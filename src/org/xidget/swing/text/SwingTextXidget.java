@@ -1,10 +1,14 @@
 package org.xidget.swing.text;
 
+import java.awt.Container;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 import org.xidget.IXidget;
 import org.xidget.TextXidget;
 import org.xidget.config.TagException;
 import org.xidget.config.TagProcessor;
+import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.adapter.SwingTooltipErrorAdapter;
 import org.xidget.widget.ITextWidgetAdapter;
 import org.xmodel.IModelObject;
@@ -22,18 +26,26 @@ public class SwingTextXidget extends TextXidget
   /* (non-Javadoc)
    * @see org.xidget.IXidget#startConfig(org.xidget.config.TagProcessor, org.xidget.IXidget, org.xmodel.IModelObject)
    */
-  public boolean startConfig( TagProcessor processor, IXidget xidget, IModelObject element) throws TagException
+  public boolean startConfig( TagProcessor processor, IXidget parent, IModelObject element) throws TagException
   {
+    if ( !(parent instanceof SwingContainerXidget)) 
+      throw new TagException( "Expected SwingContainerXidget instead of: "+
+        parent.getClass().getSimpleName());
+    
+    setParent( parent);
+    
     int rows = Xlate.get( element, "rows", -1);
     int columns = Xlate.get( element, "columns", -1);
-    widget = createWidget( rows, columns);
+    SwingContainerXidget container = (SwingContainerXidget)parent;    
+    widget = createWidget( container.getContainer(), rows, columns);
+    
     return true;
   }
-  
+
   /* (non-Javadoc)
-   * @see org.xidget.IXidget#endConfig(org.xidget.config.TagProcessor)
+   * @see org.xidget.IXidget#endConfig(org.xidget.config.TagProcessor, org.xmodel.IModelObject)
    */
-  public void endConfig( TagProcessor processor) throws TagException
+  public void endConfig( TagProcessor processor, IModelObject element) throws TagException
   {
   }
 
@@ -43,11 +55,22 @@ public class SwingTextXidget extends TextXidget
    * @param columns The number of columns.
    * @return Returns the new widget.
    */
-  protected JTextComponent createWidget( int rows, int columns)
+  protected JTextComponent createWidget( Container container, int rows, int columns)
   {
-    return null;
+    if ( rows > 0)
+    {
+      JTextArea widget = new JTextArea( rows, columns);
+      container.add( widget);
+      return widget;
+    }
+    else
+    {
+      JTextField widget = new JTextField( columns);
+      container.add( widget);
+      return widget;
+    }
   }
-  
+
   /* (non-Javadoc)
    * @see org.xidget.IXidget#getAdapter(java.lang.Class)
    */
@@ -57,6 +80,6 @@ public class SwingTextXidget extends TextXidget
     if ( clss.equals( ITextWidgetAdapter.class)) return new SwingTooltipErrorAdapter( widget);
     return null;
   }
-  
+
   private JTextComponent widget;
 }
