@@ -1,7 +1,7 @@
 package org.xidget.swing.text;
 
 import javax.swing.text.JTextComponent;
-import org.xidget.widget.ITextWidgetAdapter;
+import org.xidget.text.ITextWidgetAdapter;
 
 /**
  * Display text in a JTextComponent.
