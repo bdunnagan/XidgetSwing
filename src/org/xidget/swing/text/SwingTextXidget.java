@@ -4,11 +4,14 @@ import java.awt.Container;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
+import org.xidget.IWidgetAdapter;
+import org.xidget.adapter.IErrorAdapter;
 import org.xidget.config.TagException;
 import org.xidget.config.util.Size;
 import org.xidget.swing.SwingContainerXidget;
+import org.xidget.swing.SwingWidgetAdapter;
 import org.xidget.swing.adapter.SwingTooltipErrorAdapter;
-import org.xidget.text.ITextWidgetAdapter;
+import org.xidget.text.IWidgetTextChannel;
 import org.xidget.text.TextXidget;
 
 /**
@@ -16,15 +19,11 @@ import org.xidget.text.TextXidget;
  */
 public class SwingTextXidget extends TextXidget
 {
-  public SwingTextXidget()
-  {
-  }
-
   /* (non-Javadoc)
    * @see org.xidget.TextXidget#createWidget(org.xidget.config.util.Size)
    */
   @Override
-  protected void createWidget( Size size) throws TagException
+  protected IWidgetTextChannel createWidget( Size size) throws TagException
   {
     if ( !(getParent() instanceof SwingContainerXidget)) 
       throw new TagException( "Expected SwingContainerXidget instead of: "+
@@ -33,6 +32,8 @@ public class SwingTextXidget extends TextXidget
     SwingContainerXidget parent = (SwingContainerXidget)getParent();
     Container container = parent.getContainer();
     widget = createWidget( container, size);
+    
+    return new SwingWidgetTextChannel( widget);
   }
 
   /**
@@ -62,9 +63,9 @@ public class SwingTextXidget extends TextXidget
    */
   public Object getAdapter( Class<? extends Object> clss)
   {
-    if ( clss.equals( ITextWidgetAdapter.class)) return new SwingTextWidgetAdapter( widget);
-    if ( clss.equals( ITextWidgetAdapter.class)) return new SwingTooltipErrorAdapter( widget);
-    return null;
+    if ( clss.equals( IWidgetAdapter.class)) return new SwingWidgetAdapter( widget);
+    if ( clss.equals( IErrorAdapter.class)) return new SwingTooltipErrorAdapter( widget);
+    return super.getAdapter( clss);
   }
 
   private JTextComponent widget;
