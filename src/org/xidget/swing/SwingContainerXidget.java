@@ -3,8 +3,8 @@ package org.xidget.swing;
 import java.awt.Container;
 import org.xidget.AbstractXidget;
 import org.xidget.IXidget;
-import org.xidget.config.TagException;
-import org.xidget.config.TagProcessor;
+import org.xidget.config.processor.TagException;
+import org.xidget.config.processor.TagProcessor;
 import org.xmodel.IModelObject;
 
 /**

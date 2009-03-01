@@ -6,7 +6,7 @@ import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 import org.xidget.IWidgetAdapter;
 import org.xidget.adapter.IErrorAdapter;
-import org.xidget.config.TagException;
+import org.xidget.config.processor.TagException;
 import org.xidget.config.util.Size;
 import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.SwingWidgetAdapter;
