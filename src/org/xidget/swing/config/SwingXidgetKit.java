@@ -11,6 +11,15 @@ import org.xidget.swing.text.SwingTextXidget;
 public class SwingXidgetKit implements IXidgetKit
 {
   /* (non-Javadoc)
+   * @see org.xidget.config.IXidgetKit#getFormHandler()
+   */
+  public ITagHandler getFormHandler()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.config.IReferenceConfiguration#getButtonHandler()
    */
   public ITagHandler getButtonHandler()
