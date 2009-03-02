@@ -7,7 +7,8 @@ import javax.swing.text.JTextComponent;
 import org.xidget.IWidgetAdapter;
 import org.xidget.adapter.IErrorAdapter;
 import org.xidget.config.processor.TagException;
-import org.xidget.config.util.Size;
+import org.xidget.config.util.Pair;
+import org.xidget.swing.ISwingWidgetAdapter;
 import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.SwingWidgetAdapter;
 import org.xidget.swing.adapter.SwingTooltipErrorAdapter;
@@ -23,7 +24,7 @@ public class SwingTextXidget extends TextXidget
    * @see org.xidget.TextXidget#createWidget(org.xidget.config.util.Size)
    */
   @Override
-  protected IWidgetTextChannel createWidget( Size size) throws TagException
+  protected IWidgetTextChannel createWidget( Pair size) throws TagException
   {
     if ( !(getParent() instanceof SwingContainerXidget)) 
       throw new TagException( "Expected SwingContainerXidget instead of: "+
@@ -42,7 +43,7 @@ public class SwingTextXidget extends TextXidget
    * @param columns The number of columns.
    * @return Returns the new widget.
    */
-  protected static JTextComponent createWidget( Container container, Size size)
+  protected static JTextComponent createWidget( Container container, Pair size)
   {
     if ( size.y > 1)
     {
@@ -63,6 +64,7 @@ public class SwingTextXidget extends TextXidget
    */
   public Object getAdapter( Class<? extends Object> clss)
   {
+    if ( clss.equals( ISwingWidgetAdapter.class)) return new SwingWidgetAdapter( widget);
     if ( clss.equals( IWidgetAdapter.class)) return new SwingWidgetAdapter( widget);
     if ( clss.equals( IErrorAdapter.class)) return new SwingTooltipErrorAdapter( widget);
     return super.getAdapter( clss);

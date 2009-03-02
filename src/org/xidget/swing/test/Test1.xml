@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script>
+  <package>org.xidget.swing.xaction</package>
+
+  <create assign="form">
+    <template>
+      <form>
+        <layout>
+          <size>400, 400</size>
+        </layout>
+        
+        <layout name="text">
+          <x0>p.x0</x0>
+          <y0>p.y0</y0>
+          <x1>p.x1</x1>
+          <y1>p.y1</y1>
+        </layout>
+        <text>
+          <layout>text</layout>
+          <source>collection('appdb')/text</source>
+        </text>
+      </form>
+    </template>
+  </create>
+  
+  <create collection="appdb">
+    <template>
+      <appdb>
+        <text>type something here</text>
+      </appdb>
+    </template>
+  </create>
+  
+  <xidget>$form</xidget>
+</script>

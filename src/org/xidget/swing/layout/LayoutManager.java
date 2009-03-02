@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.SpringLayout;
 import org.xidget.IXidget;
-import org.xidget.layout.LayoutRegistry;
 import org.xidget.layout.LayoutTagHandler.Layout;
 import org.xidget.layout.LayoutTagHandler.Relative;
 import org.xidget.swing.ISwingWidgetAdapter;
@@ -16,11 +15,6 @@ import org.xidget.swing.ISwingWidgetAdapter;
  */
 public class LayoutManager
 {  
-  public LayoutManager( LayoutRegistry registry)
-  {
-    this.registry = registry;
-  }
-  
   /**
    * Apply the configured layout to the children of the specified xidget. 
    * @param xidget The xidget whose children will receive layouts.
@@ -60,7 +54,7 @@ public class LayoutManager
     int size = children.length;
     for( int i=1; i<=size; i++)
     {
-      Layout layout = registry.getLayout( xidgets.get( i-1));
+      Layout layout = xidgets.get( i-1).getLayout();
 
       if ( layout.x0 != null)
       {
@@ -109,6 +103,4 @@ public class LayoutManager
     }
     return null;
   }
-
-  private LayoutRegistry registry;
 }

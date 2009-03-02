@@ -3,6 +3,7 @@ package org.xidget.swing.config;
 import org.xidget.XidgetTagHandler;
 import org.xidget.config.IXidgetKit;
 import org.xidget.config.processor.ITagHandler;
+import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.text.SwingTextXidget;
 
 /**
@@ -15,8 +16,7 @@ public class SwingXidgetKit implements IXidgetKit
    */
   public ITagHandler getFormHandler()
   {
-    // TODO Auto-generated method stub
-    return null;
+    return new XidgetTagHandler( SwingContainerXidget.class);
   }
 
   /* (non-Javadoc)
