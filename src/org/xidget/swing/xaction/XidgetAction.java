@@ -1,5 +1,7 @@
 package org.xidget.swing.xaction;
 
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -15,6 +17,7 @@ import org.xmodel.xaction.XActionDocument;
 import org.xmodel.xaction.XActionException;
 import org.xmodel.xpath.expression.IContext;
 import org.xmodel.xpath.expression.IExpression;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An XAction which loads the xidget configuration specified by an xpath.
@@ -46,8 +49,13 @@ public class XidgetAction extends GuardedAction
       
       // place all the xidgets in a container
       JPanel rootPanel = new JPanel();
+      rootPanel.setBackground( Color.blue);
+      rootPanel.setLayout( new GridLayout());
       for( IXidget xidget: xidgets)
       {
+        xidget.setContext( (StatefulContext)context);
+        xidget.bind();
+        
         ISwingWidgetAdapter widgetAdapter = (ISwingWidgetAdapter)xidget.getAdapter( ISwingWidgetAdapter.class);
         if ( widgetAdapter != null)
         {
@@ -58,7 +66,7 @@ public class XidgetAction extends GuardedAction
       
       // place the root panel in a jframe
       JFrame frame = new JFrame();
-      frame.add( rootPanel);
+      frame.getContentPane().add( rootPanel);
       frame.pack();
       frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
       frame.setVisible( true);

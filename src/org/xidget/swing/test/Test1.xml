@@ -16,10 +16,15 @@
           <x1>p.x1</x1>
           <y1>p.y1</y1>
         </layout>
+        
         <text>
           <layout>text</layout>
           <source>collection('appdb')/text</source>
         </text>
+        
+        <trigger name="Listen" source="collection('appdb')/text">
+          <print>collection('appdb')/text</print>
+        </trigger>
       </form>
     </template>
   </create>

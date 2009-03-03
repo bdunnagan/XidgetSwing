@@ -47,7 +47,7 @@ public class LayoutManager
    */
   private void applyLayout( Container parent, Component[] children, List<IXidget> xidgets)
   {
-    SpringLayout springLayout = new SpringLayout();
+    SpringLayout springLayout = (SpringLayout)parent.getLayout();
     Component prev = parent;
     Component curr = children[ 0];
     Component next = null;
@@ -56,16 +56,17 @@ public class LayoutManager
     {
       Layout layout = xidgets.get( i-1).getLayout();
 
+      // Java 1.5 SpringLayout requires East, South, West, North ordering
       if ( layout.x0 != null)
       {
         Component other = layout.x0.previous? prev: next;
         springLayout.putConstraint( SpringLayout.EAST, curr, layout.x0.offset, convertRelative( layout.x0.relative), other);
       }
       
-      if ( layout.y0 != null)
+      if ( layout.y1 != null)
       {
-        Component other = layout.y0.previous? prev: next;
-        springLayout.putConstraint( SpringLayout.NORTH, curr, layout.y0.offset, convertRelative( layout.y0.relative), other);
+        Component other = layout.y1.previous? prev: next;
+        springLayout.putConstraint( SpringLayout.SOUTH, curr, layout.y1.offset, convertRelative( layout.y1.relative), other);
       }
       
       if ( layout.x1 != null)
@@ -74,10 +75,10 @@ public class LayoutManager
         springLayout.putConstraint( SpringLayout.WEST, curr, layout.x1.offset, convertRelative( layout.x1.relative), other);
       }
       
-      if ( layout.y1 != null)
+      if ( layout.y0 != null)
       {
-        Component other = layout.y1.previous? prev: next;
-        springLayout.putConstraint( SpringLayout.SOUTH, curr, layout.y1.offset, convertRelative( layout.y1.relative), other);
+        Component other = layout.y0.previous? prev: next;
+        springLayout.putConstraint( SpringLayout.NORTH, curr, layout.y0.offset, convertRelative( layout.y0.relative), other);
       }
       
       prev = curr;

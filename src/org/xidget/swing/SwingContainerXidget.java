@@ -1,5 +1,6 @@
 package org.xidget.swing;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -25,8 +26,8 @@ public class SwingContainerXidget extends AbstractXidget
   @Override
   public boolean startConfig( TagProcessor processor, IXidget parent, IModelObject element) throws TagException
   {
-    panel = new JPanel();
-    panel.setLayout( new SpringLayout());
+    panel = new JPanel( new SpringLayout());
+    panel.setBackground( Color.GREEN);
     return true;
   }
 
@@ -48,11 +49,12 @@ public class SwingContainerXidget extends AbstractXidget
   /* (non-Javadoc)
    * @see org.xidget.IXidget#getAdapter(java.lang.Class)
    */
-  public Object getAdapter( Class<? extends Object> clss)
+  @SuppressWarnings("unchecked")
+  public <T> T getAdapter( Class<T> clss)
   {
-    if ( clss.equals( ISwingWidgetAdapter.class)) return new SwingWidgetAdapter( panel);
-    if ( clss.equals( IWidgetAdapter.class)) return new SwingWidgetAdapter( panel);
-    if ( clss.equals( IErrorAdapter.class)) return new SwingTooltipErrorAdapter( panel);
+    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetAdapter( panel);
+    if ( clss.equals( IWidgetAdapter.class)) return (T)new SwingWidgetAdapter( panel);
+    if ( clss.equals( IErrorAdapter.class)) return (T)new SwingTooltipErrorAdapter( panel);
     return null;
   }
 

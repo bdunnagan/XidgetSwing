@@ -12,7 +12,6 @@ import org.xidget.swing.ISwingWidgetAdapter;
 import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.SwingWidgetAdapter;
 import org.xidget.swing.adapter.SwingTooltipErrorAdapter;
-import org.xidget.text.IWidgetTextChannel;
 import org.xidget.text.TextXidget;
 
 /**
@@ -24,7 +23,7 @@ public class SwingTextXidget extends TextXidget
    * @see org.xidget.TextXidget#createWidget(org.xidget.config.util.Size)
    */
   @Override
-  protected IWidgetTextChannel createWidget( Pair size) throws TagException
+  protected void createWidget( Pair size) throws TagException
   {
     if ( !(getParent() instanceof SwingContainerXidget)) 
       throw new TagException( "Expected SwingContainerXidget instead of: "+
@@ -33,8 +32,6 @@ public class SwingTextXidget extends TextXidget
     SwingContainerXidget parent = (SwingContainerXidget)getParent();
     Container container = parent.getContainer();
     widget = createWidget( container, size);
-    
-    return new SwingWidgetTextChannel( widget);
   }
 
   /**
@@ -62,11 +59,12 @@ public class SwingTextXidget extends TextXidget
   /* (non-Javadoc)
    * @see org.xidget.IXidget#getAdapter(java.lang.Class)
    */
-  public Object getAdapter( Class<? extends Object> clss)
+  @SuppressWarnings("unchecked")
+  public <T> T getAdapter( Class<T> clss)
   {
-    if ( clss.equals( ISwingWidgetAdapter.class)) return new SwingWidgetAdapter( widget);
-    if ( clss.equals( IWidgetAdapter.class)) return new SwingWidgetAdapter( widget);
-    if ( clss.equals( IErrorAdapter.class)) return new SwingTooltipErrorAdapter( widget);
+    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetAdapter( widget);
+    if ( clss.equals( IWidgetAdapter.class)) return (T)new SwingWidgetAdapter( widget);
+    if ( clss.equals( IErrorAdapter.class)) return (T)new SwingTooltipErrorAdapter( widget);    
     return super.getAdapter( clss);
   }
 
