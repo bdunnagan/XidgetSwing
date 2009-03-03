@@ -1,8 +1,16 @@
 package org.xidget.swing.text;
 
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
 import org.xidget.IWidgetAdapter;
 import org.xidget.adapter.IErrorAdapter;
@@ -12,7 +20,10 @@ import org.xidget.swing.ISwingWidgetAdapter;
 import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.SwingWidgetAdapter;
 import org.xidget.swing.adapter.SwingTooltipErrorAdapter;
+import org.xidget.swing.text.adapter.TextAdapter;
 import org.xidget.text.TextXidget;
+import org.xidget.text.adapter.IModelTextAdapter;
+import org.xidget.text.adapter.IWidgetTextAdapter;
 
 /**
  * An implementation of TextXidget for a Swing text widget.
@@ -32,6 +43,10 @@ public class SwingTextXidget extends TextXidget
     SwingContainerXidget parent = (SwingContainerXidget)getParent();
     Container container = parent.getContainer();
     widget = createWidget( container, size);
+    
+    // add listeners to the widget
+    widget.addKeyListener( keyListener);
+    widget.addCaretListener( caretListener);
   }
 
   /**
@@ -40,7 +55,7 @@ public class SwingTextXidget extends TextXidget
    * @param columns The number of columns.
    * @return Returns the new widget.
    */
-  protected static JTextComponent createWidget( Container container, Pair size)
+  protected JTextComponent createWidget( Container container, Pair size)
   {
     if ( size.y > 1)
     {
@@ -62,11 +77,35 @@ public class SwingTextXidget extends TextXidget
   @SuppressWarnings("unchecked")
   public <T> T getAdapter( Class<T> clss)
   {
+    if ( clss.equals( IWidgetTextAdapter.class)) return (T)new TextAdapter( widget);
     if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetAdapter( widget);
     if ( clss.equals( IWidgetAdapter.class)) return (T)new SwingWidgetAdapter( widget);
     if ( clss.equals( IErrorAdapter.class)) return (T)new SwingTooltipErrorAdapter( widget);    
     return super.getAdapter( clss);
   }
 
+  private final KeyListener keyListener = new KeyAdapter() {
+    public void keyTyped( KeyEvent e)
+    {
+      SwingUtilities.invokeLater( updateRunnable);
+    }
+  };
+    
+  private final CaretListener caretListener = new CaretListener() {
+    public void caretUpdate( CaretEvent e)
+    {
+      IModelTextAdapter adapter = getAdapter( IModelTextAdapter.class);
+      if ( adapter != null) adapter.setText( TextXidget.selectedChannel, widget.getSelectedText());
+    }
+  };
+  
+  private final Runnable updateRunnable = new Runnable() {
+    public void run()
+    {
+      IModelTextAdapter adapter = getAdapter( IModelTextAdapter.class);
+      if ( adapter != null) adapter.setText( TextXidget.allChannel, widget.getText());
+    }
+  };
+  
   private JTextComponent widget;
 }

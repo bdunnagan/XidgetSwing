@@ -13,6 +13,11 @@ import org.xmodel.xpath.expression.IExpression;
  */
 public class TextAdapter implements IWidgetTextAdapter
 {
+  public TextAdapter( JTextComponent widget)
+  {
+    this.widget = widget;
+  }
+  
   /* (non-Javadoc)
    * @see org.xidget.text.adapter.IWidgetTextAdapter#setEditable(boolean)
    */

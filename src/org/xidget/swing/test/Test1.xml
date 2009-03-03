@@ -23,7 +23,7 @@
         </text>
         
         <trigger name="Listen" source="collection('appdb')/text">
-          <print>collection('appdb')/text</print>
+          <print>string( collection('appdb')/text)</print>
         </trigger>
       </form>
     </template>
