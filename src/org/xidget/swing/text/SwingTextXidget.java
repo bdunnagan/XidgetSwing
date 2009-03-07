@@ -18,7 +18,7 @@ import org.xidget.swing.ISwingWidgetAdapter;
 import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.SwingWidgetAdapter;
 import org.xidget.swing.adapter.SwingTooltipErrorAdapter;
-import org.xidget.swing.text.adapter.TextAdapter;
+import org.xidget.swing.text.feature.TextAdapter;
 import org.xidget.text.TextXidget;
 import org.xidget.text.feature.IModelTextFeature;
 import org.xidget.text.feature.IWidgetTextFeature;

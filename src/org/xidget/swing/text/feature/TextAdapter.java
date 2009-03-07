@@ -1,4 +1,4 @@
-package org.xidget.swing.text.adapter;
+package org.xidget.swing.text.feature;
 
 import javax.swing.text.JTextComponent;
 import org.xidget.config.util.TextTransform;
