@@ -10,7 +10,7 @@ import org.xidget.config.processor.TagException;
 import org.xidget.config.processor.TagProcessor;
 import org.xidget.feature.IErrorFeature;
 import org.xidget.layout.LayoutTagHandler.Layout;
-import org.xidget.swing.adapter.SwingTooltipErrorAdapter;
+import org.xidget.swing.feature.SwingTooltipErrorFeature;
 import org.xidget.swing.layout.LayoutManager;
 import org.xmodel.IModelObject;
 
@@ -52,7 +52,7 @@ public class SwingContainerXidget extends AbstractXidget
   {
     if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetAdapter( panel);
     if ( clss.equals( IWidgetAdapter.class)) return (T)new SwingWidgetAdapter( panel);
-    if ( clss.equals( IErrorFeature.class)) return (T)new SwingTooltipErrorAdapter( panel);
+    if ( clss.equals( IErrorFeature.class)) return (T)new SwingTooltipErrorFeature( panel);
     return null;
   }
 

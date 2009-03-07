@@ -1,4 +1,4 @@
-package org.xidget.swing.adapter;
+package org.xidget.swing.feature;
 
 import javax.swing.JComponent;
 import org.xidget.feature.IErrorFeature;
@@ -8,9 +8,9 @@ import org.xidget.feature.IErrorFeature;
  * The adapter will restore the original tooltip text when the error is cleared.
  * This adapter is not suitable if the tooltip text is dynamic.
  */
-public class SwingTooltipErrorAdapter implements IErrorFeature
+public class SwingTooltipErrorFeature implements IErrorFeature
 {
-  public SwingTooltipErrorAdapter( JComponent widget)
+  public SwingTooltipErrorFeature( JComponent widget)
   {
     this.widget = widget;
   }
