@@ -6,24 +6,24 @@
   <create assign="form">
     <template>
       <form>
-        <layout>
-          <size>400, 400</size>
-        </layout>
-        
-        <layout name="text">
-          <x0>p.x0</x0>
+        <layout name="default-vertical-text">
+          <x0>c.x0</x0>
           <y0>p.y0</y0>
-          <x1>p.x1</x1>
-          <y1>p.y1</y1>
+          <x1>c.x1</x1>
         </layout>
         
-        <text>
-          <layout>text</layout>
-          <source>collection('appdb')/text</source>
+        <text size="100,1">
+          <layout>default-vertical-text</layout>
+          <source>collection('appdb')/text1</source>
         </text>
         
-        <trigger name="Listen" source="collection('appdb')/text">
-          <print>string( collection('appdb')/text)</print>
+        <text size="100,1">        
+          <layout>default-vertical-text</layout>
+          <source>collection('appdb')/text2</source>
+        </text>
+        
+        <trigger name="Listen" source="collection('appdb')/text2">
+          <print>string( collection('appdb')/text2)</print>
         </trigger>
       </form>
     </template>
@@ -32,7 +32,8 @@
   <create collection="appdb">
     <template>
       <appdb>
-        <text>type something here</text>
+        <text1>Bob</text1>
+        <text2>Expert</text2>
       </appdb>
     </template>
   </create>

@@ -11,17 +11,17 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
 import org.xidget.IWidgetAdapter;
-import org.xidget.adapter.IErrorAdapter;
 import org.xidget.config.processor.TagException;
 import org.xidget.config.util.Pair;
+import org.xidget.feature.IErrorFeature;
 import org.xidget.swing.ISwingWidgetAdapter;
 import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.SwingWidgetAdapter;
 import org.xidget.swing.adapter.SwingTooltipErrorAdapter;
 import org.xidget.swing.text.adapter.TextAdapter;
 import org.xidget.text.TextXidget;
-import org.xidget.text.adapter.IModelTextAdapter;
-import org.xidget.text.adapter.IWidgetTextAdapter;
+import org.xidget.text.feature.IModelTextFeature;
+import org.xidget.text.feature.IWidgetTextFeature;
 
 /**
  * An implementation of TextXidget for a Swing text widget.
@@ -73,13 +73,13 @@ public class SwingTextXidget extends TextXidget
    * @see org.xidget.IXidget#getAdapter(java.lang.Class)
    */
   @SuppressWarnings("unchecked")
-  public <T> T getAdapter( Class<T> clss)
+  public <T> T getFeature( Class<T> clss)
   {
-    if ( clss.equals( IWidgetTextAdapter.class)) return (T)new TextAdapter( widget);
+    if ( clss.equals( IWidgetTextFeature.class)) return (T)new TextAdapter( widget);
     if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetAdapter( widget);
     if ( clss.equals( IWidgetAdapter.class)) return (T)new SwingWidgetAdapter( widget);
-    if ( clss.equals( IErrorAdapter.class)) return (T)new SwingTooltipErrorAdapter( widget);    
-    return super.getAdapter( clss);
+    if ( clss.equals( IErrorFeature.class)) return (T)new SwingTooltipErrorAdapter( widget);    
+    return super.getFeature( clss);
   }
 
   private final KeyListener keyListener = new KeyAdapter() {
@@ -92,7 +92,7 @@ public class SwingTextXidget extends TextXidget
   private final CaretListener caretListener = new CaretListener() {
     public void caretUpdate( CaretEvent e)
     {
-      IModelTextAdapter adapter = getAdapter( IModelTextAdapter.class);
+      IModelTextFeature adapter = getFeature( IModelTextFeature.class);
       if ( adapter != null) adapter.setText( TextXidget.selectedChannel, widget.getSelectedText());
     }
   };
@@ -100,7 +100,7 @@ public class SwingTextXidget extends TextXidget
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      IModelTextAdapter adapter = getAdapter( IModelTextAdapter.class);
+      IModelTextFeature adapter = getFeature( IModelTextFeature.class);
       if ( adapter != null) adapter.setText( TextXidget.allChannel, widget.getText());
     }
   };

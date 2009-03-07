@@ -3,7 +3,7 @@ package org.xidget.swing.text.adapter;
 import javax.swing.text.JTextComponent;
 import org.xidget.config.util.TextTransform;
 import org.xidget.text.TextXidget;
-import org.xidget.text.adapter.IWidgetTextAdapter;
+import org.xidget.text.feature.IWidgetTextFeature;
 import org.xmodel.xpath.expression.IExpression;
 
 /**
@@ -11,7 +11,7 @@ import org.xmodel.xpath.expression.IExpression;
  * supports both the <i>all</i> and the <i>selected</i> channels. It does not support
  * a transform for the <i>selected</i> channel.
  */
-public class TextAdapter implements IWidgetTextAdapter
+public class TextAdapter implements IWidgetTextFeature
 {
   public TextAdapter( JTextComponent widget)
   {

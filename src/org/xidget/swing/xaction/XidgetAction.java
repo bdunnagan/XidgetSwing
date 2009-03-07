@@ -56,7 +56,7 @@ public class XidgetAction extends GuardedAction
         xidget.setContext( (StatefulContext)context);
         xidget.bind();
         
-        ISwingWidgetAdapter widgetAdapter = (ISwingWidgetAdapter)xidget.getAdapter( ISwingWidgetAdapter.class);
+        ISwingWidgetAdapter widgetAdapter = (ISwingWidgetAdapter)xidget.getFeature( ISwingWidgetAdapter.class);
         if ( widgetAdapter != null)
         {
           JComponent widget = widgetAdapter.getWidget();

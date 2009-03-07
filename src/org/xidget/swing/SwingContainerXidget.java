@@ -1,15 +1,14 @@
 package org.xidget.swing;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import org.xidget.AbstractXidget;
 import org.xidget.IWidgetAdapter;
 import org.xidget.IXidget;
-import org.xidget.adapter.IErrorAdapter;
 import org.xidget.config.processor.TagException;
 import org.xidget.config.processor.TagProcessor;
+import org.xidget.feature.IErrorFeature;
 import org.xidget.layout.LayoutTagHandler.Layout;
 import org.xidget.swing.adapter.SwingTooltipErrorAdapter;
 import org.xidget.swing.layout.LayoutManager;
@@ -27,7 +26,6 @@ public class SwingContainerXidget extends AbstractXidget
   public boolean startConfig( TagProcessor processor, IXidget parent, IModelObject element) throws TagException
   {
     panel = new JPanel( new SpringLayout());
-    panel.setBackground( Color.GREEN);
     return true;
   }
 
@@ -50,11 +48,11 @@ public class SwingContainerXidget extends AbstractXidget
    * @see org.xidget.IXidget#getAdapter(java.lang.Class)
    */
   @SuppressWarnings("unchecked")
-  public <T> T getAdapter( Class<T> clss)
+  public <T> T getFeature( Class<T> clss)
   {
     if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetAdapter( panel);
     if ( clss.equals( IWidgetAdapter.class)) return (T)new SwingWidgetAdapter( panel);
-    if ( clss.equals( IErrorAdapter.class)) return (T)new SwingTooltipErrorAdapter( panel);
+    if ( clss.equals( IErrorFeature.class)) return (T)new SwingTooltipErrorAdapter( panel);
     return null;
   }
 

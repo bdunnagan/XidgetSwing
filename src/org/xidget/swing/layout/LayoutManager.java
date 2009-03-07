@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.SpringLayout;
 import org.xidget.IXidget;
+import org.xidget.layout.LayoutTagHandler;
 import org.xidget.layout.LayoutTagHandler.Layout;
 import org.xidget.layout.LayoutTagHandler.Relative;
 import org.xidget.swing.ISwingWidgetAdapter;
@@ -34,7 +35,7 @@ public class LayoutManager
    */
   private JComponent getWidget( IXidget xidget)
   {
-    ISwingWidgetAdapter adapter = (ISwingWidgetAdapter)xidget.getAdapter( ISwingWidgetAdapter.class);
+    ISwingWidgetAdapter adapter = (ISwingWidgetAdapter)xidget.getFeature( ISwingWidgetAdapter.class);
     if ( adapter != null) return adapter.getWidget();    
     return null;
   }
@@ -59,25 +60,33 @@ public class LayoutManager
       // Java 1.5 SpringLayout requires East, South, West, North ordering
       if ( layout.x0 != null)
       {
-        Component other = layout.x0.previous? prev: next;
+        Component other = parent;
+        if ( layout.x0.connected == LayoutTagHandler.Connected.previous) other = prev;
+        if ( layout.x0.connected == LayoutTagHandler.Connected.next) other = next;
         springLayout.putConstraint( SpringLayout.EAST, curr, layout.x0.offset, convertRelative( layout.x0.relative), other);
       }
       
       if ( layout.y1 != null)
       {
-        Component other = layout.y1.previous? prev: next;
+        Component other = parent;
+        if ( layout.y1.connected == LayoutTagHandler.Connected.previous) other = prev;
+        if ( layout.y1.connected == LayoutTagHandler.Connected.next) other = next;
         springLayout.putConstraint( SpringLayout.SOUTH, curr, layout.y1.offset, convertRelative( layout.y1.relative), other);
       }
       
       if ( layout.x1 != null)
       {
-        Component other = layout.x1.previous? prev: next;
+        Component other = parent;
+        if ( layout.x1.connected == LayoutTagHandler.Connected.previous) other = prev;
+        if ( layout.x1.connected == LayoutTagHandler.Connected.next) other = next;
         springLayout.putConstraint( SpringLayout.WEST, curr, layout.x1.offset, convertRelative( layout.x1.relative), other);
       }
       
       if ( layout.y0 != null)
       {
-        Component other = layout.y0.previous? prev: next;
+        Component other = parent;
+        if ( layout.y0.connected == LayoutTagHandler.Connected.previous) other = prev;
+        if ( layout.y0.connected == LayoutTagHandler.Connected.next) other = next;
         springLayout.putConstraint( SpringLayout.NORTH, curr, layout.y0.offset, convertRelative( layout.y0.relative), other);
       }
       
@@ -85,6 +94,9 @@ public class LayoutManager
       curr = next;
       next = (i < size)? children[ i]: parent; 
     }      
+    
+    // size the container to fit the widgets inside
+    
   }
     
   /**

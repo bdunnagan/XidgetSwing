@@ -1,14 +1,14 @@
 package org.xidget.swing.adapter;
 
 import javax.swing.JComponent;
-import org.xidget.adapter.IErrorAdapter;
+import org.xidget.feature.IErrorFeature;
 
 /**
  * An IErrorAdapter which displays the error in a tooltip on a Swing component.
  * The adapter will restore the original tooltip text when the error is cleared.
  * This adapter is not suitable if the tooltip text is dynamic.
  */
-public class SwingTooltipErrorAdapter implements IErrorAdapter
+public class SwingTooltipErrorAdapter implements IErrorFeature
 {
   public SwingTooltipErrorAdapter( JComponent widget)
   {
