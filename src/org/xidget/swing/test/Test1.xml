@@ -2,23 +2,30 @@
 
 <script>
   <package>org.xidget.swing.xaction</package>
+  <package>org.xidget.layout.xaction</package>
 
   <create assign="form">
     <template>
       <form>
-        <layout name="default-vertical-text">
-          <x0>c.x0</x0>
-          <y0>p.y0</y0>
-          <x1>c.x1</x1>
+        <layout>
+          <assign name="previous">preceding::*[ 1]</assign>
+          <attach when="not( $previous)">
+            <x0 attach=".." side="x0" pad="5"/>
+            <x1 attach=".." side="x1" pad="5"/>            
+            <y0 attach=".." side="y0" pad="5"/>
+          </attach>
+          <attach when="$previous">
+            <x0 attach=".." side="x0" pad="5"/>
+            <x1 attach=".." side="x1" pad="5"/>            
+            <y0 attach="$previous" side="y1" pad="5"/>
+          </attach>
         </layout>
         
         <text size="100,1">
-          <layout>default-vertical-text</layout>
           <source>collection('appdb')/text1</source>
         </text>
         
         <text size="100,1">        
-          <layout>default-vertical-text</layout>
           <source>collection('appdb')/text2</source>
         </text>
         

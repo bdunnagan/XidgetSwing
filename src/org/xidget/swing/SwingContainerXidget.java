@@ -1,17 +1,14 @@
 package org.xidget.swing;
 
-import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import org.xidget.AbstractXidget;
-import org.xidget.IWidgetAdapter;
 import org.xidget.IXidget;
 import org.xidget.config.processor.TagException;
 import org.xidget.config.processor.TagProcessor;
 import org.xidget.feature.IErrorFeature;
-import org.xidget.layout.LayoutTagHandler.Layout;
+import org.xidget.feature.IWidgetFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
-import org.xidget.swing.layout.LayoutManager;
 import org.xmodel.IModelObject;
 
 /**
@@ -35,13 +32,6 @@ public class SwingContainerXidget extends AbstractXidget
   @Override
   public void endConfig( TagProcessor processor, IModelObject element) throws TagException
   {
-    // set sizes
-    Layout layout = getLayout();
-    if ( layout != null) panel.setPreferredSize( new Dimension( layout.size.x, layout.size.y));
-    
-    // create layout for children
-    LayoutManager manager = new LayoutManager();
-    manager.applyLayout( this);
   }
 
   /* (non-Javadoc)
@@ -50,8 +40,8 @@ public class SwingContainerXidget extends AbstractXidget
   @SuppressWarnings("unchecked")
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetAdapter( panel);
-    if ( clss.equals( IWidgetAdapter.class)) return (T)new SwingWidgetAdapter( panel);
+    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetFeature( panel);
+    if ( clss.equals( IWidgetFeature.class)) return (T)new SwingWidgetFeature( panel);
     if ( clss.equals( IErrorFeature.class)) return (T)new SwingTooltipErrorFeature( panel);
     return null;
   }

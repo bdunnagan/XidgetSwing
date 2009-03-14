@@ -10,13 +10,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
-import org.xidget.IWidgetAdapter;
 import org.xidget.config.processor.TagException;
 import org.xidget.config.util.Pair;
 import org.xidget.feature.IErrorFeature;
+import org.xidget.feature.IWidgetFeature;
 import org.xidget.swing.ISwingWidgetAdapter;
 import org.xidget.swing.SwingContainerXidget;
-import org.xidget.swing.SwingWidgetAdapter;
+import org.xidget.swing.SwingWidgetFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
 import org.xidget.swing.text.feature.TextFeature;
 import org.xidget.text.TextXidget;
@@ -76,8 +76,8 @@ public class SwingTextXidget extends TextXidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss.equals( IWidgetTextFeature.class)) return (T)new TextFeature( widget);
-    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetAdapter( widget);
-    if ( clss.equals( IWidgetAdapter.class)) return (T)new SwingWidgetAdapter( widget);
+    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetFeature( widget);
+    if ( clss.equals( IWidgetFeature.class)) return (T)new SwingWidgetFeature( widget);
     if ( clss.equals( IErrorFeature.class)) return (T)new SwingTooltipErrorFeature( widget);    
     return super.getFeature( clss);
   }
