@@ -1,7 +1,6 @@
 package org.xidget.swing;
 
 import javax.swing.JPanel;
-import javax.swing.SpringLayout;
 import org.xidget.AbstractXidget;
 import org.xidget.IXidget;
 import org.xidget.config.processor.TagException;
@@ -9,6 +8,7 @@ import org.xidget.config.processor.TagProcessor;
 import org.xidget.feature.IErrorFeature;
 import org.xidget.feature.IWidgetFeature;
 import org.xidget.layout.AnchorLayoutFeature;
+import org.xidget.layout.ConstantNode;
 import org.xidget.layout.ILayoutFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
 import org.xidget.swing.layout.AnchorLayoutManager;
@@ -31,23 +31,17 @@ public class SwingContainerXidget extends AbstractXidget
   public boolean startConfig( TagProcessor processor, IXidget parent, IModelObject element) throws TagException
   {
     super.startConfig( processor, parent, element);
-    
-    panel = new JPanel( new SpringLayout());
-    //panel.setLayout( new FlowLayout());
-    panel.setLayout( new AnchorLayoutManager( layoutFeature));
-    
+
+    panel = new JPanel( new AnchorLayoutManager( layoutFeature));
+
     widgetFeature = new SwingWidgetFeature( panel);
     errorFeature = new SwingTooltipErrorFeature( panel);
     
+    // upper-left corner is always (0, 0)
+    getAnchor( "x0").addDependency( new ConstantNode( 0));
+    getAnchor( "y0").addDependency( new ConstantNode( 0));    
+    
     return true;
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.AbstractXidget#endConfig(org.xidget.config.processor.TagProcessor, org.xmodel.IModelObject)
-   */
-  @Override
-  public void endConfig( TagProcessor processor, IModelObject element) throws TagException
-  {
   }
 
   /* (non-Javadoc)
@@ -56,7 +50,7 @@ public class SwingContainerXidget extends AbstractXidget
   @SuppressWarnings("unchecked")
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)widgetFeature;
+    if ( clss.equals( ISwingWidgetFeature.class)) return (T)widgetFeature;
     if ( clss.equals( IWidgetFeature.class)) return (T)widgetFeature;
     if ( clss.equals( IErrorFeature.class)) return (T)errorFeature;
     if ( clss.equals( ILayoutFeature.class)) return (T)layoutFeature;

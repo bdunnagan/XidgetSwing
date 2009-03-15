@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import org.xidget.IXidget;
 import org.xidget.config.Configuration;
 import org.xidget.config.processor.TagException;
-import org.xidget.swing.ISwingWidgetAdapter;
+import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.config.SwingXidgetKit;
 import org.xmodel.IModelObject;
 import org.xmodel.xaction.GuardedAction;
@@ -55,11 +55,12 @@ public class XidgetAction extends GuardedAction
       {
         xidget.setContext( (StatefulContext)context);
         xidget.bind();
-        
-        ISwingWidgetAdapter widgetAdapter = (ISwingWidgetAdapter)xidget.getFeature( ISwingWidgetAdapter.class);
-        if ( widgetAdapter != null)
+
+        // get top-level widget and add to root panel
+        ISwingWidgetFeature swingWidgetFeature = xidget.getFeature( ISwingWidgetFeature.class);
+        if ( swingWidgetFeature != null)
         {
-          JComponent widget = widgetAdapter.getWidget();
+          JComponent widget = swingWidgetFeature.getWidget();
           rootPanel.add( widget);
         }
       }

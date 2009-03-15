@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.awt.Rectangle;
 import org.xidget.layout.ILayoutFeature;
 
 /**
@@ -61,9 +62,16 @@ public class AnchorLayoutManager implements LayoutManager
   public Dimension preferredLayoutSize( Container parent)
   {
     layoutContainer( parent);
-    Dimension size = parent.getSize();
-    if ( size.width > 0 || size.height > 0) return size;
-    return new Dimension( 50, 100);
+    
+    Rectangle bounds = new Rectangle();
+    Rectangle childBounds = new Rectangle();
+    for( Component child: parent.getComponents())
+    {
+      child.getBounds( childBounds);
+      bounds.add( childBounds);
+    }
+    
+    return bounds.getSize();
   }
 
   private ILayoutFeature layout;

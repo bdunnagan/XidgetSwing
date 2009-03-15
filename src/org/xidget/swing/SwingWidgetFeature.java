@@ -7,24 +7,13 @@ import org.xidget.feature.IWidgetFeature;
 /**
  * An adapter for Swing/AWT widgets.
  */
-public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetAdapter
+public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetFeature
 {
   public SwingWidgetFeature( JComponent widget)
   {
     this.widget = widget;
   }
   
-  /* (non-Javadoc)
-   * @see org.xidget.feature.IWidgetFeature#hasBounds()
-   */
-  public boolean hasBounds()
-  {
-    Rectangle rectangle = widget.getBounds();
-    boolean result = rectangle.width >= 0 && rectangle.height >= 0;
-    if ( !result) System.out.println( "!hasBounds: "+widget);
-    return result;
-  }
-
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetFeature#setBounds(int, int, int, int)
    */

@@ -11,6 +11,7 @@
           
           <for source="*[ @xidget]">
             <assign name="previous">(preceding-sibling::*[ @xidget])[ 1]</assign>
+            
             <attach when="not( $previous)">
               <x0 attach=".." side="x0" pad="5"/>
               <x1 attach=".." side="x1" pad="5"/>            
@@ -21,23 +22,18 @@
               <x1 attach=".." side="x1" pad="5"/>            
               <y0 attach="$previous" side="y1" pad="5"/>
             </attach>
+            
             <attach when="@id = '1'">
               <x0 attach=".." side="x0" pad="5"/>
-              <x1 attach=".." side="x1" percent=".33"/>            
+              <x1 attach=".." side="x0" percent=".50" pad="-2"/>            
               <y0 attach=".." side="y0" pad="5"/>
             </attach>
             <attach when="@id = '2'">
+              <x0 attach="$previous" side="x1" pad="5"/>
               <x1 attach=".." side="x1" pad="5"/>            
               <y0 attach="$previous" side="y0"/>
             </attach>
-            <attach when="@id = '2'">
-              <x0 attach="$previous" side="x1" pad="5"/>
-            </attach>
           </for>
-          <!--attach>
-            <x1 attach="components/text[ @id = '3']" side="x1" pad="5"/>
-            <y1 attach="components/text[ @id = '3']" side="y1" pad="5"/>
-          </attach-->
         </layout>
       </layouts>
     </template>
@@ -54,9 +50,9 @@
           <source>collection('appdb')/text2</source>
         </text>
         
-        <text size="100,1">        
+        <!--text size="100,1">        
           <source>collection('appdb')/text3</source>
-        </text>
+        </text-->
           
         <trigger name="Listen" source="collection('appdb')/text2">
           <print>string( collection('appdb')/text2)</print>

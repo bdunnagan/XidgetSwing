@@ -14,7 +14,7 @@ import org.xidget.config.processor.TagException;
 import org.xidget.config.util.Pair;
 import org.xidget.feature.IErrorFeature;
 import org.xidget.feature.IWidgetFeature;
-import org.xidget.swing.ISwingWidgetAdapter;
+import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.SwingWidgetFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
@@ -81,7 +81,7 @@ public class SwingTextXidget extends TextXidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss.equals( IWidgetTextFeature.class)) return (T)textFeature;
-    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)widgetFeature;
+    if ( clss.equals( ISwingWidgetFeature.class)) return (T)widgetFeature;
     if ( clss.equals( IWidgetFeature.class)) return (T)widgetFeature;
     if ( clss.equals( IErrorFeature.class)) return (T)errorFeature;    
     return super.getFeature( clss);

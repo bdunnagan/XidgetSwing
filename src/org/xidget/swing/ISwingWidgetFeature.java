@@ -5,7 +5,7 @@ import javax.swing.JComponent;
 /**
  * An adapter interface for returning the Swing widget of a Swing xidget.
  */
-public interface ISwingWidgetAdapter
+public interface ISwingWidgetFeature
 {
   /**
    * Returns the widget.
