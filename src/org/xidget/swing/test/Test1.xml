@@ -9,25 +9,25 @@
         <layout name="l1">
           <package>org.xidget.layout.xaction</package>
           
-          <for source="components/*[ not( layout)]">
-            <assign name="previous">preceding-sibling::*[ 1]</assign>
+          <for source="*[ @xidget]">
+            <assign name="previous">(preceding-sibling::*[ @xidget])[ 1]</assign>
             <attach when="not( $previous)">
-              <x0 attach="../.." side="x0" pad="5"/>
-              <x1 attach="../.." side="x1" pad="5"/>            
-              <y0 attach="../.." side="y0" pad="5"/>
+              <x0 attach=".." side="x0" pad="5"/>
+              <x1 attach=".." side="x1" pad="5"/>            
+              <y0 attach=".." side="y0" pad="5"/>
             </attach>
             <attach when="$previous">
-              <x0 attach="../.." side="x0" pad="5"/>
-              <x1 attach="../.." side="x1" pad="5"/>            
+              <x0 attach=".." side="x0" pad="5"/>
+              <x1 attach=".." side="x1" pad="5"/>            
               <y0 attach="$previous" side="y1" pad="5"/>
             </attach>
             <attach when="@id = '1'">
-              <x0 attach="../.." side="x0" pad="5"/>
-              <x1 attach="../.." side="x1" percent=".33"/>            
-              <y0 attach="../.." side="y0" pad="5"/>
+              <x0 attach=".." side="x0" pad="5"/>
+              <x1 attach=".." side="x1" percent=".33"/>            
+              <y0 attach=".." side="y0" pad="5"/>
             </attach>
             <attach when="@id = '2'">
-              <x1 attach="../.." side="x1" pad="5"/>            
+              <x1 attach=".." side="x1" pad="5"/>            
               <y0 attach="$previous" side="y0"/>
             </attach>
             <attach when="@id = '2'">
@@ -46,19 +46,17 @@
   <create assign="form">
     <template>
       <form layout="collection('layouts')/layout[ 1]">
-        <components>
-          <text id="1" size="100,1">
-            <source>collection('appdb')/text1</source>
-          </text>
+        <text id="1" size="100,1">
+          <source>collection('appdb')/text1</source>
+        </text>
 
-          <text id="2" size="100,1">        
-            <source>collection('appdb')/text2</source>
-          </text>
-          
-              <text size="100,1">        
-                <source>collection('appdb')/text3</source>
-              </text>
-        </components>        
+        <text id="2" size="100,1">        
+          <source>collection('appdb')/text2</source>
+        </text>
+        
+        <text size="100,1">        
+          <source>collection('appdb')/text3</source>
+        </text>
           
         <trigger name="Listen" source="collection('appdb')/text2">
           <print>string( collection('appdb')/text2)</print>
