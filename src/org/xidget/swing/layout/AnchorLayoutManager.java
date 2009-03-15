@@ -52,7 +52,7 @@ public class AnchorLayoutManager implements LayoutManager
    */
   public Dimension minimumLayoutSize( Container parent)
   {
-    return new Dimension( 1000, 1000);
+    return new Dimension( 5, 5);
   }
 
   /* (non-Javadoc)
@@ -60,7 +60,10 @@ public class AnchorLayoutManager implements LayoutManager
    */
   public Dimension preferredLayoutSize( Container parent)
   {
-    return new Dimension( 1000, 1000);
+    layoutContainer( parent);
+    Dimension size = parent.getSize();
+    if ( size.width > 0 || size.height > 0) return size;
+    return new Dimension( 50, 100);
   }
 
   private ILayoutFeature layout;
