@@ -40,11 +40,16 @@ public class SwingTextXidget extends TextXidget
     
     SwingContainerXidget parent = (SwingContainerXidget)getParent();
     Container container = parent.getContainer();
-    widget = createWidget( container, size);
+    component = createWidget( container, size);
     
     // add listeners to the widget
-    widget.addKeyListener( keyListener);
-    widget.addCaretListener( caretListener);
+    component.addKeyListener( keyListener);
+    component.addCaretListener( caretListener);
+    
+    // create features
+    widgetFeature = new SwingWidgetFeature( component);
+    errorFeature = new SwingTooltipErrorFeature( component);
+    textFeature = new TextFeature( component);
   }
 
   /**
@@ -75,10 +80,10 @@ public class SwingTextXidget extends TextXidget
   @SuppressWarnings("unchecked")
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss.equals( IWidgetTextFeature.class)) return (T)new TextFeature( widget);
-    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetFeature( widget);
-    if ( clss.equals( IWidgetFeature.class)) return (T)new SwingWidgetFeature( widget);
-    if ( clss.equals( IErrorFeature.class)) return (T)new SwingTooltipErrorFeature( widget);    
+    if ( clss.equals( IWidgetTextFeature.class)) return (T)textFeature;
+    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)widgetFeature;
+    if ( clss.equals( IWidgetFeature.class)) return (T)widgetFeature;
+    if ( clss.equals( IErrorFeature.class)) return (T)errorFeature;    
     return super.getFeature( clss);
   }
 
@@ -93,7 +98,7 @@ public class SwingTextXidget extends TextXidget
     public void caretUpdate( CaretEvent e)
     {
       IModelTextFeature adapter = getFeature( IModelTextFeature.class);
-      if ( adapter != null) adapter.setText( TextXidget.selectedChannel, widget.getSelectedText());
+      if ( adapter != null) adapter.setText( TextXidget.selectedChannel, component.getSelectedText());
     }
   };
   
@@ -101,9 +106,12 @@ public class SwingTextXidget extends TextXidget
     public void run()
     {
       IModelTextFeature adapter = getFeature( IModelTextFeature.class);
-      if ( adapter != null) adapter.setText( TextXidget.allChannel, widget.getText());
+      if ( adapter != null) adapter.setText( TextXidget.allChannel, component.getText());
     }
   };
   
-  private JTextComponent widget;
+  private JTextComponent component;
+  private TextFeature textFeature;
+  private SwingWidgetFeature widgetFeature;
+  private SwingTooltipErrorFeature errorFeature;
 }

@@ -2,33 +2,42 @@
 
 <script>
   <package>org.xidget.swing.xaction</package>
-  <package>org.xidget.layout.xaction</package>
-
+  
   <create assign="form">
     <template>
       <form>
+        <package>org.xidget.layout.xaction</package>
+
         <layout>
-          <assign name="previous">preceding::*[ 1]</assign>
-          <attach when="not( $previous)">
-            <x0 attach=".." side="x0" pad="5"/>
-            <x1 attach=".." side="x1" pad="5"/>            
-            <y0 attach=".." side="y0" pad="5"/>
-          </attach>
-          <attach when="$previous">
-            <x0 attach=".." side="x0" pad="5"/>
-            <x1 attach=".." side="x1" pad="5"/>            
-            <y0 attach="$previous" side="y1" pad="5"/>
-          </attach>
+          <for source="components/*">
+            <assign name="previous">preceding-sibling::*[ 1]</assign>
+            <attach when="not( $previous)">
+              <x0 attach="../.." side="x0" pad="5"/>
+              <x1 attach="../.." side="x1" pad="5"/>            
+              <y0 attach="../.." side="y0" pad="5"/>
+            </attach>
+            <attach when="$previous">
+              <x0 attach="../.." side="x0" pad="5"/>
+              <x1 attach="../.." side="x1" pad="5"/>            
+              <y0 attach="$previous" side="y1" pad="5"/>
+            </attach>
+          </for>
         </layout>
-        
-        <text size="100,1">
-          <source>collection('appdb')/text1</source>
-        </text>
-        
-        <text size="100,1">        
-          <source>collection('appdb')/text2</source>
-        </text>
-        
+    
+        <components>
+          <text size="100,1">
+            <source>collection('appdb')/text1</source>
+          </text>
+          
+          <text size="100,1">        
+            <source>collection('appdb')/text2</source>
+          </text>
+          
+          <text size="100,1">        
+            <source>collection('appdb')/text3</source>
+          </text>        
+        </components>
+          
         <trigger name="Listen" source="collection('appdb')/text2">
           <print>string( collection('appdb')/text2)</print>
         </trigger>
@@ -39,8 +48,9 @@
   <create collection="appdb">
     <template>
       <appdb>
-        <text1>Bob</text1>
-        <text2>Expert</text2>
+        <text1>Time and a Word</text1>
+        <text2>Relayer</text2>
+        <text3>Close to the Edge</text3>
       </appdb>
     </template>
   </create>

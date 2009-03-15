@@ -20,7 +20,9 @@ public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetAdapter
   public boolean hasBounds()
   {
     Rectangle rectangle = widget.getBounds();
-    return rectangle.width <= 0 && rectangle.height <= 0; 
+    boolean result = rectangle.width >= 0 && rectangle.height >= 0;
+    if ( !result) System.out.println( "!hasBounds: "+widget);
+    return result;
   }
 
   /* (non-Javadoc)

@@ -8,7 +8,10 @@ import org.xidget.config.processor.TagException;
 import org.xidget.config.processor.TagProcessor;
 import org.xidget.feature.IErrorFeature;
 import org.xidget.feature.IWidgetFeature;
+import org.xidget.layout.AnchorLayoutFeature;
+import org.xidget.layout.ILayoutFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
+import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 
 /**
@@ -16,13 +19,26 @@ import org.xmodel.IModelObject;
  */
 public class SwingContainerXidget extends AbstractXidget
 {  
+  public SwingContainerXidget()
+  {
+    layoutFeature = new AnchorLayoutFeature( this);
+  }
+  
   /* (non-Javadoc)
    * @see org.xidget.AbstractXidget#startConfig(org.xidget.config.processor.TagProcessor, org.xidget.IXidget, org.xmodel.IModelObject)
    */
   @Override
   public boolean startConfig( TagProcessor processor, IXidget parent, IModelObject element) throws TagException
   {
+    super.startConfig( processor, parent, element);
+    
     panel = new JPanel( new SpringLayout());
+    //panel.setLayout( new FlowLayout());
+    panel.setLayout( new AnchorLayoutManager( layoutFeature));
+    
+    widgetFeature = new SwingWidgetFeature( panel);
+    errorFeature = new SwingTooltipErrorFeature( panel);
+    
     return true;
   }
 
@@ -40,9 +56,10 @@ public class SwingContainerXidget extends AbstractXidget
   @SuppressWarnings("unchecked")
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)new SwingWidgetFeature( panel);
-    if ( clss.equals( IWidgetFeature.class)) return (T)new SwingWidgetFeature( panel);
-    if ( clss.equals( IErrorFeature.class)) return (T)new SwingTooltipErrorFeature( panel);
+    if ( clss.equals( ISwingWidgetAdapter.class)) return (T)widgetFeature;
+    if ( clss.equals( IWidgetFeature.class)) return (T)widgetFeature;
+    if ( clss.equals( IErrorFeature.class)) return (T)errorFeature;
+    if ( clss.equals( ILayoutFeature.class)) return (T)layoutFeature;
     return null;
   }
 
@@ -56,4 +73,7 @@ public class SwingContainerXidget extends AbstractXidget
   }
   
   private JPanel panel;
+  private ILayoutFeature layoutFeature;
+  private SwingWidgetFeature widgetFeature;
+  private SwingTooltipErrorFeature errorFeature; 
 }
