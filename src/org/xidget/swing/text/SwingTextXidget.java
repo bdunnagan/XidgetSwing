@@ -7,9 +7,11 @@ import java.awt.event.KeyListener;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
+import org.xidget.IXidget;
 import org.xidget.config.processor.TagException;
 import org.xidget.config.util.Pair;
 import org.xidget.feature.IErrorFeature;
@@ -22,24 +24,27 @@ import org.xidget.swing.text.feature.TextFeature;
 import org.xidget.text.TextXidget;
 import org.xidget.text.feature.IModelTextFeature;
 import org.xidget.text.feature.IWidgetTextFeature;
+import org.xidget.text.feature.ModelTextFeature;
+import org.xmodel.IModelObject;
+import org.xmodel.Xlate;
 
 /**
  * An implementation of TextXidget for a Swing text widget.
  */
 public class SwingTextXidget extends TextXidget
-{
+{  
   /* (non-Javadoc)
-   * @see org.xidget.TextXidget#createWidget(org.xidget.config.util.Size)
+   * @see org.xidget.text.TextXidget#build(org.xidget.IXidget, org.xmodel.IModelObject)
    */
   @Override
-  protected void createWidget( Pair size) throws TagException
+  protected final void build( IXidget parent, IModelObject element) throws TagException
   {
     if ( !(getParent() instanceof SwingContainerXidget)) 
       throw new TagException( "Expected SwingContainerXidget instead of: "+
         getParent().getClass().getSimpleName());
     
-    SwingContainerXidget parent = (SwingContainerXidget)getParent();
-    Container container = parent.getContainer();
+    Container container = ((SwingContainerXidget)parent).getContainer();
+    Pair size = new Pair( Xlate.get( element, "size", Xlate.childGet( element, "size", "")), 0, 0);
     component = createWidget( container, size);
     
     // add listeners to the widget
@@ -58,7 +63,7 @@ public class SwingTextXidget extends TextXidget
    * @param columns The number of columns.
    * @return Returns the new widget.
    */
-  protected JTextComponent createWidget( Container container, Pair size)
+  private JTextComponent createWidget( Container container, Pair size)
   {
     if ( size.y > 1)
     {
@@ -69,6 +74,7 @@ public class SwingTextXidget extends TextXidget
     else
     {
       JTextField widget = new JTextField( size.x);
+      widget.setBorder( new EmptyBorder( 2, 3, 2, 3));
       container.add( widget);
       return widget;
     }
@@ -98,7 +104,7 @@ public class SwingTextXidget extends TextXidget
     public void caretUpdate( CaretEvent e)
     {
       IModelTextFeature adapter = getFeature( IModelTextFeature.class);
-      if ( adapter != null) adapter.setText( TextXidget.selectedChannel, component.getSelectedText());
+      if ( adapter != null) adapter.setText( ModelTextFeature.selectedChannel, component.getSelectedText());
     }
   };
   

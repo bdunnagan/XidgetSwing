@@ -6,34 +6,85 @@
   <create collection="layouts">
     <template>
       <layouts>
-        <layout name="l1">
-          <package>org.xidget.layout.xaction</package>
+        <package>org.xidget.layout.xaction</package>
+        
+        <layout id="vertical">
+          <assign name="xidgets">*[ @xidget]</assign>
           
+          <attach xidget="$xidgets[ 1]">
+            <x0 attach="." side="x0" pad="5"/>
+            <x1 attach="." side="x1" pad="5"/>            
+            <y0 attach="." side="y0" pad="5"/>
+          </attach>
+          
+          <for assign="i" from="2" to="count( $xidgets)+1" by="1">
+            <attach xidget="$xidgets[ $i]">
+              <x0 attach="." side="x0" pad="5"/>
+              <x1 attach="." side="x1" pad="5"/>            
+              <y0 attach="$xidgets[ $i - 1]" side="y1" pad="5"/>
+            </attach>
+          </for>
+          
+          <assign name="last">reverse( *[ @xidget])[ 1]</assign>          
+          <attach>
+            <x1 attach="$last" side="x1" pad="5"/>
+            <y1 attach="$last" side="y1" pad="5"/>
+          </attach>
+        </layout>
+        
+        <layout id="horizontal">
+          <profile assign="t">
+            <assign name="xidgets">*[ @xidget]</assign>
+            
+            <attach xidget="$xidgets[ 1]">
+              <x0 attach="." side="x0" pad="5"/>
+              <y0 attach="." side="y0" pad="5"/>
+              <y1 attach="." side="y1" pad="5"/>
+            </attach>
+            
+            <for assign="i" from="2" to="count( $xidgets)+1" by="1">
+              <attach xidget="$xidgets[ $i]">
+                <x0 attach="$xidgets[ $i - 1]" side="x1" pad="5"/>
+                <y0 attach="." side="y0" pad="5"/>
+                <y1 attach="." side="y1" pad="5"/>
+              </attach>
+            </for>
+            
+            <assign name="last">reverse( *[ @xidget])[ 1]</assign>          
+            <attach>
+              <x1 attach="$last" side="x1" pad="5"/>
+              <y1 attach="$last" side="y1" pad="5"/>
+            </attach>
+          </profile>
+          <print>printf( 'elapsed: %3.3fms\n', $t div 1000000)</print>  
+        </layout>
+        
+        <layout>
           <for source="*[ @xidget]">
             <assign name="previous">(preceding-sibling::*[ @xidget])[ 1]</assign>
             
-            <attach when="not( $previous)">
+            <attach when="position() = 1">
               <x0 attach=".." side="x0" pad="5"/>
-              <x1 attach=".." side="x1" pad="5"/>            
+              <x1 attach=".." side="x0" percent=".33" pad="-2"/>            
               <y0 attach=".." side="y0" pad="5"/>
             </attach>
-            <attach when="$previous">
-              <x0 attach=".." side="x0" pad="5"/>
-              <x1 attach=".." side="x1" pad="5"/>            
-              <y0 attach="$previous" side="y1" pad="5"/>
+            <attach when="position() = 2">
+              <x0 attach="$previous" side="x1" pad="5"/>
+              <x1 attach=".." side="x0" percent=".66" pad="-2"/>            
+              <y0 attach="$previous" side="y0"/>
             </attach>
-            
-            <attach when="@id = '1'">
-              <x0 attach=".." side="x0" pad="5"/>
-              <x1 attach=".." side="x0" percent=".50" pad="-2"/>            
-              <y0 attach=".." side="y0" pad="5"/>
-            </attach>
-            <attach when="@id = '2'">
+            <attach when="position() = 3">
               <x0 attach="$previous" side="x1" pad="5"/>
               <x1 attach=".." side="x1" pad="5"/>            
               <y0 attach="$previous" side="y0"/>
             </attach>
           </for>
+
+          <assign name="last">reverse( *[ @xidget])[ 1]</assign>          
+          <attach>
+            <x1 attach="$last" side="x1" pad="5"/>
+            <y1 attach="$last" side="y1" pad="5"/>
+          </attach>
         </layout>
       </layouts>
     </template>
@@ -41,18 +92,18 @@
   
   <create assign="form">
     <template>
-      <form layout="collection('layouts')/layout[ 1]">
-        <text id="1" size="100,1">
+      <form layout="collection('layouts')/layout[ @id = 'vertical']">
+        <text id="1">
           <source>collection('appdb')/text1</source>
         </text>
 
-        <text id="2" size="100,1">        
+        <text id="2" size="50,1">        
           <source>collection('appdb')/text2</source>
         </text>
         
-        <!--text size="100,1">        
+        <text id="3" size="50,1">        
           <source>collection('appdb')/text3</source>
-        </text-->
+        </text>
           
         <trigger name="Listen" source="collection('appdb')/text2">
           <print>string( collection('appdb')/text2)</print>

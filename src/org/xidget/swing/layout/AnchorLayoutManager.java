@@ -63,7 +63,14 @@ public class AnchorLayoutManager implements LayoutManager
   {
     layoutContainer( parent);
     
+    // see if size already computed
     Rectangle bounds = new Rectangle();
+    parent.getBounds( bounds);
+    if ( bounds.width > 0 || bounds.height > 0)
+      return new Dimension( bounds.width, bounds.height);
+    
+    // compute size
+    bounds = new Rectangle();
     Rectangle childBounds = new Rectangle();
     for( Component child: parent.getComponents())
     {

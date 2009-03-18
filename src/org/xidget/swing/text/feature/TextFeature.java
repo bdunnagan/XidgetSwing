@@ -4,6 +4,7 @@ import javax.swing.text.JTextComponent;
 import org.xidget.config.util.TextTransform;
 import org.xidget.text.TextXidget;
 import org.xidget.text.feature.IWidgetTextFeature;
+import org.xidget.text.feature.ModelTextFeature;
 import org.xmodel.xpath.expression.IExpression;
 
 /**
@@ -36,7 +37,7 @@ public class TextFeature implements IWidgetTextFeature
       if ( transform != null) text = transform.transform( text);
       widget.setText( text);
     }
-    else if ( channel.equals( TextXidget.selectedChannel))
+    else if ( channel.equals( ModelTextFeature.selectedChannel))
     {
       widget.replaceSelection( text);
       String allText = widget.getText();
