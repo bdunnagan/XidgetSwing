@@ -5,6 +5,7 @@ import org.xidget.AbstractXidget;
 import org.xidget.IXidget;
 import org.xidget.config.processor.TagException;
 import org.xidget.config.processor.TagProcessor;
+import org.xidget.config.util.Pair;
 import org.xidget.feature.IErrorFeature;
 import org.xidget.feature.IWidgetFeature;
 import org.xidget.layout.AnchorLayoutFeature;
@@ -13,6 +14,7 @@ import org.xidget.layout.ILayoutFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
+import org.xmodel.Xlate;
 
 /**
  * An implementation of IXidget that serves as the Swing/AWT implementation of a form.
@@ -40,6 +42,14 @@ public class SwingContainerXidget extends AbstractXidget
     // upper-left corner is always (0, 0)
     getAnchor( "x0").addDependency( new ConstantNode( 0));
     getAnchor( "y0").addDependency( new ConstantNode( 0));    
+    
+    // lower-right corner is set if size is defined
+    Pair size = new Pair( Xlate.get( element, "size", Xlate.childGet( element, "size", "")), 0, 0);
+    if ( size.x > 0 || size.y > 0)
+    {
+      getAnchor( "x1").addDependency( new ConstantNode( size.x));
+      getAnchor( "y1").addDependency( new ConstantNode( size.y));
+    }
     
     return true;
   }

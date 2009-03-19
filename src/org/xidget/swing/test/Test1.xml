@@ -26,10 +26,10 @@
           </for>
           
           <assign name="last">reverse( *[ @xidget])[ 1]</assign>          
-          <attach>
+          <!--attach>
             <x1 attach="$last" side="x1" pad="5"/>
             <y1 attach="$last" side="y1" pad="5"/>
-          </attach>
+          </attach-->
         </layout>
         
         <layout id="horizontal">
@@ -92,18 +92,21 @@
   
   <create assign="form">
     <template>
-      <form layout="collection('layouts')/layout[ @id = 'vertical']">
+      <!-- setting the size doesn't work here because there is no dependency on form.y1 -->
+      <form size="600, 200" layout="collection('layouts')/layout[ @id = 'vertical']">
         <text id="1">
+          <label>Text1</label>
           <source>collection('appdb')/text1</source>
         </text>
 
-        <text id="2" size="50,1">        
+        <!--text id="2" size="50,1">        
           <source>collection('appdb')/text2</source>
         </text>
         
         <text id="3" size="50,1">        
+          <label>Text3</label>
           <source>collection('appdb')/text3</source>
-        </text>
+        </text-->
           
         <trigger name="Listen" source="collection('appdb')/text2">
           <print>string( collection('appdb')/text2)</print>
