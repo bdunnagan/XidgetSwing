@@ -1,5 +1,6 @@
 package org.xidget.swing;
 
+import java.awt.Container;
 import javax.swing.JPanel;
 import org.xidget.AbstractXidget;
 import org.xidget.IXidget;
@@ -19,7 +20,7 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IXidget that serves as the Swing/AWT implementation of a form.
  */
-public class SwingContainerXidget extends AbstractXidget
+public class SwingContainerXidget extends AbstractXidget implements ISwingContainerFeature
 {  
   public SwingContainerXidget()
   {
@@ -34,7 +35,11 @@ public class SwingContainerXidget extends AbstractXidget
   {
     super.startConfig( processor, parent, element);
 
+    ISwingContainerFeature containerFeature = parent.getFeature( ISwingContainerFeature.class);
+    Container container = containerFeature.getContainer();
+    
     panel = new JPanel( new AnchorLayoutManager( layoutFeature));
+    container.add( panel);
 
     widgetFeature = new SwingWidgetFeature( panel);
     errorFeature = new SwingTooltipErrorFeature( panel);
@@ -55,11 +60,20 @@ public class SwingContainerXidget extends AbstractXidget
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.swing.ISwingContainerFeature#getContainer()
+   */
+  public Container getContainer()
+  {
+    return panel;
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.IXidget#getAdapter(java.lang.Class)
    */
   @SuppressWarnings("unchecked")
   public <T> T getFeature( Class<T> clss)
   {
+    if ( clss.equals( ISwingContainerFeature.class)) return (T)this;
     if ( clss.equals( ISwingWidgetFeature.class)) return (T)widgetFeature;
     if ( clss.equals( IWidgetFeature.class)) return (T)widgetFeature;
     if ( clss.equals( IErrorFeature.class)) return (T)errorFeature;
@@ -67,15 +81,6 @@ public class SwingContainerXidget extends AbstractXidget
     return null;
   }
 
-  /**
-   * Returns a Swing/AWT widget container.
-   * @return Returns a Swing/AWT widget container.
-   */
-  public JPanel getContainer()
-  {
-    return panel;
-  }
-  
   private JPanel panel;
   private ILayoutFeature layoutFeature;
   private SwingWidgetFeature widgetFeature;

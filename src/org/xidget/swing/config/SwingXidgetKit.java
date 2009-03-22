@@ -3,6 +3,7 @@ package org.xidget.swing.config;
 import org.xidget.XidgetTagHandler;
 import org.xidget.config.IXidgetKit;
 import org.xidget.config.processor.ITagHandler;
+import org.xidget.swing.SwingApplicationXidget;
 import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.text.SwingTextXidget;
 
@@ -11,6 +12,23 @@ import org.xidget.swing.text.SwingTextXidget;
  */
 public class SwingXidgetKit implements IXidgetKit
 {
+  /* (non-Javadoc)
+   * @see org.xidget.config.IXidgetKit#getApplicationHandler()
+   */
+  public ITagHandler getApplicationHandler()
+  {
+    return new XidgetTagHandler( SwingApplicationXidget.class);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.config.IXidgetKit#getDialogHandler()
+   */
+  public ITagHandler getDialogHandler()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
   /* (non-Javadoc)
    * @see org.xidget.config.IXidgetKit#getFormHandler()
    */

@@ -22,6 +22,7 @@ import org.xidget.config.processor.TagException;
 import org.xidget.config.util.Pair;
 import org.xidget.feature.IErrorFeature;
 import org.xidget.feature.IWidgetFeature;
+import org.xidget.swing.ISwingContainerFeature;
 import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingContainerXidget;
 import org.xidget.swing.SwingWidgetFeature;
@@ -49,7 +50,8 @@ public class SwingTextXidget extends TextXidget
       throw new TagException( "Expected SwingContainerXidget instead of: "+
         getParent().getClass().getSimpleName());
     
-    Container container = ((SwingContainerXidget)parent).getContainer();
+    ISwingContainerFeature containerFeature = parent.getFeature( ISwingContainerFeature.class);
+    Container container = containerFeature.getContainer();
 
     // create text widget
     Pair size = new Pair( Xlate.get( element, "size", Xlate.childGet( element, "size", "")), 0, 0);    

@@ -3,6 +3,8 @@ package org.xidget.swing;
 import java.io.File;
 import java.io.FileInputStream;
 import javax.swing.SwingUtilities;
+import org.xidget.config.Configuration;
+import org.xidget.swing.config.SwingXidgetKit;
 import org.xmodel.IDispatcher;
 import org.xmodel.IModelObject;
 import org.xmodel.ModelRegistry;
@@ -18,6 +20,8 @@ public class Main
   public static void main( String[] args) throws Exception
   {    
     final File file = new File( args[ 0]);
+    
+    Configuration.setToolkit( new SwingXidgetKit());
     
     SwingUtilities.invokeLater( new Runnable() {
       public void run()
