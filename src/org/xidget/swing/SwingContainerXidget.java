@@ -1,3 +1,7 @@
+/**
+ * Xidget - UI Toolkit based on XModel
+ * Copyright 2009 Bob Dunnagan. All rights reserved.
+ */
 package org.xidget.swing;
 
 import java.awt.Container;
@@ -11,6 +15,7 @@ import org.xidget.feature.IErrorFeature;
 import org.xidget.feature.IWidgetFeature;
 import org.xidget.layout.AnchorLayoutFeature;
 import org.xidget.layout.ConstantNode;
+import org.xidget.layout.IComputeNodeFeature;
 import org.xidget.layout.ILayoutFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
 import org.xidget.swing.layout.AnchorLayoutManager;
@@ -45,15 +50,16 @@ public class SwingContainerXidget extends AbstractXidget implements ISwingContai
     errorFeature = new SwingTooltipErrorFeature( panel);
     
     // upper-left corner is always (0, 0)
-    getAnchor( "x0").addDependency( new ConstantNode( 0));
-    getAnchor( "y0").addDependency( new ConstantNode( 0));    
+    IComputeNodeFeature computeNodeFeature = getFeature( IComputeNodeFeature.class);
+    computeNodeFeature.getAnchor( "x0").addDependency( new ConstantNode( 0));
+    computeNodeFeature.getAnchor( "y0").addDependency( new ConstantNode( 0));    
     
     // lower-right corner is set if size is defined
     Pair size = new Pair( Xlate.get( element, "size", Xlate.childGet( element, "size", "")), 0, 0);
     if ( size.x > 0 || size.y > 0)
     {
-      getAnchor( "x1").addDependency( new ConstantNode( size.x));
-      getAnchor( "y1").addDependency( new ConstantNode( size.y));
+      computeNodeFeature.getAnchor( "x1").addDependency( new ConstantNode( size.x));
+      computeNodeFeature.getAnchor( "y1").addDependency( new ConstantNode( size.y));
     }
     
     return true;
@@ -78,7 +84,7 @@ public class SwingContainerXidget extends AbstractXidget implements ISwingContai
     if ( clss.equals( IWidgetFeature.class)) return (T)widgetFeature;
     if ( clss.equals( IErrorFeature.class)) return (T)errorFeature;
     if ( clss.equals( ILayoutFeature.class)) return (T)layoutFeature;
-    return null;
+    return super.getFeature( clss);
   }
 
   private JPanel panel;

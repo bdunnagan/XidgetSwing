@@ -1,3 +1,7 @@
+/**
+ * Xidget - UI Toolkit based on XModel
+ * Copyright 2009 Bob Dunnagan. All rights reserved.
+ */
 package org.xidget.swing;
 
 import java.awt.Container;
@@ -45,7 +49,7 @@ public class SwingApplicationXidget extends AbstractXidget implements ISwingFram
   {
     if ( clss.equals( ISwingContainerFeature.class)) return (T)this;
     if ( clss.equals( ISwingFrameFeature.class)) return (T)this; 
-    return null;
+    return super.getFeature( clss);
   }
 
   /* (non-Javadoc)
