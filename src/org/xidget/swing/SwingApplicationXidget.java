@@ -10,24 +10,14 @@ import org.xidget.AbstractXidget;
 import org.xidget.IXidget;
 import org.xidget.config.processor.TagException;
 import org.xidget.config.processor.TagProcessor;
+import org.xidget.feature.IWidgetHierarchyFeature;
 import org.xmodel.IModelObject;
 
 /**
  * An implementation of IXidget which represents a Swing JFrame widget.
  */
-public class SwingApplicationXidget extends AbstractXidget implements ISwingFrameFeature, ISwingContainerFeature
+public class SwingApplicationXidget extends AbstractXidget implements IWidgetHierarchyFeature, ISwingFrameFeature, ISwingContainerFeature
 {
-  /* (non-Javadoc)
-   * @see org.xidget.AbstractXidget#startConfig(org.xidget.config.processor.TagProcessor, org.xidget.IXidget, org.xmodel.IModelObject)
-   */
-  @Override
-  public boolean startConfig( TagProcessor processor, IXidget parent, IModelObject element) throws TagException
-  {
-    super.startConfig( processor, parent, element);
-    frame = new JFrame();
-    return true;
-  }
-
   /* (non-Javadoc)
    * @see org.xidget.AbstractXidget#endConfig(org.xidget.config.processor.TagProcessor, org.xmodel.IModelObject)
    */
@@ -49,7 +39,16 @@ public class SwingApplicationXidget extends AbstractXidget implements ISwingFram
   {
     if ( clss.equals( ISwingContainerFeature.class)) return (T)this;
     if ( clss.equals( ISwingFrameFeature.class)) return (T)this; 
+    if ( clss.equals( IWidgetHierarchyFeature.class)) return (T)this;
     return super.getFeature( clss);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.feature.IWidgetHierarchyFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
+   */
+  public void createWidget( IXidget xidget, String label, IModelObject element)
+  {
+    frame = new JFrame();    
   }
 
   /* (non-Javadoc)

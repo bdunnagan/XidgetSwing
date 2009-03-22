@@ -13,6 +13,7 @@ import org.xidget.config.processor.TagProcessor;
 import org.xidget.config.util.Pair;
 import org.xidget.feature.IErrorFeature;
 import org.xidget.feature.IWidgetFeature;
+import org.xidget.feature.IWidgetHierarchyFeature;
 import org.xidget.layout.AnchorLayoutFeature;
 import org.xidget.layout.ConstantNode;
 import org.xidget.layout.IComputeNodeFeature;
@@ -25,7 +26,7 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IXidget that serves as the Swing/AWT implementation of a form.
  */
-public class SwingContainerXidget extends AbstractXidget implements ISwingContainerFeature
+public class SwingContainerXidget extends AbstractXidget implements IWidgetHierarchyFeature, ISwingContainerFeature
 {  
   public SwingContainerXidget()
   {
@@ -40,15 +41,9 @@ public class SwingContainerXidget extends AbstractXidget implements ISwingContai
   {
     super.startConfig( processor, parent, element);
 
-    ISwingContainerFeature containerFeature = parent.getFeature( ISwingContainerFeature.class);
-    Container container = containerFeature.getContainer();
-    
-    panel = new JPanel( new AnchorLayoutManager( layoutFeature));
-    container.add( panel);
-
     widgetFeature = new SwingWidgetFeature( panel);
     errorFeature = new SwingTooltipErrorFeature( panel);
-    
+
     // upper-left corner is always (0, 0)
     IComputeNodeFeature computeNodeFeature = getFeature( IComputeNodeFeature.class);
     computeNodeFeature.getAnchor( "x0").addDependency( new ConstantNode( 0));
@@ -60,9 +55,21 @@ public class SwingContainerXidget extends AbstractXidget implements ISwingContai
     {
       computeNodeFeature.getAnchor( "x1").addDependency( new ConstantNode( size.x));
       computeNodeFeature.getAnchor( "y1").addDependency( new ConstantNode( size.y));
-    }
+    }    
     
     return true;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.feature.IWidgetHierarchyFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
+   */
+  public void createWidget( IXidget xidget, String label, IModelObject element)
+  {
+    ISwingContainerFeature containerFeature = xidget.getParent().getFeature( ISwingContainerFeature.class);
+    Container container = containerFeature.getContainer();
+    
+    panel = new JPanel( new AnchorLayoutManager( layoutFeature));
+    container.add( panel);
   }
 
   /* (non-Javadoc)
@@ -84,6 +91,7 @@ public class SwingContainerXidget extends AbstractXidget implements ISwingContai
     if ( clss.equals( IWidgetFeature.class)) return (T)widgetFeature;
     if ( clss.equals( IErrorFeature.class)) return (T)errorFeature;
     if ( clss.equals( ILayoutFeature.class)) return (T)layoutFeature;
+    if ( clss.equals( IWidgetHierarchyFeature.class)) return (T)this;
     return super.getFeature( clss);
   }
 
