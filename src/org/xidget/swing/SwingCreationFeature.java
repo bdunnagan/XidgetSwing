@@ -7,17 +7,17 @@ package org.xidget.swing;
 import java.awt.Container;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
-import org.xidget.feature.IWidgetHierarchyFeature;
+import org.xidget.feature.IWidgetCreationFeature;
 import org.xmodel.IModelObject;
 
 /**
- * An abstract implementation of IWidgetHierarchyFeature which performs the common
+ * An abstract implementation of IWidgetCreationFeature which performs the common
  * work necessary to relayout the widget hierarchy after a widget is replaced.
  */
-public abstract class SwingWidgetHierarchyFeature implements IWidgetHierarchyFeature
+public abstract class SwingCreationFeature implements IWidgetCreationFeature
 {
   /* (non-Javadoc)
-   * @see org.xidget.feature.IWidgetHierarchyFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.feature.IWidgetCreationFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
    */
   public void createWidget( IXidget xidget, String label, IModelObject element)
   {

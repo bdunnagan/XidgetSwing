@@ -5,24 +5,24 @@
 package org.xidget.swing.text;
 
 import org.xidget.feature.IErrorFeature;
+import org.xidget.feature.IWidgetCreationFeature;
 import org.xidget.feature.IWidgetFeature;
-import org.xidget.feature.IWidgetHierarchyFeature;
 import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingWidgetFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
-import org.xidget.swing.text.feature.SwingTextWidgetHierarchyFeature;
+import org.xidget.swing.text.feature.TextWidgetCreationFeature;
 import org.xidget.swing.text.feature.TextFeature;
 import org.xidget.text.TextXidget;
 import org.xidget.text.feature.IWidgetTextFeature;
 
 /**
- * An implementation of TextXidget for a Swing text widget.
+ * An implementation of TextXidget for a JTextField or JTextArea.
  */
 public class SwingTextXidget extends TextXidget
 {  
   public SwingTextXidget()
   {
-    hierarchyFeature = new SwingTextWidgetHierarchyFeature( this);
+    creationFeature = new TextWidgetCreationFeature( this);
   }
   
   /* (non-Javadoc)
@@ -31,7 +31,8 @@ public class SwingTextXidget extends TextXidget
   @Override
   protected IErrorFeature getErrorFeature()
   {
-    return new SwingTooltipErrorFeature( hierarchyFeature.getWidget());
+    ISwingWidgetFeature widgetFeature = getFeature( ISwingWidgetFeature.class);
+    return new SwingTooltipErrorFeature( widgetFeature.getWidget());
   }
 
   /* (non-Javadoc)
@@ -40,7 +41,8 @@ public class SwingTextXidget extends TextXidget
   @Override
   protected IWidgetFeature getWidgetFeature()
   {
-    return new SwingWidgetFeature( hierarchyFeature.getWidget());
+    ISwingWidgetFeature widgetFeature = getFeature( ISwingWidgetFeature.class);
+    return new SwingWidgetFeature( widgetFeature.getWidget());
   }
 
   /* (non-Javadoc)
@@ -49,7 +51,7 @@ public class SwingTextXidget extends TextXidget
   @Override
   protected IWidgetTextFeature getWidgetTextFeature()
   {
-    return new TextFeature( hierarchyFeature.getTextWidget());
+    return new TextFeature( creationFeature.getTextWidget());
   }
 
   /* (non-Javadoc)
@@ -58,10 +60,10 @@ public class SwingTextXidget extends TextXidget
   @SuppressWarnings("unchecked")
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss.equals( ISwingWidgetFeature.class)) return (T)hierarchyFeature;
-    if ( clss.equals( IWidgetHierarchyFeature.class)) return (T)hierarchyFeature;
+    if ( clss.equals( ISwingWidgetFeature.class)) return (T)creationFeature;
+    if ( clss.equals( IWidgetCreationFeature.class)) return (T)creationFeature;
     return super.getFeature( clss);
   }
 
-  private SwingTextWidgetHierarchyFeature hierarchyFeature;
+  private TextWidgetCreationFeature creationFeature;
 }

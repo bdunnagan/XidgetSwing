@@ -9,6 +9,7 @@ import org.xidget.config.IXidgetKit;
 import org.xidget.config.processor.ITagHandler;
 import org.xidget.swing.SwingApplicationXidget;
 import org.xidget.swing.SwingContainerXidget;
+import org.xidget.swing.text.SwingComboXidget;
 import org.xidget.swing.text.SwingTextXidget;
 
 /**
@@ -55,8 +56,7 @@ public class SwingXidgetKit implements IXidgetKit
    */
   public ITagHandler getComboHandler()
   {
-    // TODO Auto-generated method stub
-    return null;
+    return new XidgetTagHandler( SwingComboXidget.class);
   }
 
   /* (non-Javadoc)

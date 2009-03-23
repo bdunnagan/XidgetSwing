@@ -10,13 +10,13 @@ import org.xidget.AbstractXidget;
 import org.xidget.IXidget;
 import org.xidget.config.processor.TagException;
 import org.xidget.config.processor.TagProcessor;
-import org.xidget.feature.IWidgetHierarchyFeature;
+import org.xidget.feature.IWidgetCreationFeature;
 import org.xmodel.IModelObject;
 
 /**
  * An implementation of IXidget which represents a Swing JFrame widget.
  */
-public class SwingApplicationXidget extends AbstractXidget implements IWidgetHierarchyFeature, ISwingFrameFeature, ISwingContainerFeature
+public class SwingApplicationXidget extends AbstractXidget implements IWidgetCreationFeature, ISwingFrameFeature, ISwingContainerFeature
 {
   /* (non-Javadoc)
    * @see org.xidget.AbstractXidget#endConfig(org.xidget.config.processor.TagProcessor, org.xmodel.IModelObject)
@@ -39,12 +39,12 @@ public class SwingApplicationXidget extends AbstractXidget implements IWidgetHie
   {
     if ( clss.equals( ISwingContainerFeature.class)) return (T)this;
     if ( clss.equals( ISwingFrameFeature.class)) return (T)this; 
-    if ( clss.equals( IWidgetHierarchyFeature.class)) return (T)this;
+    if ( clss.equals( IWidgetCreationFeature.class)) return (T)this;
     return super.getFeature( clss);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.feature.IWidgetHierarchyFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.feature.IWidgetCreationFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
    */
   public void createWidget( IXidget xidget, String label, IModelObject element)
   {

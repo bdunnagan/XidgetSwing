@@ -22,11 +22,16 @@
             <source>collection('appdb')/text1</source>
           </text>
   
-          <!--text id="2" size="50,1">        
+          <combo id="2" size="50,1">
+            <choices>
+              <choice>Choice 1</choice>
+              <choice>Choice 2</choice>
+              <choice>Choice 3</choice>
+            </choices>        
             <source>collection('appdb')/text2</source>
-          </text>
+          </combo>
           
-          <text id="3" size="50,1">        
+          <!--text id="3" size="50,1">        
             <label>Text3</label>
             <source>collection('appdb')/text3</source>
           </text-->

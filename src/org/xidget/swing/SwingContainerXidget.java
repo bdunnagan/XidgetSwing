@@ -13,7 +13,7 @@ import org.xidget.config.processor.TagProcessor;
 import org.xidget.config.util.Pair;
 import org.xidget.feature.IErrorFeature;
 import org.xidget.feature.IWidgetFeature;
-import org.xidget.feature.IWidgetHierarchyFeature;
+import org.xidget.feature.IWidgetCreationFeature;
 import org.xidget.layout.AnchorLayoutFeature;
 import org.xidget.layout.ConstantNode;
 import org.xidget.layout.IComputeNodeFeature;
@@ -26,7 +26,7 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IXidget that serves as the Swing/AWT implementation of a form.
  */
-public class SwingContainerXidget extends AbstractXidget implements IWidgetHierarchyFeature, ISwingContainerFeature
+public class SwingContainerXidget extends AbstractXidget implements IWidgetCreationFeature, ISwingContainerFeature
 {  
   public SwingContainerXidget()
   {
@@ -61,7 +61,7 @@ public class SwingContainerXidget extends AbstractXidget implements IWidgetHiera
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.feature.IWidgetHierarchyFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.feature.IWidgetCreationFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
    */
   public void createWidget( IXidget xidget, String label, IModelObject element)
   {
@@ -91,7 +91,7 @@ public class SwingContainerXidget extends AbstractXidget implements IWidgetHiera
     if ( clss.equals( IWidgetFeature.class)) return (T)widgetFeature;
     if ( clss.equals( IErrorFeature.class)) return (T)errorFeature;
     if ( clss.equals( ILayoutFeature.class)) return (T)layoutFeature;
-    if ( clss.equals( IWidgetHierarchyFeature.class)) return (T)this;
+    if ( clss.equals( IWidgetCreationFeature.class)) return (T)this;
     return super.getFeature( clss);
   }
 
