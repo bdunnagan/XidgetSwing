@@ -10,6 +10,16 @@
       </xml>
     </template>
   </create>
+  
+  <create assign="choices">
+    <template>
+      <choices>
+        <choice>A</choice>
+        <choice>B</choice>
+        <choice>C</choice>
+      </choices>
+    </template>
+  </create>
 
   <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
   <create assign="form">
@@ -23,11 +33,7 @@
           </text>
   
           <combo id="2" size="50,1">
-            <choices>
-              <choice>Choice 1</choice>
-              <choice>Choice 2</choice>
-              <choice>Choice 3</choice>
-            </choices>        
+            <choices>$choices/choice</choices>        
             <source>collection('appdb')/text2</source>
           </combo>
           

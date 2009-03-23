@@ -5,7 +5,7 @@
 package org.xidget.swing.config;
 
 import org.xidget.XidgetTagHandler;
-import org.xidget.config.IXidgetKit;
+import org.xidget.config.XidgetKit;
 import org.xidget.config.processor.ITagHandler;
 import org.xidget.swing.SwingApplicationXidget;
 import org.xidget.swing.SwingContainerXidget;
@@ -15,7 +15,7 @@ import org.xidget.swing.text.SwingTextXidget;
 /**
  * An implementation of IReferenceConfiguration for Swing/AWT.
  */
-public class SwingXidgetKit implements IXidgetKit
+public class SwingXidgetKit extends XidgetKit
 {
   /* (non-Javadoc)
    * @see org.xidget.config.IXidgetKit#getApplicationHandler()
