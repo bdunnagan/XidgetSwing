@@ -13,7 +13,7 @@ import org.xidget.swing.feature.SwingTooltipErrorFeature;
 import org.xidget.swing.text.feature.TextWidgetCreationFeature;
 import org.xidget.swing.text.feature.TextFeature;
 import org.xidget.text.TextXidget;
-import org.xidget.text.feature.IWidgetTextFeature;
+import org.xidget.text.feature.ITextWidgetFeature;
 
 /**
  * An implementation of TextXidget for a JTextField or JTextArea.
@@ -49,7 +49,7 @@ public class SwingTextXidget extends TextXidget
    * @see org.xidget.text.TextXidget#getWidgetTextFeature()
    */
   @Override
-  protected IWidgetTextFeature getWidgetTextFeature()
+  protected ITextWidgetFeature getWidgetTextFeature()
   {
     return new TextFeature( creationFeature.getTextWidget());
   }

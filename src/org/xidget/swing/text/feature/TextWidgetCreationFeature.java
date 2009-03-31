@@ -26,8 +26,8 @@ import org.xidget.config.util.Pair;
 import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingCreationFeature;
 import org.xidget.text.TextXidget;
-import org.xidget.text.feature.IModelTextFeature;
-import org.xidget.text.feature.ModelTextFeature;
+import org.xidget.text.feature.ITextModelFeature;
+import org.xidget.text.feature.TextModelFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
@@ -126,15 +126,15 @@ public class TextWidgetCreationFeature extends SwingCreationFeature implements I
   private final CaretListener caretListener = new CaretListener() {
     public void caretUpdate( CaretEvent e)
     {
-      IModelTextFeature adapter = xidget.getFeature( IModelTextFeature.class);
-      if ( adapter != null) adapter.setText( ModelTextFeature.selectedChannel, jtext.getSelectedText());
+      ITextModelFeature adapter = xidget.getFeature( ITextModelFeature.class);
+      if ( adapter != null) adapter.setText( TextModelFeature.selectedChannel, jtext.getSelectedText());
     }
   };
   
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      IModelTextFeature adapter = xidget.getFeature( IModelTextFeature.class);
+      ITextModelFeature adapter = xidget.getFeature( ITextModelFeature.class);
       if ( adapter != null) adapter.setText( TextXidget.allChannel, jtext.getText());
     }
   };

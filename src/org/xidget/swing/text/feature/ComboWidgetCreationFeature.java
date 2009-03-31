@@ -20,7 +20,7 @@ import org.xidget.IXidget;
 import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingCreationFeature;
 import org.xidget.text.TextXidget;
-import org.xidget.text.feature.IModelTextFeature;
+import org.xidget.text.feature.ITextModelFeature;
 import org.xmodel.IModelObject;
 
 /**
@@ -107,7 +107,7 @@ public class ComboWidgetCreationFeature extends SwingCreationFeature implements 
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      IModelTextFeature feature = xidget.getFeature( IModelTextFeature.class);
+      ITextModelFeature feature = xidget.getFeature( ITextModelFeature.class);
       if ( feature != null) feature.setText( TextXidget.allChannel, jcombo.getSelectedItem().toString());
     }
   };

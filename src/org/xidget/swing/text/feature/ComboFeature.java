@@ -7,14 +7,14 @@ package org.xidget.swing.text.feature;
 import javax.swing.JComboBox;
 import org.xidget.config.util.TextTransform;
 import org.xidget.text.TextXidget;
-import org.xidget.text.feature.IWidgetTextFeature;
+import org.xidget.text.feature.ITextWidgetFeature;
 import org.xmodel.xpath.expression.IExpression;
 
 /**
  * An implementation of IWidgetTextAdapter for a JComboBox widget 
  * which supports the <i>all</i> channel.
  */
-public class ComboFeature implements IWidgetTextFeature
+public class ComboFeature implements ITextWidgetFeature
 {
   public ComboFeature( JComboBox widget)
   {

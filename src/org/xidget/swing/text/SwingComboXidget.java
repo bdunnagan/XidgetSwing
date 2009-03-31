@@ -14,7 +14,7 @@ import org.xidget.swing.text.feature.ComboChoiceListFeature;
 import org.xidget.swing.text.feature.ComboFeature;
 import org.xidget.swing.text.feature.ComboWidgetCreationFeature;
 import org.xidget.text.feature.IChoiceListFeature;
-import org.xidget.text.feature.IWidgetTextFeature;
+import org.xidget.text.feature.ITextWidgetFeature;
 
 /**
  * An implementation of TextXidget for a JComboBox.
@@ -50,7 +50,7 @@ public class SwingComboXidget extends SwingTextXidget
    * @see org.xidget.text.TextXidget#getWidgetTextFeature()
    */
   @Override
-  protected IWidgetTextFeature getWidgetTextFeature()
+  protected ITextWidgetFeature getWidgetTextFeature()
   {
     return new ComboFeature( creationFeature.getComboBox());
   }
