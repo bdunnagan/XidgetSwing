@@ -14,9 +14,9 @@
   <create assign="choices">
     <template>
       <choices>
-        <choice>A</choice>
-        <choice>B</choice>
-        <choice>C</choice>
+        <choice>Time and a Word</choice>
+        <choice>Relayer</choice>
+        <choice>Close to the Edge</choice>
       </choices>
     </template>
   </create>
