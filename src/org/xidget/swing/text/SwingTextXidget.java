@@ -11,7 +11,7 @@ import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingWidgetFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
 import org.xidget.swing.text.feature.TextWidgetCreationFeature;
-import org.xidget.swing.text.feature.TextFeature;
+import org.xidget.swing.text.feature.TextWidgetFeature;
 import org.xidget.text.TextXidget;
 import org.xidget.text.feature.ITextWidgetFeature;
 
@@ -51,7 +51,7 @@ public class SwingTextXidget extends TextXidget
   @Override
   protected ITextWidgetFeature getWidgetTextFeature()
   {
-    return new TextFeature( creationFeature.getTextWidget());
+    return new TextWidgetFeature( creationFeature.getTextWidget());
   }
 
   /* (non-Javadoc)

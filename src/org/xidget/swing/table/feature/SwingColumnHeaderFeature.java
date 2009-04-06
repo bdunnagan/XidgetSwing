@@ -4,19 +4,25 @@
  */
 package org.xidget.swing.table.feature;
 
-import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
+import org.xidget.IXidget;
 import org.xidget.feature.IIconFeature;
 import org.xidget.feature.ITitleFeature;
+import org.xidget.swing.feature.ITableHeaderFeature;
 
 /**
  * An implementation of IIconFeature which sends an event to the JTable to update the column header text and icon.
  */
 public class SwingColumnHeaderFeature implements ITitleFeature, IIconFeature
 {
-  public SwingColumnHeaderFeature( JTable table)
+  /**
+   * Cretae a column header feature for the specified column xidget.
+   * @param xidget The column xidget.
+   * @param column The column index.
+   */
+  public SwingColumnHeaderFeature( IXidget xidget, int column)
   {
-    this.table = table;
+    this.xidget = xidget;
+    this.column = column;
   }
   
   /* (non-Javadoc)
@@ -24,8 +30,8 @@ public class SwingColumnHeaderFeature implements ITitleFeature, IIconFeature
    */
   public void setTitle( String title)
   {
-    TableModelEvent event = new TableModelEvent( table.getModel(), TableModelEvent.HEADER_ROW);
-    table.tableChanged( event);
+    ITableHeaderFeature feature = xidget.getParent().getFeature( ITableHeaderFeature.class);
+    feature.setTitle( column, title);
   }
 
   /* (non-Javadoc)
@@ -33,9 +39,10 @@ public class SwingColumnHeaderFeature implements ITitleFeature, IIconFeature
    */
   public void setIcon( Object icon)
   {
-    TableModelEvent event = new TableModelEvent( table.getModel(), TableModelEvent.HEADER_ROW);
-    table.tableChanged( event);
+    ITableHeaderFeature feature = xidget.getParent().getFeature( ITableHeaderFeature.class);
+    feature.setIcon( column, icon);
   }
-
-  private JTable table;
+  
+  private IXidget xidget;
+  private int column;
 }

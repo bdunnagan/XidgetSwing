@@ -4,7 +4,7 @@
  */
 package org.xidget.swing.config;
 
-import org.xidget.XidgetTagHandler;
+import org.xidget.binding.XidgetTagHandler;
 import org.xidget.config.XidgetKit;
 import org.xidget.config.processor.ITagHandler;
 import org.xidget.swing.SwingApplicationXidget;

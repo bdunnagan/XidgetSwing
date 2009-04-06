@@ -11,8 +11,8 @@ import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingWidgetFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
 import org.xidget.swing.text.feature.ComboChoiceListFeature;
-import org.xidget.swing.text.feature.ComboFeature;
 import org.xidget.swing.text.feature.ComboWidgetCreationFeature;
+import org.xidget.swing.text.feature.ComboWidgetFeature;
 import org.xidget.text.feature.IChoiceListFeature;
 import org.xidget.text.feature.ITextWidgetFeature;
 
@@ -52,7 +52,7 @@ public class SwingComboXidget extends SwingTextXidget
   @Override
   protected ITextWidgetFeature getWidgetTextFeature()
   {
-    return new ComboFeature( creationFeature.getComboBox());
+    return new ComboWidgetFeature( creationFeature.getComboBox());
   }
   
   /**

@@ -4,21 +4,19 @@
  */
 package org.xidget.swing.text.feature;
 
-import javax.swing.text.JTextComponent;
+import javax.swing.JComboBox;
 import org.xidget.config.util.TextTransform;
 import org.xidget.text.TextXidget;
 import org.xidget.text.feature.ITextWidgetFeature;
-import org.xidget.text.feature.TextModelFeature;
 import org.xmodel.xpath.expression.IExpression;
 
 /**
- * An implementation of IWidgetTextAdapter for a JTextField or JTextArea widget which
- * supports both the <i>all</i> and the <i>selected</i> channels. It does not support
- * a transform for the <i>selected</i> channel.
+ * An implementation of IWidgetTextAdapter for a JComboBox widget 
+ * which supports the <i>all</i> channel.
  */
-public class TextFeature implements ITextWidgetFeature
+public class ComboWidgetFeature implements ITextWidgetFeature
 {
-  public TextFeature( JTextComponent widget)
+  public ComboWidgetFeature( JComboBox widget)
   {
     this.widget = widget;
   }
@@ -39,13 +37,7 @@ public class TextFeature implements ITextWidgetFeature
     if ( channel.equals( TextXidget.allChannel))
     {
       if ( transform != null) text = transform.transform( text);
-      widget.setText( text);
-    }
-    else if ( channel.equals( TextModelFeature.selectedChannel))
-    {
-      widget.replaceSelection( text);
-      String allText = widget.getText();
-      widget.setText( transform.transform( allText));
+      widget.setSelectedItem( text);
     }
   }
 
@@ -57,6 +49,6 @@ public class TextFeature implements ITextWidgetFeature
     this.transform = new TextTransform( expression);
   }
   
-  private JTextComponent widget;
+  private JComboBox widget;
   private TextTransform transform;
 }

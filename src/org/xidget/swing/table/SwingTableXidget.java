@@ -6,6 +6,8 @@ package org.xidget.swing.table;
 
 import org.xidget.feature.IErrorFeature;
 import org.xidget.feature.IWidgetFeature;
+import org.xidget.swing.ISwingWidgetFeature;
+import org.xidget.swing.feature.SwingTooltipErrorFeature;
 import org.xidget.table.TableXidget;
 import org.xidget.table.features.ITableModelFeature;
 import org.xidget.table.features.ITableWidgetFeature;
@@ -21,8 +23,8 @@ public class SwingTableXidget extends TableXidget
   @Override
   protected IErrorFeature getErrorFeature()
   {
-    // TODO Auto-generated method stub
-    return null;
+    ISwingWidgetFeature widgetFeature = getFeature( ISwingWidgetFeature.class);
+    return new SwingTooltipErrorFeature( widgetFeature.getWidget());
   }
 
   /* (non-Javadoc)
