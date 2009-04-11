@@ -21,19 +21,33 @@ import org.xidget.text.feature.ITextWidgetFeature;
  */
 public class SwingComboXidget extends SwingTextXidget
 {
-  public SwingComboXidget()
+  /* (non-Javadoc)
+   * @see org.xidget.swing.text.SwingTextXidget#getWidgetCreationFeature()
+   */
+  @Override
+  protected IWidgetCreationFeature getWidgetCreationFeature()
   {
     creationFeature = new ComboWidgetCreationFeature( this);
+    return creationFeature;
   }
-  
+
+  /* (non-Javadoc)
+   * @see org.xidget.text.TextXidget#createFeatures()
+   */
+  @Override
+  protected void createFeatures()
+  {
+    super.createFeatures();
+    choiceListFeature = new ComboChoiceListFeature( creationFeature.getComboBox());
+  }
+
   /* (non-Javadoc)
    * @see org.xidget.text.TextXidget#getErrorFeature()
    */
   @Override
   protected IErrorFeature getErrorFeature()
   {
-    ISwingWidgetFeature widgetFeature = getFeature( ISwingWidgetFeature.class);
-    return new SwingTooltipErrorFeature( widgetFeature.getWidget());
+    return new SwingTooltipErrorFeature( this);
   }
 
   /* (non-Javadoc)
@@ -50,21 +64,11 @@ public class SwingComboXidget extends SwingTextXidget
    * @see org.xidget.text.TextXidget#getWidgetTextFeature()
    */
   @Override
-  protected ITextWidgetFeature getWidgetTextFeature()
+  protected ITextWidgetFeature getTextWidgetFeature()
   {
     return new ComboWidgetFeature( creationFeature.getComboBox());
   }
   
-  /**
-   * Returns the IChoiceListFeature.
-   * @return Returns the IChoiceListFeature.
-   */
-  private IChoiceListFeature getChoiceListFeature()
-  {
-    if ( choiceListFeature == null) choiceListFeature = new ComboChoiceListFeature( creationFeature.getComboBox());
-    return choiceListFeature;
-  }
-
   /* (non-Javadoc)
    * @see org.xidget.IXidget#getAdapter(java.lang.Class)
    */
@@ -73,7 +77,7 @@ public class SwingComboXidget extends SwingTextXidget
   {
     if ( clss.equals( ISwingWidgetFeature.class)) return (T)creationFeature;
     if ( clss.equals( IWidgetCreationFeature.class)) return (T)creationFeature;
-    if ( clss.equals( IChoiceListFeature.class)) return (T)getChoiceListFeature(); 
+    if ( clss.equals( IChoiceListFeature.class)) return (T)choiceListFeature; 
     return super.getFeature( clss);
   }
 

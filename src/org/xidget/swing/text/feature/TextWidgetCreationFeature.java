@@ -38,7 +38,7 @@ public class TextWidgetCreationFeature extends SwingCreationFeature implements I
 {
   public TextWidgetCreationFeature( IXidget xidget)
   {
-    this.xidget = xidget;
+    super( xidget);
   }
   
   /* (non-Javadoc)
@@ -139,7 +139,6 @@ public class TextWidgetCreationFeature extends SwingCreationFeature implements I
     }
   };
 
-  private IXidget xidget;
   private JComponent component;
   private JLabel jlabel;
   private JTextComponent jtext;

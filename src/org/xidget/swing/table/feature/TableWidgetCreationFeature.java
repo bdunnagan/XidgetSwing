@@ -11,6 +11,8 @@ import org.xidget.IXidget;
 import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingCreationFeature;
 import org.xidget.swing.table.CustomTableModel;
+import org.xidget.swing.table.renderer.CustomCellRenderer;
+import org.xidget.swing.table.renderer.CustomHeaderCellRenderer;
 import org.xmodel.IModelObject;
 
 /**
@@ -20,7 +22,7 @@ public class TableWidgetCreationFeature extends SwingCreationFeature implements 
 {
   public TableWidgetCreationFeature( IXidget xidget)
   {
-    this.xidget = xidget;
+    super( xidget);
   }
   
   /* (non-Javadoc)
@@ -30,7 +32,11 @@ public class TableWidgetCreationFeature extends SwingCreationFeature implements 
   protected JComponent createSwingWidget( Container container, String label, IModelObject element)
   {
     table = new JTable( new CustomTableModel( xidget));
+    table.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
+    table.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
+    
     container.add( table);
+    
     return table;
   }
 
@@ -42,6 +48,5 @@ public class TableWidgetCreationFeature extends SwingCreationFeature implements 
     return table;
   }
 
-  private IXidget xidget;
   private JTable table;
 }

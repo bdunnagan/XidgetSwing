@@ -22,6 +22,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
   public CustomTableModel( IXidget xidget)
   {
     this.xidget = xidget;
+    this.editors = new ArrayList<IXidget>( 5);
     this.headers = new ArrayList<Column>( 5);
     this.rows = new ArrayList<Column[]>( 5);
   }
@@ -73,6 +74,48 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
   }
   
   /* (non-Javadoc)
+   * @see org.xidget.table.features.ITableWidgetFeature#insertRow(int)
+   */
+  public void insertRow( int row)
+  {
+    Column[] column = new Column[ getColumnCount()];
+    rows.add( column);
+    fireTableRowsInserted( row, row);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.table.features.ITableWidgetFeature#removeRow(int)
+   */
+  public void removeRow( int row)
+  {
+    rows.remove( row);
+    fireTableRowsDeleted( row, row);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.table.features.ITableWidgetFeature#insertRows(int, int)
+   */
+  public void insertRows( int row, int count)
+  {
+    int columnCount = getColumnCount();
+    for( int i=0; i<count; i++)
+    {
+      Column[] column = new Column[ columnCount];
+      rows.add( column);
+    }
+    fireTableRowsInserted( row, row+count-1);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.table.features.ITableWidgetFeature#removeRows(int, int)
+   */
+  public void removeRows( int row, int count)
+  {
+    for( int i=0; i<count; i++) rows.remove( row);
+    fireTableRowsDeleted( row, row+count-1);
+  }
+
+  /* (non-Javadoc)
    * @see javax.swing.table.AbstractTableModel#getColumnName(int)
    */
   @Override
@@ -121,13 +164,44 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
     feature.setText( rowIndex, columnIndex, TextXidget.allChannel, value.toString());
   }
   
+  /**
+   * Returns the icon at the specified cell.
+   * @param rowIndex The row index.
+   * @param columnIndex The column index.
+   */
+  public Object getIconAt( int rowIndex, int columnIndex)
+  {
+    Column[] columns = rows.get( rowIndex);
+    return columns[ columnIndex].icon;
+  }
+  
+  /**
+   * Returns the header title of the specified column.
+   * @param columnIndex The column index.
+   */
+  public String getHeaderTitleAt( int columnIndex)
+  {
+    Column header = headers.get( columnIndex);
+    return header.text;
+  }
+  
+  /**
+   * Returns the header icon of the specified column.
+   * @param columnIndex The column index.
+   */
+  public Object getHeaderIconAt( int columnIndex)
+  {
+    Column header = headers.get( columnIndex);
+    return header.icon;
+  }
+    
   /* (non-Javadoc)
    * @see org.xidget.table.features.ITableWidgetFeature#setEditor(int, org.xidget.IXidget)
    */
   public void setEditor( int column, IXidget xidget)
   {
-    // TODO Auto-generated method stub
-    
+    for( int i=editors.size(); i<=column; i++) editors.add( null);
+    editors.set( column, xidget);
   }
 
   /* (non-Javadoc)
@@ -150,6 +224,27 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
     fireTableCellUpdated( rowIndex, columnIndex);
   }
   
+  /**
+   * Set whether the specified cell is editable.
+   * @param rowIndex The row index of the cell.
+   * @param columnIndex The column index of the cell.
+   * @param editable True if the cell is editable.
+   */
+  public void setEditable( int rowIndex, int columnIndex, boolean editable)
+  {
+    rows.get( rowIndex)[ columnIndex].editable = editable;
+  }
+  
+  /* (non-Javadoc)
+   * @see javax.swing.table.AbstractTableModel#isCellEditable(int, int)
+   */
+  @Override
+  public boolean isCellEditable( int rowIndex, int columnIndex)
+  {
+    if ( editors.get( rowIndex) == null) return false;
+    return rows.get( rowIndex)[ columnIndex].editable;
+  }
+
   /**
    * Change the column count for all rows.
    * @param count The new count.
@@ -176,9 +271,11 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
   {
     Object icon;
     String text;
+    boolean editable;
   }
 
   private IXidget xidget;
+  private List<IXidget> editors;
   private List<Column> headers;
   private List<Column[]> rows;
 }

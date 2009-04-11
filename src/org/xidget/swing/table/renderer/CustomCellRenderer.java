@@ -11,10 +11,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.xidget.swing.table.CustomTableModel;
 
 /**
- * A TableCellRenderer to be used as the table column header renderer.
+ * A TableCellRenderer to be used as the table column row renderer. 
  */
 @SuppressWarnings("serial")
-public class CustomHeaderCellRenderer extends DefaultTableCellRenderer
+public class CustomCellRenderer extends DefaultTableCellRenderer
 {
   /* (non-Javadoc)
    * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(
@@ -28,9 +28,9 @@ public class CustomHeaderCellRenderer extends DefaultTableCellRenderer
     
     // consult table model for header title and icon
     CustomTableModel model = (CustomTableModel)table.getModel();
-    setIcon( (Icon)model.getHeaderIconAt( column));
+    setIcon( (Icon)model.getIconAt( row, column));
     
-    Object object = model.getHeaderTitleAt( column);
+    Object object = model.getValueAt( row, column);
     String text = (object != null)? object.toString(): "";
     setName( text);
     setText( text);

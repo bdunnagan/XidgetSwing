@@ -6,8 +6,8 @@ package org.xidget.swing;
 
 import java.awt.Container;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import org.xidget.AbstractXidget;
-import org.xidget.IXidget;
 import org.xidget.config.processor.TagException;
 import org.xidget.config.processor.TagProcessor;
 import org.xidget.feature.IWidgetCreationFeature;
@@ -25,10 +25,24 @@ public class SwingApplicationXidget extends AbstractXidget implements IWidgetCre
   public void endConfig( TagProcessor processor, IModelObject element) throws TagException
   {
     super.endConfig( processor, element);
-    
-    frame.pack();
-    frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
-    frame.setVisible( true);
+
+    SwingUtilities.invokeLater( new Runnable() {
+      public void run()
+      {
+        frame.pack();
+        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
+        frame.setVisible( true);
+      }
+    });
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.AbstractXidget#getWidgetCreationFeature()
+   */
+  @Override
+  protected IWidgetCreationFeature getWidgetCreationFeature()
+  {
+    return this;
   }
 
   /* (non-Javadoc)
@@ -39,16 +53,24 @@ public class SwingApplicationXidget extends AbstractXidget implements IWidgetCre
   {
     if ( clss.equals( ISwingContainerFeature.class)) return (T)this;
     if ( clss.equals( ISwingFrameFeature.class)) return (T)this; 
-    if ( clss.equals( IWidgetCreationFeature.class)) return (T)this;
     return super.getFeature( clss);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.feature.IWidgetCreationFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.feature.IWidgetCreationFeature#createWidget( java.lang.String, org.xmodel.IModelObject)
    */
-  public void createWidget( IXidget xidget, String label, IModelObject element)
+  public void createWidget( String label, IModelObject element)
   {
-    frame = new JFrame();    
+    frame = new JFrame();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
+   */
+  public void destroyWidget()
+  {
+    frame.dispose();
+    frame = null;
   }
 
   /* (non-Javadoc)

@@ -16,21 +16,31 @@ import org.xmodel.IModelObject;
  */
 public abstract class SwingCreationFeature implements IWidgetCreationFeature
 {
+  protected SwingCreationFeature( IXidget xidget)
+  {
+    this.xidget = xidget;
+  }
+  
   /* (non-Javadoc)
-   * @see org.xidget.feature.IWidgetCreationFeature#createWidget(org.xidget.IXidget, java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.feature.IWidgetCreationFeature#createWidget(java.lang.String, org.xmodel.IModelObject)
    */
-  public void createWidget( IXidget xidget, String label, IModelObject element)
+  public void createWidget( String label, IModelObject element)
   {
     JComponent container = xidget.getParent().getFeature( ISwingWidgetFeature.class).getWidget();
-    JComponent oldWidget = xidget.getFeature( ISwingWidgetFeature.class).getWidget();
     createSwingWidget( container, label, element);
-    if ( oldWidget != null)
-    {
-      container.remove( oldWidget);
-      container.revalidate();
-    }
   }
  
+  /* (non-Javadoc)
+   * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
+   */
+  public void destroyWidget()
+  {
+    JComponent widget = xidget.getFeature( ISwingWidgetFeature.class).getWidget();
+    Container container = widget.getParent();
+    container.remove( widget);
+    container.invalidate();
+  }
+
   /**
    * Create the new swing widget in the specified container.
    * @param container The container.
@@ -39,4 +49,6 @@ public abstract class SwingCreationFeature implements IWidgetCreationFeature
    * @return Returns the new swing widget.
    */
   protected abstract JComponent createSwingWidget( Container container, String label, IModelObject element);
+  
+  protected IXidget xidget;
 }

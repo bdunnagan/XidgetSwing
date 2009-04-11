@@ -39,6 +39,14 @@ public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetFeature
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.feature.IWidgetFeature#setVisible(boolean)
+   */
+  public void setVisible( boolean visible)
+  {
+    widget.setVisible( visible);
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.IWidgetAdapter#setEnabled(boolean)
    */
   public void setEnabled( boolean enabled)

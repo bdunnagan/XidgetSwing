@@ -21,7 +21,19 @@ import org.xmodel.xml.XmlIO;
  */
 public class Main
 {
-  public static void main( String[] args) throws Exception
+  public static void main( String[] args)
+  {  
+    try
+    {
+      run( args);
+    }
+    catch( Exception e)
+    {
+      e.printStackTrace();
+    }
+  }  
+  
+  public static void run( String[] args) throws Exception
   {    
     final File file = new File( args[ 0]);
     

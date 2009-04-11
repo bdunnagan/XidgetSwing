@@ -20,19 +20,23 @@ import org.xidget.text.feature.ITextWidgetFeature;
  */
 public class SwingTextXidget extends TextXidget
 {  
-  public SwingTextXidget()
+  /* (non-Javadoc)
+   * @see org.xidget.AbstractXidget#getWidgetCreationFeature()
+   */
+  @Override
+  protected IWidgetCreationFeature getWidgetCreationFeature()
   {
     creationFeature = new TextWidgetCreationFeature( this);
+    return creationFeature;
   }
-  
+
   /* (non-Javadoc)
    * @see org.xidget.text.TextXidget#getErrorFeature()
    */
   @Override
   protected IErrorFeature getErrorFeature()
   {
-    ISwingWidgetFeature widgetFeature = getFeature( ISwingWidgetFeature.class);
-    return new SwingTooltipErrorFeature( widgetFeature.getWidget());
+    return new SwingTooltipErrorFeature( this);
   }
 
   /* (non-Javadoc)
@@ -49,7 +53,7 @@ public class SwingTextXidget extends TextXidget
    * @see org.xidget.text.TextXidget#getWidgetTextFeature()
    */
   @Override
-  protected ITextWidgetFeature getWidgetTextFeature()
+  protected ITextWidgetFeature getTextWidgetFeature()
   {
     return new TextWidgetFeature( creationFeature.getTextWidget());
   }
@@ -61,9 +65,8 @@ public class SwingTextXidget extends TextXidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss.equals( ISwingWidgetFeature.class)) return (T)creationFeature;
-    if ( clss.equals( IWidgetCreationFeature.class)) return (T)creationFeature;
     return super.getFeature( clss);
   }
-
+  
   private TextWidgetCreationFeature creationFeature;
 }

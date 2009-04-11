@@ -30,7 +30,7 @@ public class ComboWidgetCreationFeature extends SwingCreationFeature implements 
 {
   public ComboWidgetCreationFeature( IXidget xidget)
   {
-    this.xidget = xidget;
+    super( xidget);
   }
   
   /* (non-Javadoc)
@@ -112,7 +112,6 @@ public class ComboWidgetCreationFeature extends SwingCreationFeature implements 
     }
   };
 
-  private IXidget xidget;
   private JComponent component;
   private JLabel jlabel;
   private JComboBox jcombo;
