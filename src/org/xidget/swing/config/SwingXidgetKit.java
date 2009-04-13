@@ -9,8 +9,9 @@ import org.xidget.config.XidgetKit;
 import org.xidget.config.processor.ITagHandler;
 import org.xidget.swing.SwingApplicationXidget;
 import org.xidget.swing.SwingContainerXidget;
-import org.xidget.swing.text.SwingComboXidget;
-import org.xidget.swing.text.SwingTextXidget;
+import org.xidget.swing.table.JTableXidget;
+import org.xidget.swing.text.JComboBoxXidget;
+import org.xidget.swing.text.JTextComponentXidget;
 
 /**
  * An implementation of IReferenceConfiguration for Swing/AWT.
@@ -56,7 +57,7 @@ public class SwingXidgetKit extends XidgetKit
    */
   public ITagHandler getComboHandler()
   {
-    return new XidgetTagHandler( SwingComboXidget.class);
+    return new XidgetTagHandler( JComboBoxXidget.class);
   }
 
   /* (non-Javadoc)
@@ -73,8 +74,7 @@ public class SwingXidgetKit extends XidgetKit
    */
   public ITagHandler getTableHandler()
   {
-    // TODO Auto-generated method stub
-    return null;
+    return new XidgetTagHandler( JTableXidget.class);
   }
 
   /* (non-Javadoc)
@@ -82,7 +82,7 @@ public class SwingXidgetKit extends XidgetKit
    */
   public ITagHandler getTextHandler()
   {
-    return new XidgetTagHandler( SwingTextXidget.class);
+    return new XidgetTagHandler( JTextComponentXidget.class);
   }
 
   /* (non-Javadoc)

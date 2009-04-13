@@ -13,9 +13,9 @@ import org.xmodel.IModelObject;
 /**
  * An implementation of IIconFeature for setting the icon of a JTable cell.
  */
-public class SwingCellIconFeature implements IIconFeature
+public class JTableCellIconFeature implements IIconFeature
 {
-  public SwingCellIconFeature( IXidget xidget)
+  public JTableCellIconFeature( IXidget xidget)
   {
     this.xidget = xidget;
 

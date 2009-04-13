@@ -10,16 +10,16 @@ import org.xidget.feature.IWidgetFeature;
 import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingWidgetFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
-import org.xidget.swing.text.feature.ComboChoiceListFeature;
-import org.xidget.swing.text.feature.ComboWidgetCreationFeature;
-import org.xidget.swing.text.feature.ComboWidgetFeature;
+import org.xidget.swing.text.feature.JComboBoxChoiceListFeature;
+import org.xidget.swing.text.feature.JComboBoxWidgetCreationFeature;
+import org.xidget.swing.text.feature.JComboBoxWidgetFeature;
 import org.xidget.text.feature.IChoiceListFeature;
 import org.xidget.text.feature.ITextWidgetFeature;
 
 /**
  * An implementation of TextXidget for a JComboBox.
  */
-public class SwingComboXidget extends SwingTextXidget
+public class JComboBoxXidget extends JTextComponentXidget
 {
   /* (non-Javadoc)
    * @see org.xidget.swing.text.SwingTextXidget#getWidgetCreationFeature()
@@ -27,7 +27,7 @@ public class SwingComboXidget extends SwingTextXidget
   @Override
   protected IWidgetCreationFeature getWidgetCreationFeature()
   {
-    creationFeature = new ComboWidgetCreationFeature( this);
+    creationFeature = new JComboBoxWidgetCreationFeature( this);
     return creationFeature;
   }
 
@@ -38,7 +38,7 @@ public class SwingComboXidget extends SwingTextXidget
   protected void createFeatures()
   {
     super.createFeatures();
-    choiceListFeature = new ComboChoiceListFeature( creationFeature.getComboBox());
+    choiceListFeature = new JComboBoxChoiceListFeature( creationFeature.getComboBox());
   }
 
   /* (non-Javadoc)
@@ -66,7 +66,7 @@ public class SwingComboXidget extends SwingTextXidget
   @Override
   protected ITextWidgetFeature getTextWidgetFeature()
   {
-    return new ComboWidgetFeature( creationFeature.getComboBox());
+    return new JComboBoxWidgetFeature( creationFeature.getComboBox());
   }
   
   /* (non-Javadoc)
@@ -81,6 +81,6 @@ public class SwingComboXidget extends SwingTextXidget
     return super.getFeature( clss);
   }
 
-  private ComboWidgetCreationFeature creationFeature;
-  private ComboChoiceListFeature choiceListFeature;
+  private JComboBoxWidgetCreationFeature creationFeature;
+  private JComboBoxChoiceListFeature choiceListFeature;
 }

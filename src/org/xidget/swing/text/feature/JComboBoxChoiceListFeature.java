@@ -12,9 +12,9 @@ import org.xidget.text.feature.IChoiceListFeature;
 /**
  * An implementation of IChoiceListFeature which is backed by a JComboBox.
  */
-public class ComboChoiceListFeature implements IChoiceListFeature
+public class JComboBoxChoiceListFeature implements IChoiceListFeature
 {
-  public ComboChoiceListFeature( JComboBox widget)
+  public JComboBoxChoiceListFeature( JComboBox widget)
   {
     this.widget = widget;
   }

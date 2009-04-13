@@ -10,15 +10,15 @@ import org.xidget.feature.IWidgetFeature;
 import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingWidgetFeature;
 import org.xidget.swing.feature.SwingTooltipErrorFeature;
-import org.xidget.swing.text.feature.TextWidgetCreationFeature;
-import org.xidget.swing.text.feature.TextWidgetFeature;
+import org.xidget.swing.text.feature.JTextComponentWidgetCreationFeature;
+import org.xidget.swing.text.feature.JTextComponentWidgetFeature;
 import org.xidget.text.TextXidget;
 import org.xidget.text.feature.ITextWidgetFeature;
 
 /**
  * An implementation of TextXidget for a JTextField or JTextArea.
  */
-public class SwingTextXidget extends TextXidget
+public class JTextComponentXidget extends TextXidget
 {  
   /* (non-Javadoc)
    * @see org.xidget.AbstractXidget#getWidgetCreationFeature()
@@ -26,7 +26,7 @@ public class SwingTextXidget extends TextXidget
   @Override
   protected IWidgetCreationFeature getWidgetCreationFeature()
   {
-    creationFeature = new TextWidgetCreationFeature( this);
+    creationFeature = new JTextComponentWidgetCreationFeature( this);
     return creationFeature;
   }
 
@@ -55,7 +55,7 @@ public class SwingTextXidget extends TextXidget
   @Override
   protected ITextWidgetFeature getTextWidgetFeature()
   {
-    return new TextWidgetFeature( creationFeature.getTextWidget());
+    return new JTextComponentWidgetFeature( creationFeature.getTextWidget());
   }
 
   /* (non-Javadoc)
@@ -68,5 +68,5 @@ public class SwingTextXidget extends TextXidget
     return super.getFeature( clss);
   }
   
-  private TextWidgetCreationFeature creationFeature;
+  private JTextComponentWidgetCreationFeature creationFeature;
 }

@@ -14,9 +14,9 @@ import org.xmodel.xpath.expression.IExpression;
  * An implementation of IWidgetTextAdapter for a JComboBox widget 
  * which supports the <i>all</i> channel.
  */
-public class ComboWidgetFeature implements ITextWidgetFeature
+public class JComboBoxWidgetFeature implements ITextWidgetFeature
 {
-  public ComboWidgetFeature( JComboBox widget)
+  public JComboBoxWidgetFeature( JComboBox widget)
   {
     this.widget = widget;
   }

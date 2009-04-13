@@ -8,6 +8,7 @@ import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import org.xidget.IXidget;
+import org.xidget.feature.IWidgetCreationFeature;
 import org.xidget.swing.ISwingWidgetFeature;
 import org.xidget.swing.SwingCreationFeature;
 import org.xidget.swing.table.CustomTableModel;
@@ -16,11 +17,11 @@ import org.xidget.swing.table.renderer.CustomHeaderCellRenderer;
 import org.xmodel.IModelObject;
 
 /**
- * An implementation of IWidgetCreationFeature which creates a JTable.
+ * An implementation of IWidgetCreationFeature for creating a JTable.
  */
-public class TableWidgetCreationFeature extends SwingCreationFeature implements ISwingWidgetFeature
+public class JTableWidgetCreationFeature extends SwingCreationFeature implements IWidgetCreationFeature, ISwingWidgetFeature
 {
-  public TableWidgetCreationFeature( IXidget xidget)
+  public JTableWidgetCreationFeature( IXidget xidget)
   {
     super( xidget);
   }
@@ -31,13 +32,13 @@ public class TableWidgetCreationFeature extends SwingCreationFeature implements 
   @Override
   protected JComponent createSwingWidget( Container container, String label, IModelObject element)
   {
-    table = new JTable( new CustomTableModel( xidget));
-    table.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
-    table.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
-    
-    container.add( table);
-    
-    return table;
+    // TODO: add support for widget label for jtable
+    CustomTableModel tableModel = new CustomTableModel( xidget);
+    jtable = new JTable( tableModel);
+    jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
+    jtable.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
+    container.add( jtable);
+    return jtable;
   }
 
   /* (non-Javadoc)
@@ -45,8 +46,9 @@ public class TableWidgetCreationFeature extends SwingCreationFeature implements 
    */
   public JComponent getWidget()
   {
-    return table;
+    return jtable;
   }
 
-  private JTable table;
+  private IXidget xidget;
+  private JTable jtable;
 }

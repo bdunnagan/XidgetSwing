@@ -16,9 +16,9 @@ import org.xmodel.xpath.expression.IExpression;
  * supports both the <i>all</i> and the <i>selected</i> channels. It does not support
  * a transform for the <i>selected</i> channel.
  */
-public class TextWidgetFeature implements ITextWidgetFeature
+public class JTextComponentWidgetFeature implements ITextWidgetFeature
 {
-  public TextWidgetFeature( JTextComponent widget)
+  public JTextComponentWidgetFeature( JTextComponent widget)
   {
     this.widget = widget;
   }

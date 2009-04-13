@@ -16,9 +16,9 @@ import org.xmodel.xpath.expression.IExpression;
 /**
  * An implementation of ICellTextWidgetFeature for cells in a JTable.
  */
-public class SwingCellTextWidgetFeature implements ITextWidgetFeature
+public class JTableCellTextWidgetFeature implements ITextWidgetFeature
 {
-  public SwingCellTextWidgetFeature( IXidget xidget)
+  public JTableCellTextWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
 
@@ -64,7 +64,7 @@ public class SwingCellTextWidgetFeature implements ITextWidgetFeature
    */
   private int getCurrentRow()
   {
-    IRowSetFeature rowSetFeature = xidget.getFeature( IRowSetFeature.class);
+    IRowSetFeature rowSetFeature = xidget.getParent().getFeature( IRowSetFeature.class);
     return rowSetFeature.getCurrentRow();
   }
   
