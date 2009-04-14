@@ -271,7 +271,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
       for( int j=0; j<count; j++) columns[ j] = new Column();
       
       System.arraycopy( rows.get( i), 0, columns, 0, max);
-      for( int j=max; j<=count; j++) columns[ j].text = "";
+      for( int j=max; j<count; j++) columns[ j].text = "";
       
       rows.set( i, columns);
     }
