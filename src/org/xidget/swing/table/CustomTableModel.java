@@ -145,6 +145,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
    */
   public Object getValueAt( int rowIndex, int columnIndex)
   {
+    changeColumnCount( columnIndex+1);
     Column[] columns = rows.get( rowIndex);
     return columns[ columnIndex].text;
   }
@@ -155,6 +156,8 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
   @Override
   public void setValueAt( Object value, int rowIndex, int columnIndex)
   {
+    changeColumnCount( columnIndex+1);
+    
     // set text in table
     Column[] columns = rows.get( rowIndex);
     columns[ columnIndex].text = value.toString();
@@ -171,6 +174,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
    */
   public Object getIconAt( int rowIndex, int columnIndex)
   {
+    changeColumnCount( columnIndex+1);
     Column[] columns = rows.get( rowIndex);
     return columns[ columnIndex].icon;
   }
@@ -181,6 +185,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
    */
   public String getHeaderTitleAt( int columnIndex)
   {
+    changeColumnCount( columnIndex+1);
     Column header = headers.get( columnIndex);
     return header.text;
   }
@@ -191,6 +196,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
    */
   public Object getHeaderIconAt( int columnIndex)
   {
+    changeColumnCount( columnIndex+1);
     Column header = headers.get( columnIndex);
     return header.icon;
   }
@@ -209,6 +215,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
    */
   public void setIcon( int rowIndex, int columnIndex, Object icon)
   {
+    changeColumnCount( columnIndex+1);
     Column[] columns = rows.get( rowIndex);
     columns[ columnIndex].icon = icon;
     fireTableCellUpdated( rowIndex, columnIndex);
@@ -219,6 +226,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
    */
   public void setText( int rowIndex, int columnIndex, String text)
   {
+    changeColumnCount( columnIndex+1);
     Column[] columns = rows.get( rowIndex);
     columns[ columnIndex].text = text;
     fireTableCellUpdated( rowIndex, columnIndex);
@@ -232,6 +240,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
    */
   public void setEditable( int rowIndex, int columnIndex, boolean editable)
   {
+    changeColumnCount( columnIndex+1);
     rows.get( rowIndex)[ columnIndex].editable = editable;
   }
   
@@ -241,6 +250,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
   @Override
   public boolean isCellEditable( int rowIndex, int columnIndex)
   {
+    changeColumnCount( columnIndex+1);
     if ( editors.get( rowIndex) == null) return false;
     return rows.get( rowIndex)[ columnIndex].editable;
   }
@@ -251,7 +261,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
    */
   private void changeColumnCount( int count)
   {
-    if ( rows.size() == 0) return;
+    if ( rows.size() == 0 || rows.get( 0).length > count) return;
     
     int current = rows.get( 0).length;
     int max = (current < count)? current: count;
