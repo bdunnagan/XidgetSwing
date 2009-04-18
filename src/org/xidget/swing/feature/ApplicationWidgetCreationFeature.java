@@ -2,14 +2,14 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.impl;
+package org.xidget.swing.feature;
 
 import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.swing.feature.ISwingContainerFeature;
-import org.xidget.swing.feature.ISwingFrameFeature;
+import org.xidget.swing.ifeature.ISwingContainerFeature;
+import org.xidget.swing.ifeature.ISwingFrameFeature;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.

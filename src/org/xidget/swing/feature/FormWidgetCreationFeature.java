@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.impl;
+package org.xidget.swing.feature;
 
 import java.awt.Container;
 import javax.swing.JPanel;
@@ -11,7 +11,7 @@ import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.layout.ConstantNode;
-import org.xidget.swing.feature.ISwingContainerFeature;
+import org.xidget.swing.ifeature.ISwingContainerFeature;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;

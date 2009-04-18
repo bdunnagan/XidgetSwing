@@ -6,7 +6,7 @@ package org.xidget.swing.table.feature;
 
 import javax.swing.JTable;
 import org.xidget.IXidget;
-import org.xidget.swing.feature.ISwingWidgetFeature;
+import org.xidget.swing.ifeature.ISwingWidgetFeature;
 import org.xidget.swing.table.CustomTableModel;
 import org.xidget.table.ifeatures.ITableWidgetFeature;
 

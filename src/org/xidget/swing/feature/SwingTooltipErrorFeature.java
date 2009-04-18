@@ -2,12 +2,12 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.impl;
+package org.xidget.swing.feature;
 
 import javax.swing.JComponent;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IErrorFeature;
-import org.xidget.swing.feature.ISwingWidgetFeature;
+import org.xidget.swing.ifeature.ISwingWidgetFeature;
 
 /**
  * An IErrorAdapter which displays the error in a tooltip on a Swing component.

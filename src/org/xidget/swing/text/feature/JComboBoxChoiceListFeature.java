@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.text.feature.impl;
+package org.xidget.swing.text.feature;
 
 import java.util.ArrayList;
 import java.util.List;
