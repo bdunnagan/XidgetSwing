@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.xidget.IXidget;
+import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.table.ITableModelFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
-import org.xidget.text.TextXidget;
 
 /**
  * A custom table model for table xidgets.
@@ -164,7 +164,7 @@ public class CustomTableModel extends AbstractTableModel implements ITableWidget
     
     // set text in model
     ITableModelFeature feature = xidget.getFeature( ITableModelFeature.class);
-    feature.setText( rowIndex, columnIndex, TextXidget.allChannel, value.toString());
+    feature.setText( rowIndex, columnIndex, TextModelFeature.allChannel, value.toString());
   }
   
   /**
