@@ -6,7 +6,6 @@ package org.xidget.swing.text.feature;
 
 import javax.swing.text.JTextComponent;
 import org.xidget.config.util.TextTransform;
-import org.xidget.text.TextXidget;
 import org.xidget.text.feature.TextModelFeature;
 import org.xidget.text.ifeature.ITextWidgetFeature;
 import org.xmodel.xpath.expression.IExpression;
@@ -36,7 +35,7 @@ public class JTextComponentWidgetFeature implements ITextWidgetFeature
    */
   public void setText( String channel, String text)
   {
-    if ( channel.equals( TextXidget.allChannel))
+    if ( channel.equals( TextModelFeature.allChannel))
     {
       if ( transform != null) text = transform.transform( text);
       widget.setText( text);

@@ -9,7 +9,6 @@ import javax.swing.JComponent;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.ifeature.ISwingWidgetFeature;
-import org.xmodel.IModelObject;
 
 /**
  * An abstract implementation of IWidgetCreationFeature which performs the common
@@ -23,12 +22,12 @@ public abstract class SwingCreationFeature implements IWidgetCreationFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.feature.IWidgetCreationFeature#createWidget(java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.IWidgetCreationFeature#createWidget()
    */
-  public void createWidget( String label, IModelObject element)
+  public void createWidget()
   {
     JComponent container = xidget.getParent().getFeature( ISwingWidgetFeature.class).getWidget();
-    createSwingWidget( container, label, element);
+    createSwingWidget( container);
   }
  
   /* (non-Javadoc)
@@ -45,11 +44,9 @@ public abstract class SwingCreationFeature implements IWidgetCreationFeature
   /**
    * Create the new swing widget in the specified container.
    * @param container The container.
-   * @param label The xidget label.
-   * @param element The configuration element.
    * @return Returns the new swing widget.
    */
-  protected abstract JComponent createSwingWidget( Container container, String label, IModelObject element);
+  protected abstract JComponent createSwingWidget( Container container);
   
   protected IXidget xidget;
 }

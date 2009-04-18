@@ -19,9 +19,9 @@ import javax.swing.border.EmptyBorder;
 import org.xidget.IXidget;
 import org.xidget.swing.feature.SwingCreationFeature;
 import org.xidget.swing.ifeature.ISwingWidgetFeature;
-import org.xidget.text.TextXidget;
+import org.xidget.text.feature.TextModelFeature;
 import org.xidget.text.ifeature.ITextModelFeature;
-import org.xmodel.IModelObject;
+import org.xmodel.Xlate;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a JTextField or JTextArea.
@@ -34,15 +34,18 @@ public class JComboBoxWidgetCreationFeature extends SwingCreationFeature impleme
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.swing.SwingWidgetHierarchyFeature#createSwingWidget(java.awt.Container, java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.swing.feature.SwingCreationFeature#createSwingWidget(java.awt.Container)
    */
   @Override
-  protected JComponent createSwingWidget( Container container, String label, IModelObject element)
+  protected JComponent createSwingWidget( Container container)
   {    
     // create text widget
     jcombo = new JComboBox();
     jcombo.setBorder( new EmptyBorder( 2, 3, 2, 3));
-        
+
+    // get label
+    String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
+    
     // create extra container to hold label and widget
     if ( label != null)
     {
@@ -108,7 +111,7 @@ public class JComboBoxWidgetCreationFeature extends SwingCreationFeature impleme
     public void run()
     {
       ITextModelFeature feature = xidget.getFeature( ITextModelFeature.class);
-      if ( feature != null) feature.setText( TextXidget.allChannel, jcombo.getSelectedItem().toString());
+      if ( feature != null) feature.setText( TextModelFeature.allChannel, jcombo.getSelectedItem().toString());
     }
   };
 

@@ -25,7 +25,6 @@ import org.xidget.IXidget;
 import org.xidget.config.util.Pair;
 import org.xidget.swing.feature.SwingCreationFeature;
 import org.xidget.swing.ifeature.ISwingWidgetFeature;
-import org.xidget.text.TextXidget;
 import org.xidget.text.feature.TextModelFeature;
 import org.xidget.text.ifeature.ITextModelFeature;
 import org.xmodel.IModelObject;
@@ -42,11 +41,13 @@ public class JTextComponentWidgetCreationFeature extends SwingCreationFeature im
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.swing.SwingWidgetHierarchyFeature#createSwingWidget(java.awt.Container, java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.swing.feature.SwingCreationFeature#createSwingWidget(java.awt.Container)
    */
   @Override
-  protected JComponent createSwingWidget( Container container, String label, IModelObject element)
+  protected JComponent createSwingWidget( Container container)
   {    
+    IModelObject element = xidget.getConfig();
+    
     // create text widget
     Pair size = new Pair( Xlate.get( element, "size", Xlate.childGet( element, "size", "")), 0, 0);    
     if ( size.y > 1)
@@ -59,6 +60,9 @@ public class JTextComponentWidgetCreationFeature extends SwingCreationFeature im
       jtext.setBorder( new EmptyBorder( 2, 3, 2, 3));
     }
         
+    // get label
+    String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
+    
     // create extra container to hold label and widget
     if ( label != null)
     {
@@ -135,7 +139,7 @@ public class JTextComponentWidgetCreationFeature extends SwingCreationFeature im
     public void run()
     {
       ITextModelFeature adapter = xidget.getFeature( ITextModelFeature.class);
-      if ( adapter != null) adapter.setText( TextXidget.allChannel, jtext.getText());
+      if ( adapter != null) adapter.setText( TextModelFeature.allChannel, jtext.getText());
     }
   };
 
