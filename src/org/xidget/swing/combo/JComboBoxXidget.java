@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.text;
+package org.xidget.swing.combo;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;

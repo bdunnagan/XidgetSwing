@@ -7,7 +7,7 @@ package org.xidget.swing;
 import org.xidget.IToolkit;
 import org.xidget.binding.XidgetTagHandler;
 import org.xidget.config.TagProcessor;
-import org.xidget.swing.text.JComboBoxXidget;
+import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.text.JTextXidget;
 
 /**
