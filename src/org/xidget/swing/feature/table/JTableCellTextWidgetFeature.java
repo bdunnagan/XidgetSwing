@@ -6,10 +6,10 @@ package org.xidget.swing.feature.table;
 
 import org.xidget.IXidget;
 import org.xidget.config.util.TextTransform;
+import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.table.IRowSetFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
-import org.xidget.text.TextXidget;
 import org.xmodel.IModelObject;
 import org.xmodel.xpath.expression.IExpression;
 
@@ -41,7 +41,7 @@ public class JTableCellTextWidgetFeature implements ITextWidgetFeature
    */
   public void setText( String channel, String text)
   {
-    if ( channel.equals( TextXidget.allChannel))
+    if ( channel.equals( TextModelFeature.allChannel))
     {
       if ( transform != null) text = transform.transform( text);
       

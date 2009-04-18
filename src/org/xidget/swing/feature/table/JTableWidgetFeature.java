@@ -7,7 +7,6 @@ package org.xidget.swing.feature.table;
 import javax.swing.JTable;
 import org.xidget.IXidget;
 import org.xidget.ifeature.table.ITableWidgetFeature;
-import org.xidget.swing.ifeature.ISwingWidgetFeature;
 import org.xidget.swing.table.CustomTableModel;
 
 /**
@@ -17,9 +16,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature
 {
   public JTableWidgetFeature( IXidget xidget)
   {
-    ISwingWidgetFeature feature = xidget.getFeature( ISwingWidgetFeature.class);
-    JTable table = (JTable)feature.getWidget();
-    this.tableModel = (CustomTableModel)table.getModel();
+    this.xidget = xidget;
   }
   
   /* (non-Javadoc)
@@ -27,6 +24,8 @@ public class JTableWidgetFeature implements ITableWidgetFeature
    */
   public void insertRow( int row)
   {
+    JTable table = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.insertRow( row);
   }
 
@@ -35,6 +34,8 @@ public class JTableWidgetFeature implements ITableWidgetFeature
    */
   public void insertRows( int row, int count)
   {
+    JTable table = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.insertRows( row, count);
   }
 
@@ -43,6 +44,8 @@ public class JTableWidgetFeature implements ITableWidgetFeature
    */
   public void removeRow( int row)
   {
+    JTable table = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.removeRow( row);
   }
 
@@ -51,6 +54,8 @@ public class JTableWidgetFeature implements ITableWidgetFeature
    */
   public void removeRows( int row, int count)
   {
+    JTable table = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.removeRows( row, count);
   }
 
@@ -59,6 +64,8 @@ public class JTableWidgetFeature implements ITableWidgetFeature
    */
   public void setEditable( int row, int column, boolean editable)
   {
+    JTable table = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.setEditable( row, column, editable);
   }
 
@@ -67,6 +74,8 @@ public class JTableWidgetFeature implements ITableWidgetFeature
    */
   public void setIcon( int row, int column, Object icon)
   {
+    JTable table = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.setIcon( row, column, icon);
   }
 
@@ -75,8 +84,10 @@ public class JTableWidgetFeature implements ITableWidgetFeature
    */
   public void setText( int row, int column, String text)
   {
+    JTable table = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.setText( row, column, text);
   }
-  
-  private CustomTableModel tableModel;
+
+  private IXidget xidget;
 }

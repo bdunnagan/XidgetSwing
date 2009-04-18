@@ -7,7 +7,6 @@ package org.xidget.swing.feature.table;
 import javax.swing.JTable;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITitleFeature;
-import org.xidget.swing.ifeature.ISwingWidgetFeature;
 import org.xidget.swing.table.CustomTableModel;
 import org.xmodel.IModelObject;
 
@@ -34,8 +33,7 @@ public class JTableColumnTitleFeature implements ITitleFeature
    */
   public void setTitle( String title)
   {
-    ISwingWidgetFeature feature = xidget.getFeature( ISwingWidgetFeature.class);
-    JTable table = (JTable)feature.getWidget();
+    JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.setColumnTitle( column, title);
   }

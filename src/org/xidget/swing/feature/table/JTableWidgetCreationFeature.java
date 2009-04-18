@@ -8,9 +8,7 @@ import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import org.xidget.IXidget;
-import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
-import org.xidget.swing.ifeature.ISwingWidgetFeature;
 import org.xidget.swing.table.CustomCellRenderer;
 import org.xidget.swing.table.CustomHeaderCellRenderer;
 import org.xidget.swing.table.CustomTableModel;
@@ -19,7 +17,7 @@ import org.xmodel.IModelObject;
 /**
  * An implementation of IWidgetCreationFeature for creating a JTable.
  */
-public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature implements IWidgetCreationFeature, ISwingWidgetFeature
+public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
 {
   public JTableWidgetCreationFeature( IXidget xidget)
   {
@@ -27,10 +25,10 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature impl
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.swing.SwingCreationFeature#createSwingWidget(java.awt.Container, java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#createSwingWidget(java.awt.Container)
    */
   @Override
-  protected JComponent createSwingWidget( Container container, String label, IModelObject element)
+  protected JComponent createSwingWidget( Container container)
   {
     // TODO: add support for widget label for jtable
     CustomTableModel tableModel = new CustomTableModel( xidget);
