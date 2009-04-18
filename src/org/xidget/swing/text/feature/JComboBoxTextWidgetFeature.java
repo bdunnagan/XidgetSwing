@@ -7,8 +7,8 @@ package org.xidget.swing.text.feature;
 import javax.swing.JComboBox;
 import org.xidget.IXidget;
 import org.xidget.config.util.TextTransform;
-import org.xidget.text.feature.TextModelFeature;
-import org.xidget.text.ifeature.ITextWidgetFeature;
+import org.xidget.feature.text.TextModelFeature;
+import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xmodel.xpath.expression.IExpression;
 
 /**

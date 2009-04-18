@@ -24,9 +24,9 @@ import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
 import org.xidget.IXidget;
 import org.xidget.config.util.Pair;
+import org.xidget.feature.text.TextModelFeature;
+import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
-import org.xidget.text.feature.TextModelFeature;
-import org.xidget.text.ifeature.ITextModelFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 

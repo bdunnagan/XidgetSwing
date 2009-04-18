@@ -7,11 +7,11 @@ package org.xidget.swing.table.column;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.table.feature.JTableCellTextWidgetFeature;
 import org.xidget.swing.table.feature.JTableColumnIconFeature;
 import org.xidget.swing.table.feature.JTableColumnTitleFeature;
 import org.xidget.table.column.ColumnXidget;
-import org.xidget.text.ifeature.ITextWidgetFeature;
 
 /**
  * A column xidget for Swing JTable widgets.

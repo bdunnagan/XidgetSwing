@@ -9,20 +9,20 @@ import javax.swing.JComponent;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
+import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IErrorFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.ifeature.combo.IChoiceListFeature;
+import org.xidget.ifeature.text.ITextModelFeature;
+import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 import org.xidget.swing.feature.TooltipErrorFeature;
 import org.xidget.swing.text.feature.JComboBoxChoiceListFeature;
 import org.xidget.swing.text.feature.JComboBoxTextWidgetFeature;
 import org.xidget.swing.text.feature.JComboBoxWidgetCreationFeature;
-import org.xidget.text.feature.TextModelFeature;
-import org.xidget.text.ifeature.IChoiceListFeature;
-import org.xidget.text.ifeature.ITextModelFeature;
-import org.xidget.text.ifeature.ITextWidgetFeature;
 
 /**
  * @author bdunnagan

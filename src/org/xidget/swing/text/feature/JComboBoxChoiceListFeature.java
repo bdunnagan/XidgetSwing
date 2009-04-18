@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
 import org.xidget.IXidget;
-import org.xidget.text.ifeature.IChoiceListFeature;
+import org.xidget.ifeature.combo.IChoiceListFeature;
 
 /**
  * An implementation of IChoiceListFeature which is backed by a JComboBox.

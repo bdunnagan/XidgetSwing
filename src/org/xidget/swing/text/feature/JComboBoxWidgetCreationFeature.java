@@ -17,9 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import org.xidget.IXidget;
+import org.xidget.feature.text.TextModelFeature;
+import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
-import org.xidget.text.feature.TextModelFeature;
-import org.xidget.text.ifeature.ITextModelFeature;
 import org.xmodel.Xlate;
 
 /**

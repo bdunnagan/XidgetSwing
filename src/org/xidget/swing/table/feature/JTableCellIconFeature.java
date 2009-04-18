@@ -6,8 +6,8 @@ package org.xidget.swing.table.feature;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.IIconFeature;
-import org.xidget.table.ifeatures.IRowSetFeature;
-import org.xidget.table.ifeatures.ITableWidgetFeature;
+import org.xidget.ifeature.table.IRowSetFeature;
+import org.xidget.ifeature.table.ITableWidgetFeature;
 import org.xmodel.IModelObject;
 
 /**
