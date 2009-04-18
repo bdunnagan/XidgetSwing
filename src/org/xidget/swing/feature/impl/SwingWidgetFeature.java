@@ -2,11 +2,12 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing;
+package org.xidget.swing.feature.impl;
 
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import org.xidget.feature.IWidgetFeature;
+import org.xidget.swing.feature.ISwingWidgetFeature;
 
 /**
  * An adapter for Swing/AWT widgets.

@@ -7,8 +7,8 @@ package org.xidget.swing;
 import java.io.File;
 import java.io.FileInputStream;
 import javax.swing.SwingUtilities;
-import org.xidget.config.Configuration;
-import org.xidget.swing.config.SwingXidgetKit;
+import org.xidget.Creator;
+import org.xidget.config.TagProcessor;
 import org.xmodel.IDispatcher;
 import org.xmodel.IModelObject;
 import org.xmodel.ModelRegistry;
@@ -33,11 +33,16 @@ public class Main
     }
   }  
   
+  private static void configure( TagProcessor processor)
+  {
+    
+  }
+  
   public static void run( String[] args) throws Exception
   {    
     final File file = new File( args[ 0]);
-    
-    Configuration.setToolkit( new SwingXidgetKit());
+
+    configure( Creator.getInstance().getProcessor());
     
     SwingUtilities.invokeLater( new Runnable() {
       public void run()

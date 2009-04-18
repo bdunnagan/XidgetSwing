@@ -9,16 +9,17 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
-import org.xidget.layout.ILayoutFeature;
+import org.xidget.IXidget;
+import org.xidget.feature.ILayoutFeature;
 
 /**
  * An implementation of LayoutManager that uses the AnchorLayoutFeature.
  */
 public class AnchorLayoutManager implements LayoutManager
 {
-  public AnchorLayoutManager( ILayoutFeature layout)
+  public AnchorLayoutManager( IXidget xidget)
   {
-    this.layout = layout;
+    this.xidget = xidget;
   }
   
   /* (non-Javadoc)
@@ -48,7 +49,8 @@ public class AnchorLayoutManager implements LayoutManager
     
     synchronized( parent.getTreeLock()) 
     {
-      layout.layout();
+      ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+      if ( feature != null) feature.layout();
     }
   }
 
@@ -85,5 +87,5 @@ public class AnchorLayoutManager implements LayoutManager
     return bounds.getSize();
   }
 
-  private ILayoutFeature layout;
+  private IXidget xidget;
 }
