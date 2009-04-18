@@ -7,7 +7,7 @@ package org.xidget.swing.feature.impl;
 import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import org.xidget.feature.IWidgetCreationFeature;
+import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.feature.ISwingContainerFeature;
 import org.xidget.swing.feature.ISwingFrameFeature;
 

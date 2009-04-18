@@ -6,7 +6,7 @@ package org.xidget.swing.feature.impl;
 
 import java.awt.Rectangle;
 import javax.swing.JComponent;
-import org.xidget.feature.IWidgetFeature;
+import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.ISwingWidgetFeature;
 
 /**

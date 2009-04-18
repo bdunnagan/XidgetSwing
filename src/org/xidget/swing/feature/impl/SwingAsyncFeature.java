@@ -8,7 +8,7 @@ import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.SwingUtilities;
-import org.xidget.feature.IAsyncFeature;
+import org.xidget.ifeature.IAsyncFeature;
 
 /**
  * An implementation of the IAsyncFeature for Swing/AWT.

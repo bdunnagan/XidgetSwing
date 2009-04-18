@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.xidget.IXidget;
-import org.xidget.table.features.ITableModelFeature;
-import org.xidget.table.features.ITableWidgetFeature;
+import org.xidget.table.ifeatures.ITableModelFeature;
+import org.xidget.table.ifeatures.ITableWidgetFeature;
 import org.xidget.text.TextXidget;
 
 /**

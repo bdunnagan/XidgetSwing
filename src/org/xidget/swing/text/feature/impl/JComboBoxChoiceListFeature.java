@@ -2,12 +2,12 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.text.feature;
+package org.xidget.swing.text.feature.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
-import org.xidget.text.feature.IChoiceListFeature;
+import org.xidget.text.ifeature.IChoiceListFeature;
 
 /**
  * An implementation of IChoiceListFeature which is backed by a JComboBox.

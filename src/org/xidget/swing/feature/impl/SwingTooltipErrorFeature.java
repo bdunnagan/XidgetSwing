@@ -6,7 +6,7 @@ package org.xidget.swing.feature.impl;
 
 import javax.swing.JComponent;
 import org.xidget.IXidget;
-import org.xidget.feature.IErrorFeature;
+import org.xidget.ifeature.IErrorFeature;
 import org.xidget.swing.feature.ISwingWidgetFeature;
 
 /**

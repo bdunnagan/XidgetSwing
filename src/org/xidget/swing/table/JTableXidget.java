@@ -8,9 +8,9 @@ import org.xidget.IXidget;
 import org.xidget.binding.XidgetTagHandler;
 import org.xidget.config.TagException;
 import org.xidget.config.TagProcessor;
-import org.xidget.feature.IErrorFeature;
-import org.xidget.feature.IWidgetCreationFeature;
-import org.xidget.feature.IWidgetFeature;
+import org.xidget.ifeature.IErrorFeature;
+import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.ISwingWidgetFeature;
 import org.xidget.swing.feature.impl.SwingTooltipErrorFeature;
 import org.xidget.swing.feature.impl.SwingWidgetFeature;
@@ -18,9 +18,9 @@ import org.xidget.swing.table.column.JTableColumnXidget;
 import org.xidget.swing.table.feature.JTableWidgetCreationFeature;
 import org.xidget.swing.table.feature.JTableWidgetFeature;
 import org.xidget.table.TableXidget;
-import org.xidget.table.features.ITableModelFeature;
-import org.xidget.table.features.ITableWidgetFeature;
 import org.xidget.table.features.TableModelFeature;
+import org.xidget.table.ifeatures.ITableModelFeature;
+import org.xidget.table.ifeatures.ITableWidgetFeature;
 import org.xmodel.IModelObject;
 
 /**

@@ -6,10 +6,10 @@ package org.xidget.swing.table.feature;
 
 import org.xidget.IXidget;
 import org.xidget.config.util.TextTransform;
-import org.xidget.table.features.IRowSetFeature;
-import org.xidget.table.features.ITableWidgetFeature;
+import org.xidget.table.ifeatures.IRowSetFeature;
+import org.xidget.table.ifeatures.ITableWidgetFeature;
 import org.xidget.text.TextXidget;
-import org.xidget.text.feature.ITextWidgetFeature;
+import org.xidget.text.ifeature.ITextWidgetFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.xpath.expression.IExpression;
 

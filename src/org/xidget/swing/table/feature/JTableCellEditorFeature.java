@@ -6,7 +6,7 @@ package org.xidget.swing.table.feature;
 
 import java.util.List;
 import org.xidget.IXidget;
-import org.xidget.table.column.feature.IColumnEditorFeature;
+import org.xidget.table.column.ifeature.IColumnEditorFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.xpath.expression.StatefulContext;
 

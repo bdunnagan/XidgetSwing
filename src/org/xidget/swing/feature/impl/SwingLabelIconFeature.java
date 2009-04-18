@@ -6,7 +6,7 @@ package org.xidget.swing.feature.impl;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import org.xidget.feature.IIconFeature;
+import org.xidget.ifeature.IIconFeature;
 
 /**
  * An implementation of IIconFeature which updates the icon of a JLabel. 

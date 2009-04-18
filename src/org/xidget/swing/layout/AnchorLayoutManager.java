@@ -10,7 +10,7 @@ import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import org.xidget.IXidget;
-import org.xidget.feature.ILayoutFeature;
+import org.xidget.ifeature.ILayoutFeature;
 
 /**
  * An implementation of LayoutManager that uses the AnchorLayoutFeature.
