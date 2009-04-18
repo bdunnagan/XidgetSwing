@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.table.feature;
+package org.xidget.swing.feature.table;
 
 import java.awt.Container;
 import javax.swing.JComponent;
@@ -11,9 +11,9 @@ import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.swing.ifeature.ISwingWidgetFeature;
+import org.xidget.swing.table.CustomCellRenderer;
+import org.xidget.swing.table.CustomHeaderCellRenderer;
 import org.xidget.swing.table.CustomTableModel;
-import org.xidget.swing.table.renderer.CustomCellRenderer;
-import org.xidget.swing.table.renderer.CustomHeaderCellRenderer;
 import org.xmodel.IModelObject;
 
 /**

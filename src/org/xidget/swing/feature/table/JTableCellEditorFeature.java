@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.table.feature;
+package org.xidget.swing.feature.table;
 
 import java.util.List;
 import org.xidget.IXidget;

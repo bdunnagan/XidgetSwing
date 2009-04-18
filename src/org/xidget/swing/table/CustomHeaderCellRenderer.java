@@ -2,19 +2,18 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.table.renderer;
+package org.xidget.swing.table;
 
 import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import org.xidget.swing.table.CustomTableModel;
 
 /**
- * A TableCellRenderer to be used as the table column row renderer. 
+ * A TableCellRenderer to be used as the table column header renderer.
  */
 @SuppressWarnings("serial")
-public class CustomCellRenderer extends DefaultTableCellRenderer
+public class CustomHeaderCellRenderer extends DefaultTableCellRenderer
 {
   /* (non-Javadoc)
    * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(
@@ -28,9 +27,9 @@ public class CustomCellRenderer extends DefaultTableCellRenderer
     
     // consult table model for header title and icon
     CustomTableModel model = (CustomTableModel)table.getModel();
-    setIcon( (Icon)model.getIconAt( row, column));
+    setIcon( (Icon)model.getHeaderIconAt( column));
     
-    Object object = model.getValueAt( row, column);
+    Object object = model.getHeaderTitleAt( column);
     String text = (object != null)? object.toString(): "";
     setName( text);
     setText( text);

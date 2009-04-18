@@ -19,8 +19,8 @@ import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 import org.xidget.swing.feature.TooltipErrorFeature;
-import org.xidget.swing.text.feature.JTextComponentTextWidgetFeature;
-import org.xidget.swing.text.feature.JTextComponentWidgetCreationFeature;
+import org.xidget.swing.feature.text.JTextComponentTextWidgetFeature;
+import org.xidget.swing.feature.text.JTextComponentWidgetCreationFeature;
 
 /**
  * A text xidget implemented with a Swing JTextComponent widget.
