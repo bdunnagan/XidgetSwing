@@ -17,8 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import org.xidget.IXidget;
-import org.xidget.swing.feature.SwingCreationFeature;
-import org.xidget.swing.ifeature.ISwingWidgetFeature;
+import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.text.feature.TextModelFeature;
 import org.xidget.text.ifeature.ITextModelFeature;
 import org.xmodel.Xlate;
@@ -26,7 +25,7 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IWidgetCreationFeature which creates a JTextField or JTextArea.
  */
-public class JComboBoxWidgetCreationFeature extends SwingCreationFeature implements ISwingWidgetFeature
+public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
 {
   public JComboBoxWidgetCreationFeature( IXidget xidget)
   {
@@ -83,14 +82,6 @@ public class JComboBoxWidgetCreationFeature extends SwingCreationFeature impleme
     return component;
   }
 
-  /* (non-Javadoc)
-   * @see org.xidget.swing.ISwingWidgetFeature#getWidget()
-   */
-  public JComponent getWidget()
-  {
-    return component;
-  }
-  
   /**
    * Returns the JComboBox.
    * @return Returns the JComboBox.

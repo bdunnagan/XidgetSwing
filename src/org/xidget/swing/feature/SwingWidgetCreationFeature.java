@@ -8,15 +8,14 @@ import java.awt.Container;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.swing.ifeature.ISwingWidgetFeature;
 
 /**
  * An abstract implementation of IWidgetCreationFeature which performs the common
  * work necessary to relayout the widget hierarchy after a widget is replaced.
  */
-public abstract class SwingCreationFeature implements IWidgetCreationFeature
+public abstract class SwingWidgetCreationFeature implements IWidgetCreationFeature
 {
-  protected SwingCreationFeature( IXidget xidget)
+  protected SwingWidgetCreationFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }
@@ -26,8 +25,8 @@ public abstract class SwingCreationFeature implements IWidgetCreationFeature
    */
   public void createWidget()
   {
-    JComponent container = xidget.getParent().getFeature( ISwingWidgetFeature.class).getWidget();
-    createSwingWidget( container);
+    JComponent component = xidget.getParent().getFeature( JComponent.class);
+    createSwingWidget( component);
   }
  
   /* (non-Javadoc)
@@ -35,7 +34,7 @@ public abstract class SwingCreationFeature implements IWidgetCreationFeature
    */
   public void destroyWidget()
   {
-    JComponent widget = xidget.getFeature( ISwingWidgetFeature.class).getWidget();
+    JComponent widget = xidget.getFeature( JComponent.class);
     Container container = widget.getParent();
     container.remove( widget);
     container.invalidate();

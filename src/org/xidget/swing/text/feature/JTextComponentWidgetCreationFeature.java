@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.text.feature;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,8 +24,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
 import org.xidget.IXidget;
 import org.xidget.config.util.Pair;
-import org.xidget.swing.feature.SwingCreationFeature;
-import org.xidget.swing.ifeature.ISwingWidgetFeature;
+import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.text.feature.TextModelFeature;
 import org.xidget.text.ifeature.ITextModelFeature;
 import org.xmodel.IModelObject;
@@ -33,7 +33,7 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IWidgetCreationFeature which creates a JTextField or JTextArea.
  */
-public class JTextComponentWidgetCreationFeature extends SwingCreationFeature implements ISwingWidgetFeature
+public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeature
 {
   public JTextComponentWidgetCreationFeature( IXidget xidget)
   {
@@ -72,17 +72,18 @@ public class JTextComponentWidgetCreationFeature extends SwingCreationFeature im
       
       GridBagConstraints constraints = new GridBagConstraints();
       constraints.fill = GridBagConstraints.NONE;
-      constraints.anchor = GridBagConstraints.WEST;
+      constraints.anchor = GridBagConstraints.NORTHWEST;
       constraints.insets = new Insets( 0, 0, 0, 6);
       layout.setConstraints( jlabel, constraints);
       
       constraints = new GridBagConstraints();
       constraints.fill = GridBagConstraints.HORIZONTAL;
-      constraints.anchor = GridBagConstraints.WEST;
+      constraints.anchor = GridBagConstraints.NORTHWEST;
       constraints.weightx = 1;
       layout.setConstraints( jtext, constraints);
       
       component = new JPanel( layout);
+      component.setBackground( Color.green);
       component.add( jlabel);
       component.add( jtext);
       
@@ -101,10 +102,11 @@ public class JTextComponentWidgetCreationFeature extends SwingCreationFeature im
     return component;
   }
 
-  /* (non-Javadoc)
-   * @see org.xidget.swing.ISwingWidgetFeature#getWidget()
+  /**
+   * Returns the container widget which holds the label and text widgets.
+   * @return Returns the container widget which holds the label and text widgets.
    */
-  public JComponent getWidget()
+  public JComponent getContainer()
   {
     return component;
   }

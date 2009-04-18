@@ -7,6 +7,7 @@ package org.xidget.swing.text.feature;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComboBox;
+import org.xidget.IXidget;
 import org.xidget.text.ifeature.IChoiceListFeature;
 
 /**
@@ -14,9 +15,9 @@ import org.xidget.text.ifeature.IChoiceListFeature;
  */
 public class JComboBoxChoiceListFeature implements IChoiceListFeature
 {
-  public JComboBoxChoiceListFeature( JComboBox widget)
+  public JComboBoxChoiceListFeature( IXidget xidget)
   {
-    this.widget = widget;
+    this.xidget = xidget;
   }
   
   /* (non-Javadoc)
@@ -24,6 +25,7 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public List<String> getChoices()
   {
+    JComboBox widget = xidget.getFeature( JComboBox.class);
     int count = widget.getItemCount();
     List<String> result = new ArrayList<String>( count);
     for( int i=0; i<count; i++) result.add( widget.getItemAt( i).toString());
@@ -35,6 +37,7 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void addChoice( String choice)
   {
+    JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.addItem( choice);
   }
 
@@ -43,6 +46,7 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void insertChoice( int index, String choice)
   {
+    JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.insertItemAt( choice, index);
   }
 
@@ -51,6 +55,7 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void removeAllChoices()
   {
+    JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.removeAllItems();
   }
 
@@ -59,6 +64,7 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void removeChoice( int index)
   {
+    JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.removeItemAt( index);
   }
 
@@ -67,8 +73,9 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void removeChoice( String choice)
   {
+    JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.removeItem( choice);
   }
 
-  private JComboBox widget;
+  private IXidget xidget;
 }

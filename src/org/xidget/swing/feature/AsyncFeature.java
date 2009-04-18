@@ -13,9 +13,9 @@ import org.xidget.ifeature.IAsyncFeature;
 /**
  * An implementation of the IAsyncFeature for Swing/AWT.
  */
-public class SwingAsyncFeature implements IAsyncFeature
+public class AsyncFeature implements IAsyncFeature
 {
-  public SwingAsyncFeature()
+  public AsyncFeature()
   {
     tasks = new Hashtable<Object, Task>();
   }
@@ -57,7 +57,7 @@ public class SwingAsyncFeature implements IAsyncFeature
   {
     public void run()
     {
-      SwingAsyncFeature.this.run( runnable);
+      AsyncFeature.this.run( runnable);
     }
     
     public Runnable runnable;

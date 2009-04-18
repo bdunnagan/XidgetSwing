@@ -25,10 +25,6 @@
       <x1 attach="." side="x1" pad="5"/>
       <y1 attach="." side="y1" pad="5"/>
     </attach>          
-    <!--attach>
-      <x1 attach="$last" side="x1" pad="5"/>
-      <y1 attach="$last" side="y1" pad="5"/>
-    </attach-->
   </layout>
   
   <layout id="horizontal">

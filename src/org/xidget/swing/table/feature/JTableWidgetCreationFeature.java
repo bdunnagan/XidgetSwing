@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.swing.feature.SwingCreationFeature;
+import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.swing.ifeature.ISwingWidgetFeature;
 import org.xidget.swing.table.CustomTableModel;
 import org.xidget.swing.table.renderer.CustomCellRenderer;
@@ -19,7 +19,7 @@ import org.xmodel.IModelObject;
 /**
  * An implementation of IWidgetCreationFeature for creating a JTable.
  */
-public class JTableWidgetCreationFeature extends SwingCreationFeature implements IWidgetCreationFeature, ISwingWidgetFeature
+public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature implements IWidgetCreationFeature, ISwingWidgetFeature
 {
   public JTableWidgetCreationFeature( IXidget xidget)
   {

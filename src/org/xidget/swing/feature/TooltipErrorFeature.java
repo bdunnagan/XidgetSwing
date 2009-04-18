@@ -7,16 +7,15 @@ package org.xidget.swing.feature;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IErrorFeature;
-import org.xidget.swing.ifeature.ISwingWidgetFeature;
 
 /**
  * An IErrorAdapter which displays the error in a tooltip on a Swing component.
  * The adapter will restore the original tooltip text when the error is cleared.
  * This adapter is not suitable if the tooltip text is dynamic.
  */
-public class SwingTooltipErrorFeature implements IErrorFeature
+public class TooltipErrorFeature implements IErrorFeature
 {
-  public SwingTooltipErrorFeature( IXidget xidget)
+  public TooltipErrorFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }
@@ -33,8 +32,7 @@ public class SwingTooltipErrorFeature implements IErrorFeature
    */
   public void valueError( String message)
   {
-    ISwingWidgetFeature widgetFeature = xidget.getFeature( ISwingWidgetFeature.class);
-    JComponent widget = widgetFeature.getWidget();
+    JComponent widget = xidget.getFeature( JComponent.class);
     if ( message == null || message.length() == 0)
     {
       widget.setToolTipText( tooltip);

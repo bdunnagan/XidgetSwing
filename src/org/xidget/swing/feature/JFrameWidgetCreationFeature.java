@@ -4,17 +4,14 @@
  */
 package org.xidget.swing.feature;
 
-import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.swing.ifeature.ISwingContainerFeature;
-import org.xidget.swing.ifeature.ISwingFrameFeature;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
  */
-public class ApplicationWidgetCreationFeature implements IWidgetCreationFeature, ISwingFrameFeature, ISwingContainerFeature
+public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
 {
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#createWidget()
@@ -41,17 +38,10 @@ public class ApplicationWidgetCreationFeature implements IWidgetCreationFeature,
     jframe.dispose();
     jframe = null;
   }
-  
-  /* (non-Javadoc)
-   * @see org.xidget.swing.feature.ISwingContainerFeature#getContainer()
-   */
-  public Container getContainer()
-  {
-    return jframe;
-  }
 
-  /* (non-Javadoc)
-   * @see org.xidget.swing.feature.ISwingFrameFeature#getFrame()
+  /**
+   * Returns the JFrame created for the xidget.
+   * @return Returns the JFrame created for the xidget.
    */
   public JFrame getFrame()
   {

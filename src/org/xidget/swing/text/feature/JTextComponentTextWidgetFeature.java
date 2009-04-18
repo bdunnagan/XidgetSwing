@@ -4,21 +4,23 @@
  */
 package org.xidget.swing.text.feature;
 
-import javax.swing.JComboBox;
+import javax.swing.text.JTextComponent;
+import org.xidget.IXidget;
 import org.xidget.config.util.TextTransform;
 import org.xidget.text.feature.TextModelFeature;
 import org.xidget.text.ifeature.ITextWidgetFeature;
 import org.xmodel.xpath.expression.IExpression;
 
 /**
- * An implementation of IWidgetTextAdapter for a JComboBox widget 
- * which supports the <i>all</i> channel.
+ * An implementation of IWidgetTextAdapter for a JTextField or JTextArea widget which
+ * supports both the <i>all</i> and the <i>selected</i> channels. It does not support
+ * a transform for the <i>selected</i> channel.
  */
-public class JComboBoxWidgetFeature implements ITextWidgetFeature
+public class JTextComponentTextWidgetFeature implements ITextWidgetFeature
 {
-  public JComboBoxWidgetFeature( JComboBox widget)
+  public JTextComponentTextWidgetFeature( IXidget xidget)
   {
-    this.widget = widget;
+    this.xidget = xidget;
   }
   
   /* (non-Javadoc)
@@ -26,6 +28,7 @@ public class JComboBoxWidgetFeature implements ITextWidgetFeature
    */
   public void setEditable( boolean editable)
   {
+    JTextComponent widget = xidget.getFeature( JTextComponent.class);
     widget.setEditable( editable);
   }
 
@@ -34,10 +37,17 @@ public class JComboBoxWidgetFeature implements ITextWidgetFeature
    */
   public void setText( String channel, String text)
   {
+    JTextComponent widget = xidget.getFeature( JTextComponent.class);
     if ( channel.equals( TextModelFeature.allChannel))
     {
       if ( transform != null) text = transform.transform( text);
-      widget.setSelectedItem( text);
+      widget.setText( text);
+    }
+    else if ( channel.equals( TextModelFeature.selectedChannel))
+    {
+      widget.replaceSelection( text);
+      String allText = widget.getText();
+      widget.setText( transform.transform( allText));
     }
   }
 
@@ -48,7 +58,7 @@ public class JComboBoxWidgetFeature implements ITextWidgetFeature
   {
     this.transform = new TextTransform( expression);
   }
-  
-  private JComboBox widget;
+
+  private IXidget xidget;
   private TextTransform transform;
 }

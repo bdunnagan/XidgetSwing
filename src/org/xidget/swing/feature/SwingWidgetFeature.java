@@ -6,17 +6,22 @@ package org.xidget.swing.feature;
 
 import java.awt.Rectangle;
 import javax.swing.JComponent;
+import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.swing.ifeature.ISwingWidgetFeature;
+import org.xmodel.util.Radix;
 
 /**
  * An adapter for Swing/AWT widgets.
  */
-public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetFeature
+public class SwingWidgetFeature implements IWidgetFeature
 {
-  public SwingWidgetFeature( JComponent widget)
+  public SwingWidgetFeature( IXidget xidget)
   {
-    this.widget = widget;
+    this.xidget = xidget;
+    
+    StringBuilder sb = new StringBuilder();
+    sb.append( "@"); sb.append( Radix.convert( hashCode(), 36));
+    System.out.printf( "%s: %s\n", xidget, sb);
   }
   
   /* (non-Javadoc)
@@ -24,6 +29,7 @@ public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetFeature
    */
   public void setBounds( int x, int y, int width, int height)
   {
+    JComponent widget = xidget.getFeature( JComponent.class);
     widget.setBounds( x, y, width, height);
   }
 
@@ -32,6 +38,7 @@ public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetFeature
    */
   public void getBounds( Bounds result)
   {
+    JComponent widget = xidget.getFeature( JComponent.class);
     Rectangle rectangle = widget.getBounds();
     result.x = rectangle.x;
     result.y = rectangle.y;
@@ -44,6 +51,7 @@ public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetFeature
    */
   public void setVisible( boolean visible)
   {
+    JComponent widget = xidget.getFeature( JComponent.class);
     widget.setVisible( visible);
   }
 
@@ -52,6 +60,7 @@ public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetFeature
    */
   public void setEnabled( boolean enabled)
   {
+    JComponent widget = xidget.getFeature( JComponent.class);
     widget.setEnabled( enabled);
   }
 
@@ -60,16 +69,9 @@ public class SwingWidgetFeature implements IWidgetFeature, ISwingWidgetFeature
    */
   public void setTooltip( String tooltip)
   {
+    JComponent widget = xidget.getFeature( JComponent.class);
     widget.setToolTipText( tooltip);
   }
 
-  /* (non-Javadoc)
-   * @see org.xidget.swing.ISwingWidgetAdapter#getWidget()
-   */
-  public JComponent getWidget()
-  {
-    return widget;
-  }
-
-  private JComponent widget;
+  private IXidget xidget;
 }

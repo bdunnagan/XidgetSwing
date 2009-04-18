@@ -11,7 +11,7 @@ import org.xidget.config.TagProcessor;
 import org.xidget.ifeature.IErrorFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.swing.feature.SwingTooltipErrorFeature;
+import org.xidget.swing.feature.TooltipErrorFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 import org.xidget.swing.ifeature.ISwingWidgetFeature;
 import org.xidget.swing.table.column.JTableColumnXidget;
@@ -69,7 +69,7 @@ public class JTableXidget extends TableXidget
   @Override
   protected IErrorFeature getErrorFeature()
   {
-    return new SwingTooltipErrorFeature( this);
+    return new TooltipErrorFeature( this);
   }
 
   /* (non-Javadoc)

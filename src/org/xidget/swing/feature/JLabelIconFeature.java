@@ -11,9 +11,9 @@ import org.xidget.ifeature.IIconFeature;
 /**
  * An implementation of IIconFeature which updates the icon of a JLabel. 
  */
-public class SwingLabelIconFeature implements IIconFeature
+public class JLabelIconFeature implements IIconFeature
 {
-  public SwingLabelIconFeature( JLabel jlabel)
+  public JLabelIconFeature( JLabel jlabel)
   {
     this.jlabel = jlabel;
   }

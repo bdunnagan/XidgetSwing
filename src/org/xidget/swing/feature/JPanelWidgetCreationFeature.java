@@ -11,7 +11,6 @@ import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.layout.ConstantNode;
-import org.xidget.swing.ifeature.ISwingContainerFeature;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -19,9 +18,9 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
  */
-public class FormWidgetCreationFeature implements IWidgetCreationFeature, ISwingContainerFeature
+public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
 {
-  public FormWidgetCreationFeature( IXidget xidget)
+  public JPanelWidgetCreationFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }
@@ -31,8 +30,7 @@ public class FormWidgetCreationFeature implements IWidgetCreationFeature, ISwing
    */
   public void createWidget()
   {
-    ISwingContainerFeature containerFeature = xidget.getParent().getFeature( ISwingContainerFeature.class);
-    Container container = containerFeature.getContainer();
+    Container container = xidget.getParent().getFeature( Container.class);
     
     jpanel = new JPanel( new AnchorLayoutManager( xidget));
     container.add( jpanel);
@@ -60,11 +58,12 @@ public class FormWidgetCreationFeature implements IWidgetCreationFeature, ISwing
     jpanel.getParent().remove( jpanel);
     jpanel = null;
   }
-  
-  /* (non-Javadoc)
-   * @see org.xidget.swing.feature.ISwingContainerFeature#getContainer()
+
+  /**
+   * Returns the JPanel created for this form.
+   * @return Returns the JPanel created for this form.
    */
-  public Container getContainer()
+  public JPanel getWidget()
   {
     return jpanel;
   }
