@@ -39,14 +39,14 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     return jtable;
   }
 
-  /* (non-Javadoc)
-   * @see org.xidget.swing.ISwingWidgetFeature#getWidget()
+  /**
+   * Returns the JTable widget.
+   * @return Returns the JTable widget.
    */
-  public JComponent getWidget()
+  public JTable getWidget()
   {
     return jtable;
   }
 
-  private IXidget xidget;
   private JTable jtable;
 }

@@ -25,12 +25,11 @@ import org.xidget.swing.feature.text.JComboBoxTextWidgetFeature;
 import org.xidget.swing.feature.text.JComboBoxWidgetCreationFeature;
 
 /**
- * @author bdunnagan
- *
+ * A combo xidget implemented with the Swing JComboBox widget.
  */
 public class JComboBoxXidget extends Xidget
 {
-  public JComboBoxXidget()
+  public void createFeatures()
   {
     bindFeature = new BindFeature( this);
     errorFeature = new TooltipErrorFeature( this);

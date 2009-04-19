@@ -26,7 +26,7 @@ import org.xidget.swing.feature.TooltipErrorFeature;
  */
 public class JPanelXidget extends Xidget
 {
-  public JPanelXidget()
+  public void createFeatures()
   {
     bindFeature = new BindFeature( this);
     errorFeature = new TooltipErrorFeature( this);
