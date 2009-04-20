@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.xidget.IXidget;
-import org.xidget.ifeature.table.ITableModelFeature;
+import org.xidget.ifeature.table.IHeaderFeature;
+import org.xidget.ifeature.table.IRowSetFeature;
 import org.xidget.table.Cell;
-import org.xidget.table.Column;
+import org.xidget.table.Header;
 import org.xidget.table.Row;
 
 /**
@@ -32,9 +33,9 @@ public class CustomTableModel extends AbstractTableModel
   @Override
   public String getColumnName( int columnIndex)
   {
-    ITableModelFeature feature = xidget.getFeature( ITableModelFeature.class);
-    Column column = feature.getColumns().get( columnIndex);
-    return column.title;
+    IHeaderFeature feature = xidget.getFeature( IHeaderFeature.class);
+    Header header = feature.getHeaders().get( columnIndex);
+    return header.title;
   }
 
   /* (non-Javadoc)
@@ -42,8 +43,8 @@ public class CustomTableModel extends AbstractTableModel
    */
   public int getColumnCount()
   {
-    ITableModelFeature feature = xidget.getFeature( ITableModelFeature.class);
-    return feature.getColumns().size();
+    IHeaderFeature feature = xidget.getFeature( IHeaderFeature.class);
+    return feature.getHeaders().size();
   }
 
   /* (non-Javadoc)
@@ -51,8 +52,8 @@ public class CustomTableModel extends AbstractTableModel
    */
   public int getRowCount()
   {
-    ITableModelFeature feature = xidget.getFeature( ITableModelFeature.class);
-    return feature.getRows().size();
+    IRowSetFeature feature = xidget.getFeature( IRowSetFeature.class);
+    return feature.getRowCount();
   }
 
   /* (non-Javadoc)
@@ -60,8 +61,8 @@ public class CustomTableModel extends AbstractTableModel
    */
   public Object getValueAt( int rowIndex, int columnIndex)
   {
-    ITableModelFeature feature = xidget.getFeature( ITableModelFeature.class);
-    Row row = feature.getRows().get( rowIndex);
+    IRowSetFeature feature = xidget.getFeature( IRowSetFeature.class);
+    Row row = feature.getRow( rowIndex);
     Cell cell = row.cells.get( columnIndex);
     return cell.text;
   }
@@ -72,8 +73,8 @@ public class CustomTableModel extends AbstractTableModel
   @Override
   public void setValueAt( Object value, int rowIndex, int columnIndex)
   {
-    ITableModelFeature feature = xidget.getFeature( ITableModelFeature.class);
-    Row row = feature.getRows().get( rowIndex);
+    IRowSetFeature feature = xidget.getFeature( IRowSetFeature.class);
+    Row row = feature.getRow( rowIndex);
     Cell cell = row.cells.get( columnIndex);
     cell.source.setValue( value);
   }
@@ -94,8 +95,8 @@ public class CustomTableModel extends AbstractTableModel
    */
   public Object getIconAt( int rowIndex, int columnIndex)
   {
-    ITableModelFeature feature = xidget.getFeature( ITableModelFeature.class);
-    Row row = feature.getRows().get( rowIndex);
+    IRowSetFeature feature = xidget.getFeature( IRowSetFeature.class);
+    Row row = feature.getRow( rowIndex);
     Cell cell = row.cells.get( columnIndex);
     return cell.icon;
   }

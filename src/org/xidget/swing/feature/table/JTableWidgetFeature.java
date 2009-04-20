@@ -6,10 +6,8 @@ package org.xidget.swing.feature.table;
 
 import javax.swing.JTable;
 import org.xidget.IXidget;
-import org.xidget.ifeature.table.ITableModelFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
 import org.xidget.swing.table.CustomTableModel;
-import org.xidget.table.Row;
 
 /**
  * An implementation of ITableWidgetFeature for use with a Swing JTable.
@@ -62,26 +60,20 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#setIcon(org.xidget.table.Row, int, java.lang.Object)
+   * @see org.xidget.ifeature.table.ITableWidgetFeature#setIcon(int, int, java.lang.Object)
    */
-  public void setIcon( Row row, int columnIndex, Object icon)
+  public void setIcon( int rowIndex, int columnIndex, Object icon)
   {
-    ITableModelFeature feature = xidget.getFeature( ITableModelFeature.class);
-    int rowIndex = feature.getRows().indexOf( row);
-    
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.fireTableCellUpdated( rowIndex, columnIndex);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#setText(org.xidget.table.Row, int, java.lang.String)
+   * @see org.xidget.ifeature.table.ITableWidgetFeature#setText(int, int, java.lang.String)
    */
-  public void setText( Row row, int columnIndex, String text)
+  public void setText( int rowIndex, int columnIndex, String text)
   {
-    ITableModelFeature feature = xidget.getFeature( ITableModelFeature.class);
-    int rowIndex = feature.getRows().indexOf( row);
-    
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.fireTableCellUpdated( rowIndex, columnIndex);

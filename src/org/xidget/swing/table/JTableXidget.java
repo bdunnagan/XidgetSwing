@@ -9,6 +9,9 @@ import javax.swing.JTable;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
+import org.xidget.feature.table.ColumnSetFeature;
+import org.xidget.feature.table.DelegateRowSetFeature;
+import org.xidget.feature.table.HeaderFeature;
 import org.xidget.feature.table.RowSetFeature;
 import org.xidget.feature.table.TableModelFeature;
 import org.xidget.ifeature.IBindFeature;
@@ -16,6 +19,8 @@ import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IErrorFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.ifeature.table.IColumnSetFeature;
+import org.xidget.ifeature.table.IHeaderFeature;
 import org.xidget.ifeature.table.IRowSetFeature;
 import org.xidget.ifeature.table.ITableModelFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
@@ -31,7 +36,8 @@ public class JTableXidget extends Xidget
 {
   public void createFeatures()
   {
-    rowSetFeature = new RowSetFeature( this);
+    headerFeature = new HeaderFeature( this);
+    columnSetFeature = new ColumnSetFeature( this);
     bindFeature = new BindFeature( this);
     errorFeature = new TooltipErrorFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
@@ -39,6 +45,10 @@ public class JTableXidget extends Xidget
     tableWidgetFeature = new JTableWidgetFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JTableWidgetCreationFeature( this);
+    
+    // pick the right IRowSetFeature
+    boolean delegate = getConfig().getFirstChild( "group") != null;
+    rowSetFeature = delegate? new DelegateRowSetFeature( this): new RowSetFeature( this);
   }
   
   /* (non-Javadoc)
@@ -48,7 +58,9 @@ public class JTableXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
+    if ( clss == IHeaderFeature.class) return (T)headerFeature;
     if ( clss == IRowSetFeature.class) return (T)rowSetFeature;
+    if ( clss == IColumnSetFeature.class) return (T)columnSetFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == IErrorFeature.class) return (T)errorFeature;
     if ( clss == ITableModelFeature.class) return (T)tableModelFeature;
@@ -63,7 +75,9 @@ public class JTableXidget extends Xidget
     return super.getFeature( clss);
   }
   
+  private IHeaderFeature headerFeature;
   private IRowSetFeature rowSetFeature;
+  private IColumnSetFeature columnSetFeature;
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private IErrorFeature errorFeature;

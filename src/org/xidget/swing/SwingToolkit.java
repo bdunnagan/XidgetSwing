@@ -9,6 +9,7 @@ import org.xidget.binding.XidgetTagHandler;
 import org.xidget.config.TagProcessor;
 import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.table.JTableXidget;
+import org.xidget.swing.table.TableGroupXidget;
 import org.xidget.swing.text.JTextXidget;
 
 /**
@@ -27,5 +28,6 @@ public class SwingToolkit implements IToolkit
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "combo", new XidgetTagHandler( JComboBoxXidget.class));
     processor.addHandler( "table", new XidgetTagHandler( JTableXidget.class));
+    processor.addHandler( "group", new XidgetTagHandler( TableGroupXidget.class));
   }
 }

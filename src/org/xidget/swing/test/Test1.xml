@@ -43,10 +43,28 @@
           </text>
           
           <table size="600, 200">
-            <rows>collection('appdb')/*</rows>
-            <column>
-              <source>text()</source>
-            </column>
+            <column>'Name'</column>
+            <column>'Value'</column>
+          
+            <group>
+              <rows>$choices//*</rows>
+              <cell>
+                <source>name()</source>
+              </cell>
+              <cell>
+                <source>text()</source>
+              </cell>
+            </group>
+          
+            <group>
+              <rows>$layouts//*</rows>
+              <cell>
+                <source>name()</source>
+              </cell>
+              <cell>
+                <source>text()</source>
+              </cell>
+            </group>
           </table>
             
           <trigger name="Listen" source="collection('appdb')/text2">
