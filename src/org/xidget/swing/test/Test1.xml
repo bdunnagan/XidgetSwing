@@ -47,12 +47,12 @@
             <column>'Value'</column>
           
             <group>
-              <rows>$choices//*</rows>
+              <rows>$layouts//*/@*</rows>
               <cell>
                 <source>name()</source>
               </cell>
               <cell>
-                <source>text()</source>
+                <source>.</source>
               </cell>
             </group>
           
@@ -62,7 +62,7 @@
                 <source>name()</source>
               </cell>
               <cell>
-                <source>text()</source>
+                <source>.</source>
               </cell>
             </group>
           </table>

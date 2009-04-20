@@ -6,6 +6,7 @@ package org.xidget.swing.feature.table;
 
 import java.awt.Container;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import org.xidget.IXidget;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
@@ -30,23 +31,35 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget( Container container)
   {
-    // TODO: add support for widget label for jtable
-    CustomTableModel tableModel = new CustomTableModel( xidget);
+    CustomTableModel tableModel = new CustomTableModel();
     jtable = new JTable( tableModel);
     jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
     jtable.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
-    container.add( jtable);
+    
+    jscrollPane = new JScrollPane( jtable);
+    container.add( jscrollPane);
+    
     return jtable;
   }
 
   /**
+   * Returns the scroll pane that holds the table.
+   * @return Returns the scroll pane that holds the table.
+   */
+  public JScrollPane getJScrollPane()
+  {
+    return jscrollPane;
+  }
+  
+  /**
    * Returns the JTable widget.
    * @return Returns the JTable widget.
    */
-  public JTable getWidget()
+  public JTable getJTable()
   {
     return jtable;
   }
 
+  private JScrollPane jscrollPane;
   private JTable jtable;
 }

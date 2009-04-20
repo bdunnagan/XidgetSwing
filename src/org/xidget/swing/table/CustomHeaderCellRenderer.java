@@ -24,15 +24,12 @@ public class CustomHeaderCellRenderer extends DefaultTableCellRenderer
   {
     // allow super-class to do its thing
     super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column);
+
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
     
-    // consult table model for header title and icon
-    CustomTableModel model = (CustomTableModel)table.getModel();
-    setIcon( (Icon)model.getHeaderIconAt( column));
-    
-    Object object = model.getHeaderTitleAt( column);
-    String text = (object != null)? object.toString(): "";
-    setName( text);
-    setText( text);
+    setIcon( (Icon)tableModel.getColumnImage( column));
+    setName( tableModel.getColumnName( column));
+    setText( tableModel.getColumnName( column));
         
     return this;
   }

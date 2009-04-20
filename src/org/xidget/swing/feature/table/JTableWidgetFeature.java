@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.feature.table;
 
+import java.util.List;
 import javax.swing.JTable;
 import org.xidget.IXidget;
 import org.xidget.ifeature.table.ITableWidgetFeature;
@@ -26,6 +27,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
+    tableModel.insertRows( rowIndex, count);
     tableModel.fireTableRowsInserted( rowIndex, rowIndex + count - 1);
   }
 
@@ -36,6 +38,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
+    tableModel.removeRows( rowIndex, count);
     tableModel.fireTableRowsDeleted( rowIndex, rowIndex + count - 1);
   }
 
@@ -56,6 +59,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
+    tableModel.setColumnName( columnIndex, title);
     tableModel.fireTableStructureChanged();
   }
 
@@ -66,6 +70,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
+    tableModel.setColumnImage( columnIndex, icon);
     tableModel.fireTableCellUpdated( rowIndex, columnIndex);
   }
 
@@ -76,6 +81,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
+    tableModel.setValueAt( text, rowIndex, columnIndex);
     tableModel.fireTableCellUpdated( rowIndex, columnIndex);
   }
 

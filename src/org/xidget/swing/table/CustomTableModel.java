@@ -8,11 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.xidget.IXidget;
-import org.xidget.ifeature.table.IHeaderFeature;
-import org.xidget.ifeature.table.IRowSetFeature;
-import org.xidget.table.Cell;
-import org.xidget.table.Header;
-import org.xidget.table.Row;
 
 /**
  * A custom table model for table xidgets.
@@ -21,10 +16,41 @@ import org.xidget.table.Row;
 @SuppressWarnings("serial")
 public class CustomTableModel extends AbstractTableModel
 {
-  public CustomTableModel( IXidget xidget)
+  public CustomTableModel()
   {
-    this.xidget = xidget;
+    this.rows = new ArrayList<Row>();
+    this.columns = new ArrayList<Column>( 5);
     this.editors = new ArrayList<IXidget>( 5);
+  }
+  
+  /**
+   * Set the name of the specified column.
+   * @param columnIndex The column index.
+   * @param name The name.
+   */
+  public void setColumnName( int columnIndex, String name)
+  {
+    if ( columns.size() <= columnIndex)
+    {
+      for( int i = columns.size(); i <= columnIndex; i++)
+        columns.add( new Column());
+    }
+    columns.get( columnIndex).title = name;
+  }
+  
+  /**
+   * Set the image of the specified column.
+   * @param columnIndex The column index.
+   * @param image The image.
+   */
+  public void setColumnImage( int columnIndex, Object image)
+  {
+    if ( columns.size() <= columnIndex)
+    {
+      for( int i = columns.size(); i <= columnIndex; i++)
+        columns.add( new Column());
+    }
+    columns.get( columnIndex).image = image;
   }
   
   /* (non-Javadoc)
@@ -33,27 +59,55 @@ public class CustomTableModel extends AbstractTableModel
   @Override
   public String getColumnName( int columnIndex)
   {
-    IHeaderFeature feature = xidget.getFeature( IHeaderFeature.class);
-    Header header = feature.getHeaders().get( columnIndex);
-    return header.title;
+    return columns.get( columnIndex).title;
   }
 
+  /**
+   * Returns the image for the specified column.
+   * @param columnIndex The column index.
+   * @return Returns the image for the specified column.
+   */
+  public Object getColumnImage( int columnIndex)
+  {
+    return columns.get( columnIndex).image;
+  }
+  
   /* (non-Javadoc)
    * @see javax.swing.table.TableModel#getColumnCount()
    */
   public int getColumnCount()
   {
-    IHeaderFeature feature = xidget.getFeature( IHeaderFeature.class);
-    return feature.getHeaders().size();
+    return columns.size();
   }
 
+  /**
+   * Insert blank rows.
+   * @param rowIndex The index of the first row. 
+   * @param count The number of rows to insert.
+   */
+  public void insertRows( int rowIndex, int count)
+  {
+    for( int i=0; i<count; i++)
+      rows.add( rowIndex+i, new Row());
+  }
+  
+  /**
+   * Remove rows.
+   * @param rowIndex The index of the first row.
+   * @param count The number of rows to remove.
+   */
+  public void removeRows( int rowIndex, int count)
+  {
+    for( int i=0; i<count; i++)
+      rows.remove( rowIndex);
+  }
+  
   /* (non-Javadoc)
    * @see javax.swing.table.TableModel#getRowCount()
    */
   public int getRowCount()
   {
-    IRowSetFeature feature = xidget.getFeature( IRowSetFeature.class);
-    return feature.getRowCount();
+    return rows.size();
   }
 
   /* (non-Javadoc)
@@ -61,10 +115,8 @@ public class CustomTableModel extends AbstractTableModel
    */
   public Object getValueAt( int rowIndex, int columnIndex)
   {
-    IRowSetFeature feature = xidget.getFeature( IRowSetFeature.class);
-    Row row = feature.getRow( rowIndex);
-    Cell cell = row.cells.get( columnIndex);
-    return cell.text;
+    Cell cell = rows.get( rowIndex).cells.get( columnIndex);
+    return (cell != null)? cell.text: "";
   }
 
   /* (non-Javadoc)
@@ -73,10 +125,22 @@ public class CustomTableModel extends AbstractTableModel
   @Override
   public void setValueAt( Object value, int rowIndex, int columnIndex)
   {
-    IRowSetFeature feature = xidget.getFeature( IRowSetFeature.class);
-    Row row = feature.getRow( rowIndex);
+    if ( rowIndex >= rows.size())
+    {
+      for( int i = rows.size(); i <= rowIndex; i++)
+        rows.add( new Row());
+    }
+    
+    Row row = rows.get( rowIndex);
+    if ( columnIndex >= row.cells.size())
+    {
+      for( int i = row.cells.size(); i <= columnIndex; i++)
+        row.cells.add( new Cell());
+    }
+    
     Cell cell = row.cells.get( columnIndex);
-    cell.source.setValue( value);
+    cell.text = (value != null)? value.toString(): "";
+    fireTableCellUpdated( rowIndex, columnIndex);
   }
   
   /* (non-Javadoc)
@@ -95,10 +159,8 @@ public class CustomTableModel extends AbstractTableModel
    */
   public Object getIconAt( int rowIndex, int columnIndex)
   {
-    IRowSetFeature feature = xidget.getFeature( IRowSetFeature.class);
-    Row row = feature.getRow( rowIndex);
-    Cell cell = row.cells.get( columnIndex);
-    return cell.icon;
+    Cell cell = rows.get( rowIndex).cells.get( columnIndex);
+    return (cell != null)? cell.image: null;
   }
   
   /**
@@ -122,6 +184,24 @@ public class CustomTableModel extends AbstractTableModel
   {
   }
 
-  private IXidget xidget;
+  private class Column
+  {
+    public String title;
+    public Object image;
+  }
+  
+  private class Cell
+  {
+    public String text;
+    public Object image;
+  }
+  
+  private class Row
+  {
+    public List<Cell> cells = new ArrayList<Cell>( 5);
+  }
+  
+  private List<Column> columns;
+  private List<Row> rows; 
   private List<IXidget> editors;
 }

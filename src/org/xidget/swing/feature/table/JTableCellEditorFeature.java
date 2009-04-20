@@ -56,8 +56,6 @@ public class JTableCellEditorFeature implements IColumnEditorFeature
     IXidget editor = getEditor();
     if ( editor != null)
     {
-      IActivationFeature activationFeature = xidget.getFeature( IActivationFeature.class);
-      activationFeature.deactivate( clone);
     }
   }
 

@@ -7,6 +7,7 @@ package org.xidget.swing.feature;
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
+import org.xidget.Log;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xmodel.util.Radix;
 
@@ -21,7 +22,7 @@ public class SwingWidgetFeature implements IWidgetFeature
     
     StringBuilder sb = new StringBuilder();
     sb.append( "@"); sb.append( Radix.convert( hashCode(), 36));
-    System.out.printf( "%s: %s\n", xidget, sb);
+    Log.printf( "xidget", "%s: %s\n", xidget, sb);
   }
   
   /* (non-Javadoc)
