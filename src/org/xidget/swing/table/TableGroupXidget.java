@@ -13,6 +13,8 @@ import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.table.IColumnSetFeature;
 import org.xidget.ifeature.table.IGroupOffsetFeature;
 import org.xidget.ifeature.table.IRowSetFeature;
+import org.xidget.ifeature.table.ITableModelFeature;
+import org.xidget.ifeature.table.ITableWidgetFeature;
 
 /**
  * A xidget representing a contiguous set of rows in the table.
@@ -38,13 +40,12 @@ public class TableGroupXidget extends Xidget
     if ( clss == IColumnSetFeature.class) return (T)columnSetFeature;
     if ( clss == IRowSetFeature.class) return (T)rowSetFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
+
+    // get features from parent
+    if ( clss == ITableModelFeature.class) return (T)getParent().getFeature( clss);
+    if ( clss == ITableWidgetFeature.class) return (T)getParent().getFeature( clss);
     
-    // get feature from superclass first
-    T feature = super.getFeature( clss);
-    if ( feature != null) return feature;
-    
-    // get all other features from parent
-    return getParent().getFeature( clss);
+    return super.getFeature( clss);
   }
   
   private IRowSetFeature rowSetFeature;
