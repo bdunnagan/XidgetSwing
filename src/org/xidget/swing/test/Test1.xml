@@ -47,7 +47,7 @@
             <column>'Value'</column>
           
             <group>
-              <rows>$layouts//*/@*</rows>
+              <rows>if ( collection('appdb')/text2 = 'Relayer') then $layouts//*/@* else null</rows>
               <cell>
                 <source>name()</source>
               </cell>
