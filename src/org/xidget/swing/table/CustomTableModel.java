@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.xidget.IXidget;
+import org.xidget.table.Cell;
+import org.xidget.table.Row;
 
 /**
  * A custom table model for table xidgets.
@@ -81,14 +83,14 @@ public class CustomTableModel extends AbstractTableModel
   }
 
   /**
-   * Insert blank rows.
-   * @param rowIndex The index of the first row. 
-   * @param count The number of rows to insert.
+   * Insert rows.
+   * @param rowIndex The index of the first row.
+   * @param newRows The rows to be inserted. 
    */
-  public void insertRows( int rowIndex, int count)
+  public void insertRows( int rowIndex, Row[] newRows)
   {
-    for( int i=0; i<count; i++)
-      rows.add( rowIndex+i, new Row());
+    for( int i=0; i<newRows.length; i++)
+      rows.add( rowIndex+i, newRows[ i]);
   }
   
   /**
@@ -100,6 +102,15 @@ public class CustomTableModel extends AbstractTableModel
   {
     for( int i=0; i<count; i++)
       rows.remove( rowIndex);
+  }
+  
+  /**
+   * Returns the rows of the table.
+   * @return Returns the rows of the table.
+   */
+  public List<Row> getRows()
+  {
+    return rows;
   }
   
   /* (non-Javadoc)
@@ -160,7 +171,7 @@ public class CustomTableModel extends AbstractTableModel
   public Object getIconAt( int rowIndex, int columnIndex)
   {
     Cell cell = rows.get( rowIndex).cells.get( columnIndex);
-    return (cell != null)? cell.image: null;
+    return (cell != null)? cell.icon: null;
   }
   
   /**
@@ -188,17 +199,6 @@ public class CustomTableModel extends AbstractTableModel
   {
     public String title;
     public Object image;
-  }
-  
-  private class Cell
-  {
-    public String text;
-    public Object image;
-  }
-  
-  private class Row
-  {
-    public List<Cell> cells = new ArrayList<Cell>( 5);
   }
   
   private List<Column> columns;

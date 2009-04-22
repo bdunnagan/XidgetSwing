@@ -13,7 +13,6 @@ import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.table.IColumnSetFeature;
 import org.xidget.ifeature.table.IGroupOffsetFeature;
 import org.xidget.ifeature.table.IRowSetFeature;
-import org.xidget.ifeature.table.ITableModelFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
 
 /**
@@ -42,7 +41,6 @@ public class TableGroupXidget extends Xidget
     if ( clss == IBindFeature.class) return (T)bindFeature;
 
     // get features from parent
-    if ( clss == ITableModelFeature.class) return (T)getParent().getFeature( clss);
     if ( clss == ITableWidgetFeature.class) return (T)getParent().getFeature( clss);
     
     return super.getFeature( clss);

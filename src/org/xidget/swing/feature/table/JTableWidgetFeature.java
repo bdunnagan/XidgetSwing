@@ -9,6 +9,7 @@ import javax.swing.JTable;
 import org.xidget.IXidget;
 import org.xidget.ifeature.table.ITableWidgetFeature;
 import org.xidget.swing.table.CustomTableModel;
+import org.xidget.table.Row;
 
 /**
  * An implementation of ITableWidgetFeature for use with a Swing JTable.
@@ -21,14 +22,14 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.table.features.ITableWidgetFeature#insertRows(int, int)
+   * @see org.xidget.ifeature.table.ITableWidgetFeature#insertRows(int, org.xidget.table.Row[])
    */
-  public void insertRows( int rowIndex, int count)
+  public void insertRows( int rowIndex, Row[] rows)
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
-    tableModel.insertRows( rowIndex, count);
-    tableModel.fireTableRowsInserted( rowIndex, rowIndex + count - 1);
+    tableModel.insertRows( rowIndex, rows);
+    tableModel.fireTableRowsInserted( rowIndex, rowIndex + rows.length - 1);
   }
 
   /* (non-Javadoc)
@@ -40,6 +41,16 @@ public class JTableWidgetFeature implements ITableWidgetFeature
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.removeRows( rowIndex, count);
     tableModel.fireTableRowsDeleted( rowIndex, rowIndex + count - 1);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.table.ITableWidgetFeature#getRows()
+   */
+  public List<Row> getRows()
+  {
+    JTable table = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
+    return tableModel.getRows();
   }
 
   /* (non-Javadoc)
@@ -64,25 +75,13 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#setIcon(int, int, java.lang.Object)
+   * @see org.xidget.ifeature.table.ITableWidgetFeature#updateCell(org.xidget.table.Row, int)
    */
-  public void setIcon( int rowIndex, int columnIndex, Object icon)
+  public void updateCell( Row row, int columnIndex)
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
-    tableModel.setColumnImage( columnIndex, icon);
-    tableModel.fireTableCellUpdated( rowIndex, columnIndex);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#setText(int, int, java.lang.String)
-   */
-  public void setText( int rowIndex, int columnIndex, String text)
-  {
-    JTable table = xidget.getFeature( JTable.class);
-    CustomTableModel tableModel = (CustomTableModel)table.getModel();
-    tableModel.setValueAt( text, rowIndex, columnIndex);
-    tableModel.fireTableCellUpdated( rowIndex, columnIndex);
+    tableModel.fireTableCellUpdated( tableModel.getRows().indexOf( row), columnIndex);
   }
 
   private IXidget xidget;
