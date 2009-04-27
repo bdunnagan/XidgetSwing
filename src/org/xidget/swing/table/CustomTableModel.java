@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.xidget.IXidget;
-import org.xidget.table.Cell;
 import org.xidget.table.Row;
 
 /**
@@ -126,8 +125,8 @@ public class CustomTableModel extends AbstractTableModel
    */
   public Object getValueAt( int rowIndex, int columnIndex)
   {
-    Cell cell = rows.get( rowIndex).cells.get( columnIndex);
-    return (cell != null)? cell.text: "";
+    String text = rows.get( rowIndex).getCell( columnIndex).text;
+    return (text != null)? text: "";
   }
 
   /* (non-Javadoc)
@@ -143,14 +142,7 @@ public class CustomTableModel extends AbstractTableModel
     }
     
     Row row = rows.get( rowIndex);
-    if ( columnIndex >= row.cells.size())
-    {
-      for( int i = row.cells.size(); i <= columnIndex; i++)
-        row.cells.add( new Cell());
-    }
-    
-    Cell cell = row.cells.get( columnIndex);
-    cell.text = (value != null)? value.toString(): "";
+    row.getCell( columnIndex).text = (value != null)? value.toString(): "";
     fireTableCellUpdated( rowIndex, columnIndex);
   }
   
@@ -170,8 +162,7 @@ public class CustomTableModel extends AbstractTableModel
    */
   public Object getIconAt( int rowIndex, int columnIndex)
   {
-    Cell cell = rows.get( rowIndex).cells.get( columnIndex);
-    return (cell != null)? cell.icon: null;
+    return rows.get( rowIndex).getCell( columnIndex).icon;
   }
   
   /**

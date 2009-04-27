@@ -6,10 +6,13 @@ package org.xidget.swing;
 
 import org.xidget.IToolkit;
 import org.xidget.binding.XidgetTagHandler;
+import org.xidget.binding.table.TableTagHandler;
+import org.xidget.binding.tree.TreeTagHandler;
 import org.xidget.config.TagProcessor;
 import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.text.JTextXidget;
+import org.xidget.swing.tree.JTreeXidget;
 
 /**
  * An implementation of IToolkit for the Swing platform.
@@ -26,6 +29,7 @@ public class SwingToolkit implements IToolkit
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "combo", new XidgetTagHandler( JComboBoxXidget.class));
-    processor.addHandler( "table", new XidgetTagHandler( JTableXidget.class));
+    processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
+    processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
   }
 }

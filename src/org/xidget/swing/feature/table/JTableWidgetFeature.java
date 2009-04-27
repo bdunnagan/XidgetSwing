@@ -10,6 +10,7 @@ import org.xidget.IXidget;
 import org.xidget.ifeature.table.ITableWidgetFeature;
 import org.xidget.swing.table.CustomTableModel;
 import org.xidget.table.Row;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of ITableWidgetFeature for use with a Swing JTable.
@@ -22,9 +23,9 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#insertRows(int, org.xidget.table.Row[])
+   * @see org.xidget.ifeature.table.ITableWidgetFeature#insertRows(org.xmodel.xpath.expression.StatefulContext, int, org.xidget.table.Row[])
    */
-  public void insertRows( int rowIndex, Row[] rows)
+  public void insertRows( StatefulContext parent, int rowIndex, Row[] rows)
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
@@ -33,20 +34,20 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.table.features.ITableWidgetFeature#removeRows(int, int)
+   * @see org.xidget.ifeature.table.ITableWidgetFeature#removeRows(org.xmodel.xpath.expression.StatefulContext, int, org.xidget.table.Row[])
    */
-  public void removeRows( int rowIndex, int count)
+  public void removeRows( StatefulContext parent, int rowIndex, Row[] rows)
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
-    tableModel.removeRows( rowIndex, count);
-    tableModel.fireTableRowsDeleted( rowIndex, rowIndex + count - 1);
+    tableModel.removeRows( rowIndex, rows.length);
+    tableModel.fireTableRowsDeleted( rowIndex, rowIndex + rows.length - 1);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#getRows()
+   * @see org.xidget.ifeature.table.ITableWidgetFeature#getRows(org.xmodel.xpath.expression.StatefulContext)
    */
-  public List<Row> getRows()
+  public List<Row> getRows( StatefulContext parent)
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();

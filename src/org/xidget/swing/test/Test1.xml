@@ -42,31 +42,42 @@
             <source>collection('appdb')/text3</source>
           </text>
           
-          <table size="600, 200">
+          <tree size="600, 200">
             <column>'Name'</column>
             <column>'Value'</column>
           
-            <group>
-              <rows>collection('appdb')/*</rows>
+            <table>
+              <rows>.</rows>
               <cell>
-                <source>name()</source>
+                <source>'Folder #1'</source>
               </cell>
-              <cell>
-                <source>.</source>
-              </cell>
-            </group>
+            </table>
             
-            <group>
-              <rows>if ( collection('appdb')/text2 = 'Relayer') then $layouts//*/@* else null</rows>
+            <table>
+              <rows>.</rows>
+              <cell>
+                <source>'Folder #2'</source>
+              </cell>
+            </table>
+            
+            <table>
+              <rows>if ( collection('appdb')/text2 = 'Relayer') then static( $layouts//*/@*) else null</rows>
               <cell>
                 <source>name()</source>
               </cell>
               <cell>
                 <source>.</source>
               </cell>
-            </group>
+            </table>
           
-            <group>
+            <table>
+              <rows>.</rows>
+              <cell>
+                <source>'Folder #3'</source>
+              </cell>
+            </table>
+            
+            <table>
               <rows>$layouts//*</rows>
               <cell>
                 <source>name()</source>
@@ -74,8 +85,8 @@
               <cell>
                 <source>.</source>
               </cell>
-            </group>
-          </table>
+            </table>
+          </tree>
             
           <trigger name="Listen" source="collection('appdb')/text2">
             <print>string( collection('appdb')/text2)</print>
