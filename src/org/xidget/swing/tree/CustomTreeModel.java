@@ -12,6 +12,9 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import org.xidget.IXidget;
 import org.xidget.table.Row;
+import org.xmodel.IModelObject;
+import org.xmodel.ModelListener;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * A custom Swing TreeModel which is backed by the table/tree data-structures.
@@ -23,6 +26,8 @@ public class CustomTreeModel implements TreeModel
   {
     listeners = new ArrayList<TreeModelListener>( 3);
     root = new Row( xidget);
+    temp = new Row( null);
+    temp.getCell( 0).text = "BLAH!";
   }
   
   /* (non-Javadoc)
@@ -68,14 +73,20 @@ public class CustomTreeModel implements TreeModel
    */
   public void insertRows( Row parent, int rowIndex, Row[] rows)
   {
+    // fire event to insert rows
     Object[] path = createPath( parent);
     int[] indices = new int[ rows.length];
     for( int i=0; i<rows.length; i++) indices[ i] = rowIndex + i;
     
-    if ( parent == root)
-      fireTreeStructureChanged( this, path, indices, rows);
-    else
-      fireTreeNodesInserted( this, path, indices, rows);
+    if ( parent == root || wasDirty) fireTreeStructureChanged( this, path);
+    else fireTreeNodesInserted( this, path, indices, rows);
+    
+    // add dirty listener
+    for( int i=0; i<rows.length; i++)
+    {
+      IModelObject element = rows[ i].getContext().getObject();
+      element.addModelListener( new DirtyListener( rows[ i]));
+    }
   }
   
   /**
@@ -86,6 +97,14 @@ public class CustomTreeModel implements TreeModel
    */
   public void removeRows( Row parent, int rowIndex, Row[] rows)
   {
+    // remove dirty listener
+    for( int i=0; i<rows.length; i++)
+    {
+      IModelObject element = rows[ i].getContext().getObject();
+      element.removeModelListener( new DirtyListener( rows[ i]));
+    }
+    
+    // fire event to remove rows
     List<Row> children = (parent == null)? root.getChildren(): parent.getChildren();
     
     Object[] path = createPath( parent);
@@ -93,10 +112,8 @@ public class CustomTreeModel implements TreeModel
     for( int i=0, j=rowIndex; i<rows.length; i++, j++) 
       indices[ i] = j;
 
-    if ( parent == root)
-      fireTreeStructureChanged( this, path, indices, rows);
-    else
-      fireTreeNodesRemoved( this, path, indices, rows);
+    if ( parent == root) fireTreeStructureChanged( this, path);
+    else fireTreeNodesRemoved( this, path, indices, rows);
   }
   
   /* (non-Javadoc)
@@ -104,8 +121,16 @@ public class CustomTreeModel implements TreeModel
    */
   public Object getChild( Object parent, int index)
   {
-    List<Row> children = (parent == null)? root.getChildren(): ((Row)parent).getChildren();
-    return children.get( index);
+    StatefulContext context = ((Row)parent).getContext();
+    if ( context != null && context.getObject().isDirty())
+    {
+      return temp;
+    }
+    else
+    {
+      List<Row> children = (parent == null)? root.getChildren(): ((Row)parent).getChildren();
+      return children.get( index);
+    }
   }
 
   /* (non-Javadoc)
@@ -113,9 +138,17 @@ public class CustomTreeModel implements TreeModel
    */
   public int getChildCount( Object parent)
   {
-    List<Row> children = (parent == null)? root.getChildren(): ((Row)parent).getChildren();
-    if ( children == null) return 0;
-    return children.size();
+    StatefulContext context = ((Row)parent).getContext();
+    if ( context != null && context.getObject().isDirty())
+    {
+      return 1;
+    }
+    else
+    {
+      List<Row> children = (parent == null)? root.getChildren(): ((Row)parent).getChildren();
+      if ( children == null) return 0;
+      return children.size();
+    }
   }
 
   /* (non-Javadoc)
@@ -141,6 +174,9 @@ public class CustomTreeModel implements TreeModel
    */
   public boolean isLeaf( Object parent)
   {
+    StatefulContext context = ((Row)parent).getContext();
+    if ( context != null && context.getObject().isDirty()) return false;
+    
     List<Row> children = (parent == null)? root.getChildren(): ((Row)parent).getChildren();
     return children == null || children.size() == 0;
   }
@@ -218,14 +254,12 @@ public class CustomTreeModel implements TreeModel
    * Notifies all listeners that have registered interest for notification on this event type.
    * @param source the node where the tree model has changed
    * @param path the path to the root node
-   * @param childIndices the indices of the affected elements
-   * @param children the affected elements
    */
-  protected void fireTreeStructureChanged( Object source, Object[] path, int[] childIndices, Object[] children) 
+  protected void fireTreeStructureChanged( Object source, Object[] path) 
   {
     if ( listeners.size() == 0) return;
     
-    TreeModelEvent event = new TreeModelEvent( source, path, childIndices, children);
+    TreeModelEvent event = new TreeModelEvent( source, path);
     TreeModelListener[] array = listeners.toArray( new TreeModelListener[ 0]);
     for( TreeModelListener listener: array) listener.treeStructureChanged( event);
   }
@@ -244,6 +278,51 @@ public class CustomTreeModel implements TreeModel
     for( TreeModelListener listener: array) listener.treeStructureChanged( event);
   }
 
+  /**
+   * A listener for dirty state events for every row. This listener will trigger the insertion
+   * of a temporary node in the tree when a node becomes dirty.
+   */
+  private class DirtyListener extends ModelListener 
+  {
+    public DirtyListener( Row row)
+    {
+      this.row = row;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.xmodel.ModelListener#notifyDirty(org.xmodel.IModelObject, boolean)
+     */
+    @Override
+    public void notifyDirty( IModelObject object, boolean dirty)
+    {
+      wasDirty = !dirty;
+      if ( dirty) fireTreeStructureChanged( CustomTreeModel.this, createPath( row)); 
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals( Object object)
+    {
+      if ( object instanceof DirtyListener) return ((DirtyListener)object).row == row;
+      return false;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+      return row.hashCode();
+    }
+
+    private Row row;
+  };
+  
   private Row root;
+  private Row temp;
   private List<TreeModelListener> listeners; 
+  private boolean wasDirty;
 }

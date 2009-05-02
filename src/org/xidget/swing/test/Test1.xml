@@ -102,6 +102,12 @@
                   <source>name()</source>
                 </cell>
               </table>
+              <table>
+                <rows>collection('appdb')/*</rows>
+                <cell>
+                  <source>name()</source>
+                </cell>
+              </table>
             </tree>
           </tree>
             
