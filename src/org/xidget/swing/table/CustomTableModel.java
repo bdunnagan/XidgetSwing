@@ -17,9 +17,9 @@ import org.xidget.table.Row;
 @SuppressWarnings("serial")
 public class CustomTableModel extends AbstractTableModel
 {
-  public CustomTableModel()
+  public CustomTableModel( IXidget xidget)
   {
-    this.rows = new ArrayList<Row>();
+    this.root = new Row( xidget);
     this.columns = new ArrayList<Column>( 5);
     this.editors = new ArrayList<IXidget>( 5);
   }
@@ -88,8 +88,7 @@ public class CustomTableModel extends AbstractTableModel
    */
   public void insertRows( int rowIndex, Row[] newRows)
   {
-    for( int i=0; i<newRows.length; i++)
-      rows.add( rowIndex+i, newRows[ i]);
+    fireTableRowsInserted( rowIndex, rowIndex + newRows.length - 1);
   }
   
   /**
@@ -99,8 +98,7 @@ public class CustomTableModel extends AbstractTableModel
    */
   public void removeRows( int rowIndex, int count)
   {
-    for( int i=0; i<count; i++)
-      rows.remove( rowIndex);
+    fireTableRowsDeleted( rowIndex, rowIndex + count - 1);
   }
   
   /**
@@ -109,7 +107,7 @@ public class CustomTableModel extends AbstractTableModel
    */
   public List<Row> getRows()
   {
-    return rows;
+    return root.getChildren();
   }
   
   /* (non-Javadoc)
@@ -117,7 +115,7 @@ public class CustomTableModel extends AbstractTableModel
    */
   public int getRowCount()
   {
-    return rows.size();
+    return root.getChildren().size();
   }
 
   /* (non-Javadoc)
@@ -125,7 +123,7 @@ public class CustomTableModel extends AbstractTableModel
    */
   public Object getValueAt( int rowIndex, int columnIndex)
   {
-    String text = rows.get( rowIndex).getCell( columnIndex).text;
+    String text = root.getChildren().get( rowIndex).getCell( columnIndex).text;
     return (text != null)? text: "";
   }
 
@@ -141,7 +139,7 @@ public class CustomTableModel extends AbstractTableModel
 //        rows.add( new Row());
 //    }
     
-    Row row = rows.get( rowIndex);
+    Row row = root.getChildren().get( rowIndex);
     row.getCell( columnIndex).text = (value != null)? value.toString(): "";
     fireTableCellUpdated( rowIndex, columnIndex);
   }
@@ -162,7 +160,7 @@ public class CustomTableModel extends AbstractTableModel
    */
   public Object getIconAt( int rowIndex, int columnIndex)
   {
-    return rows.get( rowIndex).getCell( columnIndex).icon;
+    return root.getChildren().get( rowIndex).getCell( columnIndex).icon;
   }
   
   /**
@@ -192,7 +190,7 @@ public class CustomTableModel extends AbstractTableModel
     public Object image;
   }
   
+  private Row root;
   private List<Column> columns;
-  private List<Row> rows; 
   private List<IXidget> editors;
 }

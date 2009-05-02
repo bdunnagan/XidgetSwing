@@ -4,10 +4,13 @@
  */
 package org.xidget.swing.feature.table;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JTable;
 import org.xidget.IXidget;
-import org.xidget.ifeature.table.ITableWidgetFeature;
+import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.table.CustomTableModel;
 import org.xidget.table.Row;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -15,57 +18,63 @@ import org.xmodel.xpath.expression.StatefulContext;
 /**
  * An implementation of ITableWidgetFeature for use with a Swing JTable.
  */
-public class JTableWidgetFeature implements ITableWidgetFeature
+public class JTableWidgetFeature implements ITreeWidgetFeature
 {
   public JTableWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
+    this.map = new HashMap<StatefulContext, Row>();
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#insertRows(org.xmodel.xpath.expression.StatefulContext, int, org.xidget.table.Row[])
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#insertRows(org.xidget.table.Row, int, org.xidget.table.Row[])
    */
-  public void insertRows( StatefulContext parent, int rowIndex, Row[] rows)
+  public void insertRows( Row parent, int rowIndex, Row[] rows)
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.insertRows( rowIndex, rows);
-    tableModel.fireTableRowsInserted( rowIndex, rowIndex + rows.length - 1);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#removeRows(org.xmodel.xpath.expression.StatefulContext, int, org.xidget.table.Row[])
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#removeRows(org.xidget.table.Row, int, org.xidget.table.Row[])
    */
-  public void removeRows( StatefulContext parent, int rowIndex, Row[] rows)
+  public void removeRows( Row parent, int rowIndex, Row[] rows)
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.removeRows( rowIndex, rows.length);
-    tableModel.fireTableRowsDeleted( rowIndex, rowIndex + rows.length - 1);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#getRows(org.xmodel.xpath.expression.StatefulContext)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#findRow(org.xmodel.xpath.expression.StatefulContext)
    */
-  public List<Row> getRows( StatefulContext parent)
+  public Row findRow( StatefulContext context)
   {
-    JTable table = xidget.getFeature( JTable.class);
-    CustomTableModel tableModel = (CustomTableModel)table.getModel();
-    return tableModel.getRows();
+    if ( !map.containsKey( context)) return root;
+    return map.get( context);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#getChildren(org.xidget.table.Row)
+   */
+  public List<Row> getChildren( Row parent)
+  {
+    return Collections.emptyList();
   }
 
   /* (non-Javadoc)
    * @see org.xidget.table.features.ITableWidgetFeature#setEditable(int, int, boolean)
    */
-  public void setEditable( int rowIndex, int columnIndex, boolean editable)
-  {
-    JTable table = xidget.getFeature( JTable.class);
-    CustomTableModel tableModel = (CustomTableModel)table.getModel();
-    tableModel.setEditable( rowIndex, columnIndex, editable);
-  }
+//  public void setEditable( int rowIndex, int columnIndex, boolean editable)
+//  {
+//    JTable table = xidget.getFeature( JTable.class);
+//    CustomTableModel tableModel = (CustomTableModel)table.getModel();
+//    tableModel.setEditable( rowIndex, columnIndex, editable);
+//  }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#setTitle(int, java.lang.String)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#setTitle(int, java.lang.String)
    */
   public void setTitle( int columnIndex, String title)
   {
@@ -76,7 +85,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.table.ITableWidgetFeature#updateCell(org.xidget.table.Row, int)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#updateCell(org.xidget.table.Row, int)
    */
   public void updateCell( Row row, int columnIndex)
   {
@@ -86,4 +95,6 @@ public class JTableWidgetFeature implements ITableWidgetFeature
   }
 
   private IXidget xidget;
+  private Row root;
+  private Map<StatefulContext, Row> map;
 }

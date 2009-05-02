@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JTree;
 import org.xidget.IXidget;
+import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.tree.CustomTreeModel;
 import org.xidget.table.Row;
@@ -34,6 +35,11 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
     for( int i=0; i<rows.length; i++) 
       map.put( rows[ i].getContext(), rows[ i]);
     
+    // apply tree expansion policy
+    ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
+    for( int i=0; i<rows.length; i++)
+      expandFeature.rowAdded( rows[ i]);
+    
     // notify widget
     JTree jtree = xidget.getFeature( JTree.class);
     CustomTreeModel treeModel = (CustomTreeModel)jtree.getModel();
@@ -45,6 +51,10 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
    */
   public void removeRows( Row parent, int rowIndex, Row[] rows)
   {
+    ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
+    for( int i=0; i<rows.length; i++)
+      expandFeature.rowRemoved( rows[ i]);
+    
     JTree jtree = xidget.getFeature( JTree.class);
     CustomTreeModel treeModel = (CustomTreeModel)jtree.getModel();
     
@@ -62,16 +72,6 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
   public List<Row> getChildren( Row parent)
   {
     return parent.getChildren();
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#getRoots()
-   */
-  public List<Row> getRoots()
-  {
-    JTree jtree = xidget.getFeature( JTree.class);
-    CustomTreeModel treeModel = (CustomTreeModel)jtree.getModel();
-    return ((Row)treeModel.getRoot()).getChildren();
   }
 
   /* (non-Javadoc)

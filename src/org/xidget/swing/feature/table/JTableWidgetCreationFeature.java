@@ -31,7 +31,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget( Container container)
   {
-    CustomTableModel tableModel = new CustomTableModel();
+    CustomTableModel tableModel = new CustomTableModel( xidget);
     jtable = new JTable( tableModel);
     jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
     jtable.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
