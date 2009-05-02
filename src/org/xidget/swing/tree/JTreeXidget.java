@@ -10,12 +10,14 @@ import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.table.TreeTableWidgetFeature;
+import org.xidget.feature.tree.TreeExpandFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IErrorFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
+import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 import org.xidget.swing.feature.TooltipErrorFeature;
@@ -37,6 +39,7 @@ public class JTreeXidget extends Xidget
     creationFeature = new JTreeWidgetCreationFeature( this);
     errorFeature = new TooltipErrorFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    expandFeature = new TreeExpandFeature( this);
     treeWidgetFeature = new JTreeWidgetFeature( this);
     tableWidgetFeature = new TreeTableWidgetFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);    
@@ -50,6 +53,7 @@ public class JTreeXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
+    if ( clss == ITreeExpandFeature.class) return (T)expandFeature;
     if ( clss == ITableWidgetFeature.class) return (T)tableWidgetFeature;
     if ( clss == ITreeWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
@@ -64,6 +68,7 @@ public class JTreeXidget extends Xidget
   }  
   
   private IBindFeature bindFeature;
+  private ITreeExpandFeature expandFeature;
   private ITreeWidgetFeature treeWidgetFeature;
   private ITableWidgetFeature tableWidgetFeature;
   private JTreeWidgetCreationFeature creationFeature;

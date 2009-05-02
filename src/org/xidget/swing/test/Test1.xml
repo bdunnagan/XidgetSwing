@@ -10,6 +10,14 @@
       </xml>
     </template>
   </create>
+
+  <create assign="fsys">
+    <template annotated="true">
+      <Applications path="/">
+        <extern:cache class="org.xmodel.external.caching.FileSystemCachingPolicy"/>
+      </Applications>
+    </template>
+  </create>
   
   <create assign="choices">
     <template>
@@ -46,21 +54,21 @@
             <column>'Name'</column>
             <column>'Value'</column>
           
-            <table>
+            <!--table>
               <rows>.</rows>
               <cell>
                 <source>'Folder #1'</source>
               </cell>
-            </table>
+            </table-->
             
             <table>
-              <rows>.</rows>
+              <rows>$fsys</rows>
               <cell>
-                <source>'Folder #2'</source>
+                <source>name()</source>
               </cell>
             </table>
             
-            <table>
+            <!--table>
               <rows>if ( collection('appdb')/text2 = 'Relayer') then static( $layouts//*/@*) else null</rows>
               <cell>
                 <source>name()</source>
@@ -85,7 +93,16 @@
               <cell>
                 <source>.</source>
               </cell>
-            </table>
+            </table-->
+            
+            <tree parent="table[ 1]" when="true()">
+              <table>
+                <rows>*</rows>
+                <cell>
+                  <source>name()</source>
+                </cell>
+              </table>
+            </tree>
           </tree>
             
           <trigger name="Listen" source="collection('appdb')/text2">

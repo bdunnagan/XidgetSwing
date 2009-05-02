@@ -8,10 +8,15 @@ import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
+import javax.swing.tree.TreePath;
 import org.xidget.IXidget;
+import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.swing.tree.CustomTreeCellRenderer;
 import org.xidget.swing.tree.CustomTreeModel;
+import org.xidget.table.Row;
 
 /**
  * An implementation of IWidgetCreationFeature for creating a Netbeans Outline widget.
@@ -29,11 +34,14 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget( Container container)
   {
-    jtree = new JTree( new CustomTreeModel());
+    jtree = new JTree( new CustomTreeModel( xidget));
+    
     jtree.setCellRenderer( new CustomTreeCellRenderer());
     jtree.setShowsRootHandles( true);
     jtree.setRootVisible( false);
     jtree.putClientProperty( "JTree.lineStyle", "Angled");
+    
+    jtree.addTreeExpansionListener( expandListener);
     
     jscrollPane = new JScrollPane( jtree);
     container.add( jscrollPane);
@@ -59,6 +67,26 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     return jtree;
   }
 
+  private TreeExpansionListener expandListener = new TreeExpansionListener() {
+    public void treeExpanded( TreeExpansionEvent event)
+    {
+      TreePath path = event.getPath();
+      Row row = (Row)path.getLastPathComponent();
+
+      ITreeExpandFeature feature = xidget.getFeature( ITreeExpandFeature.class);
+      feature.expand( row);
+    }
+    
+    public void treeCollapsed( TreeExpansionEvent event)
+    {
+      TreePath path = event.getPath();
+      Row row = (Row)path.getLastPathComponent();
+
+      ITreeExpandFeature feature = xidget.getFeature( ITreeExpandFeature.class);
+      feature.collapse( row);
+    }
+  };
+  
   private JScrollPane jscrollPane;
   private JTree jtree;
 }

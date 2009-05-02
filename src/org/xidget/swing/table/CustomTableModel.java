@@ -135,11 +135,11 @@ public class CustomTableModel extends AbstractTableModel
   @Override
   public void setValueAt( Object value, int rowIndex, int columnIndex)
   {
-    if ( rowIndex >= rows.size())
-    {
-      for( int i = rows.size(); i <= rowIndex; i++)
-        rows.add( new Row());
-    }
+//    if ( rowIndex >= rows.size())
+//    {
+//      for( int i = rows.size(); i <= rowIndex; i++)
+//        rows.add( new Row());
+//    }
     
     Row row = rows.get( rowIndex);
     row.getCell( columnIndex).text = (value != null)? value.toString(): "";

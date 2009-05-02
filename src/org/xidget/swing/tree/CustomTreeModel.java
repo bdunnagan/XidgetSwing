@@ -5,12 +5,12 @@
 package org.xidget.swing.tree;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+import org.xidget.IXidget;
 import org.xidget.table.Row;
 
 /**
@@ -19,10 +19,10 @@ import org.xidget.table.Row;
 @SuppressWarnings("unused")
 public class CustomTreeModel implements TreeModel
 {
-  public CustomTreeModel()
+  public CustomTreeModel( IXidget xidget)
   {
     listeners = new ArrayList<TreeModelListener>( 3);
-    root = new Row();
+    root = new Row( xidget);
   }
   
   /* (non-Javadoc)
@@ -71,8 +71,11 @@ public class CustomTreeModel implements TreeModel
     Object[] path = createPath( parent);
     int[] indices = new int[ rows.length];
     for( int i=0; i<rows.length; i++) indices[ i] = rowIndex + i;
-    //fireTreeNodesInserted( this, path, indices, rows);
-    fireTreeStructureChanged( this, path, indices, rows);
+    
+    if ( parent == root)
+      fireTreeStructureChanged( this, path, indices, rows);
+    else
+      fireTreeNodesInserted( this, path, indices, rows);
   }
   
   /**
@@ -90,8 +93,10 @@ public class CustomTreeModel implements TreeModel
     for( int i=0, j=rowIndex; i<rows.length; i++, j++) 
       indices[ i] = j;
 
-    //fireTreeNodesRemoved( this, path, indices, rows);
-    fireTreeStructureChanged( this, path, indices, rows);
+    if ( parent == root)
+      fireTreeStructureChanged( this, path, indices, rows);
+    else
+      fireTreeNodesRemoved( this, path, indices, rows);
   }
   
   /* (non-Javadoc)
@@ -145,7 +150,7 @@ public class CustomTreeModel implements TreeModel
    */
   public void valueForPathChanged( TreePath path, Object newValue)
   {
-    // xidget used remove/insert combination
+    // xidget uses remove/insert combination
   }
 
   /**
