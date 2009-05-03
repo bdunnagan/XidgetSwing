@@ -97,7 +97,7 @@
             
             <tree parent="table[ 1]" when="true()">
               <table>
-                <rows>*</rows>
+                <rows>if ( collection('appdb')/text2 = 'Relayer') then * else null</rows>
                 <cell>
                   <source>name()</source>
                 </cell>

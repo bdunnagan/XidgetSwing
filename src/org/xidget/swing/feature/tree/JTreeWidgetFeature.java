@@ -35,15 +35,15 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
     for( int i=0; i<rows.length; i++) 
       map.put( rows[ i].getContext(), rows[ i]);
     
-    // apply tree expansion policy
-    ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
-    for( int i=0; i<rows.length; i++)
-      expandFeature.rowAdded( rows[ i]);
-    
     // notify widget
     JTree jtree = xidget.getFeature( JTree.class);
     CustomTreeModel treeModel = (CustomTreeModel)jtree.getModel();
     treeModel.insertRows( parent, rowIndex, rows);
+    
+    // expand content of row according to policy
+    ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
+    for( int i=0; i<rows.length; i++)
+      expandFeature.rowAdded( rows[ i]);    
   }
 
   /* (non-Javadoc)
@@ -51,6 +51,7 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
    */
   public void removeRows( Row parent, int rowIndex, Row[] rows)
   {
+    // let expansion policy cleanup listeners
     ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
     for( int i=0; i<rows.length; i++)
       expandFeature.rowRemoved( rows[ i]);
@@ -63,7 +64,7 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
       map.remove( rows[ i].getContext());
     
     // notify widget
-    treeModel.removeRows( parent, rowIndex, rows);
+    treeModel.removeRows( parent, rowIndex, rows);    
   }
 
   /* (non-Javadoc)

@@ -79,7 +79,8 @@ public class CustomTreeModel implements TreeModel
     for( int i=0; i<rows.length; i++) indices[ i] = rowIndex + i;
     
     if ( parent == root || wasDirty) fireTreeStructureChanged( this, path);
-    else fireTreeNodesInserted( this, path, indices, rows);
+    else 
+      fireTreeNodesInserted( this, path, indices, rows);
     
     // add dirty listener
     for( int i=0; i<rows.length; i++)
