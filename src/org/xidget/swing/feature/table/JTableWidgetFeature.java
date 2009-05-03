@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature.table;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +60,7 @@ public class JTableWidgetFeature implements ITreeWidgetFeature
    */
   public boolean isVisible( Row row)
   {
-    // TODO Auto-generated method stub
-    return false;
+    return true;
   }
 
   /* (non-Javadoc)
@@ -70,7 +68,15 @@ public class JTableWidgetFeature implements ITreeWidgetFeature
    */
   public Row findRow( StatefulContext context)
   {
-    if ( !map.containsKey( context)) return root;
+    if ( !map.containsKey( context)) 
+    {
+      JTable table = xidget.getFeature( JTable.class);
+      CustomTableModel tableModel = (CustomTableModel)table.getModel();
+      Row root = tableModel.getRoot();
+      root.setContext( context);
+      map.put( context, root);
+      return root;
+    }
     return map.get( context);
   }
 
@@ -79,7 +85,7 @@ public class JTableWidgetFeature implements ITreeWidgetFeature
    */
   public List<Row> getChildren( Row parent)
   {
-    return Collections.emptyList();
+    return parent.getChildren();
   }
 
   /* (non-Javadoc)
@@ -114,6 +120,5 @@ public class JTableWidgetFeature implements ITreeWidgetFeature
   }
 
   private IXidget xidget;
-  private Row root;
   private Map<StatefulContext, Row> map;
 }

@@ -126,6 +126,15 @@ public class CustomTableModel extends AbstractTableModel
     return root.getChildren().size();
   }
 
+  /**
+   * Returns the root of the table.
+   * @return Returns the root of the table.
+   */
+  public Row getRoot()
+  {
+    return root;
+  }
+  
   /* (non-Javadoc)
    * @see javax.swing.table.TableModel#getValueAt(int, int)
    */
