@@ -88,7 +88,6 @@ public class CustomTableModel extends AbstractTableModel
    */
   public void insertRows( int rowIndex, Row[] newRows)
   {
-    fireTableRowsInserted( rowIndex, rowIndex + newRows.length - 1);
   }
   
   /**
@@ -98,7 +97,16 @@ public class CustomTableModel extends AbstractTableModel
    */
   public void removeRows( int rowIndex, int count)
   {
-    fireTableRowsDeleted( rowIndex, rowIndex + count - 1);
+  }
+  
+  /**
+   * Commit row-set changes to the specified parent.
+   * @param parent The parent.
+   */
+  public void commit( Row parent)
+  {
+    // TODO: need better record keeping for finer grained events
+    fireTableStructureChanged();
   }
   
   /**

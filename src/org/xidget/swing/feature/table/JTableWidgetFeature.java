@@ -47,6 +47,25 @@ public class JTableWidgetFeature implements ITreeWidgetFeature
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#commit(org.xidget.table.Row)
+   */
+  public void commit( Row parent)
+  {
+    JTable table = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)table.getModel();
+    tableModel.commit( parent);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#isVisible(org.xidget.table.Row)
+   */
+  public boolean isVisible( Row row)
+  {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.tree.ITreeWidgetFeature#findRow(org.xmodel.xpath.expression.StatefulContext)
    */
   public Row findRow( StatefulContext context)

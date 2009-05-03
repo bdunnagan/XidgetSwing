@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 import org.xidget.IXidget;
+import org.xidget.Log;
 import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.tree.CustomTreeModel;
@@ -31,6 +33,10 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
    */
   public void insertRows( Row parent, int rowIndex, Row[] rows)
   {
+    Log.printf( "xidget", "inserting @ %s:\n", parent);
+    for( int i=0; i<rows.length; i++)
+      Log.printf( "xidget", "\t%s\n", rows[ i]);
+    
     // update map
     for( int i=0; i<rows.length; i++) 
       map.put( rows[ i].getContext(), rows[ i]);
@@ -51,6 +57,10 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
    */
   public void removeRows( Row parent, int rowIndex, Row[] rows)
   {
+    Log.printf( "xidget", "removing @ %s:\n", parent);
+    for( int i=0; i<rows.length; i++)
+      Log.printf( "xidget", "\t%s\n", rows[ i]);
+    
     // let expansion policy cleanup listeners
     ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
     for( int i=0; i<rows.length; i++)
@@ -65,6 +75,16 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
     
     // notify widget
     treeModel.removeRows( parent, rowIndex, rows);    
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#commit(org.xidget.table.Row)
+   */
+  public void commit( Row parent)
+  {
+    JTree jtree = xidget.getFeature( JTree.class);
+    CustomTreeModel treeModel = (CustomTreeModel)jtree.getModel();
+    treeModel.commit( parent);
   }
 
   /* (non-Javadoc)
@@ -90,6 +110,17 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
     }
     
     return map.get( context);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#isVisible(org.xidget.table.Row)
+   */
+  public boolean isVisible( Row row)
+  {
+    JTree jtree = xidget.getFeature( JTree.class);
+    CustomTreeModel treeModel = (CustomTreeModel)jtree.getModel();
+    Object[] path = treeModel.createPath( row);
+    return jtree.isVisible( new TreePath( path));
   }
 
   /* (non-Javadoc)

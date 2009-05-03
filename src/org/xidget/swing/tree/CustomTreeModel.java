@@ -14,6 +14,7 @@ import org.xidget.IXidget;
 import org.xidget.table.Row;
 import org.xmodel.IModelObject;
 import org.xmodel.ModelListener;
+import org.xmodel.external.IExternalReference;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -26,8 +27,6 @@ public class CustomTreeModel implements TreeModel
   {
     listeners = new ArrayList<TreeModelListener>( 3);
     root = new Row( xidget);
-    temp = new Row( null);
-    temp.getCell( 0).text = "BLAH!";
   }
   
   /* (non-Javadoc)
@@ -51,7 +50,7 @@ public class CustomTreeModel implements TreeModel
    * @param row The row.
    * @return Returns the path for the specified row.
    */
-  private Object[] createPath( Row row)
+  public Object[] createPath( Row row)
   {
     List<Object> path = new ArrayList<Object>();
     if ( row != null)
@@ -73,21 +72,6 @@ public class CustomTreeModel implements TreeModel
    */
   public void insertRows( Row parent, int rowIndex, Row[] rows)
   {
-    // fire event to insert rows
-    Object[] path = createPath( parent);
-    int[] indices = new int[ rows.length];
-    for( int i=0; i<rows.length; i++) indices[ i] = rowIndex + i;
-    
-    if ( parent == root || wasDirty) fireTreeStructureChanged( this, path);
-    else 
-      fireTreeNodesInserted( this, path, indices, rows);
-    
-    // add dirty listener
-    for( int i=0; i<rows.length; i++)
-    {
-      IModelObject element = rows[ i].getContext().getObject();
-      element.addModelListener( new DirtyListener( rows[ i]));
-    }
   }
   
   /**
@@ -98,23 +82,17 @@ public class CustomTreeModel implements TreeModel
    */
   public void removeRows( Row parent, int rowIndex, Row[] rows)
   {
-    // remove dirty listener
-    for( int i=0; i<rows.length; i++)
-    {
-      IModelObject element = rows[ i].getContext().getObject();
-      element.removeModelListener( new DirtyListener( rows[ i]));
-    }
-    
-    // fire event to remove rows
-    List<Row> children = (parent == null)? root.getChildren(): parent.getChildren();
-    
-    Object[] path = createPath( parent);
-    int[] indices = new int[ rows.length];
-    for( int i=0, j=rowIndex; i<rows.length; i++, j++) 
-      indices[ i] = j;
+  }
 
-    if ( parent == root) fireTreeStructureChanged( this, path);
-    else fireTreeNodesRemoved( this, path, indices, rows);
+  /**
+   * Fire events to commit previous changes to the row-set of the specified parent.
+   * @param parent The parent row.
+   */
+  public void commit( Row parent)
+  {
+    // TODO: probably should do finer-grained events for inserts and deletes
+    Object[] path = createPath( parent);
+    fireTreeStructureChanged( this, path);
   }
   
   /* (non-Javadoc)
@@ -122,16 +100,8 @@ public class CustomTreeModel implements TreeModel
    */
   public Object getChild( Object parent, int index)
   {
-    StatefulContext context = ((Row)parent).getContext();
-    if ( context != null && context.getObject().isDirty())
-    {
-      return temp;
-    }
-    else
-    {
-      List<Row> children = (parent == null)? root.getChildren(): ((Row)parent).getChildren();
-      return children.get( index);
-    }
+    List<Row> children = (parent == null)? root.getChildren(): ((Row)parent).getChildren();
+    return children.get( index);
   }
 
   /* (non-Javadoc)
@@ -139,17 +109,9 @@ public class CustomTreeModel implements TreeModel
    */
   public int getChildCount( Object parent)
   {
-    StatefulContext context = ((Row)parent).getContext();
-    if ( context != null && context.getObject().isDirty())
-    {
-      return 1;
-    }
-    else
-    {
-      List<Row> children = (parent == null)? root.getChildren(): ((Row)parent).getChildren();
-      if ( children == null) return 0;
-      return children.size();
-    }
+    List<Row> children = (parent == null)? root.getChildren(): ((Row)parent).getChildren();
+    if ( children == null) return 0;
+    return children.size();
   }
 
   /* (non-Javadoc)
@@ -279,51 +241,6 @@ public class CustomTreeModel implements TreeModel
     for( TreeModelListener listener: array) listener.treeStructureChanged( event);
   }
 
-  /**
-   * A listener for dirty state events for every row. This listener will trigger the insertion
-   * of a temporary node in the tree when a node becomes dirty.
-   */
-  private class DirtyListener extends ModelListener 
-  {
-    public DirtyListener( Row row)
-    {
-      this.row = row;
-    }
-    
-    /* (non-Javadoc)
-     * @see org.xmodel.ModelListener#notifyDirty(org.xmodel.IModelObject, boolean)
-     */
-    @Override
-    public void notifyDirty( IModelObject object, boolean dirty)
-    {
-      wasDirty = !dirty;
-      if ( dirty) fireTreeStructureChanged( CustomTreeModel.this, createPath( row)); 
-    }
-    
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals( Object object)
-    {
-      if ( object instanceof DirtyListener) return ((DirtyListener)object).row == row;
-      return false;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode()
-    {
-      return row.hashCode();
-    }
-
-    private Row row;
-  };
-  
   private Row root;
-  private Row temp;
   private List<TreeModelListener> listeners; 
-  private boolean wasDirty;
 }

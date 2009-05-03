@@ -95,15 +95,9 @@
               </cell>
             </table-->
             
-            <tree parent="table[ 1]" when="true()">
+            <tree parent="table[ 1]" recursive="true" when="true()">
               <table>
-                <rows>if ( collection('appdb')/text2 = 'Relayer') then * else null</rows>
-                <cell>
-                  <source>name()</source>
-                </cell>
-              </table>
-              <table>
-                <rows>collection('appdb')/*</rows>
+                <rows>*</rows>
                 <cell>
                   <source>name()</source>
                 </cell>
