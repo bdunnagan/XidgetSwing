@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.xidget.IXidget;
-import org.xidget.table.Row;
+import org.xidget.tree.Row;
 
 /**
  * A custom table model for table xidgets.

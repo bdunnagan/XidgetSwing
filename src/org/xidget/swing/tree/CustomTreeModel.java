@@ -11,7 +11,7 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import org.xidget.IXidget;
-import org.xidget.table.Row;
+import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
 import org.xmodel.ModelListener;
 import org.xmodel.external.IExternalReference;

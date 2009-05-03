@@ -16,7 +16,7 @@ import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.swing.tree.CustomTreeCellRenderer;
 import org.xidget.swing.tree.CustomTreeModel;
-import org.xidget.table.Row;
+import org.xidget.tree.Row;
 
 /**
  * An implementation of IWidgetCreationFeature for creating a Netbeans Outline widget.

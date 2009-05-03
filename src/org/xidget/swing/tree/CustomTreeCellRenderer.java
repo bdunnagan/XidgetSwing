@@ -8,8 +8,8 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import org.xidget.table.Cell;
-import org.xidget.table.Row;
+import org.xidget.tree.Cell;
+import org.xidget.tree.Row;
 
 /**
  * An implementatino of TreeCellRenderer for rendering the cells of a tree.

@@ -14,7 +14,7 @@ import org.xidget.Log;
 import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.tree.CustomTreeModel;
-import org.xidget.table.Row;
+import org.xidget.tree.Row;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
