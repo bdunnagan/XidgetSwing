@@ -6,19 +6,19 @@ package org.xidget.swing.tree;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
+import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.tree.TreeExpandFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
-import org.xidget.ifeature.IErrorFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
+import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.TooltipErrorFeature;
 import org.xidget.swing.feature.tree.JTreeWidgetCreationFeature;
 import org.xidget.swing.feature.tree.JTreeWidgetFeature;
 
@@ -35,11 +35,11 @@ public class JTreeXidget extends Xidget
   {
     bindFeature = new BindFeature( this, new String[] { "tree"});
     creationFeature = new JTreeWidgetCreationFeature( this);
-    errorFeature = new TooltipErrorFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     expandFeature = new TreeExpandFeature( this);
     treeWidgetFeature = new JTreeWidgetFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);    
+    basicFeatureSet = new BasicFeatureSet( this);
   }
 
   /* (non-Javadoc)
@@ -54,11 +54,13 @@ public class JTreeXidget extends Xidget
     if ( clss == ITreeWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == IErrorFeature.class) return (T)errorFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     
     if ( clss == JComponent.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JTree.class) return (T)creationFeature.getJTree();
+    
+    T feature = basicFeatureSet.getFeature( clss);
+    if ( feature != null) return feature;
     
     return super.getFeature( clss);
   }  
@@ -68,6 +70,6 @@ public class JTreeXidget extends Xidget
   private ITreeWidgetFeature treeWidgetFeature;
   private JTreeWidgetCreationFeature creationFeature;
   private IWidgetFeature widgetFeature;
-  private IErrorFeature errorFeature;
   private IComputeNodeFeature computeNodeFeature;
+  private IFeatured basicFeatureSet;
 }

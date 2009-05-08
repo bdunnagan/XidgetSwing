@@ -4,10 +4,11 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Hashtable;
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import org.xidget.ifeature.IAsyncFeature;
 
 /**
@@ -17,7 +18,7 @@ public class AsyncFeature implements IAsyncFeature
 {
   public AsyncFeature()
   {
-    tasks = new Hashtable<Object, Task>();
+    timers = new Hashtable<Object, Timer>();
   }
   
   /* (non-Javadoc)
@@ -29,19 +30,18 @@ public class AsyncFeature implements IAsyncFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.feature.IAsyncFeature#schedule(java.lang.Object, int, java.lang.Runnable)
+   * @see org.xidget.ifeature.IAsyncFeature#schedule(java.lang.Object, int, boolean, java.lang.Runnable)
    */
-  public void schedule( Object key, int delay, Runnable runnable)
+  public void schedule( Object key, int delay, boolean repeat, Runnable runnable)
   {
-    if ( timer == null) timer = new Timer();
+    Timer timer = timers.remove( key);
+    if ( timer != null) timer.stop();
     
-    Task task = tasks.remove( key);
-    if ( task != null) task.cancel();
+    timer = new Timer( delay, new Task( runnable));
+    timer.setRepeats( repeat);
+    timers.put( key, timer);
     
-    task = new Task();
-    task.runnable = runnable;
-    timer.schedule( task, delay);
-    tasks.put( key, task);
+    timer.start();
   }
   
   /* (non-Javadoc)
@@ -49,20 +49,24 @@ public class AsyncFeature implements IAsyncFeature
    */
   public void cancel( Object key)
   {
-    Task task = tasks.remove( key);
-    if ( task != null) task.cancel();
+    Timer timer = timers.remove( key);
+    if ( timer != null) timer.stop();
   }
 
-  private class Task extends TimerTask
+  private class Task implements ActionListener
   {
-    public void run()
+    public Task( Runnable runnable)
+    {
+      this.runnable = runnable;
+    }
+    
+    public void actionPerformed( ActionEvent e)
     {
       AsyncFeature.this.run( runnable);
     }
-    
-    public Runnable runnable;
+
+    private Runnable runnable;
   }
   
-  private static Timer timer;
-  private Hashtable<Object, Task> tasks;
+  private Hashtable<Object, Timer> timers;
 }

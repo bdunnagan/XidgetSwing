@@ -2,39 +2,43 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.text;
+package org.xidget.swing.button;
 
-import javax.swing.JComponent;
-import javax.swing.text.JTextComponent;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
-import org.xidget.feature.text.TextModelFeature;
+import org.xidget.feature.button.ButtonModelFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
-import org.xidget.ifeature.text.ITextWidgetFeature;
+import org.xidget.ifeature.button.IButtonModelFeature;
+import org.xidget.ifeature.button.IButtonWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.text.JTextComponentTextWidgetFeature;
-import org.xidget.swing.feature.text.JTextComponentWidgetCreationFeature;
+import org.xidget.swing.feature.button.AbstractButtonWidgetCreationFeature;
+import org.xidget.swing.feature.button.ButtonWidgetFeature;
 
 /**
- * A text xidget implemented with a Swing JTextComponent widget.
+ * A xidget implementation for Swing AbstactButton widgets.
  */
-public class JTextXidget extends Xidget
+public class AbstractButtonXidget extends Xidget
 {
-  public void createFeatures()
+  /* (non-Javadoc)
+   * @see org.xidget.Xidget#createFeatures()
+   */
+  @Override
+  protected void createFeatures()
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    textModelFeature = new TextModelFeature( this);
-    textWidgetFeature = new JTextComponentTextWidgetFeature( this);
+    buttonWidgetFeature = new ButtonWidgetFeature( this);
+    buttonModelFeature = new ButtonModelFeature();
     computeNodeFeature = new ComputeNodeFeature( this);
-    creationFeature = new JTextComponentWidgetCreationFeature( this);
+    creationFeature = new AbstractButtonWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -46,27 +50,26 @@ public class JTextXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ITextModelFeature.class) return (T)textModelFeature;
-    if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
+    if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
+    if ( clss == IButtonModelFeature.class) return (T)buttonModelFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == JComponent.class) return (T)creationFeature.getContainer();
-    if ( clss == JTextComponent.class) return (T)creationFeature.getTextWidget();
+    if ( clss == AbstractButton.class) return (T)creationFeature.getAbstractButton();
+    if ( clss == ButtonGroup.class) return (T)creationFeature.getButtonGroup();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
     
     return super.getFeature( clss);
   }
-  
+
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private ITextModelFeature textModelFeature;
-  private ITextWidgetFeature textWidgetFeature;
+  private IButtonWidgetFeature buttonWidgetFeature;
+  private IButtonModelFeature buttonModelFeature;
   private IComputeNodeFeature computeNodeFeature;
-  private JTextComponentWidgetCreationFeature creationFeature;
+  private AbstractButtonWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;
-
 }

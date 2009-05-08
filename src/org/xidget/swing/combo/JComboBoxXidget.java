@@ -6,20 +6,20 @@ package org.xidget.swing.combo;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
-import org.xidget.ifeature.IErrorFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.combo.IChoiceListFeature;
 import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
+import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.TooltipErrorFeature;
 import org.xidget.swing.feature.text.JComboBoxChoiceListFeature;
 import org.xidget.swing.feature.text.JComboBoxTextWidgetFeature;
 import org.xidget.swing.feature.text.JComboBoxWidgetCreationFeature;
@@ -32,13 +32,13 @@ public class JComboBoxXidget extends Xidget
   public void createFeatures()
   {
     bindFeature = new BindFeature( this);
-    errorFeature = new TooltipErrorFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     textModelFeature = new TextModelFeature( this);
     textWidgetFeature = new JComboBoxTextWidgetFeature( this);
     choiceListFeature = new JComboBoxChoiceListFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JComboBoxWidgetCreationFeature( this);
+    basicFeatureSet = new BasicFeatureSet( this);
   }
   
   /* (non-Javadoc)
@@ -48,27 +48,30 @@ public class JComboBoxXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
+    if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == IErrorFeature.class) return (T)errorFeature;
     if ( clss == ITextModelFeature.class) return (T)textModelFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
-    if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IChoiceListFeature.class) return (T)choiceListFeature;
     
     if ( clss == JComponent.class) return (T)creationFeature.getComboBox();
     if ( clss == JComboBox.class) return (T)creationFeature.getComboBox();
+    
+    T feature = basicFeatureSet.getFeature( clss);
+    if ( feature != null) return feature;
     
     return super.getFeature( clss);
   }
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private IErrorFeature errorFeature;
   private ITextModelFeature textModelFeature;
   private ITextWidgetFeature textWidgetFeature;
   private IComputeNodeFeature computeNodeFeature;
   private JComboBoxChoiceListFeature choiceListFeature;
   private JComboBoxWidgetCreationFeature creationFeature;
+  private IFeatured basicFeatureSet;
+
 }
