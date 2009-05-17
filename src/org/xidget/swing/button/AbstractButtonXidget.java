@@ -14,6 +14,7 @@ import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.button.ButtonModelFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
+import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.button.IButtonModelFeature;
@@ -51,6 +52,7 @@ public class AbstractButtonXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ISourceFeature.class) return (T)buttonModelFeature;
     if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
     if ( clss == IButtonModelFeature.class) return (T)buttonModelFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;

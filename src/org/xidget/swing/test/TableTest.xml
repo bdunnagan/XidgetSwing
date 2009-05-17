@@ -49,26 +49,53 @@
             <label>Text3</label>
             <source>collection('appdb')/text3</source>
           </text>
-
-          <!-- NEED BETTER RADIO SCHEMA -->
-          <button type="radio">
-            <label>Option 1</label>
-            <source></source>
-          </button>          
-          <button type="radio">
-            <label>Option 2</label>
-          </button>          
-          <button type="radio">
-            <label>Option 3</label>
-          </button>          
+          
+          <table size="600, 200">
+            <column>'Name'</column>
+            <column>'Value'</column>
+          
+            <table>
+              <rows>.</rows>
+              <cell>
+                <source>'Folder #1'</source>
+              </cell>
+            </table>
             
-          <button type="push">
-            <label>Push Me!</label>
-            <buttonPressed>
-              <print>'Been pushed!'</print>
-            </buttonPressed>
-          </button>
-                    
+            <table>
+              <rows>$fsys</rows>
+              <cell>
+                <source>name()</source>
+              </cell>
+            </table>
+            
+            <table>
+              <rows>if ( collection('appdb')/text2 = 'Relayer') then static( $layouts//*/@*) else null</rows>
+              <cell>
+                <source>name()</source>
+              </cell>
+              <cell>
+                <source>.</source>
+              </cell>
+            </table>
+          
+            <table>
+              <rows>.</rows>
+              <cell>
+                <source>'Folder #3'</source>
+              </cell>
+            </table>
+            
+            <table>
+              <rows>$layouts//*</rows>
+              <cell>
+                <source>name()</source>
+              </cell>
+              <cell>
+                <source>.</source>
+              </cell>
+            </table>
+          </table>
+            
           <trigger name="Listen" source="collection('appdb')/text2">
             <print>string( collection('appdb')/text2)</print>
           </trigger>
@@ -83,7 +110,6 @@
         <text1>Time and a Word</text1>
         <text2>Relayer</text2>
         <text3>Close to the Edge</text3>
-        <button></button>
       </appdb>
     </template>
   </create>

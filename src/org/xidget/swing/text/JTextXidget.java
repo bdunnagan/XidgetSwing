@@ -13,6 +13,7 @@ import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
+import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.text.ITextModelFeature;
@@ -46,6 +47,7 @@ public class JTextXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ISourceFeature.class) return (T)textModelFeature;
     if ( clss == ITextModelFeature.class) return (T)textModelFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;

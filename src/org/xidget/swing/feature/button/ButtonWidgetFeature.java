@@ -38,7 +38,7 @@ public class ButtonWidgetFeature implements IButtonWidgetFeature
     if ( button != null)
     {
       ButtonModel model = button.getModel();
-      model.setPressed( state);
+      model.setSelected( state);
     }
   }
 

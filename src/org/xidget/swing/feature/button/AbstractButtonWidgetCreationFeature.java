@@ -7,6 +7,8 @@ package org.xidget.swing.feature.button;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -18,6 +20,7 @@ import javax.swing.JToggleButton;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IScriptFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.button.IButtonModelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -57,6 +60,7 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
     
     // add button listener
     button.addActionListener( actionListener);
+    button.addItemListener( itemListener);
     container.add( button);
     
     return button;
@@ -128,6 +132,14 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
         StatefulContext context = contextFeature.getContext( e.getSource());
         if ( context != null) scriptFeature.runScript( "buttonPressed", context);
       }
+    }
+  };
+  
+  private ItemListener itemListener = new ItemListener() {
+    public void itemStateChanged( ItemEvent e)
+    {
+      IButtonModelFeature feature = xidget.getFeature( IButtonModelFeature.class);
+      if ( feature != null) feature.setState( e.getStateChange() == ItemEvent.SELECTED);
     }
   };
   
