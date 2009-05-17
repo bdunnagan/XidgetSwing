@@ -74,5 +74,14 @@ public class SwingWidgetFeature implements IWidgetFeature
     widget.setToolTipText( tooltip);
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString()
+  {
+    return xidget.toString();
+  }
+
   private IXidget xidget;
 }

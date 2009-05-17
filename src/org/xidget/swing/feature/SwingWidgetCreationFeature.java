@@ -7,6 +7,7 @@ package org.xidget.swing.feature;
 import java.awt.Container;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
+import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 
 /**
@@ -25,8 +26,12 @@ public abstract class SwingWidgetCreationFeature implements IWidgetCreationFeatu
    */
   public void createWidgets()
   {
-    JComponent component = xidget.getParent().getFeature( JComponent.class);
-    createSwingWidget( component);
+    // create widget(s)
+    createSwingWidget();
+    
+    // attach to parent
+    IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
+    if ( containerFeature != null) containerFeature.addWidget( xidget);    
   }
  
   /* (non-Javadoc)
@@ -41,11 +46,10 @@ public abstract class SwingWidgetCreationFeature implements IWidgetCreationFeatu
   }
 
   /**
-   * Create the new swing widget in the specified container.
-   * @param container The container.
+   * Create the new swing widget.
    * @return Returns the new swing widget.
    */
-  protected abstract JComponent createSwingWidget( Container container);
+  protected abstract JComponent createSwingWidget();
   
   protected IXidget xidget;
 }

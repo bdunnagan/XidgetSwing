@@ -6,36 +6,33 @@ package org.xidget.swing;
 
 import java.awt.Container;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
-import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
-import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
-import org.xidget.swing.feature.GenericContainerFeature;
-import org.xidget.swing.feature.JFrameWidgetCreationFeature;
+import org.xidget.swing.feature.JTabbedPaneContainerFeature;
+import org.xidget.swing.feature.JTabbedPaneWidgetCreationFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
- * An application xidget implemented with the Swing JFrame widget.
+ * A form xidget implemented with the Swing JPanel widget.
  */
-public class JFrameXidget extends Xidget
+public class JTabbedPaneXidget extends Xidget
 {
   public void createFeatures()
   {
     bindFeature = new BindFeature( this);
-    layoutFeature = new AnchorLayoutFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
-    creationFeature = new JFrameWidgetCreationFeature();
-    containerFeature = new GenericContainerFeature( this);
+    creationFeature = new JTabbedPaneWidgetCreationFeature( this);
+    containerFeature = new JTabbedPaneContainerFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -47,15 +44,14 @@ public class JFrameXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
-    if ( clss == ILayoutFeature.class) return (T)layoutFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
-    if ( clss == JComponent.class) return (T)creationFeature.getFrame();
-    if ( clss == Container.class) return (T)creationFeature.getFrame();
-    if ( clss == JFrame.class) return (T)creationFeature.getFrame();
+    if ( clss == JComponent.class) return (T)creationFeature.getJTabbedPane();
+    if ( clss == Container.class) return (T)creationFeature.getJTabbedPane();
+    if ( clss == JTabbedPane.class) return (T)creationFeature.getJTabbedPane();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
@@ -65,9 +61,9 @@ public class JFrameXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private ILayoutFeature layoutFeature;
   private IComputeNodeFeature computeNodeFeature;
-  private JFrameWidgetCreationFeature creationFeature;
+  private JTabbedPaneWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;
   private IFeatured basicFeatureSet;
+
 }

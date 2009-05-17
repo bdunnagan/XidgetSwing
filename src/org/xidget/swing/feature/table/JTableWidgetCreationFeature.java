@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature.table;
 
-import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,21 +24,16 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     super( xidget);
   }
   
-  /* (non-Javadoc)
-   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#createSwingWidget(java.awt.Container)
-   */
   @Override
-  protected JComponent createSwingWidget( Container container)
+  protected JComponent createSwingWidget()
   {
     CustomTableModel tableModel = new CustomTableModel( xidget);
     jtable = new JTable( tableModel);
     jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
     jtable.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
     
-    jscrollPane = new JScrollPane( jtable);
-    container.add( jscrollPane);
-    
-    return jtable;
+    jscrollPane = new JScrollPane( jtable);    
+    return jscrollPane;
   }
 
   /* (non-Javadoc)

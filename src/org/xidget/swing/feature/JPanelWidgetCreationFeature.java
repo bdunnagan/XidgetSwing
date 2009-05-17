@@ -4,11 +4,16 @@
  */
 package org.xidget.swing.feature;
 
-import java.awt.Container;
+import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import javax.swing.JPanel;
 import org.xidget.IXidget;
+import org.xidget.Log;
 import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IComputeNodeFeature;
+import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.layout.ConstantNode;
 import org.xidget.swing.layout.AnchorLayoutManager;
@@ -30,10 +35,11 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void createWidgets()
   {
-    Container container = xidget.getParent().getFeature( Container.class);
-    
     jpanel = new JPanel( new AnchorLayoutManager( xidget));
-    container.add( jpanel);
+    jpanel.addComponentListener( componentListener);
+    
+    IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
+    if ( containerFeature != null) containerFeature.addWidget( xidget);
     
     // upper-left corner is always (0, 0)
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
@@ -75,6 +81,18 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   {
     return jpanel;
   }
+  
+  private ComponentListener componentListener = new ComponentAdapter() {
+    public void componentMoved( ComponentEvent e)
+    {
+      Point point = jpanel.getLocation();
+      Log.printf( "layout", "MOVED: %s (%d, %d)\n", xidget, point.x, point.y);
+    }
+    public void componentResized( ComponentEvent e)
+    {
+      Log.printf( "layout", "RESIZE: %s (%d, %d)\n", xidget, jpanel.getWidth(), jpanel.getHeight());
+    }
+  };
 
   private IXidget xidget;
   private JPanel jpanel;

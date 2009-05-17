@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature.tree;
 
-import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -29,10 +28,10 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#createSwingWidget(java.awt.Container)
+   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#createSwingWidget()
    */
   @Override
-  protected JComponent createSwingWidget( Container container)
+  protected JComponent createSwingWidget()
   {
     jtree = new JTree( new CustomTreeModel( xidget));
     
@@ -44,9 +43,7 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     jtree.addTreeExpansionListener( expandListener);
     
     jscrollPane = new JScrollPane( jtree);
-    container.add( jscrollPane);
-    
-    return jtree;
+    return jscrollPane;
   }
   
   /* (non-Javadoc)

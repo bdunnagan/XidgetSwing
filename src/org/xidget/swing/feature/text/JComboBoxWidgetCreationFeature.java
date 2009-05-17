@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature.text;
 
-import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -33,10 +32,10 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.swing.feature.SwingCreationFeature#createSwingWidget(java.awt.Container)
+   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#createSwingWidget()
    */
   @Override
-  protected JComponent createSwingWidget( Container container)
+  protected JComponent createSwingWidget()
   {    
     // create text widget
     jcombo = new JComboBox();
@@ -67,13 +66,10 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
       component = new JPanel( layout);
       component.add( jlabel);
       component.add( jcombo);
-      
-      container.add( component);
     }
     else
     {
       component = jcombo;
-      container.add( jcombo);
     }
     
     // add listeners to the widget

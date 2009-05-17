@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script>
+  <package>org.xidget.xaction</package>
+  
+  <create collection="xml">
+    <template annotated="true">
+      <xml path=".">
+        <extern:cache class="org.xmodel.external.caching.FileSystemCachingPolicy"/>
+      </xml>
+    </template>
+  </create>
+
+  <create assign="fsys">
+    <template annotated="true">
+      <Applications path="/">
+        <extern:cache class="org.xmodel.external.caching.FileSystemCachingPolicy"/>
+      </Applications>
+    </template>
+  </create>
+  
+  <create assign="choices">
+    <template>
+      <choices>
+        <choice>Time and a Word</choice>
+        <choice>Relayer</choice>
+        <choice>Close to the Edge</choice>
+      </choices>
+    </template>
+  </create>
+
+  <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
+  <create assign="form">
+    <template>
+      <app>
+        <!-- setting the size doesn't work here because there is no dependency on form.y1 -->
+        <form id="1" layout="$layouts/layout[ @id = 'vertical']">
+          <form id="1a" layout="$layouts/layout[ @id = 'vertical']">
+            <text id="1">
+              <label>Text1</label>
+              <source>collection('appdb')/text1</source>
+            </text>
+          </form>
+
+          <form id="1b" layout="$layouts/layout[ @id = 'vertical']">
+            <combo id="2">
+              <choices>$choices/choice</choices>        
+              <source>collection('appdb')/text2</source>
+            </combo>
+          </form>
+                    
+          <trigger name="Listen" when="collection('appdb')/radio/@* = 'true'">
+            <print>collection('appdb')/radio</print>
+          </trigger>
+        </form>
+      </app>
+    </template>
+  </create>
+  
+  <create collection="appdb">
+    <template>
+      <appdb>
+        <text1>Time and a Word</text1>
+        <text2>Relayer</text2>
+        <text3>Close to the Edge</text3>
+        <radio b1="false" b2="true" b3="false"/>
+      </appdb>
+    </template>
+  </create>
+  
+  <xidget>$form</xidget>
+</script>

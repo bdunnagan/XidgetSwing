@@ -28,6 +28,7 @@ public class SwingToolkit implements IToolkit
     processor.addHandler( "app", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "application", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));
+    processor.addHandler( "tabs", new XidgetTagHandler( JTabbedPaneXidget.class));
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "combo", new XidgetTagHandler( JComboBoxXidget.class));
     processor.addHandler( "button", new XidgetTagHandler( AbstractButtonXidget.class));

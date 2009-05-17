@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature.button;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -38,10 +37,10 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#createSwingWidget(java.awt.Container)
+   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#createSwingWidget()
    */
   @Override
-  protected JComponent createSwingWidget( Container container)
+  protected JComponent createSwingWidget()
   {
     // create button
     String spec = Xlate.get( xidget.getConfig(), "type", "push");
@@ -61,7 +60,6 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
     // add button listener
     button.addActionListener( actionListener);
     button.addItemListener( itemListener);
-    container.add( button);
     
     return button;
   }
