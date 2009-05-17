@@ -49,6 +49,14 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     return jtree;
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
+   */
+  public Object[] getLastWidgets()
+  {
+    return new Object[] { jscrollPane, jtree};
+  }
+
   /**
    * Returns the scroll pane that holds the table.
    * @return Returns the scroll pane that holds the table.

@@ -23,7 +23,7 @@ public abstract class SwingWidgetCreationFeature implements IWidgetCreationFeatu
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetCreationFeature#createWidget()
    */
-  public void createWidget()
+  public void createWidgets()
   {
     JComponent component = xidget.getParent().getFeature( JComponent.class);
     createSwingWidget( component);
@@ -32,7 +32,7 @@ public abstract class SwingWidgetCreationFeature implements IWidgetCreationFeatu
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
    */
-  public void destroyWidget()
+  public void destroyWidgets()
   {
     JComponent widget = xidget.getFeature( JComponent.class);
     Container container = widget.getParent();

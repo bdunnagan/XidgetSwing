@@ -42,6 +42,14 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     return jtable;
   }
 
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
+   */
+  public Object[] getLastWidgets()
+  {
+    return new Object[] { jscrollPane, jtable};
+  }
+
   /**
    * Returns the scroll pane that holds the table.
    * @return Returns the scroll pane that holds the table.

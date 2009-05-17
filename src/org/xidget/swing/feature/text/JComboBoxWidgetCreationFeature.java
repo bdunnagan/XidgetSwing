@@ -82,6 +82,14 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
     return component;
   }
 
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
+   */
+  public Object[] getLastWidgets()
+  {
+    return new Object[] { jcombo};
+  }
+
   /**
    * Returns the JComboBox.
    * @return Returns the JComboBox.

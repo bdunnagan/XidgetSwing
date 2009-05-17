@@ -16,7 +16,7 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#createWidget()
    */
-  public void createWidget()
+  public void createWidgets()
   {
     jframe = new JFrame();
 
@@ -33,10 +33,18 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
    */
-  public void destroyWidget()
+  public void destroyWidgets()
   {
     jframe.dispose();
     jframe = null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
+   */
+  public Object[] getLastWidgets()
+  {
+    return new Object[] { jframe};
   }
 
   /**

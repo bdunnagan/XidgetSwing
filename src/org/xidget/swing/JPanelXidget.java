@@ -49,9 +49,9 @@ public class JPanelXidget extends Xidget
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     
-    if ( clss == JComponent.class) return (T)creationFeature.getWidget();
-    if ( clss == Container.class) return (T)creationFeature.getWidget();
-    if ( clss == JPanel.class) return (T)creationFeature.getWidget();
+    if ( clss == JComponent.class) return (T)creationFeature.getJPanel();
+    if ( clss == Container.class) return (T)creationFeature.getJPanel();
+    if ( clss == JPanel.class) return (T)creationFeature.getJPanel();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;

@@ -102,6 +102,14 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     return component;
   }
 
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
+   */
+  public Object[] getLastWidgets()
+  {
+    return new Object[] { component, jtext};
+  }
+
   /**
    * Returns the container widget which holds the label and text widgets.
    * @return Returns the container widget which holds the label and text widgets.

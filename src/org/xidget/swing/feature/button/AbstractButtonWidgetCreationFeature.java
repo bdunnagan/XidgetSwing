@@ -17,8 +17,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IScriptFeature;
+import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.Xlate;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a concrete implementation of Swing AbstractButton.
@@ -38,6 +40,7 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
   @Override
   protected JComponent createSwingWidget( Container container)
   {
+    // create button
     String spec = Xlate.get( xidget.getConfig(), "type", "push");
     Type type = Enum.valueOf( Type.class, spec);
     switch( type)
@@ -48,6 +51,11 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
       case radio:  button = createRadioButton(); break;
     }
     
+    // set button label
+    String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
+    if ( label != null) button.setText( label);
+    
+    // add button listener
     button.addActionListener( actionListener);
     container.add( button);
     
@@ -84,6 +92,14 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
     return button;
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
+   */
+  public Object[] getLastWidgets()
+  {
+    return new Object[] { button};
+  }
+
   /**
    * Returns the AbstractButton that was created.
    * @return Returns the AbstractButton that was created.
@@ -101,12 +117,17 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
   {
     return group;
   }
-  
+    
   private ActionListener actionListener = new ActionListener() {
     public void actionPerformed( ActionEvent e)
     {
-      IScriptFeature feature = xidget.getFeature( IScriptFeature.class);
-      if ( feature != null) feature.runScript( "buttonPressed", xidget.getContext());
+      IScriptFeature scriptFeature = xidget.getFeature( IScriptFeature.class);
+      if ( scriptFeature != null) 
+      {
+        IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
+        StatefulContext context = contextFeature.getContext( e.getSource());
+        if ( context != null) scriptFeature.runScript( "buttonPressed", context);
+      }
     }
   };
   

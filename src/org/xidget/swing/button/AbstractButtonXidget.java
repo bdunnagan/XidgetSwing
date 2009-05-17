@@ -6,6 +6,7 @@ package org.xidget.swing.button;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -56,6 +57,7 @@ public class AbstractButtonXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
+    if ( clss == JComponent.class) return (T)creationFeature.getAbstractButton();
     if ( clss == AbstractButton.class) return (T)creationFeature.getAbstractButton();
     if ( clss == ButtonGroup.class) return (T)creationFeature.getButtonGroup();
     

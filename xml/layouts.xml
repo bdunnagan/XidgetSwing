@@ -8,7 +8,7 @@
     
     <attach xidget="$xidgets[ 1]">
       <x0 attach="." side="x0" pad="5"/>
-      <x1 attach="." side="x1" pad="5"/>            
+      <x1 attach="." side="x1" pad="5"/>
       <y0 attach="." side="y0" pad="5"/>
     </attach>
     

@@ -28,7 +28,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#createWidget()
    */
-  public void createWidget()
+  public void createWidgets()
   {
     Container container = xidget.getParent().getFeature( Container.class);
     
@@ -53,17 +53,25 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
    */
-  public void destroyWidget()
+  public void destroyWidgets()
   {
     jpanel.getParent().remove( jpanel);
     jpanel = null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
+   */
+  public Object[] getLastWidgets()
+  {
+    return new Object[] { jpanel};
   }
 
   /**
    * Returns the JPanel created for this form.
    * @return Returns the JPanel created for this form.
    */
-  public JPanel getWidget()
+  public JPanel getJPanel()
   {
     return jpanel;
   }
