@@ -20,11 +20,36 @@
       </attach>
     </for>
     
-    <assign name="last">reverse( *[ @xidget])[ 1]</assign>
+    <!--assign name="last">reverse( *[ @xidget])[ 1]</assign>
     <attach xidget="$last">
       <x1 attach="." side="x1" pad="5"/>
       <y1 attach="." side="y1" pad="5"/>
-    </attach>          
+    </attach-->          
+  </layout>
+  
+  <layout id="vertical_even">
+    <assign name="xidgets">*[ @xidget]</assign>
+    
+    <assign name="dy">1 div count( $xidgets)</assign>
+    <assign name="py">$dy</assign>
+    
+    <attach xidget="$xidgets[ 1]">
+      <x0 attach="." side="x0" pad="5"/>
+      <x1 attach="." side="x1" pad="5"/>
+      <y0 attach="." side="y0" pad="5"/>
+      <y1 attach="." side="y0" percent="$py"/>
+    </attach>
+    
+    <for assign="i" from="2" to="count( $xidgets)+1" by="1">
+      <assign name="py">$py + $dy</assign>
+      <attach xidget="$xidgets[ $i]">
+        <x0 attach="." side="x0" pad="5"/>
+        <x1 attach="." side="x1" pad="5"/>            
+        <y0 attach="$xidgets[ $i - 1]" side="y1" pad="5"/>
+        <y1 attach="." side="y0" percent="$py"/>
+      </attach>
+      <print>$py</print>
+    </for>
   </layout>
   
   <layout id="horizontal">

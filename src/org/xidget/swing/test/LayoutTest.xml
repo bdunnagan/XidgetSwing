@@ -34,7 +34,7 @@
     <template>
       <app>
         <!-- setting the size doesn't work here because there is no dependency on form.y1 -->
-        <form id="1" layout="$layouts/layout[ @id = 'vertical']">
+        <form id="1" layout="$layouts/layout[ @id = 'vertical_even']">
           <form id="1a" layout="$layouts/layout[ @id = 'vertical']">
             <text id="1">
               <label>Text1</label>

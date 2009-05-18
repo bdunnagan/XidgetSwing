@@ -33,20 +33,16 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
     if ( containerFeature != null) containerFeature.addWidget( xidget);
-    
-//    // upper-left corner is always (0, 0)
-//    IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
-//    computeNodeFeature.getAnchor( "x0").addDependency( new ConstantNode( 0));
-//    computeNodeFeature.getAnchor( "y0").addDependency( new ConstantNode( 0));    
-//    
-//    // lower-right corner is set if size is defined
-//    IModelObject config = xidget.getConfig();
-//    Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
-//    if ( size.x > 0 || size.y > 0)
-//    {
-//      computeNodeFeature.getAnchor( "x1").addDependency( new ConstantNode( size.x));
-//      computeNodeFeature.getAnchor( "y1").addDependency( new ConstantNode( size.y));
-//    }    
+        
+    // optionally constrain size
+    IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
+    IModelObject config = xidget.getConfig();
+    Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
+    if ( size.x > 0 || size.y > 0)
+    {
+      computeNodeFeature.getAnchor( "w").addDependency( new ConstantNode( size.x));
+      computeNodeFeature.getAnchor( "h").addDependency( new ConstantNode( size.y));
+    }    
   }
 
   /* (non-Javadoc)
