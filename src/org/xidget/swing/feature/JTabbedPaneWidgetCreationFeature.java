@@ -4,13 +4,12 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.Dimension;
 import javax.swing.JTabbedPane;
 import org.xidget.IXidget;
 import org.xidget.config.util.Pair;
-import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.layout.ConstantNode;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
@@ -35,13 +34,11 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     if ( containerFeature != null) containerFeature.addWidget( xidget);
         
     // optionally constrain size
-    IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
     IModelObject config = xidget.getConfig();
     Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
     if ( size.x > 0 || size.y > 0)
     {
-      computeNodeFeature.getAnchor( "w").addDependency( new ConstantNode( size.x));
-      computeNodeFeature.getAnchor( "h").addDependency( new ConstantNode( size.y));
+      jtabbedPane.setPreferredSize( new Dimension( size.x, size.y));
     }    
   }
 

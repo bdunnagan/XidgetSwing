@@ -11,16 +11,18 @@ import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.ILayoutFeature;
+import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.BorderComputeNodeFeature;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.JPanelWidgetCreationFeature;
+import org.xidget.swing.feature.SwingTitleFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
@@ -33,7 +35,8 @@ public class JPanelXidget extends Xidget
     bindFeature = new BindFeature( this);
     layoutFeature = new AnchorLayoutFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    computeNodeFeature = new ComputeNodeFeature( this);
+    titleFeature = new SwingTitleFeature( this);
+    computeNodeFeature = new BorderComputeNodeFeature( this);
     creationFeature = new JPanelWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -49,6 +52,7 @@ public class JPanelXidget extends Xidget
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == ILayoutFeature.class) return (T)layoutFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITitleFeature.class) return (T)titleFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
@@ -66,6 +70,7 @@ public class JPanelXidget extends Xidget
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private ILayoutFeature layoutFeature;
+  private ITitleFeature titleFeature;
   private IComputeNodeFeature computeNodeFeature;
   private JPanelWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;

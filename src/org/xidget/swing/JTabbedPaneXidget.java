@@ -65,5 +65,4 @@ public class JTabbedPaneXidget extends Xidget
   private JTabbedPaneWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;
   private IFeatured basicFeatureSet;
-
 }

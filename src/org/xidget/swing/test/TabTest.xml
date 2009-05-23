@@ -34,8 +34,8 @@
     <template>
       <app>
         <!-- setting the size doesn't work here because there is no dependency on form.y1 -->
-        <form layout="$layouts/layout[ @id = 'vertical']">
-          <form title="Tab 1" layout="$layouts/layout[ @id = 'vertical']">
+        <tabs layout="$layouts/layout[ @id = 'vertical']" size="400,300">
+          <form title="'Tab 1'" layout="$layouts/layout[ @id = 'vertical']">
             <text id="1">
               <label>Text1</label>
               <source>collection('appdb')/text1</source>
@@ -52,7 +52,7 @@
             </text>
           </form>
 
-          <form title="Tab 2" layout="$layouts/layout[ @id = 'vertical']">
+          <form title="'Tab 2'" layout="$layouts/layout[ @id = 'vertical']">
             <!-- debug button source not updated -->
             <button type="radio">
               <label>Option 1</label>
@@ -78,7 +78,7 @@
           <trigger name="Listen" when="collection('appdb')/radio/@* = 'true'">
             <print>collection('appdb')/radio</print>
           </trigger>
-        </form>
+        </tabs>
       </app>
     </template>
   </create>

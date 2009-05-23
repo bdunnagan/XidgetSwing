@@ -7,7 +7,6 @@ package org.xidget.swing.feature;
 import java.awt.Component;
 import javax.swing.JTabbedPane;
 import org.xidget.IXidget;
-import org.xidget.Log;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 
@@ -33,8 +32,7 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
       Object[] widgets = creationFeature.getLastWidgets();
       if ( widgets.length > 0) 
       {
-        Log.printf( "xidget", "JTabbedPaneContainerFeature.addWidget: %s <- %s\n", xidget, child);
-        container.addTab( "Tab", (Component)widgets[ 0]);
+        container.addTab( "", (Component)widgets[ 0]);
       }
     }
   }

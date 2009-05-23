@@ -4,12 +4,12 @@
  */
 package org.xidget.swing.feature;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 import org.xidget.IXidget;
 import org.xidget.Log;
 import org.xidget.config.util.Pair;
@@ -20,6 +20,7 @@ import org.xidget.layout.ConstantNode;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
+import org.xmodel.xpath.expression.IExpression;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
@@ -37,7 +38,6 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jpanel = new JPanel( new AnchorLayoutManager( xidget));
-    if ( c < colors.length) jpanel.setBackground( colors[ c++]);
     jpanel.addComponentListener( componentListener);
     
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
@@ -51,7 +51,33 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     {
       computeNodeFeature.getAnchor( "w").addDependency( new ConstantNode( size.x));
       computeNodeFeature.getAnchor( "h").addDependency( new ConstantNode( size.y));
-    }    
+    }
+    
+    // create titled border if necessary (but not for tab entries)
+    String title = getTitle();
+    if ( title != null && title.length() > 0)
+    {
+      IXidget parent = xidget.getParent();
+      if ( parent != null)
+      {
+        if ( parent.getConfig().isType( "form"))
+        {
+          jpanel.setBorder( new TitledBorder( title));
+        }
+      }
+    }
+  }
+  
+  /**
+   * Returns the title of the form.
+   * @return Returns null or the title of the form.
+   */
+  private String getTitle()
+  {
+    IModelObject element = xidget.getConfig();
+    IExpression titleExpr = Xlate.childGet( element, "title", Xlate.get( element, "title", (IExpression)null));
+    if ( titleExpr != null) return titleExpr.evaluateString();
+    return null;
   }
 
   /* (non-Javadoc)
@@ -92,9 +118,6 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
   };
 
-  private static Color[] colors = { Color.orange, Color.blue, Color.red};
-  private static int c = 0;
-  
   private IXidget xidget;
   private JPanel jpanel;
 }
