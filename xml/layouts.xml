@@ -7,16 +7,16 @@
     <assign name="xidgets">*[ @xidget]</assign>
     
     <attach xidget="$xidgets[ 1]">
-      <x0 attach="." side="x0" pad="5"/>
-      <x1 attach="." side="x1" pad="5"/>
-      <y0 attach="." side="y0" pad="5"/>
+      <x0 attach="." side="x0"/>
+      <x1 attach="." side="x1"/>
+      <y0 attach="." side="y0"/>
     </attach>
     
     <for assign="i" from="2" to="count( $xidgets)+1" by="1">
       <attach xidget="$xidgets[ $i]">
-        <x0 attach="." side="x0" pad="5"/>
-        <x1 attach="." side="x1" pad="5"/>            
-        <y0 attach="$xidgets[ $i - 1]" side="y1" pad="5"/>
+        <x0 attach="." side="x0"/>
+        <x1 attach="." side="x1"/>            
+        <y0 attach="$xidgets[ $i - 1]" side="y1"/>
       </attach>
     </for>
     
@@ -27,56 +27,51 @@
     </attach-->          
   </layout>
   
-  <layout id="vertical_even">
+  <!-- Vertical Grid Layout -->
+  <layout id="vgrid">
     <assign name="xidgets">*[ @xidget]</assign>
     
     <assign name="dy">1 div count( $xidgets)</assign>
-    <assign name="py">$dy</assign>
+    <assign name="py">$dy div 2</assign>
     
     <attach xidget="$xidgets[ 1]">
-      <x0 attach="." side="x0" pad="5"/>
-      <x1 attach="." side="x1" pad="5"/>
-      <y0 attach="." side="y0" pad="5"/>
-      <y1 attach="." side="y0" percent="$py"/>
+      <x0 attach="." side="x0"/>
+      <x1 attach="." side="x1"/>
+      <yc attach="." side="y0" percent="$py"/>
     </attach>
     
     <for assign="i" from="2" to="count( $xidgets)+1" by="1">
       <assign name="py">$py + $dy</assign>
       <attach xidget="$xidgets[ $i]">
-        <x0 attach="." side="x0" pad="5"/>
-        <x1 attach="." side="x1" pad="5"/>            
-        <y0 attach="$xidgets[ $i - 1]" side="y1" pad="5"/>
-        <y1 attach="." side="y0" percent="$py"/>
+        <x0 attach="." side="x0"/>
+        <x1 attach="." side="x1"/>            
+        <yc attach="." side="y0" percent="$py"/>
       </attach>
-      <print>$py</print>
     </for>
   </layout>
   
   <layout id="horizontal">
-    <profile assign="t">
-      <assign name="xidgets">*[ @xidget]</assign>
-      
-      <attach xidget="$xidgets[ 1]">
-        <x0 attach="." side="x0" pad="5"/>
+    <assign name="xidgets">*[ @xidget]</assign>
+    
+    <attach xidget="$xidgets[ 1]">
+      <x0 attach="." side="x0" pad="5"/>
+      <y0 attach="." side="y0" pad="5"/>
+      <y1 attach="." side="y1" pad="5"/>
+    </attach>
+    
+    <for assign="i" from="2" to="count( $xidgets)+1" by="1">
+      <attach xidget="$xidgets[ $i]">
+        <x0 attach="$xidgets[ $i - 1]" side="x1" pad="5"/>
         <y0 attach="." side="y0" pad="5"/>
         <y1 attach="." side="y1" pad="5"/>
       </attach>
-      
-      <for assign="i" from="2" to="count( $xidgets)+1" by="1">
-        <attach xidget="$xidgets[ $i]">
-          <x0 attach="$xidgets[ $i - 1]" side="x1" pad="5"/>
-          <y0 attach="." side="y0" pad="5"/>
-          <y1 attach="." side="y1" pad="5"/>
-        </attach>
-      </for>
-      
-      <assign name="last">reverse( *[ @xidget])[ 1]</assign>          
-      <attach>
-        <x1 attach="$last" side="x1" pad="5"/>
-        <y1 attach="$last" side="y1" pad="5"/>
-      </attach>
-    </profile>
-    <print>printf( 'elapsed: %3.3fms\n', $t div 1000000)</print>  
+    </for>
+    
+    <assign name="last">reverse( *[ @xidget])[ 1]</assign>          
+    <attach>
+      <x1 attach="$last" side="x1" pad="5"/>
+      <y1 attach="$last" side="y1" pad="5"/>
+    </attach>
   </layout>
   
   <layout>

@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -36,6 +37,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jpanel = new JPanel( new AnchorLayoutManager( xidget));
+    if ( c < colors.length) jpanel.setBackground( colors[ c++]);
     jpanel.addComponentListener( componentListener);
     
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
@@ -90,6 +92,9 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
   };
 
+  private static Color[] colors = { Color.orange, Color.blue, Color.red};
+  private static int c = 0;
+  
   private IXidget xidget;
   private JPanel jpanel;
 }

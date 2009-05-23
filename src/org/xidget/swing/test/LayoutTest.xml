@@ -34,19 +34,27 @@
     <template>
       <app>
         <!-- setting the size doesn't work here because there is no dependency on form.y1 -->
-        <form id="1" layout="$layouts/layout[ @id = 'vertical_even']">
+        <form id="1" layout="$layouts/layout[ @id = 'vgrid']">
           <form id="1a" layout="$layouts/layout[ @id = 'vertical']">
             <text id="1">
               <label>Text1</label>
               <source>collection('appdb')/text1</source>
             </text>
+            <!--text id="3" size="50,1">        
+              <label>Text3</label>
+              <source>collection('appdb')/text3</source>
+            </text-->          
           </form>
 
           <form id="1b" layout="$layouts/layout[ @id = 'vertical']">
-            <combo id="2">
+            <!--combo id="2">
               <choices>$choices/choice</choices>        
               <source>collection('appdb')/text2</source>
-            </combo>
+            </combo-->
+            <text id="4">        
+              <label>Text4</label>
+              <source>collection('appdb')/text4</source>
+            </text>          
           </form>
                     
           <trigger name="Listen" when="collection('appdb')/radio/@* = 'true'">
@@ -63,6 +71,7 @@
         <text1>Time and a Word</text1>
         <text2>Relayer</text2>
         <text3>Close to the Edge</text3>
+        <text4>Tales From Topographic Oceans</text4>
         <radio b1="false" b2="true" b3="false"/>
       </appdb>
     </template>
