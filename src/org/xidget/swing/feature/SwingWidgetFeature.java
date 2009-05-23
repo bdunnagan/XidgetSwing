@@ -7,9 +7,7 @@ package org.xidget.swing.feature;
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
-import org.xidget.Log;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xmodel.util.Radix;
 
 /**
  * An adapter for Swing/AWT widgets.
@@ -19,19 +17,15 @@ public class SwingWidgetFeature implements IWidgetFeature
   public SwingWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
-    
-    StringBuilder sb = new StringBuilder();
-    sb.append( "@"); sb.append( Radix.convert( hashCode(), 36));
-    Log.printf( "xidget", "%s: %s\n", xidget, sb);
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.feature.IWidgetFeature#setBounds(int, int, int, int)
+   * @see org.xidget.ifeature.IWidgetFeature#setBounds(float, float, float, float)
    */
-  public void setBounds( int x, int y, int width, int height)
+  public void setBounds( float x, float y, float width, float height)
   {
     JComponent widget = xidget.getFeature( JComponent.class);
-    widget.setBounds( x, y, width, height);
+    widget.setBounds( (int)Math.round( x), (int)Math.round( y), (int)Math.round( width), (int)Math.round( height));
   }
 
   /* (non-Javadoc)
