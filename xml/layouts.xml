@@ -3,17 +3,6 @@
 <layouts>
   <package>org.xidget.layout.xaction</package>
   
-  <layout id="root">
-    <assign name="xidgets">*[ @xidget]</assign>
-    
-    <attach xidget="$xidgets[ 1]">
-      <x0 side="x0"/>
-      <x1 side="x1"/>
-      <y0 side="y0"/>
-      <y1 side="y1"/>
-    </attach>
-  </layout>
-  
   <layout id="vertical">
     <assign name="xidgets">*[ @xidget]</assign>
     

@@ -33,7 +33,6 @@
   <create assign="form">
     <template>
       <app>
-        <!-- setting the size doesn't work here because there is no dependency on form.y1 -->
         <tabs layout="$layouts/layout[ @id = 'vertical']" size="400,300">
           <form title="'Tab 1'" layout="$layouts/layout[ @id = 'vertical']">
             <text id="1">

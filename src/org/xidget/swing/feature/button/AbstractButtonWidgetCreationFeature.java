@@ -128,7 +128,7 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
       {
         IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
         StatefulContext context = contextFeature.getContext( e.getSource());
-        if ( context != null) scriptFeature.runScript( "buttonPressed", context);
+        if ( context != null) scriptFeature.runScript( "onPress", context);
       }
     }
   };
