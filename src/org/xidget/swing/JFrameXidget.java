@@ -34,7 +34,7 @@ public class JFrameXidget extends Xidget
     layoutFeature = new AnchorLayoutFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
-    creationFeature = new JFrameWidgetCreationFeature();
+    creationFeature = new JFrameWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
