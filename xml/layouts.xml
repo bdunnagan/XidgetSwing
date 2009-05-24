@@ -20,11 +20,11 @@
       </attach>
     </for>
     
-    <!--assign name="last">reverse( *[ @xidget])[ 1]</assign>
+    <assign name="last">reverse( *[ @xidget])[ 1]</assign>
     <attach xidget="$last">
       <x1 attach="." side="x1" pad="5"/>
       <y1 attach="." side="y1" pad="5"/>
-    </attach-->          
+    </attach>          
   </layout>
   
   <!-- Vertical Grid Layout -->

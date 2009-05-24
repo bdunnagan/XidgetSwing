@@ -39,7 +39,7 @@ public class BorderComputeNodeFeature extends ComputeNodeFeature
     IComputeNode node = nodes.get( "p"+type);
     if ( node != null) return node;
 
-    Quad quad = null;
+    Quad quad = new Quad( Xlate.get( xidget.getConfig(), "margins", (String)null), 0, 0, 0, 0);    
     JComponent component = xidget.getFeature( JComponent.class);
     if ( component != null)
     {
@@ -47,7 +47,10 @@ public class BorderComputeNodeFeature extends ComputeNodeFeature
       if ( border != null)
       {
         Insets insets = border.getBorderInsets( component);
-        quad = new Quad( Xlate.get( xidget.getConfig(), "margins", (String)null), insets.left, insets.top, insets.right, insets.bottom);
+        quad.a += insets.left;
+        quad.b += insets.top;
+        quad.c += insets.right;
+        quad.d += insets.bottom;
       }
     }
     

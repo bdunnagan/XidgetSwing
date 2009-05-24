@@ -46,8 +46,8 @@
             </text-->          
           </form>
 
-          <form id="1b" title="'1b'" layout="$layouts/layout[ @id = 'vertical']">
-            <!--combo id="2">
+          <form id="1b" title="'1b'" layout="$layouts/layout[ @id = 'vertical']" margins="5, 5, 5, 5">
+            <!-- combo id="2">
               <choices>$choices/choice</choices>        
               <source>collection('appdb')/text2</source>
             </combo-->
