@@ -34,6 +34,10 @@
     <template>
       <app>
         <form layout="$layouts/layout[ @id = 'vertical']">
+          <onOpen>
+            <create assign="selection">'selection'</create>
+          </onOpen>
+          
           <text id="1">
             <label>Text1</label>
             <source>collection('appdb')/text1</source>
@@ -52,6 +56,8 @@
           <tree size="600, 200">
             <column>'Name'</column>
             <column>'Value'</column>
+            
+            <selection srcAttr="id" dstAttr="id" parent="$selection"/>
           
             <!--table>
               <rows>.</rows>

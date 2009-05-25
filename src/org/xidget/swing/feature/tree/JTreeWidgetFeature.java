@@ -4,28 +4,37 @@
  */
 package org.xidget.swing.feature.tree;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 import org.xidget.IXidget;
-import org.xidget.Log;
+import org.xidget.ifeature.ISelectionModelFeature;
+import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.tree.CustomTreeModel;
 import org.xidget.tree.Row;
+import org.xmodel.IModelObject;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of ITreeWidgetFeature for a Netbeans Outline widget.
  */
-public class JTreeWidgetFeature implements ITreeWidgetFeature
+public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetFeature
 {
   public JTreeWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
-    this.map = new HashMap<StatefulContext, Row>();
+    this.contexts = new HashMap<StatefulContext, Row>();
+    
+    // only create index if selection element is present
+    if ( xidget.getConfig().getFirstChild( "selection") != null)
+    {
+      index = new HashMap<Object, Row>();
+    }
   }
   
   /* (non-Javadoc)
@@ -33,13 +42,20 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
    */
   public void insertRows( Row parent, int rowIndex, Row[] rows)
   {
-    Log.printf( "xidget", "inserting @ %s:\n", parent);
-    for( int i=0; i<rows.length; i++)
-      Log.printf( "xidget", "\t%s\n", rows[ i]);
-    
-    // update map
+    // update context map
     for( int i=0; i<rows.length; i++) 
-      map.put( rows[ i].getContext(), rows[ i]);
+      contexts.put( rows[ i].getContext(), rows[ i]);
+
+    // update index
+    if ( index != null)
+    {
+      ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+      for( Row row: rows)
+      {
+        Object identity = selectionModelFeature.getIdentity( row.getContext().getObject());
+        index.put( identity, row);
+      }
+    }
     
     // notify widget
     JTree jtree = xidget.getFeature( JTree.class);
@@ -57,10 +73,6 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
    */
   public void removeRows( Row parent, int rowIndex, Row[] rows)
   {
-    Log.printf( "xidget", "removing @ %s:\n", parent);
-    for( int i=0; i<rows.length; i++)
-      Log.printf( "xidget", "\t%s\n", rows[ i]);
-    
     // let expansion policy cleanup listeners
     ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
     for( int i=0; i<rows.length; i++)
@@ -69,9 +81,20 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
     JTree jtree = xidget.getFeature( JTree.class);
     CustomTreeModel treeModel = (CustomTreeModel)jtree.getModel();
     
-    // update model
+    // update context map
     for( int i=0; i<rows.length; i++)
-      map.remove( rows[ i].getContext());
+      contexts.remove( rows[ i].getContext());
+    
+    // update index
+    if ( index != null)
+    {
+      ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+      for( Row row: rows)
+      {
+        Object identity = selectionModelFeature.getIdentity( row.getContext().getObject());
+        index.remove( identity);
+      }
+    }
     
     // notify widget
     treeModel.removeRows( parent, rowIndex, rows);    
@@ -100,16 +123,16 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
    */
   public Row findRow( StatefulContext context)
   {
-    if ( !map.containsKey( context))
+    if ( !contexts.containsKey( context))
     {
       JTree jtree = xidget.getFeature( JTree.class);
       CustomTreeModel treeModel = (CustomTreeModel)jtree.getModel();
       Row root = (Row)treeModel.getRoot();
       root.setContext( context);
-      map.put( context, root);
+      contexts.put( context, root);
     }
     
-    return map.get( context);
+    return contexts.get( context);
   }
 
   /* (non-Javadoc)
@@ -144,6 +167,45 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature
     treeModel.updateCells( row);
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#getSelection()
+   */
+  public List<IModelObject> getSelection()
+  {
+    JTree jtree = xidget.getFeature( JTree.class);
+    TreePath[] paths = jtree.getSelectionPaths();
+    List<IModelObject> nodes = new ArrayList<IModelObject>( paths.length);
+    for( int i=0; i<paths.length; i++)
+    {
+      Row row = (Row)paths[ i].getLastPathComponent();
+      nodes.add( row.getContext().getObject());
+    }
+    return nodes;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#setSelection(java.util.List)
+   */
+  public void setSelection( List<IModelObject> nodes)
+  {
+    if ( index == null) return;
+    
+    JTree jtree = xidget.getFeature( JTree.class);
+    CustomTreeModel model = (CustomTreeModel)jtree.getModel();
+
+    TreePath[] paths = new TreePath[ nodes.size()];
+    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+    for( int i=0; i<nodes.size(); i++)
+    {
+      Object identity = selectionModelFeature.getIdentity( nodes.get( i));
+      Row row = index.get( identity);
+      paths[ i] = new TreePath( model.createPath( row));
+    }
+
+    jtree.setSelectionPaths( paths);
+  }
+
   private IXidget xidget;
-  private Map<StatefulContext, Row> map;
+  private Map<StatefulContext, Row> contexts;
+  private Map<Object, Row> index;
 }
