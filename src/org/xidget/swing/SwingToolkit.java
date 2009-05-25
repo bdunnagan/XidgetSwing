@@ -14,6 +14,7 @@ import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.text.JTextXidget;
 import org.xidget.swing.tree.JTreeXidget;
+import org.xmodel.external.ICachingPolicy;
 
 /**
  * An implementation of IToolkit for the Swing platform.
@@ -34,5 +35,14 @@ public class SwingToolkit implements IToolkit
     processor.addHandler( "button", new XidgetTagHandler( AbstractButtonXidget.class));
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.IToolkit#getImageCachingPolicy()
+   */
+  public ICachingPolicy getImageCachingPolicy()
+  {
+    // TODO: implement caching policy
+    return null;
   }
 }
