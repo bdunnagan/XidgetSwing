@@ -6,15 +6,13 @@ package org.xidget.swing.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JTree;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import org.xidget.IXidget;
 import org.xidget.tree.Row;
-import org.xmodel.IModelObject;
-import org.xmodel.ModelListener;
-import org.xmodel.external.IExternalReference;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -27,6 +25,7 @@ public class CustomTreeModel implements TreeModel
   {
     listeners = new ArrayList<TreeModelListener>( 3);
     root = new Row( xidget);
+    root.setExpanded( true);
   }
   
   /* (non-Javadoc)

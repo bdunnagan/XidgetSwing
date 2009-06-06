@@ -27,7 +27,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer
     Row row = (Row)value;
     Cell cell = row.getCell( 0);
     setIcon( (Icon)cell.icon);
-    setText( (cell.text != null)? cell.text: "");
+    setText( ((cell.text != null)? cell.text: ""));
     
     return component;
   }

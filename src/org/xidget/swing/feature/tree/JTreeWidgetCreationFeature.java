@@ -4,18 +4,26 @@
  */
 package org.xidget.swing.feature.tree;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import org.xidget.IXidget;
+import org.xidget.ifeature.ISelectionModelFeature;
+import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.swing.tree.CustomTreeCellRenderer;
 import org.xidget.swing.tree.CustomTreeModel;
 import org.xidget.tree.Row;
+import org.xmodel.IModelObject;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IWidgetCreationFeature for creating a Netbeans Outline widget.
@@ -41,6 +49,9 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     jtree.putClientProperty( "JTree.lineStyle", "Angled");
     
     jtree.addTreeExpansionListener( expandListener);
+    
+    if ( xidget.getFeature( ISelectionModelFeature.class) != null)
+      jtree.addTreeSelectionListener( selectionListener);
     
     jscrollPane = new JScrollPane( jtree);
     return jscrollPane;
@@ -90,6 +101,43 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
       ITreeExpandFeature feature = xidget.getFeature( ITreeExpandFeature.class);
       feature.collapse( row);
     }
+  };
+  
+  private TreeSelectionListener selectionListener = new TreeSelectionListener() {
+    public void valueChanged( TreeSelectionEvent event)
+    {
+      if ( updating) return;
+      updating = true;
+      
+      try
+      {
+        IWidgetContextFeature widgetContextFeature = xidget.getFeature( IWidgetContextFeature.class);
+        StatefulContext context = widgetContextFeature.getContext( event.getSource());
+
+        // TODO: tree selection is not ordered and causes unnecessary change records
+        JTree jtree = (JTree)event.getSource();
+        TreePath[] paths = jtree.getSelectionPaths();
+        
+        List<IModelObject> elements = new ArrayList<IModelObject>();
+        if ( paths != null)
+        {
+          for( int i=0; i<paths.length; i++)
+          {
+            Row row = (Row)paths[ i].getLastPathComponent();
+            elements.add( row.getContext().getObject());
+          }
+        }
+        
+        ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+        selectionModelFeature.setSelection( context, elements);
+      }
+      finally
+      {
+        updating = false;
+      }
+    }
+    
+    private boolean updating;
   };
   
   private JScrollPane jscrollPane;

@@ -19,8 +19,6 @@
     </template>
   </create>
   
-  <print>$fsys/n</print>
-  
   <create assign="choices">
     <template>
       <choices>
@@ -55,19 +53,12 @@
             <source>collection('appdb')/text3</source>
           </text>
           
-          <tree size="600, 200">
+          <tree size="600, 400">
             <column>'Name'</column>
             <column>'Value'</column>
             
             <selection parent="$selection"/>
           
-            <!--table>
-              <rows>.</rows>
-              <cell>
-                <source>'Folder #1'</source>
-              </cell>
-            </table-->
-            
             <table>
               <rows>$fsys</rows>
               <cell>
@@ -75,32 +66,28 @@
               </cell>
             </table>
             
-            <!--table>
-              <rows>if ( collection('appdb')/text2 = 'Relayer') then static( $layouts//*/@*) else null</rows>
-              <cell>
-                <source>name()</source>
-              </cell>
-              <cell>
-                <source>.</source>
-              </cell>
-            </table>
-          
-            <table>
-              <rows>.</rows>
-              <cell>
-                <source>'Folder #3'</source>
-              </cell>
-            </table>
+            <tree parent="table[ 1]" recursive="true" when="true()">
+              <table>
+                <rows>*</rows>
+                <cell>
+                  <source>name()</source>
+                </cell>
+              </table>
+            </tree>
+          </tree>
+            
+          <tree id="2" size="600, 400">
+            <column>'Name'</column>
+            <column>'Value'</column>
+            
+            <selection parent="$selection"/>
             
             <table>
-              <rows>$layouts//*</rows>
+              <rows>$fsys</rows>
               <cell>
                 <source>name()</source>
               </cell>
-              <cell>
-                <source>.</source>
-              </cell>
-            </table-->
+            </table>
             
             <tree parent="table[ 1]" recursive="true" when="true()">
               <table>

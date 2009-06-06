@@ -21,7 +21,7 @@ import org.xmodel.IModelObject;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
- * An implementation of ITreeWidgetFeature for a Netbeans Outline widget.
+ * An implementation of ITreeWidgetFeature for a Swing JTree widget.
  */
 public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetFeature
 {
@@ -50,10 +50,13 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
     if ( index != null)
     {
       ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-      for( Row row: rows)
+      if ( selectionModelFeature != null)
       {
-        Object identity = selectionModelFeature.getIdentity( row.getContext().getObject());
-        index.put( identity, row);
+        for( Row row: rows)
+        {
+          Object identity = selectionModelFeature.getIdentity( row.getContext().getObject());
+          index.put( identity, row);
+        }
       }
     }
     
@@ -89,10 +92,13 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
     if ( index != null)
     {
       ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-      for( Row row: rows)
+      if ( selectionModelFeature != null)
       {
-        Object identity = selectionModelFeature.getIdentity( row.getContext().getObject());
-        index.remove( identity);
+        for( Row row: rows)
+        {
+          Object identity = selectionModelFeature.getIdentity( row.getContext().getObject());
+          index.remove( identity);
+        }
       }
     }
     
@@ -168,19 +174,35 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#getSelection()
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, org.xmodel.IModelObject)
    */
-  public List<IModelObject> getSelection()
+  public void insertSelected( int index, IModelObject element)
   {
     JTree jtree = xidget.getFeature( JTree.class);
-    TreePath[] paths = jtree.getSelectionPaths();
-    List<IModelObject> nodes = new ArrayList<IModelObject>( paths.length);
-    for( int i=0; i<paths.length; i++)
-    {
-      Row row = (Row)paths[ i].getLastPathComponent();
-      nodes.add( row.getContext().getObject());
-    }
-    return nodes;
+    CustomTreeModel model = (CustomTreeModel)jtree.getModel();
+    
+    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+    Object identity = selectionModelFeature.getIdentity( element);
+    Row row = this.index.get( identity);
+    
+    TreePath path = new TreePath( model.createPath( row));
+    jtree.addSelectionPath( path);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, org.xmodel.IModelObject)
+   */
+  public void removeSelected( int index, IModelObject element)
+  {
+    JTree jtree = xidget.getFeature( JTree.class);
+    CustomTreeModel model = (CustomTreeModel)jtree.getModel();
+    
+    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+    Object identity = selectionModelFeature.getIdentity( element);
+    Row row = this.index.get( identity);
+    
+    TreePath path = new TreePath( model.createPath( row));
+    jtree.removeSelectionPath( path);
   }
 
   /* (non-Javadoc)
@@ -203,6 +225,22 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
     }
 
     jtree.setSelectionPaths( paths);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#getSelection()
+   */
+  public List<IModelObject> getSelection()
+  {
+    JTree jtree = xidget.getFeature( JTree.class);
+    TreePath[] paths = jtree.getSelectionPaths();
+    List<IModelObject> nodes = new ArrayList<IModelObject>( paths.length);
+    for( int i=0; i<paths.length; i++)
+    {
+      Row row = (Row)paths[ i].getLastPathComponent();
+      nodes.add( row.getContext().getObject());
+    }
+    return nodes;
   }
 
   private IXidget xidget;
