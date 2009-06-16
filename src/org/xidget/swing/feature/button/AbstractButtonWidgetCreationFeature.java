@@ -11,12 +11,14 @@ import java.awt.event.ItemListener;
 import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 import org.xidget.IXidget;
+import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.IScriptFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.button.IButtonModelFeature;
@@ -27,7 +29,7 @@ import org.xmodel.xpath.expression.StatefulContext;
 /**
  * An implementation of IWidgetCreationFeature which creates a concrete implementation of Swing AbstractButton.
  */
-public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeature
+public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeature implements IIconFeature
 {
   private enum Type { push, toggle, check, radio};
   
@@ -100,6 +102,14 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
   public Object[] getLastWidgets()
   {
     return new Object[] { button};
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IIconFeature#setIcon(java.lang.Object)
+   */
+  public void setIcon( Object icon)
+  {
+    button.setIcon( (Icon)icon);
   }
 
   /**

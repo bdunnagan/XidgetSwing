@@ -2,33 +2,34 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.button;
+package org.xidget.swing.menu;
 
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
+import java.awt.Container;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.button.ButtonModelFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.button.IButtonModelFeature;
 import org.xidget.ifeature.button.IButtonWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.button.AbstractButtonWidgetCreationFeature;
-import org.xidget.swing.feature.button.ButtonWidgetFeature;
+import org.xidget.swing.feature.menu.JMenuItemButtonWidgetFeature;
+import org.xidget.swing.feature.menu.JMenuItemWidgetCreationFeature;
 
 /**
  * A xidget implementation for Swing AbstactButton widgets.
  */
-public class AbstractButtonXidget extends Xidget
+public class JMenuItemXidget extends Xidget
 {
   /* (non-Javadoc)
    * @see org.xidget.Xidget#createFeatures()
@@ -38,10 +39,10 @@ public class AbstractButtonXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    buttonWidgetFeature = new ButtonWidgetFeature( this);
+    containerFeature = new GenericContainerFeature( this);
+    buttonWidgetFeature = new JMenuItemButtonWidgetFeature( this);
     buttonModelFeature = new ButtonModelFeature();
-    computeNodeFeature = new ComputeNodeFeature( this);
-    creationFeature = new AbstractButtonWidgetCreationFeature( this);
+    creationFeature = new JMenuItemWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -53,17 +54,18 @@ public class AbstractButtonXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IIconFeature.class) return (T)creationFeature;
+    if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)buttonModelFeature;
     if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
     if ( clss == IButtonModelFeature.class) return (T)buttonModelFeature;
-    if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
+    if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == JComponent.class) return (T)creationFeature.getAbstractButton();
-    if ( clss == AbstractButton.class) return (T)creationFeature.getAbstractButton();
-    if ( clss == ButtonGroup.class) return (T)creationFeature.getButtonGroup();
+    if ( clss == JComponent.class) return (T)creationFeature.getJMenuItem();
+    if ( clss == JMenuItem.class) return (T)creationFeature.getJMenuItem();
+    if ( clss == Container.class) return (T)creationFeature.getJMenuItem();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
@@ -73,9 +75,9 @@ public class AbstractButtonXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private IWidgetContainerFeature containerFeature;
   private IButtonWidgetFeature buttonWidgetFeature;
   private IButtonModelFeature buttonModelFeature;
-  private IComputeNodeFeature computeNodeFeature;
-  private AbstractButtonWidgetCreationFeature creationFeature;  
+  private JMenuItemWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;
 }

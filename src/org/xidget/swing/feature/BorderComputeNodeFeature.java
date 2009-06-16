@@ -29,14 +29,15 @@ public class BorderComputeNodeFeature extends ComputeNodeFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IComputeNodeFeature#getParentAnchor(java.lang.String)
+   * @see org.xidget.feature.ComputeNodeFeature#getParentAnchor(org.xidget.ifeature.IComputeNodeFeature.Type)
    */
-  public IComputeNode getParentAnchor( String type)
+  public IComputeNode getParentAnchor( Type type)
   {
     IWidgetFeature widget = xidget.getFeature( IWidgetFeature.class);
     if ( widget == null) return null;
     
-    IComputeNode node = nodes.get( "p"+type);
+    int ordinal = type.ordinal();
+    IComputeNode node = nodes[ ordinal];
     if ( node != null) return node;
 
     Quad quad = new Quad( Xlate.get( xidget.getConfig(), "margins", (String)null), 0, 0, 0, 0);    
@@ -54,16 +55,17 @@ public class BorderComputeNodeFeature extends ComputeNodeFeature
       }
     }
     
-    if ( quad == null) quad = new Quad( Xlate.get( xidget.getConfig(), "margins", (String)null), 0, 0, 0, 0);    
+    switch( type)
+    {
+      case top: node = new ConstantNode( quad.b); break;
+      case left: node = new ConstantNode( quad.a); break;
+      case right: node = new OffsetNode( new ContainerWidthNode( widget), -quad.c); break;
+      case bottom: node = new OffsetNode( new ContainerHeightNode( widget), -quad.d); break;
+      case width: node = new OffsetNode( new ContainerWidthNode( widget), -(quad.a + quad.c)); break;
+      case height: node = new OffsetNode( new ContainerHeightNode( widget), -(quad.b + quad.d)); break;
+    }
     
-    if ( type.equals( "x0")) node = new ConstantNode( quad.a);
-    else if ( type.equals( "x1")) node = new OffsetNode( new ContainerWidthNode( widget), -quad.c);
-    else if ( type.equals( "y0")) node = new ConstantNode( quad.b);
-    else if ( type.equals( "y1")) node = new OffsetNode( new ContainerHeightNode( widget), -quad.d);
-    else if ( type.equals( "w")) node = new OffsetNode( new ContainerWidthNode( widget), -(quad.a + quad.c));
-    else if ( type.equals( "h")) node = new OffsetNode( new ContainerHeightNode( widget), -(quad.b + quad.d));
-    
-    nodes.put( "p"+type, node);
+    nodes[ ordinal] = node;
     return node;    
   }
 }

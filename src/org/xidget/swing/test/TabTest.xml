@@ -33,8 +33,8 @@
   <create assign="form">
     <template>
       <app>
-        <tabs layout="$layouts/layout[ @id = 'vertical']" size="400,300">
-          <form title="'Tab 1'" layout="$layouts/layout[ @id = 'vertical']">
+        <tabs layout="$layouts/vertical" size="400,300">
+          <form title="'Tab 1'" layout="$layouts/vertical">
             <text id="1">
               <label>Text1</label>
               <source>collection('appdb')/text1</source>
@@ -51,7 +51,7 @@
             </text>
           </form>
 
-          <form title="'Tab 2'" layout="$layouts/layout[ @id = 'vertical']">
+          <form title="'Tab 2'" layout="$layouts/vertical">
             <!-- debug button source not updated -->
             <button type="radio">
               <label>Option 1</label>

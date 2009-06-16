@@ -11,6 +11,8 @@ import org.xidget.binding.tree.TreeTagHandler;
 import org.xidget.config.TagProcessor;
 import org.xidget.swing.button.AbstractButtonXidget;
 import org.xidget.swing.combo.JComboBoxXidget;
+import org.xidget.swing.menu.JMenuItemXidget;
+import org.xidget.swing.menu.JMenuXidget;
 import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.text.JTextXidget;
 import org.xidget.swing.tree.JTreeXidget;
@@ -33,6 +35,8 @@ public class SwingToolkit implements IToolkit
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "combo", new XidgetTagHandler( JComboBoxXidget.class));
     processor.addHandler( "button", new XidgetTagHandler( AbstractButtonXidget.class));
+    processor.addHandler( "menu", new XidgetTagHandler( JMenuXidget.class));
+    processor.addHandler( "menuItem", new XidgetTagHandler( JMenuItemXidget.class));
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
   }

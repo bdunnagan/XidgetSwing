@@ -35,7 +35,7 @@
   <create assign="form">
     <template>
       <app>
-        <form layout="$layouts/layout[ @id = 'vertical']">
+        <form layout="$layouts/vertical">
           <onOpen>
             <create assign="selection" name="'selection'"/>
           </onOpen>

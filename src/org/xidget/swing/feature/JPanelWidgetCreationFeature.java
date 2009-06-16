@@ -16,6 +16,7 @@ import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.ifeature.IComputeNodeFeature.Type;
 import org.xidget.layout.ConstantNode;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
@@ -43,28 +44,23 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
     if ( containerFeature != null) containerFeature.addWidget( xidget);
     
+    // create titled border if necessary (but not for tab entries)
+    IXidget parent = xidget.getParent();
+    String title = getTitle();
+    if ( title != null && title.length() > 0 && parent != null)
+    {
+      if ( parent.getConfig().isType( "form"))
+        jpanel.setBorder( new TitledBorder( title));
+    }
+    
     // optionally constrain size
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
     IModelObject config = xidget.getConfig();
     Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
     if ( size.x > 0 || size.y > 0)
     {
-      computeNodeFeature.getAnchor( "w").addDependency( new ConstantNode( size.x));
-      computeNodeFeature.getAnchor( "h").addDependency( new ConstantNode( size.y));
-    }
-    
-    // create titled border if necessary (but not for tab entries)
-    String title = getTitle();
-    if ( title != null && title.length() > 0)
-    {
-      IXidget parent = xidget.getParent();
-      if ( parent != null)
-      {
-        if ( parent.getConfig().isType( "form"))
-        {
-          jpanel.setBorder( new TitledBorder( title));
-        }
-      }
+      computeNodeFeature.getAnchor( Type.width).addDependency( new ConstantNode( size.x));
+      computeNodeFeature.getAnchor( Type.height).addDependency( new ConstantNode( size.y));
     }
   }
   

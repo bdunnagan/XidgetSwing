@@ -3,7 +3,7 @@
 <layouts>
   <package>org.xidget.layout.xaction</package>
   
-  <layout id="vertical">
+  <vertical>
     <assign name="xidgets">*[ @xidget]</assign>
     
     <attach xidget="$xidgets[ 1]">
@@ -25,10 +25,10 @@
       <x1 attach="." side="x1" pad="5"/>
       <y1 attach="." side="y1" pad="5"/>
     </attach>
-  </layout>
+  </vertical>
   
   <!-- Vertical Grid Layout -->
-  <layout id="vgrid">
+  <vgrid>
     <assign name="xidgets">*[ @xidget]</assign>
     
     <assign name="dy">1 div count( $xidgets)</assign>
@@ -50,9 +50,9 @@
         <y1 side="h" percent="$py"/>
       </attach>
     </for>
-  </layout>
+  </vgrid>
   
-  <layout id="horizontal">
+  <horizontal>
     <assign name="xidgets">*[ @xidget]</assign>
     
     <attach xidget="$xidgets[ 1]">
@@ -74,9 +74,9 @@
       <x1 attach="$last" side="x1" pad="5"/>
       <y1 attach="$last" side="y1" pad="5"/>
     </attach>
-  </layout>
+  </horizontal>>
   
-  <layout>
+  <other>
     <for source="*[ @xidget]">
       <assign name="previous">(preceding-sibling::*[ @xidget])[ 1]</assign>
       
@@ -102,5 +102,5 @@
       <x1 attach="$last" side="x1" pad="5"/>
       <y1 attach="$last" side="y1" pad="5"/>
     </attach>
-  </layout>
+  </other>
 </layouts>
