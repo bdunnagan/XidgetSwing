@@ -10,6 +10,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ILabelFeature;
@@ -40,13 +41,19 @@ public class JMenuItemWidgetCreationFeature extends SwingWidgetCreationFeature i
     if ( !spec.equals( "push")) throw new UnsupportedOperationException( "Only push menu items are currently supported.");
 
     IModelObject config = xidget.getConfig();
-    if ( config.getNumberOfChildren() == 0 && config.getAttributeNames().size() < 2)
+    if ( config.isType( "separator"))
     {
-      jMenuItem = new JMenu();
+      IXidget parent = xidget.getParent();
+      
+      JMenu menu = parent.getFeature( JMenu.class);
+      if ( menu != null) menu.addSeparator();
+      
+      JPopupMenu popupMenu = parent.getFeature( JPopupMenu.class);
+      if ( popupMenu != null) popupMenu.addSeparator();
     }
     else
     {
-      jMenuItem = new JMenuItem( "Fuck");
+      jMenuItem = new JMenuItem();
       jMenuItem.addActionListener( actionListener);
     }
     
@@ -58,6 +65,7 @@ public class JMenuItemWidgetCreationFeature extends SwingWidgetCreationFeature i
    */
   public Object[] getLastWidgets()
   {
+    if ( jMenuItem == null) return new Object[ 0];
     return new Object[] { jMenuItem};
   }
   

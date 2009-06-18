@@ -6,25 +6,23 @@ package org.xidget.swing.menu;
 
 import java.awt.Container;
 import javax.swing.JComponent;
-import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IIconFeature;
-import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.menu.JMenuWidgetCreationFeature;
+import org.xidget.swing.feature.menu.JPopupMenuWidgetCreationFeature;
 
 /**
  * A xidget implementation for Swing JMenu widgets.
  */
-public class JMenuXidget extends Xidget
+public class JPopupMenuXidget extends Xidget
 {
   /* (non-Javadoc)
    * @see org.xidget.Xidget#createFeatures()
@@ -35,7 +33,7 @@ public class JMenuXidget extends Xidget
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     containerFeature = new GenericContainerFeature( this);
-    creationFeature = new JMenuWidgetCreationFeature( this);
+    creationFeature = new JPopupMenuWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -46,16 +44,14 @@ public class JMenuXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IIconFeature.class) return (T)creationFeature;
-    if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
-    if ( clss == Container.class) return (T)creationFeature.getJMenu();
-    if ( clss == JComponent.class) return (T)creationFeature.getJMenu();
-    if ( clss == JMenu.class) return (T)creationFeature.getJMenu();
+    if ( clss == Container.class) return (T)creationFeature.getJPopupMenu();
+    if ( clss == JComponent.class) return (T)creationFeature.getJPopupMenu();
+    if ( clss == JPopupMenu.class) return (T)creationFeature.getJPopupMenu();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
@@ -66,6 +62,6 @@ public class JMenuXidget extends Xidget
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private IWidgetContainerFeature containerFeature;
-  private JMenuWidgetCreationFeature creationFeature;  
+  private JPopupMenuWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;
 }

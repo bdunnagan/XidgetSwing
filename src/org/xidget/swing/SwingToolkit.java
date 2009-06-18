@@ -12,7 +12,8 @@ import org.xidget.config.TagProcessor;
 import org.xidget.swing.button.AbstractButtonXidget;
 import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.menu.JMenuItemXidget;
-import org.xidget.swing.menu.JMenuXidget;
+import org.xidget.swing.menu.MenuTagHandler;
+import org.xidget.swing.menu.SubMenuTagHandler;
 import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.text.JTextXidget;
 import org.xidget.swing.tree.JTreeXidget;
@@ -35,8 +36,10 @@ public class SwingToolkit implements IToolkit
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "combo", new XidgetTagHandler( JComboBoxXidget.class));
     processor.addHandler( "button", new XidgetTagHandler( AbstractButtonXidget.class));
-    processor.addHandler( "menu", new XidgetTagHandler( JMenuXidget.class));
+    processor.addHandler( "menu", new MenuTagHandler());
+    processor.addHandler( "menu", new SubMenuTagHandler());
     processor.addHandler( "menuItem", new XidgetTagHandler( JMenuItemXidget.class));
+    processor.addHandler( "separator", new XidgetTagHandler( JMenuItemXidget.class));
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
   }
@@ -46,7 +49,6 @@ public class SwingToolkit implements IToolkit
    */
   public ICachingPolicy getImageCachingPolicy()
   {
-    // TODO: implement caching policy
     return null;
   }
 }
