@@ -29,20 +29,21 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jframe = new JFrame();
+    jframe.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
 
     // set size of jframe if child size is set
-    IModelObject config = xidget.getChildren().get( 0).getConfig();
+    IModelObject config = xidget.getConfig();
     Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
     if ( size.x > 0 || size.y > 0)
     {
-      jframe.setPreferredSize( new Dimension( size.x, size.y));
+      jframe.setSize( new Dimension( size.x, size.y));
+      sized = true;
     }
     
     SwingUtilities.invokeLater( new Runnable() {
       public void run()
       {
-        jframe.pack();
-        jframe.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
+        if ( !sized) jframe.pack();
         jframe.setVisible( true);
       }
     });
@@ -56,7 +57,7 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
     jframe.dispose();
     jframe = null;
   }
-
+  
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
    */
@@ -76,4 +77,5 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
 
   private IXidget xidget;
   private JFrame jframe;
+  private boolean sized;
 }

@@ -4,6 +4,8 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -18,6 +20,8 @@ import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IComputeNodeFeature.Type;
 import org.xidget.layout.ConstantNode;
+import org.xidget.layout.DifferenceNode;
+import org.xidget.layout.IComputeNode;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -38,7 +42,10 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void createWidgets()
   {
+    System.out.printf( "%s -> %d\n", xidget, c);
+    
     jpanel = new JPanel( new AnchorLayoutManager( xidget));
+    jpanel.setBackground( colors[ c++]);
     jpanel.addComponentListener( componentListener);
     
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
@@ -52,15 +59,38 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
       if ( parent.getConfig().isType( "form"))
         jpanel.setBorder( new TitledBorder( title));
     }
-    
-    // optionally constrain size
+
+    // setup layout
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
+    IComputeNode top = computeNodeFeature.getAnchor( Type.top);
+    IComputeNode left = computeNodeFeature.getAnchor( Type.left);
+    IComputeNode right = computeNodeFeature.getAnchor( Type.right);
+    IComputeNode bottom = computeNodeFeature.getAnchor( Type.bottom);
+    IComputeNode width = computeNodeFeature.getAnchor( Type.width);
+    IComputeNode height = computeNodeFeature.getAnchor( Type.height);
+    
+    // constrain size if size attribute is specified
     IModelObject config = xidget.getConfig();
     Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
     if ( size.x > 0 || size.y > 0)
     {
-      computeNodeFeature.getAnchor( Type.width).addDependency( new ConstantNode( size.x));
-      computeNodeFeature.getAnchor( Type.height).addDependency( new ConstantNode( size.y));
+      if ( size.x > 0)
+      {
+        // set right side
+        right.addDependency( new ConstantNode( size.x));
+        
+        // make width dependent on content width
+        width.addDependency( new DifferenceNode( left, right));
+      }
+      
+      if ( size.y > 0)
+      {
+        // set bottom side
+        bottom.addDependency( new ConstantNode( size.y));
+        
+        // make height dependent on content height
+        height.addDependency( new DifferenceNode( top, bottom));
+      }
     }
   }
   
@@ -81,7 +111,9 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void destroyWidgets()
   {
-    jpanel.getParent().remove( jpanel);
+    Container container = jpanel.getParent();
+    container.remove( jpanel);
+    container.invalidate();
     jpanel = null;
   }
 
@@ -114,6 +146,9 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
   };
 
+  private static Color[] colors = new Color[] { Color.blue, Color.green, Color.red, Color.yellow, Color.orange};
+  private static int c = 0;
+  
   private IXidget xidget;
   private JPanel jpanel;
 }

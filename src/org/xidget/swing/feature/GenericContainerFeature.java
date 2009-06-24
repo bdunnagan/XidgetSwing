@@ -8,6 +8,7 @@ import java.awt.Component;
 import java.awt.Container;
 import org.xidget.IXidget;
 import org.xidget.Log;
+import org.xidget.ifeature.IAsyncFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 
@@ -36,6 +37,13 @@ public class GenericContainerFeature implements IWidgetContainerFeature
       {
         Log.printf( "xidget", "GenericContainerFeature.addWidget: %s <- %s\n", xidget, child);
         container.add( (Component)widgets[ 0]);
+        
+        // validate the container later to improve performance
+        if ( container.isShowing())
+        {
+          IAsyncFeature asyncFeature = xidget.getFeature( IAsyncFeature.class);
+          asyncFeature.schedule( this, 500, false, validateRunnable);
+        }
       }
     }
   }
@@ -53,6 +61,14 @@ public class GenericContainerFeature implements IWidgetContainerFeature
       if ( widgets.length > 0) container.remove( (Component)widgets[ 0]);
     }
   }
+  
+  private Runnable validateRunnable = new Runnable() {
+    public void run()
+    {
+      Container container = xidget.getFeature( Container.class);
+      container.validate();
+    }
+  };
   
   private IXidget xidget;
 }

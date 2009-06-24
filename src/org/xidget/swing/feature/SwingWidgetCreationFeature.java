@@ -42,7 +42,6 @@ public abstract class SwingWidgetCreationFeature implements IWidgetCreationFeatu
     JComponent widget = xidget.getFeature( JComponent.class);
     Container container = widget.getParent();
     container.remove( widget);
-    container.invalidate();
   }
 
   /**

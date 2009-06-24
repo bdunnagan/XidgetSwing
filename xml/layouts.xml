@@ -6,101 +6,34 @@
   <vertical>
     <assign name="xidgets">*[ @xidget]</assign>
     
-    <attach xidget="$xidgets[ 1]">
-      <x0 attach="." side="x0"/>
-      <x1 attach="." side="x1"/>
-      <y0 attach="." side="y0"/>
-    </attach>
+    <depend constant="0">
+      <source type="top">$xidgets[ 1]</source>
+    </depend>
+    <depend constant="0">
+      <source type="left">$xidgets[ 1]</source>
+    </depend>
+    <depend>
+      <depend type="right">.</depend>
+      <source type="right">$xidgets[ 1]</source>
+    </depend>
     
     <for assign="i" from="2" to="count( $xidgets)+1" by="1">
-      <attach xidget="$xidgets[ $i]">
-        <x0 attach="." side="x0"/>
-        <x1 attach="." side="x1"/>            
-        <y0 attach="$xidgets[ $i - 1]" side="y1"/>
-      </attach>
+      <depend constant="0">
+        <source type="left">$xidgets[ $i]</source>
+      </depend>
+      <depend>
+        <depend type="right">.</depend>
+        <source type="right">$xidgets[ $i]</source>
+      </depend>
+      <depend>
+        <depend type="bottom">$xidgets[ $i - 1]</depend>
+        <source type="top">$xidgets[ $i]</source>
+      </depend>
     </for>
     
-    <assign name="last">reverse( *[ @xidget])[ 1]</assign>
-    <attach xidget="$last">
-      <x1 attach="." side="x1" pad="5"/>
-      <y1 attach="." side="y1" pad="5"/>
-    </attach>
+    <depend>
+      <depend type="bottom">.</depend>
+      <source type="bottom">$xidgets[ count( $xidgets)]</source>
+    </depend>
   </vertical>
-  
-  <!-- Vertical Grid Layout -->
-  <vgrid>
-    <assign name="xidgets">*[ @xidget]</assign>
-    
-    <assign name="dy">1 div count( $xidgets)</assign>
-    <assign name="py">$dy</assign>
-    
-    <attach xidget="$xidgets[ 1]">
-      <x0 side="x0"/>
-      <x1 side="x1"/>
-      <y0 side="y0"/>
-      <y1 side="h" percent="$py"/>
-    </attach>
-    
-    <for assign="i" from="2" to="count( $xidgets)+1" by="1">
-      <assign name="py">$py + $dy</assign>
-      <attach xidget="$xidgets[ $i]">
-        <x0 side="x0"/>
-        <x1 side="x1"/>
-        <y0 attach="$xidgets[ $i - 1]" side="y1" pad="5"/>
-        <y1 side="h" percent="$py"/>
-      </attach>
-    </for>
-  </vgrid>
-  
-  <horizontal>
-    <assign name="xidgets">*[ @xidget]</assign>
-    
-    <attach xidget="$xidgets[ 1]">
-      <x0 attach="." side="x0" pad="5"/>
-      <y0 attach="." side="y0" pad="5"/>
-      <y1 attach="." side="y1" pad="5"/>
-    </attach>
-    
-    <for assign="i" from="2" to="count( $xidgets)+1" by="1">
-      <attach xidget="$xidgets[ $i]">
-        <x0 attach="$xidgets[ $i - 1]" side="x1" pad="5"/>
-        <y0 attach="." side="y0" pad="5"/>
-        <y1 attach="." side="y1" pad="5"/>
-      </attach>
-    </for>
-    
-    <assign name="last">reverse( *[ @xidget])[ 1]</assign>          
-    <attach>
-      <x1 attach="$last" side="x1" pad="5"/>
-      <y1 attach="$last" side="y1" pad="5"/>
-    </attach>
-  </horizontal>>
-  
-  <other>
-    <for source="*[ @xidget]">
-      <assign name="previous">(preceding-sibling::*[ @xidget])[ 1]</assign>
-      
-      <attach when="position() = 1">
-        <x0 attach=".." side="x0" pad="5"/>
-        <x1 attach=".." side="x0" percent=".33" pad="-2"/>            
-        <y0 attach=".." side="y0" pad="5"/>
-      </attach>
-      <attach when="position() = 2">
-        <x0 attach="$previous" side="x1" pad="5"/>
-        <x1 attach=".." side="x0" percent=".66" pad="-2"/>            
-        <y0 attach="$previous" side="y0"/>
-      </attach>
-      <attach when="position() = 3">
-        <x0 attach="$previous" side="x1" pad="5"/>
-        <x1 attach=".." side="x1" pad="5"/>            
-        <y0 attach="$previous" side="y0"/>
-      </attach>
-    </for>
-
-    <assign name="last">reverse( *[ @xidget])[ 1]</assign>          
-    <attach>
-      <x1 attach="$last" side="x1" pad="5"/>
-      <y1 attach="$last" side="y1" pad="5"/>
-    </attach>
-  </other>
 </layouts>

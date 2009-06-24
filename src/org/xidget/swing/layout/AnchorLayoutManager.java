@@ -25,14 +25,14 @@ public class AnchorLayoutManager implements LayoutManager
   /* (non-Javadoc)
    * @see java.awt.LayoutManager#addLayoutComponent(java.lang.String, java.awt.Component)
    */
-  public void addLayoutComponent( String name, Component comp)
+  public void addLayoutComponent( String name, Component component)
   {
   }
 
   /* (non-Javadoc)
    * @see java.awt.LayoutManager#removeLayoutComponent(java.awt.Component)
    */
-  public void removeLayoutComponent( Component comp)
+  public void removeLayoutComponent( Component component)
   {
   }
 
