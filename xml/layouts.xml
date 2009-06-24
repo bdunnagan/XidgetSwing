@@ -5,35 +5,161 @@
   
   <vertical>
     <assign name="xidgets">*[ @xidget]</assign>
+    <assign name="pad">if (@pad) then number( @pad) else 0</assign>
     
-    <depend constant="0">
-      <source type="top">$xidgets[ 1]</source>
-    </depend>
-    <depend constant="0">
-      <source type="left">$xidgets[ 1]</source>
-    </depend>
-    <depend>
-      <depend type="right">.</depend>
-      <source type="right">$xidgets[ 1]</source>
-    </depend>
-    
-    <for assign="i" from="2" to="count( $xidgets)+1" by="1">
-      <depend constant="0">
-        <source type="left">$xidgets[ $i]</source>
-      </depend>
-      <depend>
-        <depend type="right">.</depend>
-        <source type="right">$xidgets[ $i]</source>
-      </depend>
-      <depend>
-        <depend type="bottom">$xidgets[ $i - 1]</depend>
-        <source type="top">$xidgets[ $i]</source>
-      </depend>
-    </for>
-    
-    <depend>
-      <depend type="bottom">.</depend>
-      <source type="bottom">$xidgets[ count( $xidgets)]</source>
-    </depend>
+    <if true="@fill = 'true'">
+      <then>
+        <assign name="n">count( $xidgets)</assign>
+        <assign name="dp">1 div $n</assign>
+        <assign name="p">$dp</assign>
+        
+        <depend constant="0">
+          <source type="top">$xidgets[ 1]</source>
+        </depend>
+        <depend constant="0">
+          <source type="left">$xidgets[ 1]</source>
+        </depend>
+        <depend percent="$p">
+          <depend type="height">.</depend>
+          <source type="bottom">$xidgets[ 1]</source>
+        </depend>
+        <depend>
+          <depend type="right">.</depend>
+          <source type="right">$xidgets[ 1]</source>
+        </depend>
+        
+        <for assign="i" from="2" to="$n + 1" by="1">
+          <assign name="p">$p + $dp</assign>
+          
+          <depend constant="0">
+            <source type="left">$xidgets[ $i]</source>
+          </depend>
+          <depend percent="$p">
+            <depend type="height">.</depend>
+            <source type="bottom">$xidgets[ $i]</source>
+          </depend>
+          <depend>
+            <depend type="right">.</depend>
+            <source type="right">$xidgets[ $i]</source>
+          </depend>
+          <depend offset="$pad">
+            <depend type="bottom">$xidgets[ $i - 1]</depend>
+            <source type="top">$xidgets[ $i]</source>
+          </depend>
+        </for>
+      </then>
+      
+      <else>
+        <depend constant="0">
+          <source type="top">$xidgets[ 1]</source>
+        </depend>
+        <depend constant="0">
+          <source type="left">$xidgets[ 1]</source>
+        </depend>
+        <depend>
+          <depend type="right">.</depend>
+          <source type="right">$xidgets[ 1]</source>
+        </depend>
+        
+        <for assign="i" from="2" to="count( $xidgets)+1" by="1">
+          <depend constant="0">
+            <source type="left">$xidgets[ $i]</source>
+          </depend>
+          <depend>
+            <depend type="right">.</depend>
+            <source type="right">$xidgets[ $i]</source>
+          </depend>
+          <depend>
+            <depend type="bottom">$xidgets[ $i - 1]</depend>
+            <source type="top">$xidgets[ $i]</source>
+          </depend>
+        </for>
+        
+        <depend>
+          <depend type="bottom">.</depend>
+          <source type="bottom">$xidgets[ count( $xidgets)]</source>
+        </depend>
+      </else>
+    </if>    
   </vertical>
+  
+  <horizontal>
+    <assign name="xidgets">*[ @xidget]</assign>
+    <assign name="pad">if (@pad) then number( @pad) else 0</assign>
+    
+    <if true="@fill = 'true'">
+      <then>
+        <assign name="n">count( $xidgets)</assign>
+        <assign name="dp">1 div $n</assign>
+        <assign name="p">$dp</assign>
+        
+        <depend constant="0">
+          <source type="top">$xidgets[ 1]</source>
+        </depend>
+        <depend constant="0">
+          <source type="left">$xidgets[ 1]</source>
+        </depend>
+        <depend percent="$p">
+          <depend type="width">.</depend>
+          <source type="right">$xidgets[ 1]</source>
+        </depend>
+        <depend>
+          <depend type="bottom">.</depend>
+          <source type="bottom">$xidgets[ 1]</source>
+        </depend>
+        
+        <for assign="i" from="2" to="$n + 1" by="1">
+          <assign name="p">$p + $dp</assign>
+          
+          <depend constant="0">
+            <source type="left">$xidgets[ $i]</source>
+          </depend>
+          <depend percent="$p">
+            <depend type="width">.</depend>
+            <source type="right">$xidgets[ $i]</source>
+          </depend>
+          <depend>
+            <depend type="bottom">.</depend>
+            <source type="bottom">$xidgets[ $i]</source>
+          </depend>
+          <depend offset="$pad">
+            <depend type="right">$xidgets[ $i - 1]</depend>
+            <source type="left">$xidgets[ $i]</source>
+          </depend>
+        </for>
+      </then>
+      
+      <else>
+        <depend constant="0">
+          <source type="top">$xidgets[ 1]</source>
+        </depend>
+        <depend constant="0">
+          <source type="left">$xidgets[ 1]</source>
+        </depend>
+        <depend>
+          <depend type="bottom">.</depend>
+          <source type="bottom">$xidgets[ 1]</source>
+        </depend>
+        
+        <for assign="i" from="2" to="count( $xidgets)+1" by="1">
+          <depend constant="0">
+            <source type="left">$xidgets[ $i]</source>
+          </depend>
+          <depend>
+            <depend type="bottom">.</depend>
+            <source type="bottom">$xidgets[ $i]</source>
+          </depend>
+          <depend>
+            <depend type="right">$xidgets[ $i - 1]</depend>
+            <source type="left">$xidgets[ $i]</source>
+          </depend>
+        </for>
+        
+        <depend>
+          <depend type="right">.</depend>
+          <source type="right">$xidgets[ count( $xidgets)]</source>
+        </depend>
+      </else>
+    </if>    
+  </horizontal>
 </layouts>

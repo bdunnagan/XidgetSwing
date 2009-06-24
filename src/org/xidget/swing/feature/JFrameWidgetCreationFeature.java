@@ -39,7 +39,7 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
       jframe.setSize( new Dimension( size.x, size.y));
       sized = true;
     }
-    
+        
     SwingUtilities.invokeLater( new Runnable() {
       public void run()
       {

@@ -14,10 +14,10 @@
   <assign name="layouts">$xml/layouts.xml/layouts</assign>  
   <create assign="form">
     <template>
-      <app size="400, 800">
-        <form id="1" layout="$layouts/vertical">
-          <form id="1a" size="-1, 200"/>
-          <form id="1b" size="-1, 200"/>
+      <app size="400, 400">
+        <form id="1" layout="$layouts/horizontal" fill="true" pad="10">
+          <form id="1a"/>
+          <form id="1b"/>
         </form>
       </app>
     </template>

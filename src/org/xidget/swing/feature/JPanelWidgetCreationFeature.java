@@ -68,6 +68,14 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     IComputeNode bottom = computeNodeFeature.getAnchor( Type.bottom);
     IComputeNode width = computeNodeFeature.getAnchor( Type.width);
     IComputeNode height = computeNodeFeature.getAnchor( Type.height);
+
+    // connect top and left to 0 by default
+    top.addDependency( new ConstantNode( 0));
+    left.addDependency( new ConstantNode( 0));
+    
+    // connect width and height to other anchors by default
+    width.addDependency( new DifferenceNode( left, right));
+    height.addDependency( new DifferenceNode( top, bottom));
     
     // constrain size if size attribute is specified
     IModelObject config = xidget.getConfig();
@@ -78,18 +86,12 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
       {
         // set right side
         right.addDependency( new ConstantNode( size.x));
-        
-        // make width dependent on content width
-        width.addDependency( new DifferenceNode( left, right));
       }
       
       if ( size.y > 0)
       {
         // set bottom side
         bottom.addDependency( new ConstantNode( size.y));
-        
-        // make height dependent on content height
-        height.addDependency( new DifferenceNode( top, bottom));
       }
     }
   }
