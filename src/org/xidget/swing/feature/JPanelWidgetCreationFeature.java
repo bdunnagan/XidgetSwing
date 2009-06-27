@@ -6,22 +6,30 @@ package org.xidget.swing.feature;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.MouseInputListener;
 import org.xidget.IXidget;
 import org.xidget.Log;
 import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IComputeNodeFeature;
+import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IComputeNodeFeature.Type;
 import org.xidget.layout.ConstantNode;
 import org.xidget.layout.DifferenceNode;
 import org.xidget.layout.IComputeNode;
+import org.xidget.layout.IComputeNode.Grab;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -47,6 +55,8 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     jpanel = new JPanel( new AnchorLayoutManager( xidget));
     jpanel.setBackground( colors[ c++]);
     jpanel.addComponentListener( componentListener);
+    jpanel.addMouseListener( mouseListener);
+    jpanel.addMouseMotionListener( mouseListener);
     
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
     if ( containerFeature != null) containerFeature.addWidget( xidget);
@@ -136,6 +146,33 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     return jpanel;
   }
   
+  /**
+   * Returns the IComputeNode under the specified mouse position.
+   * @param x The x of the mouse.
+   * @param y The y of the mouse.
+   * @return Returns the IComputeNode under the specified mouse position.
+   */
+  private IComputeNode mouseGrab( int x, int y)
+  {
+    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+    List<IComputeNode> nodes = feature.getNodes();
+      
+    if ( nodes == null) return null;
+    
+    for( IComputeNode node: nodes)
+    {
+      Grab grab = node.mouseGrab( x, y);
+      switch( grab)
+      {
+        case none: jpanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR)); break;
+        case x: jpanel.setCursor( Cursor.getPredefinedCursor( Cursor.E_RESIZE_CURSOR)); return node;
+        case y: jpanel.setCursor( Cursor.getPredefinedCursor( Cursor.N_RESIZE_CURSOR)); return node;
+      }
+    }
+    
+    return null;
+  }
+  
   private ComponentListener componentListener = new ComponentAdapter() {
     public void componentMoved( ComponentEvent e)
     {
@@ -147,10 +184,46 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
       Log.printf( "layout", "RESIZE: %s (%d, %d)\n", xidget, jpanel.getWidth(), jpanel.getHeight());
     }
   };
+  
+  private MouseInputListener mouseListener = new MouseInputAdapter() {
+    public void mousePressed( MouseEvent e)
+    {
+      if ( e.getButton() == MouseEvent.BUTTON1)
+      {
+        grabbed = mouseGrab( e.getX(), e.getY());
+        Log.printf( "layout", "grab: (%d, %d) %s\n", e.getX(), e.getY(), grabbed);
+      }
+    }
+    public void mouseReleased( MouseEvent e)
+    {
+      grabbed = null;
+    }
+    public void mouseExited( MouseEvent e)
+    {
+      if ( grabbed != null) jpanel.grabFocus();
+      else jpanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR));
+    }
+    public void mouseDragged( MouseEvent e)
+    {
+      if ( grabbed != null)
+      {
+        Rectangle bounds = jpanel.getBounds();
+        float px = (float)e.getX() / bounds.width;
+        float py = (float)e.getY() / bounds.height;
+        grabbed.move( px, py);
+        jpanel.revalidate();
+      }
+    }
+    public void mouseMoved( MouseEvent e)
+    {
+      mouseGrab( e.getX(), e.getY());
+    }
+  };
 
   private static Color[] colors = new Color[] { Color.blue, Color.green, Color.red, Color.yellow, Color.orange};
   private static int c = 0;
   
   private IXidget xidget;
   private JPanel jpanel;
+  private IComputeNode grabbed;
 }

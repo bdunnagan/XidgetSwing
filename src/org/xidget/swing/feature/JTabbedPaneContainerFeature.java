@@ -5,6 +5,7 @@
 package org.xidget.swing.feature;
 
 import java.awt.Component;
+import java.awt.Container;
 import javax.swing.JTabbedPane;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetContainerFeature;
@@ -55,6 +56,15 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#relayout()
+   */
+  public void relayout()
+  {
+    Container container = xidget.getFeature( Container.class);
+    if ( container != null && container.isShowing()) container.validate();
+  }
+
   /**
    * Returns the tab index of the specified tab.
    * @param container The container.

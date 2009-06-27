@@ -12,6 +12,7 @@
         <assign name="n">count( $xidgets)</assign>
         <assign name="dp">1 div $n</assign>
         <assign name="p">$dp</assign>
+        <assign name="hpad">$pad div 2</assign>
         
         <depend constant="0">
           <source type="top">$xidgets[ 1]</source>
@@ -19,7 +20,7 @@
         <depend constant="0">
           <source type="left">$xidgets[ 1]</source>
         </depend>
-        <depend percent="$p">
+        <depend percent="$p" offset="-$hpad" grab="y">
           <depend type="height">.</depend>
           <source type="bottom">$xidgets[ 1]</source>
         </depend>
@@ -34,7 +35,7 @@
           <depend constant="0">
             <source type="left">$xidgets[ $i]</source>
           </depend>
-          <depend percent="$p">
+          <depend percent="$p" offset="-$hpad" grab="y">
             <depend type="height">.</depend>
             <source type="bottom">$xidgets[ $i]</source>
           </depend>
@@ -42,7 +43,7 @@
             <depend type="right">.</depend>
             <source type="right">$xidgets[ $i]</source>
           </depend>
-          <depend offset="$pad">
+          <depend offset="$hpad">
             <depend type="bottom">$xidgets[ $i - 1]</depend>
             <source type="top">$xidgets[ $i]</source>
           </depend>
@@ -92,6 +93,7 @@
         <assign name="n">count( $xidgets)</assign>
         <assign name="dp">1 div $n</assign>
         <assign name="p">$dp</assign>
+        <assign name="hpad">$pad div 2</assign>
         
         <depend constant="0">
           <source type="top">$xidgets[ 1]</source>
@@ -99,7 +101,7 @@
         <depend constant="0">
           <source type="left">$xidgets[ 1]</source>
         </depend>
-        <depend percent="$p">
+        <depend percent="$p" offset="-$hpad" grab="x">
           <depend type="width">.</depend>
           <source type="right">$xidgets[ 1]</source>
         </depend>
@@ -114,7 +116,7 @@
           <depend constant="0">
             <source type="left">$xidgets[ $i]</source>
           </depend>
-          <depend percent="$p">
+          <depend percent="$p" offset="-$hpad" grab="x">
             <depend type="width">.</depend>
             <source type="right">$xidgets[ $i]</source>
           </depend>
@@ -122,7 +124,7 @@
             <depend type="bottom">.</depend>
             <source type="bottom">$xidgets[ $i]</source>
           </depend>
-          <depend offset="$pad">
+          <depend offset="$hpad">
             <depend type="right">$xidgets[ $i - 1]</depend>
             <source type="left">$xidgets[ $i]</source>
           </depend>

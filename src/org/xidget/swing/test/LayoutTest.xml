@@ -15,7 +15,7 @@
   <create assign="form">
     <template>
       <app size="400, 400">
-        <form id="1" layout="$layouts/horizontal" fill="true" pad="10">
+        <form id="1" layout="$layouts/horizontal" fill="true" pad="6">
           <form id="1a"/>
           <form id="1b"/>
         </form>
