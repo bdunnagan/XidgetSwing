@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.Component;
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
@@ -46,7 +47,7 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void setVisible( boolean visible)
   {
-    JComponent widget = xidget.getFeature( JComponent.class);
+    Component widget = xidget.getFeature( Component.class);
     widget.setVisible( visible);
   }
 

@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.combo;
 
+import java.awt.Component;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import org.xidget.IFeatured;
@@ -58,6 +59,7 @@ public class JComboBoxXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IChoiceListFeature.class) return (T)choiceListFeature;
     
+    if ( clss == Component.class) return (T)creationFeature.getComboBox();
     if ( clss == JComponent.class) return (T)creationFeature.getComboBox();
     if ( clss == JComboBox.class) return (T)creationFeature.getComboBox();
     

@@ -12,12 +12,35 @@
   </create>
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>  
-  <create assign="form">
+  <create assign="form" when="true()">
     <template>
       <app size="400, 400">
-        <form id="1" layout="$layouts/horizontal" fill="true" pad="6">
+        <form id="1">
+          <layout>
+            <script>$layouts/vgrid</script>
+            <!--spacing left="6" top="6" right="6" bottom="6" peer="6"/-->
+            <spacing>6</spacing>
+          </layout>
+          
           <form id="1a"/>
           <form id="1b"/>
+        </form>
+      </app>
+    </template>
+  </create>
+  
+  <create assign="form" when="false()">
+    <template>
+      <app size="500, -1">
+        <form id="1">
+          <layout>
+            <script>$layouts/vfree</script>
+            <!--spacing left="6" top="6" right="6" bottom="6" peer="6"/-->
+            <spacing>6</spacing>
+          </layout>
+          
+          <form id="1a" size="-1, 200"/>
+          <form id="1b" size="-1, 150"/>
         </form>
       </app>
     </template>

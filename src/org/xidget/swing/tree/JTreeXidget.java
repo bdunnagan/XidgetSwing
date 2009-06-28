@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.tree;
 
+import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.JTree;
 import org.xidget.IFeatured;
@@ -62,6 +63,7 @@ public class JTreeXidget extends Xidget
     if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     
+    if ( clss == Component.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JComponent.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JTree.class) return (T)creationFeature.getJTree();
     

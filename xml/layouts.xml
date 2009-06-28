@@ -3,165 +3,69 @@
 <layouts>
   <package>org.xidget.layout.xaction</package>
   
-  <vertical>
+  <vfree>
     <assign name="xidgets">*[ @xidget]</assign>
-    <assign name="pad">if (@pad) then number( @pad) else 0</assign>
+    <assign name="n">count( $xidgets)</assign>
     
-    <if true="@fill = 'true'">
-      <then>
-        <assign name="n">count( $xidgets)</assign>
-        <assign name="dp">1 div $n</assign>
-        <assign name="p">$dp</assign>
-        <assign name="hpad">$pad div 2</assign>
-        
-        <depend constant="0">
-          <source type="top">$xidgets[ 1]</source>
-        </depend>
-        <depend constant="0">
-          <source type="left">$xidgets[ 1]</source>
-        </depend>
-        <depend percent="$p" offset="-$hpad" grab="y">
-          <depend type="height">.</depend>
-          <source type="bottom">$xidgets[ 1]</source>
-        </depend>
-        <depend>
-          <depend type="right">.</depend>
-          <source type="right">$xidgets[ 1]</source>
-        </depend>
-        
-        <for assign="i" from="2" to="$n + 1" by="1">
-          <assign name="p">$p + $dp</assign>
-          
-          <depend constant="0">
-            <source type="left">$xidgets[ $i]</source>
-          </depend>
-          <depend percent="$p" offset="-$hpad" grab="y">
-            <depend type="height">.</depend>
-            <source type="bottom">$xidgets[ $i]</source>
-          </depend>
-          <depend>
-            <depend type="right">.</depend>
-            <source type="right">$xidgets[ $i]</source>
-          </depend>
-          <depend offset="$hpad">
-            <depend type="bottom">$xidgets[ $i - 1]</depend>
-            <source type="top">$xidgets[ $i]</source>
-          </depend>
-        </for>
-      </then>
-      
-      <else>
-        <depend constant="0">
-          <source type="top">$xidgets[ 1]</source>
-        </depend>
-        <depend constant="0">
-          <source type="left">$xidgets[ 1]</source>
-        </depend>
-        <depend>
-          <depend type="right">.</depend>
-          <source type="right">$xidgets[ 1]</source>
-        </depend>
-        
-        <for assign="i" from="2" to="count( $xidgets)+1" by="1">
-          <depend constant="0">
-            <source type="left">$xidgets[ $i]</source>
-          </depend>
-          <depend>
-            <depend type="right">.</depend>
-            <source type="right">$xidgets[ $i]</source>
-          </depend>
-          <depend>
-            <depend type="bottom">$xidgets[ $i - 1]</depend>
-            <source type="top">$xidgets[ $i]</source>
-          </depend>
-        </for>
-        
-        <depend>
-          <depend type="bottom">.</depend>
-          <source type="bottom">$xidgets[ count( $xidgets)]</source>
-        </depend>
-      </else>
-    </if>    
-  </vertical>
+    <assign name="lpad">number( layout/spacing/@left | layout/spacing/left | layout/spacing)</assign>
+    <assign name="tpad">number( layout/spacing/@top | layout/spacing/top | layout/spacing)</assign>
+    <assign name="rpad">number( layout/spacing/@right | layout/spacing/right | layout/spacing)</assign>
+    <assign name="bpad">number( layout/spacing/@bottom | layout/spacing/bottom | layout/spacing)</assign>
+    <assign name="between">number( layout/spacing/@peer | layout/spacing/peer | layout/spacing)</assign>
+    
+    <attach xidget="$xidgets[ 1]">
+      <top constant="$tpad"/>
+      <left constant="$lpad"/>
+      <right anchor="width" offset="-$rpad"/>
+    </attach>
+    
+    <for assign="i" from="2" to="$n + 1" by="1">
+      <attach xidget="$xidgets[ $i]">
+        <top attach="$xidgets[ $i - 1]" anchor="bottom" offset="$between"/>
+        <left constant="$lpad"/>
+        <right anchor="width" offset="-$rpad"/>
+      </attach>
+    </for>
+    
+    <attach xidget=".">
+      <width attach="$xidgets[ $n]" anchor="right" offset="$rpad"/>
+      <height attach="$xidgets[ $n]" anchor="bottom" offset="$bpad"/>
+    </attach>
+  </vfree>
   
-  <horizontal>
+  <vgrid>
     <assign name="xidgets">*[ @xidget]</assign>
-    <assign name="pad">if (@pad) then number( @pad) else 0</assign>
+    <assign name="n">count( $xidgets)</assign>
     
-    <if true="@fill = 'true'">
-      <then>
-        <assign name="n">count( $xidgets)</assign>
-        <assign name="dp">1 div $n</assign>
-        <assign name="p">$dp</assign>
-        <assign name="hpad">$pad div 2</assign>
-        
-        <depend constant="0">
-          <source type="top">$xidgets[ 1]</source>
-        </depend>
-        <depend constant="0">
-          <source type="left">$xidgets[ 1]</source>
-        </depend>
-        <depend percent="$p" offset="-$hpad" grab="x">
-          <depend type="width">.</depend>
-          <source type="right">$xidgets[ 1]</source>
-        </depend>
-        <depend>
-          <depend type="bottom">.</depend>
-          <source type="bottom">$xidgets[ 1]</source>
-        </depend>
-        
-        <for assign="i" from="2" to="$n + 1" by="1">
-          <assign name="p">$p + $dp</assign>
-          
-          <depend constant="0">
-            <source type="left">$xidgets[ $i]</source>
-          </depend>
-          <depend percent="$p" offset="-$hpad" grab="x">
-            <depend type="width">.</depend>
-            <source type="right">$xidgets[ $i]</source>
-          </depend>
-          <depend>
-            <depend type="bottom">.</depend>
-            <source type="bottom">$xidgets[ $i]</source>
-          </depend>
-          <depend offset="$hpad">
-            <depend type="right">$xidgets[ $i - 1]</depend>
-            <source type="left">$xidgets[ $i]</source>
-          </depend>
-        </for>
-      </then>
-      
-      <else>
-        <depend constant="0">
-          <source type="top">$xidgets[ 1]</source>
-        </depend>
-        <depend constant="0">
-          <source type="left">$xidgets[ 1]</source>
-        </depend>
-        <depend>
-          <depend type="bottom">.</depend>
-          <source type="bottom">$xidgets[ 1]</source>
-        </depend>
-        
-        <for assign="i" from="2" to="count( $xidgets)+1" by="1">
-          <depend constant="0">
-            <source type="left">$xidgets[ $i]</source>
-          </depend>
-          <depend>
-            <depend type="bottom">.</depend>
-            <source type="bottom">$xidgets[ $i]</source>
-          </depend>
-          <depend>
-            <depend type="right">$xidgets[ $i - 1]</depend>
-            <source type="left">$xidgets[ $i]</source>
-          </depend>
-        </for>
-        
-        <depend>
-          <depend type="right">.</depend>
-          <source type="right">$xidgets[ count( $xidgets)]</source>
-        </depend>
-      </else>
-    </if>    
-  </horizontal>
+    <assign name="lpad">number( layout/spacing/@left | layout/spacing/left | layout/spacing)</assign>
+    <assign name="tpad">number( layout/spacing/@top | layout/spacing/top | layout/spacing)</assign>
+    <assign name="rpad">number( layout/spacing/@right | layout/spacing/right | layout/spacing)</assign>
+    <assign name="bpad">number( layout/spacing/@bottom | layout/spacing/bottom | layout/spacing)</assign>
+    <assign name="between">number( layout/spacing/@peer | layout/spacing/peer | layout/spacing)</assign>
+    <assign name="before">$between div 2</assign>
+    <assign name="after">$between - $before</assign>
+    
+    <attach xidget="$xidgets[ 1]">
+      <top constant="$tpad"/>
+      <left constant="$lpad"/>
+      <right anchor="width" offset="-$rpad"/>
+      <bottom percent="1 div $n" anchor="height" offset="-$before"/>
+    </attach>
+    
+    <for assign="i" from="2" to="$n" by="1">
+      <attach xidget="$xidgets[ $i]">
+        <top percent="($i - 1) div $n" anchor="height" offset="$after"/>
+        <left constant="$lpad"/>
+        <right anchor="width" offset="-$rpad"/>
+        <bottom percent="$i div $n" anchor="height" offset="-$before"/>
+      </attach>
+    </for>
+    
+    <attach xidget="$xidgets[ $n]">
+      <top percent="($n - 1) div $n" anchor="height" offset="$after"/>
+      <left constant="$lpad"/>
+      <right anchor="width" offset="-$rpad"/>
+      <bottom anchor="height" offset="-$bpad"/>
+    </attach>
+  </vgrid>
 </layouts>

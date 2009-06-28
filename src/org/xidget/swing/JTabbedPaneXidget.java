@@ -4,6 +4,7 @@
  */
 package org.xidget.swing;
 
+import java.awt.Component;
 import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
@@ -49,6 +50,7 @@ public class JTabbedPaneXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
+    if ( clss == Component.class) return (T)creationFeature.getJTabbedPane();
     if ( clss == JComponent.class) return (T)creationFeature.getJTabbedPane();
     if ( clss == Container.class) return (T)creationFeature.getJTabbedPane();
     if ( clss == JTabbedPane.class) return (T)creationFeature.getJTabbedPane();

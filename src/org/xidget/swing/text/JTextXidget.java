@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.text;
 
+import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 import org.xidget.IFeatured;
@@ -54,6 +55,7 @@ public class JTextXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
+    if ( clss == Component.class) return (T)creationFeature.getContainer();
     if ( clss == JComponent.class) return (T)creationFeature.getContainer();
     if ( clss == JTextComponent.class) return (T)creationFeature.getTextWidget();
     

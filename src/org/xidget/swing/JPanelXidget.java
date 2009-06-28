@@ -4,6 +4,7 @@
  */
 package org.xidget.swing;
 
+import java.awt.Component;
 import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -11,6 +12,7 @@ import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.feature.BindFeature;
+import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.ILayoutFeature;
@@ -19,7 +21,6 @@ import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
-import org.xidget.swing.feature.BorderComputeNodeFeature;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.JPanelWidgetCreationFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
@@ -36,7 +37,7 @@ public class JPanelXidget extends Xidget
     layoutFeature = new AnchorLayoutFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     titleFeature = new SwingTitleFeature( this);
-    computeNodeFeature = new BorderComputeNodeFeature( this);
+    computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JPanelWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -57,6 +58,7 @@ public class JPanelXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
+    if ( clss == Component.class) return (T)creationFeature.getJPanel();
     if ( clss == JComponent.class) return (T)creationFeature.getJPanel();
     if ( clss == Container.class) return (T)creationFeature.getJPanel();
     if ( clss == JPanel.class) return (T)creationFeature.getJPanel();

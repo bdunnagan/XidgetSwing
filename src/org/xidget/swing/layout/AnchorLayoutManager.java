@@ -11,6 +11,7 @@ import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILayoutFeature;
+import org.xidget.ifeature.IWidgetContextFeature;
 
 /**
  * An implementation of LayoutManager that uses the AnchorLayoutFeature.
@@ -50,7 +51,11 @@ public class AnchorLayoutManager implements LayoutManager
     synchronized( parent.getTreeLock()) 
     {
       ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
-      if ( feature != null) feature.layout();
+      if ( feature != null) 
+      {
+        IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
+        feature.layout( contextFeature.getContext( parent));
+      } 
     }
   }
 

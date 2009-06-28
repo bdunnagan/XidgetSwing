@@ -11,6 +11,7 @@ import org.xidget.binding.tree.TreeTagHandler;
 import org.xidget.config.TagProcessor;
 import org.xidget.swing.button.AbstractButtonXidget;
 import org.xidget.swing.combo.JComboBoxXidget;
+import org.xidget.swing.dialog.JDialogXidget;
 import org.xidget.swing.menu.JMenuItemXidget;
 import org.xidget.swing.menu.MenuTagHandler;
 import org.xidget.swing.menu.SubMenuTagHandler;
@@ -31,6 +32,7 @@ public class SwingToolkit implements IToolkit
   {
     processor.addHandler( "app", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "application", new XidgetTagHandler( JFrameXidget.class));
+    processor.addHandler( "dialog", new XidgetTagHandler( JDialogXidget.class));
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));
     processor.addHandler( "tabs", new XidgetTagHandler( JTabbedPaneXidget.class));
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));

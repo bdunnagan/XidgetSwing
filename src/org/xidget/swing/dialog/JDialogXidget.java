@@ -2,41 +2,41 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.menu;
+package org.xidget.swing.dialog;
 
 import java.awt.Component;
 import java.awt.Container;
 import javax.swing.JComponent;
-import javax.swing.JMenu;
+import javax.swing.JDialog;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IIconFeature;
-import org.xidget.ifeature.ILabelFeature;
+import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.ifeature.dialog.IDialogFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.menu.JMenuWidgetCreationFeature;
+import org.xidget.swing.feature.dialog.JDialogFeature;
+import org.xidget.swing.feature.dialog.JDialogTitleFeature;
+import org.xidget.swing.feature.dialog.JDialogWidgetCreationFeature;
 
 /**
- * A xidget implementation for Swing JMenu widgets.
+ * An implementation of IXidget for a Swing JDialog.
  */
-public class JMenuXidget extends Xidget
+public class JDialogXidget extends Xidget
 {
-  /* (non-Javadoc)
-   * @see org.xidget.Xidget#createFeatures()
-   */
-  @Override
-  protected void createFeatures()
+  public void createFeatures()
   {
     bindFeature = new BindFeature( this);
+    dialogFeature = new JDialogFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    titleFeature = new JDialogTitleFeature( this);
+    creationFeature = new JDialogWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);
-    creationFeature = new JMenuWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -47,27 +47,29 @@ public class JMenuXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IIconFeature.class) return (T)creationFeature;
-    if ( clss == ILabelFeature.class) return (T)creationFeature;
-    if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
+    if ( clss == IDialogFeature.class) return (T)dialogFeature;
+    if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITitleFeature.class) return (T)titleFeature;
+    if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJMenu();
-    if ( clss == Container.class) return (T)creationFeature.getJMenu();
-    if ( clss == JComponent.class) return (T)creationFeature.getJMenu();
-    if ( clss == JMenu.class) return (T)creationFeature.getJMenu();
+    if ( clss == Component.class) return (T)creationFeature.getJDialog();
+    if ( clss == JComponent.class) return (T)creationFeature.getJDialog();
+    if ( clss == Container.class) return (T)creationFeature.getJDialog();
+    if ( clss == JDialog.class) return (T)creationFeature.getJDialog();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
     
     return super.getFeature( clss);
   }
-
+  
   private IBindFeature bindFeature;
+  private IDialogFeature dialogFeature;
   private IWidgetFeature widgetFeature;
+  private ITitleFeature titleFeature;
+  private JDialogWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;
-  private JMenuWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;
 }

@@ -7,6 +7,7 @@ package org.xidget.swing.feature;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
@@ -29,6 +30,7 @@ import org.xidget.ifeature.IComputeNodeFeature.Type;
 import org.xidget.layout.ConstantNode;
 import org.xidget.layout.DifferenceNode;
 import org.xidget.layout.IComputeNode;
+import org.xidget.layout.SumNode;
 import org.xidget.layout.IComputeNode.Grab;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
@@ -50,10 +52,10 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void createWidgets()
   {
-    System.out.printf( "%s -> %d\n", xidget, c);
+    c += 16; if ( c > 255) c = 64;
     
     jpanel = new JPanel( new AnchorLayoutManager( xidget));
-    jpanel.setBackground( colors[ c++]);
+    jpanel.setBackground( new Color( c, c, c));
     jpanel.addComponentListener( componentListener);
     jpanel.addMouseListener( mouseListener);
     jpanel.addMouseMotionListener( mouseListener);
@@ -72,37 +74,27 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
 
     // setup layout
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
-    IComputeNode top = computeNodeFeature.getAnchor( Type.top);
-    IComputeNode left = computeNodeFeature.getAnchor( Type.left);
-    IComputeNode right = computeNodeFeature.getAnchor( Type.right);
-    IComputeNode bottom = computeNodeFeature.getAnchor( Type.bottom);
-    IComputeNode width = computeNodeFeature.getAnchor( Type.width);
-    IComputeNode height = computeNodeFeature.getAnchor( Type.height);
-
-    // connect top and left to 0 by default
-    top.addDependency( new ConstantNode( 0));
-    left.addDependency( new ConstantNode( 0));
+    IComputeNode top = computeNodeFeature.getComputeNode( Type.top);
+    IComputeNode left = computeNodeFeature.getComputeNode( Type.left);
+    IComputeNode right = computeNodeFeature.getComputeNode( Type.right);
+    IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom);
     
-    // connect width and height to other anchors by default
-    width.addDependency( new DifferenceNode( left, right));
-    height.addDependency( new DifferenceNode( top, bottom));
+    IComputeNode width = computeNodeFeature.getComputeNode( Type.width);
+    IComputeNode height = computeNodeFeature.getComputeNode( Type.height);
     
     // constrain size if size attribute is specified
     IModelObject config = xidget.getConfig();
     Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
     if ( size.x > 0 || size.y > 0)
     {
-      if ( size.x > 0)
-      {
-        // set right side
-        right.addDependency( new ConstantNode( size.x));
-      }
-      
-      if ( size.y > 0)
-      {
-        // set bottom side
-        bottom.addDependency( new ConstantNode( size.y));
-      }
+      jpanel.setPreferredSize( new Dimension( size.x, size.y));
+      if ( size.x > 0) width.addDependency( new ConstantNode( size.x));
+      if ( size.y > 0) height.addDependency( new ConstantNode( size.y));
+    }
+    else
+    {
+      width.addDependency( new DifferenceNode( left, right));
+      height.addDependency( new DifferenceNode( top, bottom));
     }
   }
   
@@ -220,8 +212,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
   };
 
-  private static Color[] colors = new Color[] { Color.blue, Color.green, Color.red, Color.yellow, Color.orange};
-  private static int c = 0;
+  private static int c = 64;
   
   private IXidget xidget;
   private JPanel jpanel;

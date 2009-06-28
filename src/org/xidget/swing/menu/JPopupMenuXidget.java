@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.menu;
 
+import java.awt.Component;
 import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -49,6 +50,7 @@ public class JPopupMenuXidget extends Xidget
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
+    if ( clss == Component.class) return (T)creationFeature.getJPopupMenu();
     if ( clss == Container.class) return (T)creationFeature.getJPopupMenu();
     if ( clss == JComponent.class) return (T)creationFeature.getJPopupMenu();
     if ( clss == JPopupMenu.class) return (T)creationFeature.getJPopupMenu();
