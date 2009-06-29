@@ -28,9 +28,7 @@ import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IComputeNodeFeature.Type;
 import org.xidget.layout.ConstantNode;
-import org.xidget.layout.DifferenceNode;
 import org.xidget.layout.IComputeNode;
-import org.xidget.layout.SumNode;
 import org.xidget.layout.IComputeNode.Grab;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
@@ -74,15 +72,10 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
 
     // setup layout
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
-    IComputeNode top = computeNodeFeature.getComputeNode( Type.top);
-    IComputeNode left = computeNodeFeature.getComputeNode( Type.left);
-    IComputeNode right = computeNodeFeature.getComputeNode( Type.right);
-    IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom);
-    
     IComputeNode width = computeNodeFeature.getComputeNode( Type.width);
     IComputeNode height = computeNodeFeature.getComputeNode( Type.height);
     
-    // constrain size if size attribute is specified
+    // optionally set the width and height nodes in case children are dependent on them
     IModelObject config = xidget.getConfig();
     Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
     if ( size.x > 0 || size.y > 0)
@@ -90,11 +83,6 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
       jpanel.setPreferredSize( new Dimension( size.x, size.y));
       if ( size.x > 0) width.addDependency( new ConstantNode( size.x));
       if ( size.y > 0) height.addDependency( new ConstantNode( size.y));
-    }
-    else
-    {
-      width.addDependency( new DifferenceNode( left, right));
-      height.addDependency( new DifferenceNode( top, bottom));
     }
   }
   

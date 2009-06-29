@@ -31,19 +31,20 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
     jframe = new JFrame();
     jframe.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
 
-    // set size of jframe if child size is set
-    IModelObject config = xidget.getConfig();
-    Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
-    if ( size.x > 0 || size.y > 0)
-    {
-      jframe.setSize( new Dimension( size.x, size.y));
-      sized = true;
-    }
-        
     SwingUtilities.invokeLater( new Runnable() {
       public void run()
       {
-        if ( !sized) jframe.pack();
+        jframe.pack();
+        Dimension packedSize = jframe.getSize();
+        
+        // set size of jframe if child size is set
+        IModelObject config = xidget.getConfig();
+        Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
+        
+        if ( size.x > 0 && size.y <= 0) jframe.setSize( size.x, packedSize.height); 
+        if ( size.y > 0 && size.x <= 0) jframe.setSize( packedSize.width, size.y); 
+        if ( size.x > 0 && size.y > 0) jframe.setSize( size.x, size.y); 
+            
         jframe.setVisible( true);
       }
     });
@@ -77,5 +78,4 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
 
   private IXidget xidget;
   private JFrame jframe;
-  private boolean sized;
 }

@@ -12,7 +12,7 @@
   </create>
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>  
-  <create assign="form" when="true()">
+  <create assign="form" when="false()">
     <template>
       <app size="400, 400">
         <form id="1">
@@ -29,7 +29,7 @@
     </template>
   </create>
   
-  <create assign="form" when="false()">
+  <create assign="form" when="true()">
     <template>
       <app size="500, -1">
         <form id="1">
