@@ -4,16 +4,13 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.Dimension;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 import org.xidget.IXidget;
 import org.xidget.config.util.Pair;
-import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.ifeature.IComputeNodeFeature.Type;
-import org.xidget.layout.ConstantNode;
-import org.xidget.layout.IComputeNode;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
@@ -39,16 +36,11 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     if ( containerFeature != null) containerFeature.addWidget( xidget);
         
     // optionally constrain size
-    IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
-    IComputeNode width = computeNodeFeature.getComputeNode( Type.width);
-    IComputeNode height = computeNodeFeature.getComputeNode( Type.height);
-    
     IModelObject config = xidget.getConfig();
     Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
     if ( size.x > 0 || size.y > 0)
     {
-      if ( size.x > 0) width.addDependency( new ConstantNode( size.x));
-      if ( size.y > 0) height.addDependency( new ConstantNode( size.y));
+      jtabbedPane.setPreferredSize( new Dimension( size.x, size.y));
     }
     
     // create titled border if necessary (but not for tab entries)

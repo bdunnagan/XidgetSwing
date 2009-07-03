@@ -26,7 +26,11 @@ public class SwingWidgetFeature implements IWidgetFeature
   public void setBounds( float x, float y, float width, float height)
   {
     JComponent widget = xidget.getFeature( JComponent.class);
-    widget.setBounds( (int)Math.round( x), (int)Math.round( y), (int)Math.round( width), (int)Math.round( height));
+    widget.setBounds( 
+      (int)Math.round( x), 
+      (int)Math.round( y), 
+      (int)Math.round( width), 
+      (int)Math.round( height));
   }
 
   /* (non-Javadoc)

@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature.text;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -82,7 +81,6 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
       layout.setConstraints( jtext, constraints);
       
       component = new JPanel( layout);
-      component.setBackground( Color.green);
       component.add( jlabel);
       component.add( jtext);
     }

@@ -7,6 +7,7 @@ package org.xidget.swing.layout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import org.xidget.IXidget;
@@ -73,7 +74,7 @@ public class AnchorLayoutManager implements LayoutManager
   public Dimension preferredLayoutSize( Container parent)
   {
     layoutContainer( parent);
-    
+
     // see if size already computed
     Rectangle bounds = new Rectangle();
     parent.getBounds( bounds);
@@ -89,7 +90,8 @@ public class AnchorLayoutManager implements LayoutManager
       bounds.add( childBounds);
     }
     
-    return bounds.getSize();
+    Insets insets = parent.getInsets();
+    return new Dimension( bounds.width + insets.left + insets.right, bounds.height + insets.top + insets.bottom);
   }
 
   private IXidget xidget;

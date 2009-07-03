@@ -6,7 +6,6 @@ package org.xidget.swing.feature;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Insets;
 import org.xidget.IXidget;
 import org.xidget.Log;
 import org.xidget.ifeature.IAsyncFeature;
@@ -75,27 +74,7 @@ public class GenericContainerFeature implements IWidgetContainerFeature
     Container container = xidget.getFeature( Container.class);
     if ( container != null && container.isShowing()) container.validate();
   }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetContainerFeature#getInsets()
-   */
-  public int[] getInsets()
-  {
-    int[] result = new int[ 4];
-    
-    Container container = xidget.getFeature( Container.class);
-    if ( container != null)
-    {
-      Insets insets = container.getInsets();
-      result[ 0] = insets.left;
-      result[ 1] = insets.top;
-      result[ 2] = insets.right;
-      result[ 3] = insets.bottom;
-    }
-      
-    return result;
-  }
-
+  
   private Runnable validateRunnable = new Runnable() {
     public void run()
     {
