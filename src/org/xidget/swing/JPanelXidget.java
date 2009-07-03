@@ -58,10 +58,12 @@ public class JPanelXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJPanel();
-    if ( clss == JComponent.class) return (T)creationFeature.getJPanel();
-    if ( clss == Container.class) return (T)creationFeature.getJPanel();
-    if ( clss == JPanel.class) return (T)creationFeature.getJPanel();
+    if ( clss == Component.class) return (T)creationFeature.getOutsidePanel();
+    if ( clss == JComponent.class) return (T)creationFeature.getOutsidePanel();
+    if ( clss == JPanel.class) return (T)creationFeature.getOutsidePanel();
+    
+    // notice that this returns the inside panel
+    if ( clss == Container.class) return (T)creationFeature.getInsidePanel();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;

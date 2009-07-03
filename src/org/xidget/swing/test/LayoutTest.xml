@@ -13,14 +13,12 @@
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>
   
-  <assign name="spacing">4</assign>
-    
-  <assign name="test">3</assign>
+  <assign name="test">1</assign>
     
   <create assign="form" when="$test = '1'">
     <template>
       <app size="400, 400">
-        <form id="1" layout="$layouts/vgrid">
+        <form id="1" layout="$layouts/vgrid" margins="6,6,6,6" spacing="6" handles="true">
           <form id="1a"/>
           <form id="1b"/>
         </form>
@@ -31,7 +29,7 @@
   <create assign="form" when="$test = '2'">
     <template>
       <app size="500, -1">
-        <form id="1" layout="$layouts/vfree">
+        <form id="1" layout="$layouts/vfree" spacing="6" handles="true">
           <form id="1a" size="-1, 200"/>
           <form id="1b" size="-1, 150"/>
         </form>
@@ -42,8 +40,8 @@
   <create assign="form" when="$test = '3'">
     <template>
       <app size="500, -1">
-        <form id="1" layout="$layouts/vfree" background='0'>
-          <form id="1a" layout="$layouts/vfree" background='255'>
+        <form id="1" layout="$layouts/vfree">
+          <form id="1a" layout="$layouts/vfree">
             <text>
               <source>'New Text'</source>
             </text>

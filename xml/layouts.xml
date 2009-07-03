@@ -6,41 +6,62 @@
   <vfree>
     <assign name="xidgets">*[ @xidget]</assign>
     <assign name="n">count( $xidgets)</assign>
+    <assign name="s">ancestor-or-self::*/@spacing</assign>
+    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
 
     <for assign="xidget" source="$xidgets">
       <attach xidget="$xidget">
-        <left constant="0"/>
-        <right offset="0"/>
+        <left offset="$ml"/>
+        <right offset="-$mr"/>
       </attach>
     </for>
     
     <attach xidget="$xidgets[ 1]">
-      <top constant="0"/>
+      <top offset="$mt"/>
     </attach>
         
     <for assign="i" from="2" to="$n+1" by="1">
       <attach xidget="$xidgets[ $i]">
-        <top attach="$xidgets[ $i - 1]" anchor="bottom" offset="$spacing"/>
+        <top attach="$xidgets[ $i - 1]" anchor="bottom" offset="$s" handle="@handles"/>
       </attach>  
     </for>
     
     <attach xidget=".">
-      <height attach="$xidgets[ $n]" anchor="bottom" offset="0"/>
+      <height attach="$xidgets[ $n]" anchor="bottom" offset="$mb"/>
     </attach>
   </vfree>
     
   <vgrid>
     <assign name="xidgets">*[ @xidget]</assign>
     <assign name="n">count( $xidgets)</assign>
-    <assign name="before">if ($n &gt; 1) then ($spacing div 2) else (0)</assign>
-    <assign name="after">$spacing - $before</assign>
     
-    <for assign="i" from="1" to="$n+1" by="1">
+    <assign name="s">ancestor-or-self::*/@spacing</assign>
+    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
+    
+    <assign name="before">if ($n &gt; 1) then ($s div 2) else (0)</assign>
+    
+    <for assign="x" source="$xidgets">
+      <attach xidget="$x">
+        <left offset="$ml"/>
+        <right offset="-$mr"/>
+      </attach>
+    </for>
+    
+    <attach xidget="$xidgets[ 1]">
+      <top offset="$mt"/>
+    </attach>
+    
+    <attach xidget="$xidgets[ $n]">
+      <bottom offset="-$mb"/>
+    </attach>
+
+    <for assign="i" from="2" to="$n+1" by="1">
+      <assign name="y">($i - 1) div $n</assign>
+      <attach xidget="$xidgets[ $i - 1]">
+        <bottom anchor="height" percent="$y" offset="-$before" handle="@handles"/>
+      </attach>
       <attach xidget="$xidgets[ $i]">
-        <top percent="($i - 1) div $n" offset="if ($i &gt; 1) then $after else 0"/>
-        <left constant="0"/>
-        <right offset="0"/>
-        <bottom percent="$i div $n" offset="if ($i &lt; $n) then -$before else 0"/>
+        <top attach="$xidgets[ $i - 1]" anchor="bottom" offset="$s"/>
       </attach>
     </for>
   </vgrid>
@@ -48,41 +69,62 @@
   <hfree>
     <assign name="xidgets">*[ @xidget]</assign>
     <assign name="n">count( $xidgets)</assign>
+    <assign name="s">ancestor-or-self::*/@spacing</assign>
+    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
 
     <for assign="xidget" source="$xidgets">
       <attach xidget="$xidget">
-        <top constant="0"/>
-        <bottom offset="0"/>
+        <top offset="$mt"/>
+        <bottom offset="-$mb"/>
       </attach>
     </for>
     
     <attach xidget="$xidgets[ 1]">
-      <left constant="0"/>
+      <left offset="$ml"/>
     </attach>
         
     <for assign="i" from="2" to="$n+1" by="1">
       <attach xidget="$xidgets[ $i]">
-        <left attach="$xidgets[ $i - 1]" anchor="right" offset="$spacing"/>
+        <left attach="$xidgets[ $i - 1]" anchor="right" offset="$s" handle="@handles"/>
       </attach>  
     </for>
     
     <attach xidget=".">
-      <width attach="$xidgets[ $n]" anchor="right" offset="0"/>
+      <width attach="$xidgets[ $n]" anchor="right" offset="$mr"/>
     </attach>
   </hfree>
     
   <hgrid>
     <assign name="xidgets">*[ @xidget]</assign>
     <assign name="n">count( $xidgets)</assign>
-    <assign name="before">if ($n &gt; 1) then ($spacing div 2) else (0)</assign>
-    <assign name="after">$spacing - $before</assign>
     
-    <for assign="i" from="1" to="$n+1" by="1">
+    <assign name="s">ancestor-or-self::*/@spacing</assign>
+    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
+    
+    <assign name="before">if ($n &gt; 1) then ($s div 2) else (0)</assign>
+    
+    <for assign="x" source="$xidgets">
+      <attach xidget="$x">
+        <top offset="$mt"/>
+        <bottom offset="-$mb"/>
+      </attach>
+    </for>
+    
+    <attach xidget="$xidgets[ 1]">
+      <left offset="$ml"/>
+    </attach>
+    
+    <attach xidget="$xidgets[ $n]">
+      <right offset="-$mr"/>
+    </attach>
+
+    <for assign="i" from="2" to="$n+1" by="1">
+      <assign name="y">($i - 1) div $n</assign>
+      <attach xidget="$xidgets[ $i - 1]">
+        <right anchor="width" percent="$y" offset="-$before" handle="@handles"/>
+      </attach>
       <attach xidget="$xidgets[ $i]">
-        <top constant="0"/>
-        <left percent="($i - 1) div $n" offset="if ($i &gt; 1) then $after else 0"/>
-        <right percent="$i div $n" offset="if ($i &lt; $n) then -$before else 0"/>
-        <bottom offset="0"/>
+        <left attach="$xidgets[ $i - 1]" anchor="right" offset="$s"/>
       </attach>
     </for>
   </hgrid>

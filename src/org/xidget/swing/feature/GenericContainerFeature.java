@@ -6,6 +6,7 @@ package org.xidget.swing.feature;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import org.xidget.IXidget;
 import org.xidget.Log;
 import org.xidget.ifeature.IAsyncFeature;
@@ -75,6 +76,44 @@ public class GenericContainerFeature implements IWidgetContainerFeature
     if ( container != null && container.isShowing()) container.validate();
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#getWidth()
+   */
+  public int getWidth()
+  {
+    Container container = xidget.getFeature( Container.class);
+    return container.getWidth();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#setWidth(int)
+   */
+  public void setWidth( int width)
+  {
+    Container container = xidget.getFeature( Container.class);
+    Dimension d = container.getSize();
+    container.setSize( width, d.height);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#getHeight()
+   */
+  public int getHeight()
+  {
+    Container container = xidget.getFeature( Container.class);
+    return container.getHeight();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#setHeight(int)
+   */
+  public void setHeight( int height)
+  {
+    Container container = xidget.getFeature( Container.class);
+    Dimension d = container.getSize();
+    container.setSize( d.width, height);
+  }
+
   private Runnable validateRunnable = new Runnable() {
     public void run()
     {
