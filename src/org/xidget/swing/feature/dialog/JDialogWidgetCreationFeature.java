@@ -32,15 +32,9 @@ public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
     jDialog = new JDialog();
     jDialog.setModal( Xlate.get( config, "modal", true));
     
-    jDialog.pack();
-    Dimension packedSize = jDialog.getSize();
-    
     // set size of jframe if child size is set
     Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
-    
-    if ( size.x > 0 && size.y <= 0) jDialog.setSize( size.x, packedSize.height); 
-    if ( size.y > 0 && size.x <= 0) jDialog.setSize( packedSize.width, size.y); 
-    if ( size.x > 0 && size.y > 0) jDialog.setSize( size.x, size.y);
+    jDialog.setPreferredSize( new Dimension( size.x, size.y));
   }
 
   /* (non-Javadoc)

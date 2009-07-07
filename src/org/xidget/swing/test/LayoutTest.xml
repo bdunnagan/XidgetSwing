@@ -18,9 +18,9 @@
   <create assign="form" when="$test = '1'">
     <template>
       <app size="400, 400">
-        <form id="1" layout="$layouts/vgrid" margins="6,6,6,6" spacing="6" handles="true">
-          <form id="1a"/>
-          <form id="1b"/>
+        <form id="ROOT" layout="$layouts/hgrid" margins="1,1,1,1" spacing="1" handles="true">
+          <form id="UPPER"/>
+          <form id="LOWER"/>
         </form>
       </app>
     </template>
@@ -29,9 +29,9 @@
   <create assign="form" when="$test = '2'">
     <template>
       <app size="500, -1">
-        <form id="1" layout="$layouts/vfree" spacing="6" handles="true">
-          <form id="1a" size="-1, 200"/>
-          <form id="1b" size="-1, 150"/>
+        <form id="ROOT" layout="$layouts/vfree" spacing="1" handles="true">
+          <form id="UPPER" size="-1, 200"/>
+          <form id="LOWER" size="-1, 150"/>
         </form>
       </app>
     </template>
@@ -40,8 +40,8 @@
   <create assign="form" when="$test = '3'">
     <template>
       <app size="500, -1">
-        <form id="1" layout="$layouts/vfree">
-          <form id="1a" layout="$layouts/vfree">
+        <form id="ROOT" layout="$layouts/vfree">
+          <form id="CHILD" layout="$layouts/vfree">
             <text>
               <source>'New Text'</source>
             </text>

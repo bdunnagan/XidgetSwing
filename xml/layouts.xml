@@ -66,7 +66,7 @@
     </for>
   </vgrid>
   
-  <hfree>
+  <leftToRight>
     <assign name="xidgets">*[ @xidget]</assign>
     <assign name="n">count( $xidgets)</assign>
     <assign name="s">ancestor-or-self::*/@spacing</assign>
@@ -92,7 +92,7 @@
     <attach xidget=".">
       <width attach="$xidgets[ $n]" anchor="right" offset="$mr"/>
     </attach>
-  </hfree>
+  </leftToRight>
     
   <hgrid>
     <assign name="xidgets">*[ @xidget]</assign>
@@ -128,4 +128,32 @@
       </attach>
     </for>
   </hgrid>
+  
+  <rightToLeft>
+    <assign name="xidgets">*[ @xidget]</assign>
+    <assign name="n">count( $xidgets)</assign>
+    <assign name="s">ancestor-or-self::*/@spacing</assign>
+    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
+
+    <for assign="xidget" source="$xidgets">
+      <attach xidget="$xidget">
+        <top offset="$mt"/>
+        <bottom offset="-$mb"/>
+      </attach>
+    </for>
+    
+    <attach xidget="$xidgets[ 1]">
+      <right offset="$mr"/>
+    </attach>
+        
+    <for assign="i" from="2" to="$n+1" by="1">
+      <attach xidget="$xidgets[ $i]">
+        <right attach="$xidgets[ $i - 1]" anchor="left" offset="$s" handle="@handles"/>
+      </attach>  
+    </for>
+    
+    <attach xidget=".">
+      <width attach="$xidgets[ $n]" anchor="right" offset="$mr"/>
+    </attach>    
+  </rightToLeft>
 </layouts>

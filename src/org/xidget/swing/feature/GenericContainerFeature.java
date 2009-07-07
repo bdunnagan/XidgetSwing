@@ -20,6 +20,8 @@ import org.xidget.ifeature.IWidgetCreationFeature;
  */
 public class GenericContainerFeature implements IWidgetContainerFeature
 {
+  public final static int validationDelay = 0;
+  
   public GenericContainerFeature( IXidget xidget)
   {
     this.xidget = xidget;
@@ -44,7 +46,7 @@ public class GenericContainerFeature implements IWidgetContainerFeature
         if ( container.isShowing())
         {
           IAsyncFeature asyncFeature = xidget.getFeature( IAsyncFeature.class);
-          asyncFeature.schedule( this, 500, false, validateRunnable);
+          asyncFeature.schedule( this, validationDelay, false, validateRunnable);
         }
       }
     }
@@ -112,6 +114,15 @@ public class GenericContainerFeature implements IWidgetContainerFeature
     Container container = xidget.getFeature( Container.class);
     Dimension d = container.getSize();
     container.setSize( d.width, height);
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString()
+  {
+    return xidget.toString();
   }
 
   private Runnable validateRunnable = new Runnable() {
