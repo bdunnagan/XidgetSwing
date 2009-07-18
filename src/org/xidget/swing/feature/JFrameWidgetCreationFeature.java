@@ -4,14 +4,9 @@
  */
 package org.xidget.swing.feature;
 
-import java.awt.Dimension;
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import org.xidget.IXidget;
-import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xmodel.IModelObject;
-import org.xmodel.Xlate;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
@@ -30,24 +25,6 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   {
     jframe = new JFrame();
     jframe.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
-
-    SwingUtilities.invokeLater( new Runnable() {
-      public void run()
-      {
-        jframe.pack();
-        Dimension packedSize = jframe.getSize();
-        
-        // set size of jframe if child size is set
-        IModelObject config = xidget.getConfig();
-        Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
-        
-        if ( size.x > 0 && size.y <= 0) jframe.setSize( size.x, packedSize.height); 
-        if ( size.y > 0 && size.x <= 0) jframe.setSize( packedSize.width, size.y); 
-        if ( size.x > 0 && size.y > 0) jframe.setSize( size.x, size.y); 
-            
-        jframe.setVisible( true);
-      }
-    });
   }
 
   /* (non-Javadoc)
@@ -76,6 +53,7 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
     return jframe;
   }
 
+  @SuppressWarnings("unused")
   private IXidget xidget;
   private JFrame jframe;
 }

@@ -11,10 +11,12 @@ import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
+import org.xidget.feature.SelectionModelFeature;
 import org.xidget.feature.tree.ColumnSetFeature;
 import org.xidget.feature.tree.RowSetFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
+import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.tree.IColumnSetFeature;
@@ -39,6 +41,7 @@ public class JTableXidget extends Xidget
     treeWidgetFeature = new JTableWidgetFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JTableWidgetCreationFeature( this);
+    selectionModelFeature = new SelectionModelFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -55,6 +58,7 @@ public class JTableXidget extends Xidget
     if ( clss == ITreeWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
+    if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getJScrollPane();
@@ -74,5 +78,6 @@ public class JTableXidget extends Xidget
   private ITreeWidgetFeature treeWidgetFeature;
   private IComputeNodeFeature computeNodeFeature;
   private JTableWidgetCreationFeature creationFeature;  
+  private ISelectionModelFeature selectionModelFeature;
   private IFeatured basicFeatureSet;
 }

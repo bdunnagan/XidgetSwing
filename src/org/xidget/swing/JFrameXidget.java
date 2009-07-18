@@ -21,7 +21,7 @@ import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.JFrameWidgetCreationFeature;
-import org.xidget.swing.feature.SwingWidgetFeature;
+import org.xidget.swing.feature.JFrameWidgetFeature;
 
 /**
  * An application xidget implemented with the Swing JFrame widget.
@@ -32,7 +32,7 @@ public class JFrameXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     layoutFeature = new AnchorLayoutFeature( this);
-    widgetFeature = new SwingWidgetFeature( this);
+    widgetFeature = new JFrameWidgetFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JFrameWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);

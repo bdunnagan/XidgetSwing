@@ -4,10 +4,17 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import org.xidget.IXidget;
+import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.layout.Bounds;
+import org.xidget.layout.Margins;
+import org.xidget.layout.Size;
+import org.xmodel.IModelObject;
+import org.xmodel.Xlate;
 
 /**
  * An implementation of IWidgetFeature for JFrame. This class is similar to SwingWidgetFeature
@@ -45,12 +52,50 @@ public class JFrameWidgetFeature implements IWidgetFeature
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getPreferredSize(org.xidget.layout.Size)
+   */
+  public void getPreferredSize( Size result)
+  {
+    JFrame widget = xidget.getFeature( JFrame.class);
+    Dimension size = widget.getPreferredSize();
+    result.width = size.width;
+    result.height = size.height;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getOutsideMargins()
+   */
+  public Margins getOutsideMargins()
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetFeature#setVisible(boolean)
    */
   public void setVisible( boolean visible)
   {
     JFrame widget = xidget.getFeature( JFrame.class);
-    widget.setVisible( visible);
+    if ( visible)
+    {
+      // size to fit first
+      widget.pack();
+      
+      // set size if requested
+      IModelObject config = xidget.getConfig();
+      Dimension oldSize = widget.getSize();
+      Pair newSize = new Pair( Xlate.get( config, "size", (String)null), -1, -1);
+      if ( newSize.x < 0) newSize.x = oldSize.width;
+      if ( newSize.y < 0) newSize.y = oldSize.height; 
+      widget.setSize( newSize.x, newSize.y);
+      
+      // show
+      widget.setVisible( true);
+    }
+    else
+    {
+      widget.setVisible( false);
+    }
   }
 
   /* (non-Javadoc)

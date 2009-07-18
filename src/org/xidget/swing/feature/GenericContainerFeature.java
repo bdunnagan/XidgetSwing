@@ -6,13 +6,14 @@ package org.xidget.swing.feature;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
+import java.awt.Insets;
 import org.xidget.IXidget;
 import org.xidget.Log;
 import org.xidget.ifeature.IAsyncFeature;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.layout.Margins;
 
 /**
  * An implementation of IWidgetContainerFeature that assumes that the parent xidget exports
@@ -79,41 +80,18 @@ public class GenericContainerFeature implements IWidgetContainerFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetContainerFeature#getWidth()
+   * @see org.xidget.ifeature.IWidgetContainerFeature#getInsideMargins()
    */
-  public int getWidth()
+  public Margins getInsideMargins()
   {
     Container container = xidget.getFeature( Container.class);
-    return container.getWidth();
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetContainerFeature#setWidth(int)
-   */
-  public void setWidth( int width)
-  {
-    Container container = xidget.getFeature( Container.class);
-    Dimension d = container.getSize();
-    container.setSize( width, d.height);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetContainerFeature#getHeight()
-   */
-  public int getHeight()
-  {
-    Container container = xidget.getFeature( Container.class);
-    return container.getHeight();
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetContainerFeature#setHeight(int)
-   */
-  public void setHeight( int height)
-  {
-    Container container = xidget.getFeature( Container.class);
-    Dimension d = container.getSize();
-    container.setSize( d.width, height);
+    Insets insets = container.getInsets();
+    Margins margins = new Margins();
+    margins.x0 = insets.left;
+    margins.y0 = insets.top;
+    margins.x1 = insets.right;
+    margins.y1 = insets.bottom;
+    return margins;
   }
 
   /* (non-Javadoc)

@@ -5,10 +5,15 @@
 package org.xidget.swing.feature;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
+import org.xidget.Log;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.layout.Bounds;
+import org.xidget.layout.Margins;
+import org.xidget.layout.Size;
 
 /**
  * An adapter for Swing/AWT widgets.
@@ -25,6 +30,8 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void setBounds( float x, float y, float width, float height)
   {
+    Log.printf( "layout", "SET BOUNDS %s -> %2.1f, %2.1f, %2.1f, %2.1f\n", xidget, x, y, width, height);
+    
     JComponent widget = xidget.getFeature( JComponent.class);
     widget.setBounds( 
       (int)Math.round( x), 
@@ -44,6 +51,26 @@ public class SwingWidgetFeature implements IWidgetFeature
     result.y = rectangle.y;
     result.width = rectangle.width;
     result.height = rectangle.height;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getPreferredSize(org.xidget.layout.Size)
+   */
+  public void getPreferredSize( Size result)
+  {
+    JComponent widget = xidget.getFeature( JComponent.class);
+    Dimension size = widget.getPreferredSize();
+    result.width = size.width;
+    result.height = size.height;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getOutsideMargins()
+   */
+  public Margins getOutsideMargins()
+  {
+    // not used yet
+    return new Margins();
   }
 
   /* (non-Javadoc)

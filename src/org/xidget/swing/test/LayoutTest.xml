@@ -13,14 +13,13 @@
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>
   
-  <assign name="test">1</assign>
+  <assign name="test">4</assign>
     
   <create assign="form" when="$test = '1'">
     <template>
-      <app size="400, 400">
-        <form id="ROOT" layout="$layouts/hgrid" margins="1,1,1,1" spacing="1" handles="true">
-          <form id="UPPER"/>
-          <form id="LOWER"/>
+      <app>
+        <form id="ROOT" layout="$layouts/vfree" margins="5,5,5,5" spacing="5" handles="true" size="400, -1">
+          <form id="FORM" size="-1, 200"/>
         </form>
       </app>
     </template>
@@ -28,10 +27,10 @@
   
   <create assign="form" when="$test = '2'">
     <template>
-      <app size="500, -1">
-        <form id="ROOT" layout="$layouts/vfree" spacing="1" handles="true">
-          <form id="UPPER" size="-1, 200"/>
-          <form id="LOWER" size="-1, 150"/>
+      <app size="400, 400">
+        <form id="ROOT" layout="$layouts/hgrid" margins="5,5,5,5" spacing="5" handles="true">
+          <form id="LEFT"/>
+          <form id="RIGHT"/>
         </form>
       </app>
     </template>
@@ -40,10 +39,27 @@
   <create assign="form" when="$test = '3'">
     <template>
       <app size="500, -1">
-        <form id="ROOT" layout="$layouts/vfree">
+        <form id="ROOT" layout="$layouts/vfree" margins="5,5,5,5" spacing="5" handles="true">
+          <form id="UPPER" size="-1, 200"/>
+          <form id="LOWER" size="-1, 150"/>
+        </form>
+      </app>
+    </template>
+  </create>
+  
+  <create assign="form" when="$test = '4'">
+    <template>
+      <app size="500, -1">
+        <form id="ROOT" layout="$layouts/vfree" margins="5,5,5,5" spacing="5">
           <form id="CHILD" layout="$layouts/vfree">
             <text>
-              <source>'New Text'</source>
+              <source>'New Text 1'</source>
+            </text>
+            <text>
+              <source>'New Text 2'</source>
+            </text>
+            <text>
+              <source>'New Text 3'</source>
             </text>
           </form>
         </form>

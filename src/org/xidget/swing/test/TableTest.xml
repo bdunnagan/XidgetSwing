@@ -33,7 +33,7 @@
   <create assign="form">
     <template>
       <app>
-        <form layout="$layouts/vertical">
+        <form layout="$layouts/vfree">
           <text id="1">
             <label>Text1</label>
             <source>collection('appdb')/text1</source>

@@ -8,7 +8,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
@@ -26,8 +25,8 @@ import org.xidget.config.util.Pair;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.layout.AnchorNode;
 import org.xidget.layout.IComputeNode;
-import org.xidget.layout.IComputeNode.Grab;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -79,11 +78,8 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     
     // optionally set the width and height nodes in case children are dependent on them
     IModelObject config = xidget.getConfig();
-    Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
-    if ( size.x > 0 || size.y > 0)
-    {
-      outsidePanel.setPreferredSize( new Dimension( size.x, size.y));
-    }
+    Pair size = new Pair( Xlate.get( config, "size", (String)null), -1, -1);
+    if ( size.x >= 0 || size.y >= 0) outsidePanel.setSize( size.x, size.y); 
   }
   
   /**
@@ -144,24 +140,38 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    * @param y The y of the mouse.
    * @return Returns the IComputeNode under the specified mouse position.
    */
-  private IComputeNode mouseGrab( int x, int y)
+  private AnchorNode mouseGrab( int x, int y)
   {
     ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
-    List<IComputeNode> nodes = feature.getAllNodes();
-      
-    if ( nodes == null) return null;
     
+    List<IComputeNode> nodes = feature.getAllNodes();
+    if ( nodes == null) return null;
+
     for( IComputeNode node: nodes)
     {
-      Grab grab = node.mouseGrab( x, y);
-      switch( grab)
+      if ( !(node instanceof IComputeNode)) continue;
+        
+      if ( node.hasXHandle())
       {
-        case none: outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR)); break;
-        case x: outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.E_RESIZE_CURSOR)); return node;
-        case y: outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.N_RESIZE_CURSOR)); return node;
+        float nx = node.getValue();
+        if ( Math.abs( nx - x) < 4) 
+        {
+          outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.E_RESIZE_CURSOR));
+          return (AnchorNode)node;
+        }
+      }
+      else if ( node.hasYHandle())
+      {
+        float ny = node.getValue();
+        if ( Math.abs( ny - y) < 4)
+        {
+          outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.N_RESIZE_CURSOR));
+          return (AnchorNode)node;
+        }
       }
     }
     
+    outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR));
     return null;
   }
   
@@ -200,9 +210,17 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
       if ( grabbed != null)
       {
         Rectangle bounds = outsidePanel.getBounds();
-        float px = (float)e.getX() / bounds.width;
-        float py = (float)e.getY() / bounds.height;
-        grabbed.move( px, py);
+        if ( grabbed.hasXHandle())
+        {
+          float px = (float)e.getX() / bounds.width;
+          grabbed.setFraction( px);
+        }
+        else
+        {
+          float py = (float)e.getY() / bounds.height;
+          grabbed.setFraction( py);
+        }
+        
         outsidePanel.revalidate();
       }
     }
@@ -217,5 +235,5 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   private IXidget xidget;
   private JPanel outsidePanel;
   private JPanel insidePanel;
-  private IComputeNode grabbed;
+  private AnchorNode grabbed;
 }

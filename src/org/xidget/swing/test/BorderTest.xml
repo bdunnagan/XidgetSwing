@@ -18,7 +18,7 @@
   <create assign="form" when="true()">
     <template>
       <app size="400, 400">
-        <form id="1" title="'Title'" layout="$layouts/vgrid">
+        <form id="1" title="'Title'" layout="$layouts/vgrid" spacing="5" handles="true">
           <form id="1a"/>
           <form id="1b"/>
         </form>
