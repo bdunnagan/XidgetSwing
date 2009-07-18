@@ -18,7 +18,7 @@
   <create assign="form" when="$test = '1'">
     <template>
       <app>
-        <form id="ROOT" layout="$layouts/vfree" margins="5,5,5,5" spacing="5" handles="true" size="400, -1">
+        <form id="ROOT" layout="$layouts/vfree" margins="5" spacing="5" handles="true" size="400, -1">
           <form id="FORM" size="-1, 200"/>
         </form>
       </app>
@@ -28,7 +28,7 @@
   <create assign="form" when="$test = '2'">
     <template>
       <app size="400, 400">
-        <form id="ROOT" layout="$layouts/hgrid" margins="5,5,5,5" spacing="5" handles="true">
+        <form id="ROOT" layout="$layouts/hgrid" margins="5" spacing="5" handles="true">
           <form id="LEFT"/>
           <form id="RIGHT"/>
         </form>
@@ -39,7 +39,7 @@
   <create assign="form" when="$test = '3'">
     <template>
       <app size="500, -1">
-        <form id="ROOT" layout="$layouts/vfree" margins="5,5,5,5" spacing="5" handles="true">
+        <form id="ROOT" layout="$layouts/vfree" margins="5" spacing="5" handles="true">
           <form id="UPPER" size="-1, 200"/>
           <form id="LOWER" size="-1, 150"/>
         </form>
@@ -50,7 +50,7 @@
   <create assign="form" when="$test = '4'">
     <template>
       <app size="500, -1">
-        <form id="ROOT" layout="$layouts/vfree" margins="5,5,5,5" spacing="5">
+        <form id="ROOT" layout="$layouts/vfree" margins="5" spacing="5">
           <form id="CHILD" layout="$layouts/vfree">
             <text>
               <source>'New Text 1'</source>

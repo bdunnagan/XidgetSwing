@@ -21,12 +21,12 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 import org.xidget.IXidget;
 import org.xidget.Log;
-import org.xidget.config.util.Pair;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.layout.AnchorNode;
 import org.xidget.layout.IComputeNode;
+import org.xidget.layout.Size;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -78,8 +78,8 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     
     // optionally set the width and height nodes in case children are dependent on them
     IModelObject config = xidget.getConfig();
-    Pair size = new Pair( Xlate.get( config, "size", (String)null), -1, -1);
-    if ( size.x >= 0 || size.y >= 0) outsidePanel.setSize( size.x, size.y); 
+    Size size = new Size( Xlate.get( config, "size", (String)null), -1, -1);
+    if ( size.width >= 0 || size.height >= 0) outsidePanel.setSize( size.width, size.height); 
   }
   
   /**

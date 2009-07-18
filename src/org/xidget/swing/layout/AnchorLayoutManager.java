@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import org.xidget.IXidget;
+import org.xidget.Log;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
@@ -104,11 +105,13 @@ public class AnchorLayoutManager implements LayoutManager
     widgetFeature.getPreferredSize( size);
     
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
-    IComputeNode width = computeNodeFeature.getComputeNode( Type.width, true);
+    IComputeNode width = computeNodeFeature.getComputeNode( Type.width, false);
     if ( size.width >= 0) width.setDefaultValue( (float)size.width);
     
-    IComputeNode height = computeNodeFeature.getComputeNode( Type.height, true);
+    IComputeNode height = computeNodeFeature.getComputeNode( Type.height, false);
     if ( size.height >= 0) height.setDefaultValue( (float)size.height);
+    
+    Log.printf( "layout", "Initalize preferred size of %s to %s\n", xidget, size);
   }
   
   /**

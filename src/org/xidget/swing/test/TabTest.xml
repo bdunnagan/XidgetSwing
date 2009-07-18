@@ -32,9 +32,9 @@
   <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
   <create assign="form">
     <template>
-      <app>
-        <tabs layout="$layouts/vertical" size="400,300">
-          <form title="'Tab 1'" layout="$layouts/vertical">
+      <app size="600, -1">
+        <tabs layout="$layouts/vfree">
+          <form title="'Tab 1'" layout="$layouts/vfree">
             <text id="1">
               <label>Text1</label>
               <source>collection('appdb')/text1</source>
@@ -51,8 +51,7 @@
             </text>
           </form>
 
-          <form title="'Tab 2'" layout="$layouts/vertical">
-            <!-- debug button source not updated -->
+          <!--form title="'Tab 2'" layout="$layouts/vfree">
             <button type="radio">
               <label>Option 1</label>
               <source>collection('appdb')/radio/@b1</source>
@@ -72,7 +71,7 @@
                 <print>'Been pushed!'</print>
               </onPress>
             </button>
-          </form>
+          </form-->
                     
           <trigger name="Listen" when="collection('appdb')/radio/@* = 'true'">
             <print>collection('appdb')/radio</print>

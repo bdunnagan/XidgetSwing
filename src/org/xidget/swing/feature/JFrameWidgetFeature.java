@@ -8,7 +8,6 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import org.xidget.IXidget;
-import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
@@ -84,10 +83,10 @@ public class JFrameWidgetFeature implements IWidgetFeature
       // set size if requested
       IModelObject config = xidget.getConfig();
       Dimension oldSize = widget.getSize();
-      Pair newSize = new Pair( Xlate.get( config, "size", (String)null), -1, -1);
-      if ( newSize.x < 0) newSize.x = oldSize.width;
-      if ( newSize.y < 0) newSize.y = oldSize.height; 
-      widget.setSize( newSize.x, newSize.y);
+      Size newSize = new Size( Xlate.get( config, "size", (String)null), -1, -1);
+      if ( newSize.width < 0) newSize.width = oldSize.width;
+      if ( newSize.height < 0) newSize.height = oldSize.height; 
+      widget.setSize( newSize.width, newSize.height);
       
       // show
       widget.setVisible( true);

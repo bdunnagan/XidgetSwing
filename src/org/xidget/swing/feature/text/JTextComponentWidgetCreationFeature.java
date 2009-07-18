@@ -21,9 +21,9 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
 import org.xidget.IXidget;
-import org.xidget.config.util.Pair;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.text.ITextModelFeature;
+import org.xidget.layout.Size;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -47,14 +47,14 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     IModelObject element = xidget.getConfig();
     
     // create text widget
-    Pair size = new Pair( Xlate.get( element, "size", Xlate.childGet( element, "size", "")), 0, 0);    
-    if ( size.y > 1)
+    Size size = new Size( Xlate.get( element, "size", (String)null));    
+    if ( size.height > 1)
     {
-      jtext = new JTextArea( size.y, size.x);
+      jtext = new JTextArea( size.height, size.width);
     }
     else
     {
-      jtext = new JTextField( size.x);
+      jtext = new JTextField( size.width);
       jtext.setBorder( new EmptyBorder( 2, 3, 2, 3));
     }
         

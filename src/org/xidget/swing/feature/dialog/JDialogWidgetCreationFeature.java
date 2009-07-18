@@ -7,8 +7,8 @@ package org.xidget.swing.feature.dialog;
 import java.awt.Dimension;
 import javax.swing.JDialog;
 import org.xidget.IXidget;
-import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.layout.Size;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
@@ -33,8 +33,8 @@ public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
     jDialog.setModal( Xlate.get( config, "modal", true));
     
     // set size of jframe if child size is set
-    Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
-    jDialog.setPreferredSize( new Dimension( size.x, size.y));
+    Size size = new Size( Xlate.get( config, "size", (String)null), -1, -1);
+    jDialog.setSize( new Dimension( size.width, size.height));
   }
 
   /* (non-Javadoc)

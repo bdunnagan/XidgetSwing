@@ -8,9 +8,9 @@ import java.awt.Dimension;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 import org.xidget.IXidget;
-import org.xidget.config.util.Pair;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.layout.Size;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
@@ -37,11 +37,8 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
         
     // optionally constrain size
     IModelObject config = xidget.getConfig();
-    Pair size = new Pair( Xlate.get( config, "size", Xlate.childGet( config, "size", "")), 0, 0);
-    if ( size.x > 0 || size.y > 0)
-    {
-      jtabbedPane.setPreferredSize( new Dimension( size.x, size.y));
-    }
+    Size size = new Size( Xlate.get( config, "size", (String)null), -1, -1);
+    if ( size.width >= 0 || size.height >= 0) jtabbedPane.setSize( new Dimension( size.width, size.height));
     
     // create titled border if necessary (but not for tab entries)
     String title = getTitle();
