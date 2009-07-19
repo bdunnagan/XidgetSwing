@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.Color;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IErrorFeature;
@@ -35,16 +36,20 @@ public class TooltipErrorFeature implements IErrorFeature
     JComponent widget = xidget.getFeature( JComponent.class);
     if ( message == null || message.length() == 0)
     {
+      widget.setBackground( background);
       widget.setToolTipText( tooltip);
       tooltip = null;
     }
     else
     {
       if ( tooltip == null) tooltip = widget.getToolTipText();
+      if ( background == null) background = widget.getBackground();
       widget.setToolTipText( "Error: "+message);
+      widget.setBackground( Color.YELLOW);
     }
   }
   
   private IXidget xidget;
   private String tooltip;
+  private Color background;
 }

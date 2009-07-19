@@ -7,7 +7,6 @@ package org.xidget.swing;
 import java.io.File;
 import java.io.FileInputStream;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import org.xidget.Creator;
 import org.xmodel.IDispatcher;
 import org.xmodel.IModelObject;

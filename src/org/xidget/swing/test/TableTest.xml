@@ -83,6 +83,11 @@
               </cell>
               <cell>
                 <source>column[ 2]</source>
+                <text>
+                  <source>.</source>
+                  <error>if ( trace( number( .)) &lt; 1) then 'Value is less than 0.' else ''</error>
+                  <error>if ( number( .) &gt; 100) then 'Value is greater than 100.' else ''</error>
+                </text>
               </cell>
               <cell>
                 <source>column[ 3]</source>
