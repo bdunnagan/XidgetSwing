@@ -7,6 +7,7 @@ package org.xidget.swing;
 import java.io.File;
 import java.io.FileInputStream;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import org.xidget.Creator;
 import org.xmodel.IDispatcher;
 import org.xmodel.IModelObject;
@@ -36,6 +37,9 @@ public class Main
   {    
     final File file = new File( args[ 0]);
 
+    //System.setProperty( "swing.aatext", "true");
+    //UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName());
+    
     SwingUtilities.invokeLater( new Runnable() {
       public void run()
       {

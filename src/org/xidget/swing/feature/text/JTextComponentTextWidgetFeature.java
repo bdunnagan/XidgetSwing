@@ -41,13 +41,13 @@ public class JTextComponentTextWidgetFeature implements ITextWidgetFeature
     if ( channel.equals( TextModelFeature.allChannel))
     {
       if ( transform != null) text = transform.transform( text);
-      widget.setText( text);
+      if ( !widget.getText().equals( text)) widget.setText( text);
     }
     else if ( channel.equals( TextModelFeature.selectedChannel))
     {
       widget.replaceSelection( text);
-      String allText = widget.getText();
-      widget.setText( transform.transform( allText));
+      String allText = transform.transform( widget.getText());
+      if ( !widget.getText().equals( allText)) widget.setText( allText);
     }
   }
 

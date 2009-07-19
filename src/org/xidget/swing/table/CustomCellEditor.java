@@ -5,11 +5,9 @@
 package org.xidget.swing.table;
 
 import java.awt.Component;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -20,6 +18,7 @@ import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
+import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -43,6 +42,8 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    */
   public Component getTableCellEditorComponent( JTable table, Object value, boolean isSelected, int rowIndex, int columnIndex)
   {
+    System.out.println( "GET");
+    
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     List<Row> rows = tableModel.getRows();
     if ( rows.size() <= rowIndex) return null;
@@ -54,24 +55,29 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     editor = findEditor( row, columnIndex);
     if ( editor == null) return null;
     
+    //
+    // WORKAROUND:
+    // Swing isn't firing the edit cancelled event which means that the widget
+    // stays bounds after editing is complete and might need to be unbound before
+    // we start editing again.
+    //
+    IBindFeature bindFeature = editor.getFeature( IBindFeature.class);
+    StatefulContext[] array = bindFeature.getBoundContexts().toArray( new StatefulContext[ 0]);
+    for( StatefulContext context: array) bindFeature.unbind( context);
+    
     // bind editor
     editorSource = cell.source;
     editorContext = new StatefulContext( row.getContext(), editorSource.cloneTree());
-    IBindFeature bindFeature = editor.getFeature( IBindFeature.class);
     bindFeature.bind( editorContext);
     
     // return widget
     IWidgetCreationFeature creationFeature = editor.getFeature( IWidgetCreationFeature.class);
     Object[] widgets = creationFeature.getLastWidgets();
     if ( widgets.length == 0) return null;
-    
-    //
-    // WORKAROUND:
-    // The table cell editor cancel event is not being fired, so we need 
-    // a listener on the widget to determine when to unbind the xidget.
-    //
+
     Component component = (Component)widgets[ 0];
-    component.addFocusListener( focusListener);
+    if ( component instanceof JComboBox) 
+      ((JComboBox)component).putClientProperty( "JComboBox.isTableCellEditor", Boolean.TRUE);
     
     return component;
   }
@@ -81,7 +87,7 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    */
   public Object getCellEditorValue()
   {
-    return editorContext.getObject();
+    return Xlate.get( editorContext.getObject(), "");
   }
   
   /**
@@ -89,13 +95,6 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    */
   private void cleanupEditor()
   {
-    // remove listener
-    IWidgetCreationFeature creationFeature = editor.getFeature( IWidgetCreationFeature.class);
-    Object[] widgets = creationFeature.getLastWidgets();
-    Component component = (Component)widgets[ 0];
-    component.removeFocusListener( focusListener);
-    
-    // unbind
     if ( editorContext != null)
     {
       IBindFeature bindFeature = editor.getFeature( IBindFeature.class);
@@ -134,10 +133,13 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
   private CellEditorListener listener = new CellEditorListener() {
     public void editingCanceled( ChangeEvent e)
     {
+      System.out.println( "CANCEL");
       cleanupEditor();
     }
     public void editingStopped( ChangeEvent e)
     {
+      System.out.println( "COMMIT");
+      
       // commit changes
       IModelObject clone = editorContext.getObject();
       editorSource.setValue( clone.getValue());
@@ -147,13 +149,6 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     }
   };
 
-  private FocusListener focusListener = new FocusAdapter() {
-    public void focusLost( FocusEvent e)
-    {
-      cleanupEditor();
-    }
-  };
-  
   private IXidget editor;
   private IModelObject editorSource;
   private StatefulContext editorContext;

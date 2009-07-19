@@ -49,7 +49,6 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable.setShowVerticalLines( true);
     jtable.setGridColor( Color.LIGHT_GRAY);
     
-    jtable.setSurrendersFocusOnKeystroke( true);
     jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
     jtable.setDefaultEditor( IModelObject.class, new CustomCellEditor());
     jtable.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());

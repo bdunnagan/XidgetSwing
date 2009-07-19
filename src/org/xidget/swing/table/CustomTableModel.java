@@ -140,7 +140,10 @@ public class CustomTableModel extends AbstractTableModel
   public Object getValueAt( int rowIndex, int columnIndex)
   {
     String text = root.getChildren().get( rowIndex).getCell( columnIndex).text;
-    return (text != null)? text: "";
+    if ( text == null) return "";
+    if ( text.equalsIgnoreCase( "true")) return Boolean.TRUE;
+    if ( text.equalsIgnoreCase( "false")) return Boolean.FALSE;
+    return text;
   }
 
   /* (non-Javadoc)

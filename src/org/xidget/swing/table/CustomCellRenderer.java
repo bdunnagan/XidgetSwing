@@ -20,19 +20,26 @@ public class CustomCellRenderer extends DefaultTableCellRenderer
    * javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
    */
   @Override
-  public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+  public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected, boolean hasFocus, int rowIndex, int columnIndex)
   {
-    // allow super-class to do its thing
-    super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column);
-    
-    // consult table model for header title and icon
-    CustomTableModel model = (CustomTableModel)table.getModel();
-    setIcon( (Icon)model.getIconAt( row, column));
-    
-    Object object = model.getValueAt( row, column);
-    String text = (object != null)? object.toString(): "";
-    setName( text);
-    setText( text);
+    if ( value instanceof Boolean)
+    {
+      return table.getDefaultRenderer( Boolean.class).getTableCellRendererComponent( table, value, isSelected, hasFocus, rowIndex, columnIndex);
+    }
+    else
+    {
+      // allow super-class to do its thing
+      super.getTableCellRendererComponent( table, value, isSelected, hasFocus, rowIndex, columnIndex);
+      
+      // consult table model for header title and icon
+      CustomTableModel model = (CustomTableModel)table.getModel();
+      setIcon( (Icon)model.getIconAt( rowIndex, columnIndex));
+      
+      Object object = model.getValueAt( rowIndex, columnIndex);
+      String text = (object != null)? object.toString(): "";
+      setName( text);
+      setText( text);
+    }
         
     return this;
   }

@@ -28,6 +28,28 @@
       </choices>
     </template>
   </create>
+  
+  <create assign="tabular">
+    <template>
+      <tabular>
+        <row>
+          <column>Bob</column>
+          <column>37</column>
+          <column>true</column>
+        </row>
+        <row>
+          <column>Steve</column>
+          <column>16</column>
+          <column>false</column>
+        </row>
+        <row>
+          <column>Dan</column>
+          <column>25</column>
+          <column>false</column>
+        </row>
+      </tabular>
+    </template>
+  </create>
 
   <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
   <create assign="form">
@@ -50,8 +72,25 @@
           </text>
           
           <table size="600, 200">
-            <column>'Name'</column>
-            <column>'Value'</column>
+            <column>'Column 1'</column>
+            <column>'Column 2'</column>
+            <column>'Column 3'</column>
+
+            <table>
+              <rows>$tabular/row</rows>
+              <cell>
+                <source>column[ 1]</source>
+              </cell>
+              <cell>
+                <source>column[ 2]</source>
+              </cell>
+              <cell>
+                <source>column[ 3]</source>
+                <button type="check">
+                  <source>.</source>
+                </button>
+              </cell>
+            </table>
 
             <table>
               <rows>.</rows>
@@ -91,9 +130,9 @@
               </cell>
               <cell>
                 <source>.</source>
-                <text>
+                <button type="check">
                   <source>.</source>
-                </text>
+                </button>
               </cell>
             </table>
           </table>

@@ -17,6 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
+import javax.swing.SwingConstants;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.IScriptFeature;
@@ -54,6 +55,13 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
       case check:  button = new JCheckBox(); break;
       case radio:  button = createRadioButton(); break;
     }
+    
+    //
+    // HACK:
+    // Force the button to use center alignment so that it will work seamlessly with 
+    // the DefaultTableCellRenderer for boolean values when used as a table cell editor.
+    //
+    button.setHorizontalAlignment( SwingConstants.CENTER);
     
     // set button label
     String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
