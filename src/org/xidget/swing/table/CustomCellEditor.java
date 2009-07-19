@@ -5,9 +5,14 @@
 package org.xidget.swing.table;
 
 import java.awt.Component;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JTable;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
@@ -15,7 +20,6 @@ import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
-import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -28,11 +32,10 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    * Create a CustomCellEditor for the specified table xidget. This class handles editing for
    * all cells in the table.  It activates the appropriate editor child xidget for the cell
    * that is being edited.
-   * @param xidget The table xidget.
    */
-  public CustomCellEditor( IXidget xidget)
+  public CustomCellEditor()
   {
-    this.xidget = xidget;
+    addCellEditorListener( listener);
   }
   
   /* (non-Javadoc)
@@ -49,9 +52,11 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     if ( cell == null || cell.source == null) return null;
 
     editor = findEditor( row, columnIndex);
+    if ( editor == null) return null;
     
     // bind editor
-    editorContext = new StatefulContext( row.getContext(), cell.source);
+    editorSource = cell.source;
+    editorContext = new StatefulContext( row.getContext(), editorSource.cloneTree());
     IBindFeature bindFeature = editor.getFeature( IBindFeature.class);
     bindFeature.bind( editorContext);
     
@@ -60,7 +65,15 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     Object[] widgets = creationFeature.getLastWidgets();
     if ( widgets.length == 0) return null;
     
-    return (Component)widgets[ 0];
+    //
+    // WORKAROUND:
+    // The table cell editor cancel event is not being fired, so we need 
+    // a listener on the widget to determine when to unbind the xidget.
+    //
+    Component component = (Component)widgets[ 0];
+    component.addFocusListener( focusListener);
+    
+    return component;
   }
 
   /* (non-Javadoc)
@@ -68,37 +81,27 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    */
   public Object getCellEditorValue()
   {
-    return Xlate.get( editorContext.getObject(), "");
-  }
-
-  /* (non-Javadoc)
-   * @see javax.swing.AbstractCellEditor#cancelCellEditing()
-   */
-  @Override
-  public void cancelCellEditing()
-  {
-    super.cancelCellEditing();
-    unbind();
-  }
-
-  /* (non-Javadoc)
-   * @see javax.swing.AbstractCellEditor#stopCellEditing()
-   */
-  @Override
-  public boolean stopCellEditing()
-  {
-    boolean result = super.stopCellEditing();
-    unbind();
-    return result;
+    return editorContext.getObject();
   }
   
-  private void unbind()
+  /**
+   * Cleanup the editor when editing is finished.
+   */
+  private void cleanupEditor()
   {
+    // remove listener
+    IWidgetCreationFeature creationFeature = editor.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    Component component = (Component)widgets[ 0];
+    component.removeFocusListener( focusListener);
+    
+    // unbind
     if ( editorContext != null)
     {
       IBindFeature bindFeature = editor.getFeature( IBindFeature.class);
       bindFeature.unbind( editorContext);
       editorContext = null;
+      editorSource = null;
     }
   }
 
@@ -112,20 +115,46 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    */
   private IXidget findEditor( Row row, int columnIndex)
   {
-    IModelObject tableConfig = row.getTable().getConfig();
+    IXidget table = row.getTable();
+    IModelObject tableConfig = table.getConfig();
     IModelObject cellConfig = tableConfig.getChildren( "cell").get( columnIndex);
     
-    for( IXidget child: xidget.getChildren())
+    for( IXidget child: table.getChildren())
     {
       IModelObject childConfig = child.getConfig();
-      if ( childConfig.getParent() == cellConfig)
+      
+      // editors are the only xidgets defined within a cell
+      if ( childConfig.getParent().isType( "cell") && cellConfig == childConfig.getParent())
         return child;
     }
     
     return null;
   }
+
+  private CellEditorListener listener = new CellEditorListener() {
+    public void editingCanceled( ChangeEvent e)
+    {
+      cleanupEditor();
+    }
+    public void editingStopped( ChangeEvent e)
+    {
+      // commit changes
+      IModelObject clone = editorContext.getObject();
+      editorSource.setValue( clone.getValue());
+      
+      // unbind
+      cleanupEditor();
+    }
+  };
+
+  private FocusListener focusListener = new FocusAdapter() {
+    public void focusLost( FocusEvent e)
+    {
+      cleanupEditor();
+    }
+  };
   
-  private IXidget xidget;
   private IXidget editor;
+  private IModelObject editorSource;
   private StatefulContext editorContext;
 }

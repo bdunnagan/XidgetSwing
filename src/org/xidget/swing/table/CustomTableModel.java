@@ -9,10 +9,10 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.xidget.IXidget;
 import org.xidget.tree.Row;
+import org.xmodel.IModelObject;
 
 /**
  * A custom table model for table xidgets.
- * TODO: set cell editor to xidget?
  */
 @SuppressWarnings("serial")
 public class CustomTableModel extends AbstractTableModel
@@ -21,7 +21,6 @@ public class CustomTableModel extends AbstractTableModel
   {
     this.root = new Row( xidget);
     this.columns = new ArrayList<Column>( 5);
-    this.editors = new ArrayList<IXidget>( 5);
   }
   
   /**
@@ -150,12 +149,6 @@ public class CustomTableModel extends AbstractTableModel
   @Override
   public void setValueAt( Object value, int rowIndex, int columnIndex)
   {
-//    if ( rowIndex >= rows.size())
-//    {
-//      for( int i = rows.size(); i <= rowIndex; i++)
-//        rows.add( new Row());
-//    }
-    
     Row row = root.getChildren().get( rowIndex);
     row.getCell( columnIndex).text = (value != null)? value.toString(): "";
     fireTableCellUpdated( rowIndex, columnIndex);
@@ -167,9 +160,19 @@ public class CustomTableModel extends AbstractTableModel
   @Override
   public boolean isCellEditable( int rowIndex, int columnIndex)
   {
-    return false;
+    Row row = root.getChildren().get( rowIndex);
+    return row.getCell( columnIndex).source != null;
   }
   
+  /* (non-Javadoc)
+   * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
+   */
+  @Override
+  public Class<?> getColumnClass( int columnIndex)
+  {
+    return IModelObject.class;
+  }
+
   /**
    * Returns the icon at the specified cell.
    * @param rowIndex The row index.
@@ -178,27 +181,6 @@ public class CustomTableModel extends AbstractTableModel
   public Object getIconAt( int rowIndex, int columnIndex)
   {
     return root.getChildren().get( rowIndex).getCell( columnIndex).icon;
-  }
-  
-  /**
-   * Set the editor for the specified column.
-   * @param columnIndex The column index.
-   * @param xidget The xidget to use for editing.
-   */
-  public void setEditor( int columnIndex, IXidget xidget)
-  {
-    for( int i=editors.size(); i<=columnIndex; i++) editors.add( null);
-    editors.set( columnIndex, xidget);
-  }
-
-  /**
-   * Set whether the specified cell is editable.
-   * @param rowIndex The row index of the cell.
-   * @param columnIndex The column index of the cell.
-   * @param editable True if the cell is editable.
-   */
-  public void setEditable( int rowIndex, int columnIndex, boolean editable)
-  {
   }
 
   private class Column
@@ -209,5 +191,4 @@ public class CustomTableModel extends AbstractTableModel
   
   private Row root;
   private List<Column> columns;
-  private List<IXidget> editors;
 }

@@ -17,6 +17,7 @@ import org.xidget.feature.tree.RowSetFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
+import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.tree.IColumnSetFeature;
@@ -24,6 +25,7 @@ import org.xidget.ifeature.tree.IRowSetFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
+import org.xidget.swing.feature.table.JTableContainerFeature;
 import org.xidget.swing.feature.table.JTableWidgetCreationFeature;
 import org.xidget.swing.feature.table.JTableWidgetFeature;
 
@@ -36,8 +38,9 @@ public class JTableXidget extends Xidget
   {
     rowSetFeature = new RowSetFeature( this);
     columnSetFeature = new ColumnSetFeature( this);
-    bindFeature = new BindFeature( this);
+    bindFeature = new BindFeature( this, new String[] { "text", "combo", "button"});
     widgetFeature = new SwingWidgetFeature( this);
+    containerFeature = new JTableContainerFeature( this);
     treeWidgetFeature = new JTableWidgetFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JTableWidgetCreationFeature( this);
@@ -55,6 +58,7 @@ public class JTableXidget extends Xidget
     if ( clss == IRowSetFeature.class) return (T)rowSetFeature;
     if ( clss == IColumnSetFeature.class) return (T)columnSetFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == ITreeWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
@@ -75,6 +79,7 @@ public class JTableXidget extends Xidget
   private IColumnSetFeature columnSetFeature;
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private IWidgetContainerFeature containerFeature;
   private ITreeWidgetFeature treeWidgetFeature;
   private IComputeNodeFeature computeNodeFeature;
   private JTableWidgetCreationFeature creationFeature;  

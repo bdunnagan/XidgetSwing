@@ -20,7 +20,7 @@
       <top offset="$mt"/>
     </attach>
         
-    <for assign="i" from="2" to="$n+1" by="1">
+    <for assign="i" from="2" to="$n" by="1">
       <attach xidget="$xidgets[ $i]">
         <top attach="$xidgets[ $i - 1]" anchor="bottom" offset="$s" handle="@handles"/>
       </attach>  
@@ -55,7 +55,7 @@
       <bottom offset="-$mb"/>
     </attach>
 
-    <for assign="i" from="2" to="$n+1" by="1">
+    <for assign="i" from="2" to="$n" by="1">
       <assign name="y">($i - 1) div $n</assign>
       <attach xidget="$xidgets[ $i - 1]">
         <bottom anchor="height" percent="$y" offset="-$before" handle="@handles"/>
@@ -83,7 +83,7 @@
       <left offset="$ml"/>
     </attach>
         
-    <for assign="i" from="2" to="$n+1" by="1">
+    <for assign="i" from="2" to="$n" by="1">
       <attach xidget="$xidgets[ $i]">
         <left attach="$xidgets[ $i - 1]" anchor="right" offset="$s" handle="@handles"/>
       </attach>  
@@ -118,7 +118,7 @@
       <right offset="-$mr"/>
     </attach>
 
-    <for assign="i" from="2" to="$n+1" by="1">
+    <for assign="i" from="2" to="$n" by="1">
       <assign name="y">($i - 1) div $n</assign>
       <attach xidget="$xidgets[ $i - 1]">
         <right anchor="width" percent="$y" offset="-$before" handle="@handles"/>
@@ -142,13 +142,13 @@
       </attach>
     </for>
     
-    <attach xidget="$xidgets[ 1]">
-      <right offset="$mr"/>
+    <attach xidget="$xidgets[ $n]">
+      <right offset="-$mr"/>
     </attach>
-        
-    <for assign="i" from="2" to="$n+1" by="1">
+
+    <for assign="i" from="$n - 1" to="1" by="-1">
       <attach xidget="$xidgets[ $i]">
-        <right attach="$xidgets[ $i - 1]" anchor="left" offset="$s" handle="@handles"/>
+        <right attach="$xidgets[ $i + 1]" anchor="left" offset="-$s" handle="@handles"/>
       </attach>  
     </for>
     

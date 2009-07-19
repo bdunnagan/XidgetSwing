@@ -4,18 +4,19 @@
  */
 package org.xidget.swing.feature.table;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
+import org.xidget.swing.table.CustomCellEditor;
 import org.xidget.swing.table.CustomCellRenderer;
 import org.xidget.swing.table.CustomHeaderCellRenderer;
 import org.xidget.swing.table.CustomTableModel;
@@ -33,12 +34,24 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     super( xidget);
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#createSwingWidget()
+   */
   @Override
   protected JComponent createSwingWidget()
   {
     CustomTableModel tableModel = new CustomTableModel( xidget);
+    
     jtable = new JTable( tableModel);
+    
+    jtable.setShowGrid( true);
+    jtable.setShowHorizontalLines( true);
+    jtable.setShowVerticalLines( true);
+    jtable.setGridColor( Color.LIGHT_GRAY);
+    
+    jtable.setSurrendersFocusOnKeystroke( true);
     jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
+    jtable.setDefaultEditor( IModelObject.class, new CustomCellEditor());
     jtable.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
     jtable.getSelectionModel().addListSelectionListener( selectionListener);
     

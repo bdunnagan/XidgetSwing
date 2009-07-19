@@ -13,8 +13,6 @@
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>
   
-  <assign name="spacing">4</assign>
-    
   <create assign="form" when="true()">
     <template>
       <app size="400, 400">

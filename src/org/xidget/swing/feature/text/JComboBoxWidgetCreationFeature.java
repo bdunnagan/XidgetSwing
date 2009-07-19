@@ -17,8 +17,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import org.xidget.IXidget;
 import org.xidget.feature.text.TextModelFeature;
+import org.xidget.ifeature.combo.IChoiceListFeature;
 import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
+import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
 /**
@@ -41,6 +43,9 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
     jcombo = new JComboBox();
     jcombo.setBorder( new EmptyBorder( 2, 3, 2, 3));
 
+    // add statically defined choices if present
+    addStaticChoices( xidget);
+    
     // get label
     String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
     
@@ -78,6 +83,22 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
     return component;
   }
 
+  /**
+   * Add the static choices defined in choices/choice.
+   * @param xidget The combo xidget.
+   */
+  private static void addStaticChoices( IXidget xidget)
+  {
+    IModelObject config = xidget.getConfig();
+    IModelObject choices = config.getFirstChild( "choices");
+    if ( choices != null)
+    {
+      IChoiceListFeature feature = xidget.getFeature( IChoiceListFeature.class);
+      for( IModelObject choice: choices.getChildren())
+        feature.addChoice( Xlate.get( choice, ""));
+    }
+  }
+  
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
    */

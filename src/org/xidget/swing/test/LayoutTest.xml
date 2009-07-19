@@ -13,7 +13,7 @@
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>
   
-  <assign name="test">4</assign>
+  <assign name="test">6</assign>
     
   <create assign="form" when="$test = '1'">
     <template>
@@ -50,16 +50,45 @@
   <create assign="form" when="$test = '4'">
     <template>
       <app size="500, -1">
+        <form id="ROOT" layout="$layouts/rightToLeft" margins="5" spacing="5">
+          <text>
+            <source>'New Text 1'</source>
+          </text>
+          <text>
+            <source>'New Text 2'</source>
+          </text>
+        </form>
+      </app>
+    </template>
+  </create>
+  
+  <create assign="form" when="$test = '5'">
+    <template>
+      <app size="500, -1">
         <form id="ROOT" layout="$layouts/vfree" margins="5" spacing="5">
-          <form id="CHILD" layout="$layouts/vfree">
+          <form id="CHILD" layout="$layouts/rightToLeft">
             <text>
               <source>'New Text 1'</source>
             </text>
             <text>
               <source>'New Text 2'</source>
             </text>
+          </form>
+        </form>
+      </app>
+    </template>
+  </create>
+  
+  <create assign="form" when="$test = '6'">
+    <template>
+      <app size="500, -1">
+        <form id="ROOT" layout="$layouts/vfree" margins="5" spacing="5">
+          <form id="CHILD" title="'Title'" layout="$layouts/vfree">
             <text>
-              <source>'New Text 3'</source>
+              <source>'New Text 1'</source>
+            </text>
+            <text>
+              <source>'New Text 2'</source>
             </text>
           </form>
         </form>

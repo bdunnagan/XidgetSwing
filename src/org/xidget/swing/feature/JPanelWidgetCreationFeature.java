@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -21,6 +20,7 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 import org.xidget.IXidget;
 import org.xidget.Log;
+import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -47,39 +47,34 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void createWidgets()
   {
-    insidePanel = new JPanel( new AnchorLayoutManager( xidget));
-    insidePanel.addComponentListener( componentListener);
-    insidePanel.addMouseListener( mouseListener);
-    insidePanel.addMouseMotionListener( mouseListener);
+    jPanel = new JPanel( new AnchorLayoutManager( xidget));
+    jPanel.addComponentListener( componentListener);
+    jPanel.addMouseListener( mouseListener);
+    jPanel.addMouseMotionListener( mouseListener);
 
     if ( System.getProperty( "debug") != null)
     {
       c += 16; if ( c > 255) c = 64;
       int d = Xlate.get( xidget.getConfig(), "background", c);
-      insidePanel.setBackground( new Color( d, d, d));
+      jPanel.setBackground( new Color( d, d, d));
     }
-    
-    // outside is same as inside by default
-    outsidePanel = insidePanel;
     
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();
     String title = getTitle();
     if ( title != null && title.length() > 0 && parent != null)
     {
-      outsidePanel = new JPanel( new BorderLayout());
-      outsidePanel.setBorder( new TitledBorder( title));
-      outsidePanel.add( insidePanel);
+      jPanel.setBorder( new TitledBorder( title));
     }
 
-    // add outside panel to parent container
+    // add panel to parent container
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
     if ( containerFeature != null) containerFeature.addWidget( xidget);
     
     // optionally set the width and height nodes in case children are dependent on them
     IModelObject config = xidget.getConfig();
     Size size = new Size( Xlate.get( config, "size", (String)null), -1, -1);
-    if ( size.width >= 0 || size.height >= 0) outsidePanel.setSize( size.width, size.height); 
+    if ( size.width >= 0 || size.height >= 0) jPanel.setSize( size.width, size.height); 
   }
   
   /**
@@ -99,11 +94,10 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void destroyWidgets()
   {
-    Container container = outsidePanel.getParent();
-    container.remove( outsidePanel);
+    Container container = jPanel.getParent();
+    container.remove( jPanel);
     container.invalidate();
-    outsidePanel = null;
-    insidePanel = null;
+    jPanel = null;
   }
 
   /* (non-Javadoc)
@@ -111,27 +105,16 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public Object[] getLastWidgets()
   {
-    return new Object[] { outsidePanel, insidePanel};
+    return new Object[] { jPanel};
   }
 
   /**
-   * Returns the outside of the container.
-   * @return Returns the outside of the container.
+   * Returns the JPanel.
+   * @return Returns the JPanel.
    */
-  public JPanel getOutsidePanel()
+  public JPanel getJPanel()
   {
-    return outsidePanel;
-  }
-  
-  /**
-   * Returns the inside of the container. The inside will be different from the outside
-   * if the container has a title, since containers must have zero insets for the layout
-   * algorithm to work.
-   * @return Returns the inside of the container.
-   */
-  public JPanel getInsidePanel()
-  {
-    return insidePanel;
+    return jPanel;
   }
   
   /**
@@ -142,7 +125,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   private AnchorNode mouseGrab( int x, int y)
   {
-    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+    AnchorLayoutFeature feature = (AnchorLayoutFeature)xidget.getFeature( ILayoutFeature.class);
     
     List<IComputeNode> nodes = feature.getAllNodes();
     if ( nodes == null) return null;
@@ -156,7 +139,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
         float nx = node.getValue();
         if ( Math.abs( nx - x) < 4) 
         {
-          outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.E_RESIZE_CURSOR));
+          jPanel.setCursor( Cursor.getPredefinedCursor( Cursor.E_RESIZE_CURSOR));
           return (AnchorNode)node;
         }
       }
@@ -165,25 +148,25 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
         float ny = node.getValue();
         if ( Math.abs( ny - y) < 4)
         {
-          outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.N_RESIZE_CURSOR));
+          jPanel.setCursor( Cursor.getPredefinedCursor( Cursor.N_RESIZE_CURSOR));
           return (AnchorNode)node;
         }
       }
     }
     
-    outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR));
+    jPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR));
     return null;
   }
   
   private ComponentListener componentListener = new ComponentAdapter() {
     public void componentMoved( ComponentEvent e)
     {
-      Point point = outsidePanel.getLocation();
+      Point point = jPanel.getLocation();
       Log.printf( "layout", "MOVED: %s (%d, %d)\n", xidget, point.x, point.y);
     }
     public void componentResized( ComponentEvent e)
     {
-      Log.printf( "layout", "RESIZE: %s (%d, %d)\n", xidget, outsidePanel.getWidth(), outsidePanel.getHeight());
+      Log.printf( "layout", "RESIZE: %s (%d, %d)\n", xidget, jPanel.getWidth(), jPanel.getHeight());
     }
   };
   
@@ -202,14 +185,14 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
     public void mouseExited( MouseEvent e)
     {
-      if ( grabbed != null) outsidePanel.grabFocus();
-      else outsidePanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR));
+      if ( grabbed != null) jPanel.grabFocus();
+      else jPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR));
     }
     public void mouseDragged( MouseEvent e)
     {
       if ( grabbed != null)
       {
-        Rectangle bounds = outsidePanel.getBounds();
+        Rectangle bounds = jPanel.getBounds();
         if ( grabbed.hasXHandle())
         {
           float px = (float)e.getX() / bounds.width;
@@ -221,7 +204,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
           grabbed.setFraction( py);
         }
         
-        outsidePanel.revalidate();
+        jPanel.revalidate();
       }
     }
     public void mouseMoved( MouseEvent e)
@@ -233,7 +216,6 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   private static int c = 64;
   
   private IXidget xidget;
-  private JPanel outsidePanel;
-  private JPanel insidePanel;
+  private JPanel jPanel;
   private AnchorNode grabbed;
 }

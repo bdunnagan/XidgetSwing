@@ -4,11 +4,9 @@
  */
 package org.xidget.swing.feature.dialog;
 
-import java.awt.Dimension;
 import javax.swing.JDialog;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.layout.Size;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
@@ -31,10 +29,6 @@ public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
     
     jDialog = new JDialog();
     jDialog.setModal( Xlate.get( config, "modal", true));
-    
-    // set size of jframe if child size is set
-    Size size = new Size( Xlate.get( config, "size", (String)null), -1, -1);
-    jDialog.setSize( new Dimension( size.width, size.height));
   }
 
   /* (non-Javadoc)
