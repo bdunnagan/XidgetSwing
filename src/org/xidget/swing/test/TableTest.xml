@@ -54,7 +54,7 @@
   <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
   <create assign="form">
     <template>
-      <app>
+      <app size="500, -1">
         <form layout="$layouts/vfree">
           <text id="1">
             <label>Text1</label>
@@ -71,7 +71,7 @@
             <source>collection('appdb')/text3</source>
           </text>
           
-          <table size="600, 200">
+          <table>
             <column>'Column 1'</column>
             <column>'Column 2'</column>
             <column>'Column 3'</column>

@@ -14,6 +14,7 @@ import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
+import org.netbeans.swing.outline.Outline;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
@@ -26,11 +27,11 @@ import org.xmodel.IModelObject;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
- * An implementation of IWidgetCreationFeature for creating a Swing JTree widget.
+ * An implementation of IWidgetCreationFeature for creating a Netbeans Outline widget.
  */
-public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
+public class OutlineWidgetCreationFeature extends SwingWidgetCreationFeature
 {
-  public JTreeWidgetCreationFeature( IXidget xidget)
+  public OutlineWidgetCreationFeature( IXidget xidget)
   {
     super( xidget);
   }
@@ -41,6 +42,8 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget()
   {
+    outline = new Outline(
+    
     jtree = new JTree( new CustomTreeModel( xidget));
     
     jtree.setCellRenderer( new CustomTreeCellRenderer());
@@ -142,4 +145,5 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
   
   private JScrollPane jscrollPane;
   private JTree jtree;
+  private Outline outline;
 }

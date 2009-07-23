@@ -35,7 +35,7 @@
   <create assign="form">
     <template>
       <app>
-        <form layout="$layouts/vertical">
+        <form layout="$layouts/vfree">
           <onOpen>
             <create assign="selection" name="'selection'"/>
           </onOpen>
@@ -75,8 +75,9 @@
               </cell>
             </table>
             
-            <!--table>
-              <rows>if ( collection('appdb')/text2 = 'Relayer') then static( $layouts//*/@*) else null</rows>
+            <table>
+              <!--rows>if ( collection('appdb')/text2 = 'Relayer') then static( $layouts//*/@*) else null</rows-->
+              <rows>static( $layouts//*/@*)</rows>
               <cell>
                 <source>name()</source>
               </cell>
@@ -100,9 +101,9 @@
               <cell>
                 <source>.</source>
               </cell>
-            </table-->
+            </table>
             
-            <tree parent="table[ 1]" recursive="true" when="true()">
+            <tree parent="table[ 1]" recursive="true" when="trace( collection('appdb')/text2 = 'Relayer')">
               <table>
                 <rows>*</rows>
                 <cell>

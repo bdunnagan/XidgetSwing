@@ -63,12 +63,12 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     //
     IBindFeature bindFeature = editor.getFeature( IBindFeature.class);
     StatefulContext[] array = bindFeature.getBoundContexts().toArray( new StatefulContext[ 0]);
-    for( StatefulContext context: array) bindFeature.unbind( context);
+    for( StatefulContext context: array) bindFeature.unbind( context, false);
     
     // bind editor
     editorSource = cell.source;
     editorContext = new StatefulContext( row.getContext(), editorSource.cloneTree());
-    bindFeature.bind( editorContext);
+    bindFeature.bind( editorContext, true);
     
     // return widget
     IWidgetCreationFeature creationFeature = editor.getFeature( IWidgetCreationFeature.class);
@@ -98,7 +98,7 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     if ( editorContext != null)
     {
       IBindFeature bindFeature = editor.getFeature( IBindFeature.class);
-      bindFeature.unbind( editorContext);
+      bindFeature.unbind( editorContext, false);
       editorContext = null;
       editorSource = null;
     }
