@@ -34,7 +34,7 @@
   <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
   <create assign="form">
     <template>
-      <app>
+      <app size="600, -1">
         <form layout="$layouts/vfree">
           <onOpen>
             <create assign="selection" name="'selection'"/>
@@ -55,7 +55,7 @@
             <source>collection('appdb')/text3</source>
           </text>
           
-          <tree size="600, 200">
+          <tree>
             <column>'Name'</column>
             <column>'Value'</column>
             

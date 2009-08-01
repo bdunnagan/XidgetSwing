@@ -14,11 +14,14 @@ import org.xidget.IXidget;
 import org.xidget.Log;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.ILayoutFeature;
+import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.IComputeNodeFeature.Type;
 import org.xidget.layout.Bounds;
 import org.xidget.layout.IComputeNode;
+import org.xidget.layout.Margins;
+import org.xidget.layout.OffsetNode;
 import org.xidget.layout.Size;
 
 /**
@@ -55,7 +58,12 @@ public class AnchorLayoutManager implements LayoutManager
       ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
       if ( feature != null) 
       {
-        initContainerSize( xidget);
+        // get inside margins of container
+        IWidgetContainerFeature containerFeature = xidget.getFeature( IWidgetContainerFeature.class);
+        Margins margins = containerFeature.getInsideMargins();
+        
+        // initialize container size
+        initContainerSize( margins, xidget);
         
         // initialize the preferred size of each child
         for( IXidget child: xidget.getChildren())
@@ -67,33 +75,40 @@ public class AnchorLayoutManager implements LayoutManager
         
         // set bounds of children
         for( IXidget child: xidget.getChildren())
-          setChildBounds( child);
+          setChildBounds( margins, child);
         
         // inside dimensions of container may have been specified so update container size
-        setContainerSize( xidget);
+        setContainerSize( margins, xidget);
       }
     }
   }
    
   /**
-   * Initialize the outside width and height nodes based on the current size.
+   * Initialize the container right and bottom nodes with the default size of the container.
+   * @param margins The inside margins of the container.
    * @param xidget The xidget.
    */
-  private static void initContainerSize( IXidget xidget)
+  private static void initContainerSize( Margins margins, IXidget xidget)
   {
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
     Bounds bounds = new Bounds(); widgetFeature.getBounds( bounds);
     
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
-    IComputeNode width = computeNodeFeature.getComputeNode( Type.width, true);
-    if ( bounds.width > 0) width.setDefaultValue( bounds.width);
+    if ( bounds.width > 0) 
+    {
+      IComputeNode right = computeNodeFeature.getComputeNode( Type.right, true);
+      right.setDefaultValue( bounds.width - margins.x0 - margins.x1);
+    }
     
-    IComputeNode height = computeNodeFeature.getComputeNode( Type.height, true);
-    if ( bounds.height > 0) height.setDefaultValue( bounds.height);
+    if ( bounds.height > 0) 
+    {
+      IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, true);
+      bottom.setDefaultValue( bounds.height - margins.y0 - margins.y1);
+    }
   }
   
   /**
-   * Initialize the outside width and height nodes based on the preferred size.
+   * Create dependencies to implement the preferred size of the specified xidget.
    * @param xidget The xidget.
    */
   private static void initPreferredSize( IXidget xidget)
@@ -103,34 +118,67 @@ public class AnchorLayoutManager implements LayoutManager
     widgetFeature.getPreferredSize( size);
     
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
-    IComputeNode width = computeNodeFeature.getComputeNode( Type.width, false);
-    if ( size.width > 0) width.setDefaultValue( (float)size.width);
+    if ( size.width > 0)
+    {
+      //
+      // Create dependencies in both directions so that nodes will be updated correctly
+      // regardless of whether the left or the right node is anchored. Note that this
+      // creates a cycle, but the sorting algorithm should insure that the these nodes
+      // appear twice in the computation list.
+      //
+      IComputeNode left = computeNodeFeature.getComputeNode( Type.left, false);
+      IComputeNode right = computeNodeFeature.getComputeNode( Type.right, false);
+      right.addDependency( new OffsetNode( left, size.width));
+      left.addDependency( new OffsetNode( right, -size.width));
+    }
     
-    IComputeNode height = computeNodeFeature.getComputeNode( Type.height, false);
-    if ( size.height > 0) height.setDefaultValue( (float)size.height);
+    if ( size.height > 0)
+    {
+      //
+      // Create dependencies in both directions so that nodes will be updated correctly
+      // regardless of whether the top or the bottom node is anchored. Note that this
+      // creates a cycle, but the sorting algorithm should insure that the these nodes
+      // appear twice in the computation list.
+      //
+      IComputeNode top = computeNodeFeature.getComputeNode( Type.top, false);
+      IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, false);
+      bottom.addDependency( new OffsetNode( top, size.height));
+      top.addDependency( new OffsetNode( bottom, -size.height));
+    }
     
     Log.printf( "layout", "Initalize preferred size of %s to %s\n", xidget, size);
   }
   
   /**
    * Set the bounds of the specified child based on its compute nodes.
+   * @param margins The inside margins of the container.
    * @param xidget The xidget.
    */
-  private static void setChildBounds( IXidget xidget)
+  private static void setChildBounds( Margins margins, IXidget xidget)
   {
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
     IComputeNode top = computeNodeFeature.getComputeNode( Type.top, false);
     IComputeNode left = computeNodeFeature.getComputeNode( Type.left, false);
-    IComputeNode width = computeNodeFeature.getComputeNode( Type.width, false);
-    IComputeNode height = computeNodeFeature.getComputeNode( Type.height, false);
+    IComputeNode right = computeNodeFeature.getComputeNode( Type.right, false);
+    IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, false);
     
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);    
     Bounds bounds = new Bounds(); widgetFeature.getBounds( bounds);
 
-    if ( top != null && top.hasValue()) bounds.y = top.getValue(); 
-    if ( left != null && left.hasValue()) bounds.x = left.getValue();
-    if ( width != null && width.hasValue()) bounds.width = width.getValue();
-    if ( height != null && height.hasValue()) bounds.height = height.getValue();
+    if ( top != null && top.hasValue()) bounds.y = top.getValue() + margins.y0; 
+    if ( left != null && left.hasValue()) bounds.x = left.getValue() + margins.x0;
+    
+    if ( right != null && right.hasValue()) 
+    {
+      if ( left == null || !left.hasValue()) Log.printf( "layout", "Width of child not constrained: %s\n", xidget);
+      bounds.width = right.getValue() - left.getValue();
+    }
+    
+    if ( bottom != null && bottom.hasValue()) 
+    {
+      if ( top == null || !top.hasValue()) Log.printf( "layout", "Height of child not constrained: %s\n", xidget);
+      bounds.height = bottom.getValue() - top.getValue();
+    }
     
     widgetFeature.setBounds( bounds.x, bounds.y, bounds.width, bounds.height);
   }
@@ -139,28 +187,20 @@ public class AnchorLayoutManager implements LayoutManager
    * Set the size of the container based on the inside width and height nodes. These values will
    * be specified if the layout contains attachments for the containers width, height, right or
    * bottom nodes.
+   * @param margins The container inside margins.
    * @param xidget The container xidget.
    */
-  private static void setContainerSize( IXidget xidget)
+  private static void setContainerSize( Margins margins, IXidget xidget)
   {
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
-    IComputeNode insideWidth = computeNodeFeature.getComputeNode( Type.width, true);
-    IComputeNode insideHeight = computeNodeFeature.getComputeNode( Type.height, true);
+    IComputeNode right = computeNodeFeature.getComputeNode( Type.right, true);
+    IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, true);
     
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
     Bounds bounds = new Bounds(); widgetFeature.getBounds( bounds);
     
-    if ( insideWidth.hasValue()) 
-    {
-      bounds.width = insideWidth.getValue();
-      computeNodeFeature.getComputeNode( Type.width, false).setDefaultValue( bounds.width);
-    }
-    
-    if ( insideHeight.hasValue()) 
-    {
-      bounds.height = insideHeight.getValue();
-      computeNodeFeature.getComputeNode( Type.height, false).setDefaultValue( bounds.height);
-    }
+    if ( right.hasValue()) bounds.width = right.getValue() + margins.x0 + margins.x1;
+    if ( bottom.hasValue()) bounds.height = bottom.getValue() + margins.y0 + margins.y1;
     
     // set widget size
     widgetFeature.setBounds( bounds.x, bounds.y, bounds.width, bounds.height);

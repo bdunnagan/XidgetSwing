@@ -84,7 +84,19 @@ public class GenericContainerFeature implements IWidgetContainerFeature
    */
   public Margins getInsideMargins()
   {
-    return new Margins();
+    Margins margins = new Margins();
+    
+    Container container = xidget.getFeature( Container.class);
+    if ( container != null)
+    {
+      Insets insets = container.getInsets();
+      margins.x0 = insets.left;
+      margins.y0 = insets.top;
+      margins.x1 = insets.right;
+      margins.y1 = insets.bottom;
+    }
+    
+    return margins;
   }
 
   /* (non-Javadoc)

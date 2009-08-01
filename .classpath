@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/XModel"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Xidget"/>
+	<classpathentry kind="lib" path="lib/napkinlaf-alpha001.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

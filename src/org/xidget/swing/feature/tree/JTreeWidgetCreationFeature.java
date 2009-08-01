@@ -75,8 +75,8 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
   }
 
   /**
-   * Returns the Outline widget.
-   * @return Returns the Outline widget.
+   * Returns the JTree widget.
+   * @return Returns the JTree widget.
    */
   public JTree getJTree()
   {

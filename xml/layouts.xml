@@ -27,7 +27,7 @@
     </for>
     
     <attach xidget=".">
-      <height attach="$xidgets[ $n]" anchor="bottom" offset="$mb"/>
+      <bottom attach="$xidgets[ $n]" anchor="bottom" offset="$mb"/>
     </attach>
   </vfree>
     
@@ -58,7 +58,7 @@
     <for assign="i" from="2" to="$n" by="1">
       <assign name="y">($i - 1) div $n</assign>
       <attach xidget="$xidgets[ $i - 1]">
-        <bottom anchor="height" percent="$y" offset="-$before" handle="@handles"/>
+        <bottom anchor="bottom" percent="$y" offset="-$before" handle="@handles"/>
       </attach>
       <attach xidget="$xidgets[ $i]">
         <top attach="$xidgets[ $i - 1]" anchor="bottom" offset="$s"/>
@@ -90,7 +90,7 @@
     </for>
     
     <attach xidget=".">
-      <width attach="$xidgets[ $n]" anchor="right" offset="$mr"/>
+      <right attach="$xidgets[ $n]" anchor="right" offset="$mr"/>
     </attach>
   </leftToRight>
     
@@ -121,7 +121,7 @@
     <for assign="i" from="2" to="$n" by="1">
       <assign name="y">($i - 1) div $n</assign>
       <attach xidget="$xidgets[ $i - 1]">
-        <right anchor="width" percent="$y" offset="-$before" handle="@handles"/>
+        <right anchor="right" percent="$y" offset="-$before" handle="@handles"/>
       </attach>
       <attach xidget="$xidgets[ $i]">
         <left attach="$xidgets[ $i - 1]" anchor="right" offset="$s"/>
@@ -153,7 +153,38 @@
     </for>
     
     <attach xidget=".">
-      <width attach="$xidgets[ $n]" anchor="right" offset="$mr"/>
+      <right attach="$xidgets[ $n]" anchor="right" offset="$mr"/>
     </attach>    
   </rightToLeft>
+  
+  <!--
+    This script iterates over the xidgets and populates two variables, "form" and "previous", before
+    executing the attachment actions defined in the declarations. 
+   -->
+  <declarations>
+    <assign name="xidgets">*[ @xidget]</assign>
+    <assign name="n">count( $xidgets)</assign>
+    <assign name="s">ancestor-or-self::*/@spacing</assign>
+    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
+
+    <assign name="form">.</assign>    
+    <assign name="previous">.</assign>
+    <for assign="current" source="$xidgets">
+    
+      <!-- turn declaration into xaction -->
+      <create assign="script">
+        <template>
+          <script>
+            <attach/>
+          </script>
+        </template>
+        <add mode="ref" source="$current/attachments/*">attach</add>
+      </create>
+      
+      <!-- execute xaction -->
+      <run>$script</run>
+      
+      <assign name="previous">$current</assign>
+    </for>
+  </declarations>
 </layouts>
