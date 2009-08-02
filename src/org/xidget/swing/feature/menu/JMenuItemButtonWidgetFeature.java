@@ -14,7 +14,6 @@ public class JMenuItemButtonWidgetFeature implements IButtonWidgetFeature
 {
   public JMenuItemButtonWidgetFeature( IXidget xidget)
   {
-    this.xidget = xidget;
   }
   
   /* (non-Javadoc)
@@ -23,6 +22,4 @@ public class JMenuItemButtonWidgetFeature implements IButtonWidgetFeature
   public void setState( boolean state)
   {
   }
-  
-  private IXidget xidget;
 }

@@ -6,6 +6,7 @@ package org.xidget.swing.menu;
 
 import java.awt.Component;
 import java.awt.Container;
+import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import org.xidget.IFeatured;
@@ -21,6 +22,7 @@ import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.button.IButtonModelFeature;
 import org.xidget.ifeature.button.IButtonWidgetFeature;
+import org.xidget.swing.feature.AbstractButtonIconFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
@@ -39,6 +41,7 @@ public class JMenuItemXidget extends Xidget
   protected void createFeatures()
   {
     bindFeature = new BindFeature( this);
+    iconFeature = new AbstractButtonIconFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     containerFeature = new GenericContainerFeature( this);
     buttonWidgetFeature = new JMenuItemButtonWidgetFeature( this);
@@ -54,7 +57,7 @@ public class JMenuItemXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IIconFeature.class) return (T)creationFeature;
+    if ( clss == IIconFeature.class) return (T)iconFeature;
     if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)buttonModelFeature;
@@ -68,6 +71,7 @@ public class JMenuItemXidget extends Xidget
     if ( clss == JComponent.class) return (T)creationFeature.getJMenuItem();
     if ( clss == JMenuItem.class) return (T)creationFeature.getJMenuItem();
     if ( clss == Container.class) return (T)creationFeature.getJMenuItem();
+    if ( clss == AbstractButton.class) return (T)creationFeature.getJMenuItem();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
@@ -76,6 +80,7 @@ public class JMenuItemXidget extends Xidget
   }
 
   private IBindFeature bindFeature;
+  private IIconFeature iconFeature;
   private IWidgetFeature widgetFeature;
   private IWidgetContainerFeature containerFeature;
   private IButtonWidgetFeature buttonWidgetFeature;

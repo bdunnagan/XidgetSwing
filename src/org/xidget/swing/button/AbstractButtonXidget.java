@@ -21,6 +21,7 @@ import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.button.IButtonModelFeature;
 import org.xidget.ifeature.button.IButtonWidgetFeature;
+import org.xidget.swing.feature.AbstractButtonIconFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 import org.xidget.swing.feature.button.AbstractButtonWidgetCreationFeature;
@@ -41,6 +42,7 @@ public class AbstractButtonXidget extends Xidget
     widgetFeature = new SwingWidgetFeature( this);
     buttonWidgetFeature = new ButtonWidgetFeature( this);
     buttonModelFeature = new ButtonModelFeature();
+    iconFeature = new AbstractButtonIconFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new AbstractButtonWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -53,7 +55,7 @@ public class AbstractButtonXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IIconFeature.class) return (T)creationFeature;
+    if ( clss == IIconFeature.class) return (T)iconFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)buttonModelFeature;
     if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
@@ -77,6 +79,7 @@ public class AbstractButtonXidget extends Xidget
   private IWidgetFeature widgetFeature;
   private IButtonWidgetFeature buttonWidgetFeature;
   private IButtonModelFeature buttonModelFeature;
+  private IIconFeature iconFeature;
   private IComputeNodeFeature computeNodeFeature;
   private AbstractButtonWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;

@@ -10,6 +10,14 @@
       </xml>
     </template>
   </create>
+  
+  <create assign="images">
+    <template annotated="true">
+      <images path=".">
+        <extern:cache class="org.xmodel.external.caching.FileSystemCachingPolicy"/>
+      </images>
+    </template>
+  </create>
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>
   
@@ -19,9 +27,9 @@
         <menubar>
           <menu label="'File'">
             <menuItem label="'New'">
-             <onPress>
+              <onPress>
                <print>'File > New'</print>
-             </onPress>
+              </onPress>
            </menuItem>
           </menu>
         </menubar>
