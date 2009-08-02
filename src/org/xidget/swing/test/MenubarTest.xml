@@ -16,6 +16,16 @@
   <create assign="form" when="true()">
     <template>
       <app size="400, 400">
+        <menubar>
+          <menu label="'File'">
+            <menuItem label="'New'">
+             <onPress>
+               <print>'File > New'</print>
+             </onPress>
+           </menuItem>
+          </menu>
+        </menubar>
+        
         <form id="1" title="'Title'" layout="$layouts/vgrid" spacing="5" handles="true">
           <form id="1a"/>
           <form id="1b"/>

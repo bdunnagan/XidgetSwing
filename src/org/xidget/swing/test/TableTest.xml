@@ -160,5 +160,5 @@
     </template>
   </create>
   
-  <xidget>$form</xidget>
+  <createXidget>$form</createXidget>
 </script>

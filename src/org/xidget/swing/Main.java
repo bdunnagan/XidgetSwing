@@ -45,7 +45,7 @@ public class Main
         try
         {
           // register toolkit
-          Creator.setToolkit( new SwingToolkit());
+          Creator.getInstance().setToolkit( new SwingToolkit());
           
           // load xml
           XmlIO xmlIO = new XmlIO();

@@ -64,7 +64,8 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     String title = getTitle();
     if ( title != null && title.length() > 0 && parent != null)
     {
-      jPanel.setBorder( new TitledBorder( title));
+      if ( !parent.getConfig().isType( "tabs"))
+        jPanel.setBorder( new TitledBorder( title));
     }
 
     // add panel to parent container
