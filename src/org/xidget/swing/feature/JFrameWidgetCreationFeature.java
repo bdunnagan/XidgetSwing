@@ -4,7 +4,10 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.JFrame;
+import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
 
@@ -24,7 +27,14 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jframe = new JFrame();
-    jframe.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
+    jframe.setDefaultCloseOperation( JFrame.HIDE_ON_CLOSE);
+    jframe.addComponentListener( new ComponentAdapter() {
+      public void componentHidden( ComponentEvent e)
+      {
+        Creator.getInstance().destroy( xidget);
+        System.exit( 1);
+      }
+    });
   }
 
   /* (non-Javadoc)
@@ -53,7 +63,6 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
     return jframe;
   }
 
-  @SuppressWarnings("unused")
   private IXidget xidget;
   private JFrame jframe;
 }

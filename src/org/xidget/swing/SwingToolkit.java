@@ -6,7 +6,9 @@ package org.xidget.swing;
 
 import java.awt.Component;
 import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import org.xidget.IToolkit;
 import org.xidget.IXidget;
@@ -67,14 +69,61 @@ public class SwingToolkit implements IToolkit
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.IToolkit#openFileDialog(org.xidget.IXidget, org.xmodel.xpath.expression.StatefulContext, 
-   * org.xmodel.xpath.expression.IExpression, java.lang.String, boolean)
+   * @see org.xidget.IToolkit#openConfirmDialog(org.xidget.IXidget, org.xmodel.xpath.expression.StatefulContext, java.lang.String, java.lang.Object, java.lang.String, boolean)
    */
-  public String[] openFileDialog( IXidget xidget, StatefulContext context, IExpression filter, String description, boolean multiSelect)
+  public Confirmation openConfirmDialog( IXidget xidget, StatefulContext context, String title, Object image, String message, boolean allowCancel)
+  {
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    if ( creationFeature == null) throw new IllegalArgumentException( "Window xidget does not have an IWidgetCreationFeature instance: "+xidget);
+    
+    Object[] widgets = creationFeature.getLastWidgets();
+    if ( widgets.length == 0) throw new IllegalArgumentException( "Window does not have a widget: "+xidget);
+    
+    int choice = JOptionPane.showConfirmDialog( (Component)widgets[ 0], message, title, allowCancel? JOptionPane.YES_NO_CANCEL_OPTION: JOptionPane.YES_NO_OPTION);
+    
+    switch( choice)
+    {
+      case JOptionPane.YES_OPTION: return Confirmation.yes;
+      case JOptionPane.NO_OPTION: return Confirmation.no;
+      default: return Confirmation.cancel;
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.IToolkit#openMessageDialog(org.xidget.IXidget, org.xmodel.xpath.expression.StatefulContext, java.lang.String, java.lang.Object, java.lang.String, org.xidget.IToolkit.MessageType)
+   */
+  public void openMessageDialog( IXidget xidget, StatefulContext context, String title, Object image, String message, MessageType type)
+  {
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    if ( creationFeature == null) throw new IllegalArgumentException( "Window xidget does not have an IWidgetCreationFeature instance: "+xidget);
+    
+    Object[] widgets = creationFeature.getLastWidgets();
+    if ( widgets.length == 0) throw new IllegalArgumentException( "Window does not have a widget: "+xidget);
+
+    int swingMessageType = JOptionPane.PLAIN_MESSAGE;
+    switch( type)
+    {
+      case error: swingMessageType = JOptionPane.ERROR_MESSAGE; break;
+      case warning: swingMessageType = JOptionPane.WARNING_MESSAGE; break;
+      case information: swingMessageType = JOptionPane.INFORMATION_MESSAGE; break;
+    }
+    
+    if ( image == null) JOptionPane.showMessageDialog( (Component)widgets[ 0], message, title, swingMessageType);
+    else JOptionPane.showMessageDialog( (Component)widgets[ 0], message, title, swingMessageType, (ImageIcon)image);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.IToolkit#openFileDialog(org.xidget.IXidget, org.xmodel.xpath.expression.StatefulContext, org.xmodel.xpath.expression.IExpression, java.lang.String, org.xidget.IToolkit.FileDialogType)
+   */
+  public String[] openFileDialog( IXidget xidget, StatefulContext context, IExpression filter, String description, FileDialogType type)
   {
     File dir = new File( Xlate.get( context.getObject(), "/"));
     JFileChooser fileChooser = new JFileChooser( dir);
-    fileChooser.setMultiSelectionEnabled( multiSelect);
+    fileChooser.setMultiSelectionEnabled( type == FileDialogType.openMany);
+    
+    // allow selecting directories unless the dialog is intended for picking a non-existing file 
+    if ( type != FileDialogType.save) 
+      fileChooser.setFileSelectionMode( JFileChooser.FILES_AND_DIRECTORIES);
     
     FileFilter fileFilter = new ExpressionFileFilter( context, filter, description);
     fileChooser.setFileFilter( fileFilter);
@@ -85,9 +134,13 @@ public class SwingToolkit implements IToolkit
     Object[] widgets = creationFeature.getLastWidgets();
     if ( widgets.length == 0) return new String[ 0];
     
-    if ( fileChooser.showOpenDialog( (Component)widgets[ 0]) == JFileChooser.APPROVE_OPTION)
+    int status = (type == FileDialogType.save)?
+      fileChooser.showSaveDialog( (Component)widgets[ 0]):
+      fileChooser.showOpenDialog( (Component)widgets[ 0]);
+    
+    if ( status == JFileChooser.APPROVE_OPTION)
     {
-      if ( multiSelect)
+      if ( type == FileDialogType.openMany)
       {
         File[] files = fileChooser.getSelectedFiles();
         String[] result = new String[ files.length];

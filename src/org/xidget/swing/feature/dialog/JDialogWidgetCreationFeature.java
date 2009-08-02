@@ -11,7 +11,7 @@ import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
 /**
- * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
+ * An implementation of IWidgetCreationFeature which creates a Swing JDialog.
  */
 public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
 {

@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import org.xidget.IXidget;
+import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
@@ -21,13 +22,22 @@ import org.xmodel.Xlate;
  * a JFrame. This class operates on a JFrame instance explicitly. In other words, this class
  * was added so that the other xidgets don't have to export a Component.class.
  */
-public class JFrameWidgetFeature implements IWidgetFeature
+public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
 {
   public JFrameWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ITitleFeature#setTitle(java.lang.String)
+   */
+  public void setTitle( String title)
+  {
+    JFrame widget = xidget.getFeature( JFrame.class);
+    widget.setTitle( title);
+  }
+
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetFeature#setBounds(float, float, float, float)
    */
