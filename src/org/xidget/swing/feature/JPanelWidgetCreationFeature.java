@@ -69,8 +69,11 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
 
     // add panel to parent container
-    IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
-    if ( containerFeature != null) containerFeature.addWidget( xidget);
+    if ( xidget.getParent() != null)
+    {
+      IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
+      if ( containerFeature != null) containerFeature.addWidget( xidget);
+    }
     
     // optionally set the width and height nodes in case children are dependent on them
     IModelObject config = xidget.getConfig();

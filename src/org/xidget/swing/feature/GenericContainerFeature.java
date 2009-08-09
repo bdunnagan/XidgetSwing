@@ -35,6 +35,14 @@ public class GenericContainerFeature implements IWidgetContainerFeature
    */
   public void addWidget( IXidget child)
   {
+    addWidget( -1, child);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#addWidget(int, org.xidget.IXidget)
+   */
+  public void addWidget( int index, IXidget child)
+  {
     Container container = xidget.getFeature( Container.class);
     if ( container != null)
     {
@@ -52,7 +60,8 @@ public class GenericContainerFeature implements IWidgetContainerFeature
         }
         else
         {
-          container.add( (Component)widgets[ 0]);
+          if ( index == -1) container.add( (Component)widgets[ 0]);
+          else container.add( (Component)widgets[ 0], index);
         }
         
         // validate the container later to improve performance

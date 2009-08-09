@@ -72,5 +72,4 @@ public class JTextXidget extends Xidget
   private IComputeNodeFeature computeNodeFeature;
   private JTextComponentWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
-
 }

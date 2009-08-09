@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature;
 
-import java.awt.Dimension;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 import org.xidget.IXidget;
@@ -31,28 +30,24 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jtabbedPane = new JTabbedPane();
-    
+
+    // create titled border if necessary (but not for tab entries)
+    IXidget parent = xidget.getParent();
+    String title = getTitle();
+    if ( title != null && title.length() > 0 && parent != null)
+    {
+      if ( !parent.getConfig().isType( "tabs"))
+        jtabbedPane.setBorder( new TitledBorder( title));
+    }
+
+    // add panel to parent container
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
     if ( containerFeature != null) containerFeature.addWidget( xidget);
-        
-    // optionally constrain size
+    
+    // optionally set the width and height nodes in case children are dependent on them
     IModelObject config = xidget.getConfig();
     Size size = new Size( Xlate.get( config, "size", (String)null), -1, -1);
-    if ( size.width >= 0 || size.height >= 0) jtabbedPane.setSize( new Dimension( size.width, size.height));
-    
-    // create titled border if necessary (but not for tab entries)
-    String title = getTitle();
-    if ( title != null && title.length() > 0)
-    {
-      IXidget parent = xidget.getParent();
-      if ( parent != null)
-      {
-        if ( parent.getConfig().isType( "form"))
-        {
-          jtabbedPane.setBorder( new TitledBorder( title));
-        }
-      }
-    }
+    if ( size.width >= 0 || size.height >= 0) jtabbedPane.setSize( size.width, size.height); 
   }
 
   /**

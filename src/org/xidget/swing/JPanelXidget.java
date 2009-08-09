@@ -15,6 +15,7 @@ import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
+import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
@@ -23,6 +24,7 @@ import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.JPanelWidgetCreationFeature;
+import org.xidget.swing.feature.SwingIconFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
@@ -37,6 +39,7 @@ public class JPanelXidget extends Xidget
     layoutFeature = new AnchorLayoutFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     titleFeature = new SwingTitleFeature( this);
+    iconFeature = new SwingIconFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JPanelWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);
@@ -54,6 +57,7 @@ public class JPanelXidget extends Xidget
     if ( clss == ILayoutFeature.class) return (T)layoutFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITitleFeature.class) return (T)titleFeature;
+    if ( clss == IIconFeature.class) return (T)iconFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
@@ -73,6 +77,7 @@ public class JPanelXidget extends Xidget
   private IWidgetFeature widgetFeature;
   private ILayoutFeature layoutFeature;
   private ITitleFeature titleFeature;
+  private IIconFeature iconFeature;
   private IComputeNodeFeature computeNodeFeature;
   private JPanelWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;

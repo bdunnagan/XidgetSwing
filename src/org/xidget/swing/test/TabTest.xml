@@ -3,11 +3,19 @@
 <script>
   <package>org.xidget.xaction</package>
   
-  <create collection="xml">
+  <create assign="xml">
     <template annotated="true">
       <xml path=".">
         <extern:cache class="org.xmodel.external.caching.FileSystemCachingPolicy"/>
       </xml>
+    </template>
+  </create>
+
+  <create assign="images">
+    <template annotated="true">
+      <images path=".">
+        <extern:cache class="org.xidget.caching.FileSystemCachingPolicy"/>
+      </images>
     </template>
   </create>
 
@@ -28,8 +36,18 @@
       </choices>
     </template>
   </create>
+  
+  <create assign="tabs">
+    <template>
+      <tabs>
+        <tab>Fred</tab>
+        <tab>Musabi</tab>
+        <tab>Dubai</tab>
+      </tabs>
+    </template>
+  </create>
 
-  <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
+  <assign name="layouts">$xml/layouts.xml/layouts</assign>  
   <create assign="form">
     <template>
       <app size="600, -1">
@@ -51,7 +69,7 @@
             </text>
           </form>
 
-          <!--form title="'Tab 2'" layout="$layouts/vfree">
+          <form title="'Tab 2'" layout="$layouts/vfree">
             <button type="radio">
               <label>Option 1</label>
               <source>collection('appdb')/radio/@b1</source>
@@ -69,9 +87,19 @@
               <label>Push Me!</label>
               <onPress>
                 <print>'Been pushed!'</print>
+                <create parent="$tabs">
+                  <template>
+                    <tab>\{concat( 'New Tab ', string( count( $tabs/tab)))}</tab>
+                  </template>
+                </create>
               </onPress>
             </button>
-          </form-->
+          </form>
+          
+          <tabs title="'Tab 3'" children="$tabs/tab" layout="$layouts/vfree">
+            <form title="." image="trace( $images/add.gif)" when="true()">
+            </form>
+          </tabs>
                     
           <trigger name="Listen" when="collection('appdb')/radio/@* = 'true'">
             <print>collection('appdb')/radio</print>

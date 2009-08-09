@@ -29,6 +29,14 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
    */
   public void addWidget( IXidget child)
   {
+    addWidget( -1, child);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#addWidget(int, org.xidget.IXidget)
+   */
+  public void addWidget( int index, IXidget child)
+  {
     JTabbedPane container = xidget.getFeature( JTabbedPane.class);
     if ( container != null)
     {
@@ -36,7 +44,8 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
       Object[] widgets = creationFeature.getLastWidgets();
       if ( widgets.length > 0) 
       {
-        container.addTab( "", (Component)widgets[ 0]);
+        if ( index < 0) container.addTab( "", (Component)widgets[ 0]);
+        else container.insertTab( "", null, (Component)widgets[ 0], null, index);
       }
     }
   }

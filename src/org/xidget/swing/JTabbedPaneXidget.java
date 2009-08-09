@@ -14,12 +14,16 @@ import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
+import org.xidget.ifeature.IDynamicContainerFeature;
+import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.DynamicContainerFeature;
 import org.xidget.swing.feature.JTabbedPaneContainerFeature;
 import org.xidget.swing.feature.JTabbedPaneWidgetCreationFeature;
+import org.xidget.swing.feature.SwingTitleFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
@@ -31,9 +35,11 @@ public class JTabbedPaneXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    titleFeature = new SwingTitleFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JTabbedPaneWidgetCreationFeature( this);
     containerFeature = new JTabbedPaneContainerFeature( this);
+    dynamicContainerFeature = new DynamicContainerFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -46,9 +52,11 @@ public class JTabbedPaneXidget extends Xidget
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITitleFeature.class) return (T)titleFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
+    if ( clss == IDynamicContainerFeature.class) return (T)dynamicContainerFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getJTabbedPane();
     if ( clss == JComponent.class) return (T)creationFeature.getJTabbedPane();
@@ -63,8 +71,10 @@ public class JTabbedPaneXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITitleFeature titleFeature;
   private IComputeNodeFeature computeNodeFeature;
   private JTabbedPaneWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;
+  private IDynamicContainerFeature dynamicContainerFeature;
   private IFeatured basicFeatureSet;
 }
