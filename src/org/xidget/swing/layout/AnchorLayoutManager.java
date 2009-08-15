@@ -98,12 +98,14 @@ public class AnchorLayoutManager implements LayoutManager
     {
       IComputeNode right = computeNodeFeature.getComputeNode( Type.right, true);
       right.setDefaultValue( bounds.width - margins.x0 - margins.x1);
+      Log.printf( "layout", "Initialize container width of %s to %3.1f\n", xidget, bounds.width);
     }
     
     if ( bounds.height > 0) 
     {
       IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, true);
       bottom.setDefaultValue( bounds.height - margins.y0 - margins.y1);
+      Log.printf( "layout", "Initialize container height of %s to %3.1f\n", xidget, bounds.height);
     }
   }
   

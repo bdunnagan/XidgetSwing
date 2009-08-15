@@ -54,9 +54,16 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
 
     if ( System.getProperty( "debug") != null)
     {
-      c += 16; if ( c > 255) c = 64;
-      int d = Xlate.get( xidget.getConfig(), "background", c);
-      jPanel.setBackground( new Color( d, d, d));
+      String background = Xlate.get( xidget.getConfig(), "background", (String)null);
+      if ( background == null)
+      {
+        c += 16; if ( c > 255) c = 64;
+        jPanel.setBackground( new Color( c, c, c));
+      }
+      else
+      {
+        jPanel.setBackground( new Color( Integer.parseInt( background, 16)));
+      }
     }
     
     // create titled border if necessary (but not for tab entries)

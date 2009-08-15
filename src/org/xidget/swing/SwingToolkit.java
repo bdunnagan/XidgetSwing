@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import org.xidget.IToolkit;
 import org.xidget.IXidget;
+import org.xidget.binding.DynamicContainerTagHandler;
 import org.xidget.binding.XidgetTagHandler;
 import org.xidget.binding.table.TableTagHandler;
 import org.xidget.binding.tree.TreeTagHandler;
@@ -47,7 +48,7 @@ public class SwingToolkit implements IToolkit
     processor.addHandler( "application", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "dialog", new XidgetTagHandler( JDialogXidget.class));
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));
-    processor.addHandler( "tabs", new XidgetTagHandler( JTabbedPaneXidget.class));
+    processor.addHandler( "tabs", new DynamicContainerTagHandler( JTabbedPaneXidget.class));
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "combo", new XidgetTagHandler( JComboBoxXidget.class));
     processor.addHandler( "button", new XidgetTagHandler( AbstractButtonXidget.class));

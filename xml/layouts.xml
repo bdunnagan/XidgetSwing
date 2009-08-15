@@ -4,187 +4,34 @@
   <package>org.xidget.layout.xaction</package>
   
   <vfree>
-    <assign name="xidgets">*[ @xidget]</assign>
-    <assign name="n">count( $xidgets)</assign>
-    <assign name="s">ancestor-or-self::*/@spacing</assign>
-    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
-
-    <for assign="xidget" source="$xidgets">
-      <attach xidget="$xidget">
-        <left offset="$ml"/>
-        <right offset="-$mr"/>
-      </attach>
-    </for>
-    
-    <attach xidget="$xidgets[ 1]">
-      <top offset="$mt"/>
-    </attach>
-        
-    <for assign="i" from="2" to="$n" by="1">
-      <attach xidget="$xidgets[ $i]">
-        <top attach="$xidgets[ $i - 1]" anchor="bottom" offset="$s" handle="@handles"/>
-      </attach>  
-    </for>
-    
-    <attach xidget=".">
-      <bottom attach="$xidgets[ $n]" anchor="bottom" offset="$mb"/>
-    </attach>
+    <layoutTopBottom/>
+    <layoutFillX/>
+    <layoutPackY/>
   </vfree>
     
   <vgrid>
-    <assign name="xidgets">*[ @xidget]</assign>
-    <assign name="n">count( $xidgets)</assign>
-    
-    <assign name="s">ancestor-or-self::*/@spacing</assign>
-    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
-    
-    <assign name="before">if ($n &gt; 1) then ($s div 2) else (0)</assign>
-    
-    <for assign="x" source="$xidgets">
-      <attach xidget="$x">
-        <left offset="$ml"/>
-        <right offset="-$mr"/>
-      </attach>
-    </for>
-    
-    <attach xidget="$xidgets[ 1]">
-      <top offset="$mt"/>
-    </attach>
-    
-    <attach xidget="$xidgets[ $n]">
-      <bottom offset="-$mb"/>
-    </attach>
-
-    <for assign="i" from="2" to="$n" by="1">
-      <assign name="y">($i - 1) div $n</assign>
-      <attach xidget="$xidgets[ $i - 1]">
-        <bottom anchor="bottom" percent="$y" offset="-$before" handle="@handles"/>
-      </attach>
-      <attach xidget="$xidgets[ $i]">
-        <top attach="$xidgets[ $i - 1]" anchor="bottom" offset="$s"/>
-      </attach>
-    </for>
+    <layoutGridY/>
+    <layoutFillX/>
   </vgrid>
   
-  <leftToRight>
-    <assign name="xidgets">*[ @xidget]</assign>
-    <assign name="n">count( $xidgets)</assign>
-    <assign name="s">ancestor-or-self::*/@spacing</assign>
-    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
-
-    <for assign="xidget" source="$xidgets">
-      <attach xidget="$xidget">
-        <top offset="$mt"/>
-        <bottom offset="-$mb"/>
-      </attach>
-    </for>
-    
-    <attach xidget="$xidgets[ 1]">
-      <left offset="$ml"/>
-    </attach>
-        
-    <for assign="i" from="2" to="$n" by="1">
-      <attach xidget="$xidgets[ $i]">
-        <left attach="$xidgets[ $i - 1]" anchor="right" offset="$s" handle="@handles"/>
-      </attach>  
-    </for>
-    
-    <attach xidget=".">
-      <right attach="$xidgets[ $n]" anchor="right" offset="$mr"/>
-    </attach>
-  </leftToRight>
-    
+  <hfree>
+    <layoutLeftRight/>
+    <layoutFillY/>
+    <layoutPackX/>
+  </hfree>
+  
   <hgrid>
-    <assign name="xidgets">*[ @xidget]</assign>
-    <assign name="n">count( $xidgets)</assign>
-    
-    <assign name="s">ancestor-or-self::*/@spacing</assign>
-    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
-    
-    <assign name="before">if ($n &gt; 1) then ($s div 2) else (0)</assign>
-    
-    <for assign="x" source="$xidgets">
-      <attach xidget="$x">
-        <top offset="$mt"/>
-        <bottom offset="-$mb"/>
-      </attach>
-    </for>
-    
-    <attach xidget="$xidgets[ 1]">
-      <left offset="$ml"/>
-    </attach>
-    
-    <attach xidget="$xidgets[ $n]">
-      <right offset="-$mr"/>
-    </attach>
-
-    <for assign="i" from="2" to="$n" by="1">
-      <assign name="y">($i - 1) div $n</assign>
-      <attach xidget="$xidgets[ $i - 1]">
-        <right anchor="right" percent="$y" offset="-$before" handle="@handles"/>
-      </attach>
-      <attach xidget="$xidgets[ $i]">
-        <left attach="$xidgets[ $i - 1]" anchor="right" offset="$s"/>
-      </attach>
-    </for>
+    <layoutGridX/>
+    <layoutFillY/>
   </hgrid>
   
+  <leftToRight>
+    <layoutLeftRight/>
+    <layoutPackY/>
+  </leftToRight>
+    
   <rightToLeft>
-    <assign name="xidgets">*[ @xidget]</assign>
-    <assign name="n">count( $xidgets)</assign>
-    <assign name="s">ancestor-or-self::*/@spacing</assign>
-    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
-
-    <for assign="xidget" source="$xidgets">
-      <attach xidget="$xidget">
-        <top offset="$mt"/>
-        <bottom offset="-$mb"/>
-      </attach>
-    </for>
-    
-    <attach xidget="$xidgets[ $n]">
-      <right offset="-$mr"/>
-    </attach>
-
-    <for assign="i" from="$n - 1" to="1" by="-1">
-      <attach xidget="$xidgets[ $i]">
-        <right attach="$xidgets[ $i + 1]" anchor="left" offset="-$s" handle="@handles"/>
-      </attach>  
-    </for>
-    
-    <attach xidget=".">
-      <right attach="$xidgets[ $n]" anchor="right" offset="$mr"/>
-    </attach>    
+    <layoutRightLeft/>
+    <layoutPackY/>
   </rightToLeft>
-  
-  <!--
-    This script iterates over the xidgets and populates two variables, "form" and "previous", before
-    executing the attachment actions defined in the declarations. 
-   -->
-  <declarations>
-    <assign name="xidgets">*[ @xidget]</assign>
-    <assign name="n">count( $xidgets)</assign>
-    <assign name="s">ancestor-or-self::*/@spacing</assign>
-    <parseInsets prefix="m">ancestor-or-self::*/@margins</parseInsets>
-
-    <assign name="form">.</assign>    
-    <assign name="previous">.</assign>
-    <for assign="current" source="$xidgets">
-    
-      <!-- turn declaration into xaction -->
-      <create assign="script">
-        <template>
-          <script>
-            <attach/>
-          </script>
-        </template>
-        <add mode="ref" source="$current/attachments/*">attach</add>
-      </create>
-      
-      <!-- execute xaction -->
-      <run>$script</run>
-      
-      <assign name="previous">$current</assign>
-    </for>
-  </declarations>
 </layouts>
