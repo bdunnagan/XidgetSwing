@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature;
 
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Point;
@@ -52,27 +51,12 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     jPanel.addMouseListener( mouseListener);
     jPanel.addMouseMotionListener( mouseListener);
 
-    if ( System.getProperty( "debug") != null)
-    {
-      String background = Xlate.get( xidget.getConfig(), "background", (String)null);
-      if ( background == null)
-      {
-        c += 16; if ( c > 255) c = 64;
-        jPanel.setBackground( new Color( c, c, c));
-      }
-      else
-      {
-        jPanel.setBackground( new Color( Integer.parseInt( background, 16)));
-      }
-    }
-    
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();
-    String title = getTitle();
-    if ( title != null && title.length() > 0 && parent != null)
+    if ( parent != null && hasTitle())
     {
       if ( !parent.getConfig().isType( "tabs"))
-        jPanel.setBorder( new TitledBorder( title));
+        jPanel.setBorder( new TitledBorder( getTitle()));
     }
 
     // add panel to parent container
@@ -89,15 +73,26 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   }
   
   /**
-   * Returns the title of the form.
-   * @return Returns null or the title of the form.
+   * Returns true if the widget has a title.
+   * @return Returns true if the widget has a title.
+   */
+  private boolean hasTitle()
+  {
+    IModelObject element = xidget.getConfig();
+    IExpression titleExpr = Xlate.childGet( element, "title", Xlate.get( element, "title", (IExpression)null));
+    return titleExpr != null;
+  }
+
+  /**
+   * Evaluates the title expression in the null context and returns the result.
+   * @return Returns an empty string or the title expression.
    */
   private String getTitle()
   {
     IModelObject element = xidget.getConfig();
     IExpression titleExpr = Xlate.childGet( element, "title", Xlate.get( element, "title", (IExpression)null));
     if ( titleExpr != null) return titleExpr.evaluateString();
-    return null;
+    return "";
   }
 
   /* (non-Javadoc)
@@ -224,8 +219,6 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
   };
 
-  private static int c = 64;
-  
   private IXidget xidget;
   private JPanel jPanel;
   private AnchorNode grabbed;

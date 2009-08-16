@@ -220,10 +220,12 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
     for( int i=0; i<nodes.size(); i++)
     {
       Object identity = selectionModelFeature.getIdentity( nodes.get( i));
+      // BUG: selection hashmap does not resolve client-created references
       Row row = index.get( identity);
       paths[ i] = new TreePath( model.createPath( row));
     }
 
+    for( TreePath path: paths) jtree.expandPath( path);
     jtree.setSelectionPaths( paths);
   }
 

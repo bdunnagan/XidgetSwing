@@ -39,6 +39,7 @@ public class Main
     //System.setProperty( "swing.aatext", "true");
     //UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName());
     
+    // get into the ui thread
     SwingUtilities.invokeLater( new Runnable() {
       public void run()
       {

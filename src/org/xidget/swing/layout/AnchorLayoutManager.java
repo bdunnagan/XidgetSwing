@@ -93,6 +93,9 @@ public class AnchorLayoutManager implements LayoutManager
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
     Bounds bounds = new Bounds(); widgetFeature.getBounds( bounds);
     
+    if ( xidget.getConfig().getAttribute( "debug") != null)
+      System.out.println( "Stopping.");
+    
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
     if ( bounds.width > 0) 
     {
@@ -115,11 +118,13 @@ public class AnchorLayoutManager implements LayoutManager
    */
   private static void initPreferredSize( IXidget xidget)
   {
+    IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
+    if ( computeNodeFeature == null) return;
+    
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
     Size size = new Size();
     widgetFeature.getPreferredSize( size);
     
-    IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
     if ( size.width > 0)
     {
       //
@@ -159,6 +164,8 @@ public class AnchorLayoutManager implements LayoutManager
   private static void setChildBounds( Margins margins, IXidget xidget)
   {
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
+    if ( computeNodeFeature == null) return; 
+
     IComputeNode top = computeNodeFeature.getComputeNode( Type.top, false);
     IComputeNode left = computeNodeFeature.getComputeNode( Type.left, false);
     IComputeNode right = computeNodeFeature.getComputeNode( Type.right, false);
@@ -167,6 +174,9 @@ public class AnchorLayoutManager implements LayoutManager
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);    
     Bounds bounds = new Bounds(); widgetFeature.getBounds( bounds);
 
+    if ( xidget.getConfig().getAttribute( "debug") != null)
+      System.out.println( "Stopping.");
+    
     if ( top != null && top.hasValue()) bounds.y = top.getValue() + margins.y0; 
     if ( left != null && left.hasValue()) bounds.x = left.getValue() + margins.x0;
     
@@ -195,6 +205,11 @@ public class AnchorLayoutManager implements LayoutManager
   private static void setContainerSize( Margins margins, IXidget xidget)
   {
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
+    if ( computeNodeFeature == null) return;
+    
+    if ( xidget.getConfig().getAttribute( "debug") != null)
+      System.out.println( "Stopping.");
+    
     IComputeNode right = computeNodeFeature.getComputeNode( Type.right, true);
     IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, true);
     

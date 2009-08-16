@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.feature.text;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -13,6 +14,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -47,17 +49,27 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     IModelObject element = xidget.getConfig();
     
     // create text widget
-    Size size = new Size( Xlate.get( element, "size", (String)null));    
+    Size size = new Size( Xlate.get( element, "size", (String)null));
     if ( size.height > 1)
     {
       jtext = new JTextArea( size.height, size.width);
+      component = new JScrollPane( jtext);
+      component.setBackground( Color.red);
+    }
+    else if ( Xlate.get( element, "multiline", false))
+    {
+      jtext = new JTextArea();
+      component = new JScrollPane( jtext);
+      component.setBackground( Color.red);
     }
     else
     {
       jtext = new JTextField( size.width);
-      jtext.setBorder( new EmptyBorder( 2, 3, 2, 3));
     }
-        
+    
+    // pretty
+    jtext.setBorder( new EmptyBorder( 1, 1, 1, 1));
+     
     // get label
     String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
     
@@ -71,23 +83,32 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
       GridBagConstraints constraints = new GridBagConstraints();
       constraints.fill = GridBagConstraints.NONE;
       constraints.anchor = GridBagConstraints.NORTHWEST;
-      constraints.insets = new Insets( 0, 0, 0, 6);
+      constraints.insets = new Insets( 0, 0, 0, 4);
       layout.setConstraints( jlabel, constraints);
       
       constraints = new GridBagConstraints();
-      constraints.fill = GridBagConstraints.HORIZONTAL;
+      constraints.fill = GridBagConstraints.BOTH;
       constraints.anchor = GridBagConstraints.NORTHWEST;
       constraints.weightx = 1;
-      layout.setConstraints( jtext, constraints);
       
-      component = new JPanel( layout);
-      component.add( jlabel);
-      component.add( jtext);
+      JPanel jPanel = new JPanel( layout);
+      if ( component == null)
+      {
+        layout.setConstraints( jtext, constraints);
+        jPanel.add( jlabel);
+        jPanel.add( jtext);
+      }
+      else
+      {
+        layout.setConstraints( component, constraints);
+        jPanel.add( jlabel);
+        jPanel.add( component);
+      }
+      
+      component = jPanel;
     }
-    else
-    {
-      component = jtext;
-    }
+    
+    if ( component == null) component = jtext;
     
     // add listeners to the widget
     jtext.addKeyListener( keyListener);

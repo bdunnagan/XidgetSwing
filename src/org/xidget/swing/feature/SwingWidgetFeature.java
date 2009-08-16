@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -98,6 +99,24 @@ public class SwingWidgetFeature implements IWidgetFeature
   {
     JComponent widget = xidget.getFeature( JComponent.class);
     widget.setToolTipText( tooltip);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setBackground(int)
+   */
+  public void setBackground( int color)
+  {
+    JComponent widget = xidget.getFeature( JComponent.class);
+    widget.setBackground( new Color( color));
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setForeground(int)
+   */
+  public void setForeground( int color)
+  {
+    JComponent widget = xidget.getFeature( JComponent.class);
+    widget.setForeground( new Color( color));
   }
 
   /* (non-Javadoc)
