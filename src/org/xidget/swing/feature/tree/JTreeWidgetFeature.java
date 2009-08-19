@@ -244,7 +244,7 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
     }
     return nodes;
   }
-
+  
   private IXidget xidget;
   private Map<StatefulContext, Row> contexts;
   private Map<Object, Row> index;
