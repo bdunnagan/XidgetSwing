@@ -36,9 +36,9 @@ public class JTableWidgetFeature implements ITreeWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#removeRows(org.xidget.table.Row, int, org.xidget.table.Row[])
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#removeRows(org.xidget.tree.Row, int, org.xidget.tree.Row[], boolean)
    */
-  public void removeRows( Row parent, int rowIndex, Row[] rows)
+  public void removeRows( Row parent, int rowIndex, Row[] rows, boolean dummy)
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();

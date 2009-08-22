@@ -7,6 +7,7 @@ package org.xidget.swing.tree;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
@@ -71,6 +72,15 @@ public class CustomTreeModel implements TreeModel
    */
   public void insertRows( Row parent, int rowIndex, Row[] rows)
   {
+    if ( swingWillHaveCollapsed) expandOnCommit = true;
+    swingWillHaveCollapsed = false;
+    
+    int[] indices = new int[ rows.length];
+    for( int i=0; i<rows.length; i++) 
+      indices[ i] = rowIndex + i;
+    
+    Object[] path = createPath( parent);
+    fireTreeNodesInserted( this, path, indices, rows);
   }
   
   /**
@@ -78,9 +88,18 @@ public class CustomTreeModel implements TreeModel
    * @param parent The parent row.
    * @param rowIndex The index where the rows will be removed.
    * @param rows The rows that were removed.
+   * @param dummy True if the dummy/temporary node is being removed.
    */
-  public void removeRows( Row parent, int rowIndex, Row[] rows)
+  public void removeRows( Row parent, int rowIndex, Row[] rows, boolean dummy)
   {
+    if ( dummy) swingWillHaveCollapsed = true;
+    
+    int[] indices = new int[ rows.length];
+    for( int i=0; i<rows.length; i++) 
+      indices[ i] = rowIndex + i;
+    
+    Object[] path = createPath( parent);
+    fireTreeNodesRemoved( this, path, indices, rows);
   }
 
   /**
@@ -89,9 +108,19 @@ public class CustomTreeModel implements TreeModel
    */
   public void commit( Row parent)
   {
-    // TODO: probably should do finer-grained events for inserts and deletes
-    Object[] path = createPath( parent);
-    fireTreeStructureChanged( this, path);
+    //
+    // Swing collapses the node if all children are removed even if some children are added afterward.
+    // So we need to make sure the row is expanded in this case.  In addition, Swing does not expand
+    // the root node, so we need to make sure it is expanded.
+    //
+    if ( parent.getParent() == null || expandOnCommit)
+    {
+      ExpandRunnable runnable = new ExpandRunnable();
+      runnable.row = parent;
+      SwingUtilities.invokeLater( runnable);
+      swingWillHaveCollapsed = false;
+      expandOnCommit = false;
+    }
   }
   
   /* (non-Javadoc)
@@ -157,11 +186,14 @@ public class CustomTreeModel implements TreeModel
    */
   public void updateCells( Row row)
   {
-    List<Row> children = (row.getParent() == null)? root.getChildren(): row.getParent().getChildren();
-    int rowIndex = children.indexOf( row);
+//    List<Row> children = (row.getParent() == null)? root.getChildren(): row.getParent().getChildren();
+//    int rowIndex = children.indexOf( row);
+//    
+//    Object[] path = createPath( row);
+//    fireTreeNodesChanged( this, path, new int[] { rowIndex}, new Row[] { row});
     
     Object[] path = createPath( row);
-    fireTreeNodesChanged( this, path, new int[] { rowIndex}, new Row[] { row});
+    fireTreeNodesChanged( this, path, new int[] {}, new Row[] {});
   }
   
   /**
@@ -240,6 +272,20 @@ public class CustomTreeModel implements TreeModel
     for( TreeModelListener listener: array) listener.treeStructureChanged( event);
   }
 
+  private class ExpandRunnable implements Runnable
+  {
+    public Row row;
+    
+    public void run()
+    {
+      Object[] path = createPath( row);
+      JTree jTree = root.getTable().getFeature( JTree.class);
+      jTree.expandPath( new TreePath( path));
+   }
+  }
+  
   private Row root;
-  private List<TreeModelListener> listeners; 
+  private List<TreeModelListener> listeners;
+  private boolean swingWillHaveCollapsed;
+  private boolean expandOnCommit;
 }

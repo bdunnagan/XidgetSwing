@@ -31,6 +31,12 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer
     Component component = super.getTreeCellRendererComponent( tree, value, selected, expanded, leaf, rowIndex, hasFocus);
     
     Row row = (Row)value;
+    if ( row.getParent() == null) 
+    {
+      setText( "ROOT");
+      return component;
+    }
+    
     Cell firstCell = row.getCell( 0);
     setIcon( (Icon)firstCell.icon);
     

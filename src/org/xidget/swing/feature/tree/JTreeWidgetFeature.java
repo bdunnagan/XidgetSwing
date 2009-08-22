@@ -74,7 +74,7 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
   /* (non-Javadoc)
    * @see org.xidget.ifeature.tree.ITreeWidgetFeature#removeRows(org.xidget.table.Row, int, org.xidget.table.Row[])
    */
-  public void removeRows( Row parent, int rowIndex, Row[] rows)
+  public void removeRows( Row parent, int rowIndex, Row[] rows, boolean dummy)
   {
     // let expansion policy cleanup listeners
     ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
@@ -103,7 +103,7 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
     }
     
     // notify widget
-    treeModel.removeRows( parent, rowIndex, rows);    
+    treeModel.removeRows( parent, rowIndex, rows, dummy);    
   }
 
   /* (non-Javadoc)

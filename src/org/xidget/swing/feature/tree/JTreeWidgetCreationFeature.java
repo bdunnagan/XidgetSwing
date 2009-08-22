@@ -47,7 +47,6 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     jtree.setShowsRootHandles( true);
     jtree.setRootVisible( false);
     jtree.putClientProperty( "JTree.lineStyle", "Angled");
-    
     jtree.addTreeExpansionListener( expandListener);
     
     if ( xidget.getFeature( ISelectionModelFeature.class) != null)

@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.table;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JTable;
@@ -26,9 +27,9 @@ public class CustomHeaderCellRenderer extends DefaultTableCellRenderer
     super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column);
 
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
-    
+
+    setBackground( Color.lightGray);
     setIcon( (Icon)tableModel.getColumnImage( column));
-    setName( tableModel.getColumnName( column));
     setText( tableModel.getColumnName( column));
         
     return this;
