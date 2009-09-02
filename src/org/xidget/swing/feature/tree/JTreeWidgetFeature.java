@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 import org.xidget.IXidget;
@@ -220,13 +221,44 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
     for( int i=0; i<nodes.size(); i++)
     {
       Object identity = selectionModelFeature.getIdentity( nodes.get( i));
-      // BUG: selection hashmap does not resolve client-created references
       Row row = index.get( identity);
+      if ( row == null) row = searchModel( identity);
       paths[ i] = new TreePath( model.createPath( row));
     }
 
     for( TreePath path: paths) jtree.expandPath( path);
     jtree.setSelectionPaths( paths);
+  }
+  
+  /**
+   * Search the model for the specified key.
+   * @param identity The key.
+   * @return Returns null or the row for that key.
+   */
+  private Row searchModel( Object identity)
+  {
+    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+    ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
+    
+    JTree jtree = xidget.getFeature( JTree.class);
+    CustomTreeModel model = (CustomTreeModel)jtree.getModel();
+    Row root = (Row)model.getRoot();
+    
+    Stack<Row> stack = new Stack<Row>();
+    stack.push( root);
+    while( !stack.empty())
+    {
+      Row row = stack.pop();
+      
+      if ( selectionModelFeature.getIdentity( row.getContext().getObject()) == identity)
+        return row;
+      
+      expandFeature.expand( row);
+      for( Row child: row.getChildren())
+        stack.push( child);
+    }
+    
+    return null;
   }
 
   /* (non-Javadoc)
