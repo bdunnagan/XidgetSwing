@@ -21,8 +21,6 @@ import org.xidget.ifeature.IComputeNodeFeature.Type;
 import org.xidget.layout.Bounds;
 import org.xidget.layout.IComputeNode;
 import org.xidget.layout.Margins;
-import org.xidget.layout.OffsetNode;
-import org.xidget.layout.Size;
 
 /**
  * An implementation of LayoutManager that uses the AnchorLayoutFeature.
@@ -39,6 +37,7 @@ public class AnchorLayoutManager implements LayoutManager
    */
   public void addLayoutComponent( String name, Component component)
   {
+    preferred = null;
   }
 
   /* (non-Javadoc)
@@ -46,6 +45,7 @@ public class AnchorLayoutManager implements LayoutManager
    */
   public void removeLayoutComponent( Component component)
   {
+    preferred = null;
   }
 
   /* (non-Javadoc)
@@ -64,10 +64,6 @@ public class AnchorLayoutManager implements LayoutManager
         
         // initialize container size
         initContainerSize( margins, xidget);
-        
-        // initialize the preferred size of each child
-        for( IXidget child: xidget.getChildren())
-          initPreferredSize( child);
         
         // layout
         IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
@@ -93,9 +89,6 @@ public class AnchorLayoutManager implements LayoutManager
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
     Bounds bounds = new Bounds(); widgetFeature.getBounds( bounds);
     
-    if ( xidget.getConfig().getAttribute( "debug") != null)
-      System.out.println( "Stopping.");
-    
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
     if ( bounds.width > 0) 
     {
@@ -110,50 +103,6 @@ public class AnchorLayoutManager implements LayoutManager
       bottom.setDefaultValue( bounds.height - margins.y0 - margins.y1);
       Log.printf( "layout", "Initialize container height of %s to %3.1f\n", xidget, bounds.height);
     }
-  }
-  
-  /**
-   * Create dependencies to implement the preferred size of the specified xidget.
-   * @param xidget The xidget.
-   */
-  private static void initPreferredSize( IXidget xidget)
-  {
-    IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
-    if ( computeNodeFeature == null) return;
-    
-    IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
-    Size size = new Size();
-    widgetFeature.getPreferredSize( size);
-    
-    if ( size.width > 0)
-    {
-      //
-      // Create dependencies in both directions so that nodes will be updated correctly
-      // regardless of whether the left or the right node is anchored. Note that this
-      // creates a cycle, but the sorting algorithm should insure that the these nodes
-      // appear twice in the computation list.
-      //
-      IComputeNode left = computeNodeFeature.getComputeNode( Type.left, false);
-      IComputeNode right = computeNodeFeature.getComputeNode( Type.right, false);
-      right.addDependency( new OffsetNode( left, size.width));
-      left.addDependency( new OffsetNode( right, -size.width));
-    }
-    
-    if ( size.height > 0)
-    {
-      //
-      // Create dependencies in both directions so that nodes will be updated correctly
-      // regardless of whether the top or the bottom node is anchored. Note that this
-      // creates a cycle, but the sorting algorithm should insure that the these nodes
-      // appear twice in the computation list.
-      //
-      IComputeNode top = computeNodeFeature.getComputeNode( Type.top, false);
-      IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, false);
-      bottom.addDependency( new OffsetNode( top, size.height));
-      top.addDependency( new OffsetNode( bottom, -size.height));
-    }
-    
-    Log.printf( "layout", "Initalize preferred size of %s to %s\n", xidget, size);
   }
   
   /**
@@ -174,9 +123,6 @@ public class AnchorLayoutManager implements LayoutManager
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);    
     Bounds bounds = new Bounds(); widgetFeature.getBounds( bounds);
 
-    if ( xidget.getConfig().getAttribute( "debug") != null)
-      System.out.println( "Stopping.");
-    
     if ( top != null && top.hasValue()) bounds.y = top.getValue() + margins.y0; 
     if ( left != null && left.hasValue()) bounds.x = left.getValue() + margins.x0;
     
@@ -236,26 +182,35 @@ public class AnchorLayoutManager implements LayoutManager
    */
   public Dimension preferredLayoutSize( Container parent)
   {
-    layoutContainer( parent);
-
-    // see if size already computed
-    Rectangle bounds = new Rectangle();
-    parent.getBounds( bounds);
-    if ( bounds.width > 0 || bounds.height > 0)
-      return new Dimension( bounds.width, bounds.height);
-    
-    // compute size
-    bounds = new Rectangle();
-    Rectangle childBounds = new Rectangle();
-    for( Component child: parent.getComponents())
+    if ( preferred == null)
     {
-      child.getBounds( childBounds);
-      bounds.add( childBounds);
+      layoutContainer( parent);
+  
+      // see if size already computed
+      Rectangle bounds = new Rectangle();
+      parent.getBounds( bounds);
+      if ( bounds.width > 0 || bounds.height > 0)
+      {
+        preferred = new Dimension( bounds.width, bounds.height);
+        return preferred;
+      }
+      
+      // compute size
+      bounds = new Rectangle();
+      Rectangle childBounds = new Rectangle();
+      for( Component child: parent.getComponents())
+      {
+        child.getBounds( childBounds);
+        bounds.add( childBounds);
+      }
+      
+      Insets insets = parent.getInsets();
+      preferred = new Dimension( bounds.width + insets.left + insets.right, bounds.height + insets.top + insets.bottom);
     }
     
-    Insets insets = parent.getInsets();
-    return new Dimension( bounds.width + insets.left + insets.right, bounds.height + insets.top + insets.bottom);
+    return preferred;
   }
   
   private IXidget xidget;
+  private Dimension preferred;
 }
