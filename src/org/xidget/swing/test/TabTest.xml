@@ -46,6 +46,8 @@
       </tabs>
     </template>
   </create>
+  
+  <create assign="selection" name="'selection'"/>
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>  
   <create assign="form">
@@ -97,12 +99,17 @@
           </form>
           
           <tabs title="'Tab 3'" children="$tabs/tab" layout="$layouts/vfree">
+            <selection parent="$selection"/>
             <form title="." image="trace( $images/add.gif)" when="true()">
             </form>
           </tabs>
                     
           <trigger name="Listen" when="collection('appdb')/radio/@* = 'true'">
             <print>collection('appdb')/radio</print>
+          </trigger>
+          
+          <trigger entity="$selection">
+            <print>$selection</print>
           </trigger>
         </tabs>
       </app>

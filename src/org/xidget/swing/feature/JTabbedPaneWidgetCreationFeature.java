@@ -4,15 +4,23 @@
  */
 package org.xidget.swing.feature;
 
+import java.util.Collections;
+import java.util.List;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.xidget.IXidget;
+import org.xidget.ifeature.IDynamicContainerFeature;
+import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
+import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.layout.Size;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
@@ -30,6 +38,7 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jtabbedPane = new JTabbedPane();
+    jtabbedPane.addChangeListener( selectionListener);
 
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();
@@ -88,6 +97,24 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     return jtabbedPane;
   }
 
+  private ChangeListener selectionListener = new ChangeListener() {
+    public void stateChanged( ChangeEvent e)
+    {
+      IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
+      StatefulContext context = contextFeature.getContext( jtabbedPane);
+      
+      IDynamicContainerFeature dynamicContainerFeature = xidget.getFeature( IDynamicContainerFeature.class);
+      List<IModelObject> children = dynamicContainerFeature.getChildren();
+      
+      int index = jtabbedPane.getSelectedIndex();
+      if ( index < children.size())
+      {
+        ISelectionModelFeature feature = xidget.getFeature( ISelectionModelFeature.class);
+        feature.setSelection( context, Collections.singletonList( children.get( index)));
+      }
+    }
+  };
+  
   private IXidget xidget;
   private JTabbedPane jtabbedPane;
 }

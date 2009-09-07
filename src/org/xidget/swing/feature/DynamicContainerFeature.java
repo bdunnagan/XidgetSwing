@@ -71,6 +71,16 @@ public class DynamicContainerFeature implements IDynamicContainerFeature, IListe
       }
     }
   }
+  
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IDynamicContainerFeature#getChildren()
+   */
+  public List<IModelObject> getChildren()
+  {
+    List<IModelObject> children = new ArrayList<IModelObject>( list.size());
+    for( Child child: list) children.add( child.context.getObject());
+    return children;
+  }
 
   /* (non-Javadoc)
    * @see org.xidget.ConfigurationSwitch.IListener#notifyMatch(org.xmodel.xpath.expression.StatefulContext, java.lang.Object)
