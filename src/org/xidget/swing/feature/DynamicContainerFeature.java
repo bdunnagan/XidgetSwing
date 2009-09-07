@@ -210,6 +210,15 @@ public class DynamicContainerFeature implements IDynamicContainerFeature, IListe
       changes.add( change);
     }
     
+    /* (non-Javadoc)
+     * @see org.xmodel.diff.AbstractListDiffer#isMatch(java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public boolean isMatch( Object lhs, Object rhs)
+    {
+      return rhs.equals( ((Child)lhs).context.getObject());
+    }
+
     /**
      * Returns the changes.
      * @return Returns the changes.
