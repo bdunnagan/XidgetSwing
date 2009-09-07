@@ -50,7 +50,17 @@
       </tabular>
     </template>
   </create>
-
+  
+  <create assign="selection">
+    <template>
+      <selection>
+        <selection1/>
+        <selection2/>
+        <selection3/>
+      </selection>
+    </template>
+  </create>
+  
   <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
   <create assign="form">
     <template>
@@ -72,11 +82,21 @@
           </text>
           
           <table>
+            <onDrop>
+              <print>printf( "drop 1 at %s %s %s\n", $rowIndex, $columnIndex, $insert)</print>
+            </onDrop>
+          
             <column>'Column 1'</column>
             <column>'Column 2'</column>
             <column>'Column 3'</column>
 
+            <selection parent="$selection/selection1" mode="fk1"/>
+              
             <table>
+              <onDrop>
+                <print>printf( "drop 2 at %s %s %s\n", $rowIndex, $columnIndex, $insert)</print>
+              </onDrop>
+          
               <rows>$tabular/row</rows>
               <cell>
                 <source>column[ 1]</source>
@@ -105,13 +125,14 @@
             </table>
             
             <table>
-              <rows>$fsys</rows>
+              <rows>$fsys/*</rows>
               <cell>
                 <source>name()</source>
               </cell>
             </table>
             
             <table>
+              <selection parent="$selection/selection2"/>
               <rows>if ( collection('appdb')/text2 = 'Relayer') then static( $layouts//*/@*) else null</rows>
               <cell>
                 <source>name()</source>
@@ -129,6 +150,7 @@
             </table>
             
             <table>
+              <selection parent="$selection/selection3"/>
               <rows>$layouts//*</rows>
               <cell>
                 <source>name()</source>
@@ -141,10 +163,6 @@
               </cell>
             </table>
           </table>
-            
-          <trigger name="Listen" source="collection('appdb')/text2">
-            <print>string( collection('appdb')/text2)</print>
-          </trigger>
         </form>
       </app>
     </template>

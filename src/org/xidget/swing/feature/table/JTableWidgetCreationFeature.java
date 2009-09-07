@@ -5,7 +5,15 @@
 package org.xidget.swing.feature.table;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -13,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.xidget.IXidget;
+import org.xidget.ifeature.IDragAndDropFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
@@ -20,6 +29,7 @@ import org.xidget.swing.table.CustomCellEditor;
 import org.xidget.swing.table.CustomCellRenderer;
 import org.xidget.swing.table.CustomHeaderCellRenderer;
 import org.xidget.swing.table.CustomTableModel;
+import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -43,6 +53,15 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     CustomTableModel tableModel = new CustomTableModel( xidget);
     
     jtable = new JTable( tableModel);
+    jtable.setDragEnabled( true);
+    try
+    {
+      jtable.getDropTarget().addDropTargetListener( dndListener);
+    }
+    catch( Exception e)
+    {
+      e.printStackTrace( System.err);
+    }
     
     jtable.setShowGrid( true);
     jtable.setShowHorizontalLines( true);
@@ -84,38 +103,208 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     return jtable;
   }
   
+  /**
+   * Update the selection in the model.
+   */
+  public void updateSelection()
+  {
+    IWidgetContextFeature widgetContextFeature = xidget.getFeature( IWidgetContextFeature.class);
+    StatefulContext context = widgetContextFeature.getContext( jtable);
+
+    int[] selected = jtable.getSelectedRows();
+    Arrays.sort( selected);
+    
+    CustomTableModel model = (CustomTableModel)jtable.getModel();
+    List<Row> rows = model.getRows();
+    
+    // global table selection
+    List<IModelObject> tableElements = new ArrayList<IModelObject>();
+    for( int i=0; i<selected.length; i++)
+    {
+      Row row = rows.get( selected[ i]);
+      tableElements.add( row.getContext().getObject());
+    }
+    
+    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+    selectionModelFeature.setSelection( context, tableElements);
+    
+    // table group selections
+    List<IModelObject> groupElements = new ArrayList<IModelObject>();
+    for( IXidget group: xidget.getChildren())
+    {
+      selectionModelFeature = group.getFeature( ISelectionModelFeature.class);
+      if ( selectionModelFeature != null)
+      {
+        extractGroupSelection( rows, group, selected, groupElements);
+        selectionModelFeature.setSelection( context, groupElements);
+      }
+    }
+  }
+
+  /**
+   * Returns the row beneath the specified display location.
+   * @param point The display location.
+   * @return Returns null or the row.
+   */
+  private Row getRowAt( Point point)
+  {
+    int rIndex = jtable.rowAtPoint( point);
+    if ( rIndex < 0) return null;
+    
+    CustomTableModel model = (CustomTableModel)jtable.getModel();
+    List<Row> rows = model.getRows();
+    if ( rIndex >= rows.size()) return null;
+    
+    return rows.get( rIndex);
+  }
+  
+  /**
+   * Returns the cell beneath the specified display location.
+   * @param point The display location.
+   * @return Returns null or the cell.
+   */
+  private Cell getCellAt( Point point)
+  {
+    int rIndex = jtable.rowAtPoint( point);
+    int cIndex = jtable.columnAtPoint( point);
+    cIndex = jtable.convertColumnIndexToModel( cIndex);
+    
+    CustomTableModel model = (CustomTableModel)jtable.getModel();
+    List<Row> rows = model.getRows();
+    if ( rIndex >= rows.size()) return null;
+    
+    Cell cell = rows.get( rIndex).getCell( cIndex);
+    return cell;
+  }
+  
+  /**
+   * Returns the row objects that are selected within the specified table group.
+   * @param group The table group.
+   * @param selected The current selection indices.
+   * @param result Returns the row objects that are selected within the specified table group.
+   */
+  private void extractGroupSelection( List<Row> rows, IXidget group, int[] selected, List<IModelObject> result)
+  {
+    result.clear();
+    for( int i=0; i<selected.length; i++)
+    {
+      Row row = rows.get( selected[ i]);
+      if ( row.getTable() == group)
+        result.add( row.getContext().getObject());
+    }
+  }
+  
   private ListSelectionListener selectionListener = new ListSelectionListener() {
     public void valueChanged( ListSelectionEvent event)
     {
       if ( updating) return;
-      updating = true;
-      
-      try
-      {
-        IWidgetContextFeature widgetContextFeature = xidget.getFeature( IWidgetContextFeature.class);
-        StatefulContext context = widgetContextFeature.getContext( event.getSource());
-
-        // TODO: table selection is not ordered and causes unnecessary change records
-        int[] selected = jtable.getSelectedRows();
-        
-        CustomTableModel model = (CustomTableModel)jtable.getModel();
-        List<Row> rows = model.getRows();
-        List<IModelObject> elements = new ArrayList<IModelObject>();
-        for( int i=0; i<selected.length; i++)
-        {
-          elements.add( rows.get( selected[ i]).getContext().getObject());
-        }
-        
-        ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-        selectionModelFeature.setSelection( context, elements);
-      }
-      finally
-      {
-        updating = false;
-      }
+      updating = true;      
+      try { updateSelection();} finally { updating = false;}
     }
     
     private boolean updating;
+  };
+  
+  /**
+   * Create a drop context and populate the appropriate variables.
+   * @param location The current drag or drop location.
+   * @return Returns the new drop context.
+   */
+  private StatefulContext createDropContext( Point location)
+  {
+    int rIndex = jtable.rowAtPoint( location);
+    int cIndex = jtable.columnAtPoint( location);
+    
+    Row row = getRowAt( location);
+    StatefulContext rowContext = (row != null)? row.getContext(): null;
+    StatefulContext dropContext = new StatefulContext( rowContext, xidget.getConfig());
+    
+    dropContext.set( "row", rowContext.getObject());
+    dropContext.set( "rowIndex", rIndex);
+    dropContext.set( "columnIndex", cIndex);
+    
+    Rectangle cellBounds = jtable.getCellRect( rIndex, cIndex, false);
+    int middle = cellBounds.y + cellBounds.height / 2;
+    int insert = (location.y < middle)? rIndex: rIndex+1;
+    dropContext.set( "insert", insert);
+    
+    Cell cell = getCellAt( location);
+    dropContext.set( "cell", (cell != null)? cell.source: null);
+    
+    return dropContext;
+  }
+  
+  private DropTargetListener dndListener = new DropTargetAdapter() {
+    public void dragEnter( DropTargetDragEvent event)
+    {
+      StatefulContext dropContext = createDropContext( event.getLocation());
+      
+      // local definition takes precedence
+      Row row = getRowAt( event.getLocation());
+      if ( row != null)
+      {
+        IDragAndDropFeature dndFeature = row.getTable().getFeature( IDragAndDropFeature.class);
+        if ( dndFeature != null && dndFeature.isDropEnabled())
+        {
+          if ( dndFeature.canDrop( dropContext)) event.acceptDrag( DnDConstants.ACTION_COPY); 
+          else event.rejectDrag();
+          return;
+        }
+      }
+      
+      // global definition
+      IDragAndDropFeature dndFeature = xidget.getFeature( IDragAndDropFeature.class);
+      if ( dndFeature != null)
+      {
+        if ( dndFeature.canDrop( dropContext)) event.acceptDrag( DnDConstants.ACTION_COPY); 
+        else event.rejectDrag();
+      }
+    }
+    public void dragOver( DropTargetDragEvent event)
+    {
+      StatefulContext dropContext = createDropContext( event.getLocation());
+      
+      // local definition takes precedence
+      Row row = getRowAt( event.getLocation());
+      if ( row != null)
+      {
+        IDragAndDropFeature dndFeature = row.getTable().getFeature( IDragAndDropFeature.class);
+        if ( dndFeature != null && dndFeature.isDropEnabled())
+        {
+          if ( dndFeature.canDrop( dropContext)) event.acceptDrag( DnDConstants.ACTION_COPY); 
+          else event.rejectDrag();
+          return;
+        }
+      }
+      
+      // global definition
+      IDragAndDropFeature dndFeature = xidget.getFeature( IDragAndDropFeature.class);
+      if ( dndFeature != null)
+      {
+        if ( dndFeature.canDrop( dropContext)) event.acceptDrag( DnDConstants.ACTION_COPY); 
+        else event.rejectDrag();
+      }
+    }
+    public void drop( DropTargetDropEvent event)
+    {
+      StatefulContext dropContext = createDropContext( event.getLocation());
+      
+      // local definition goes first
+      Row row = getRowAt( event.getLocation());
+      if ( row != null)
+      {
+        IDragAndDropFeature dndFeature = row.getTable().getFeature( IDragAndDropFeature.class);
+        if ( dndFeature != null && dndFeature.isDropEnabled())
+        {
+          dndFeature.drop( dropContext);
+          return;
+        }
+      }
+      
+      // global definition
+      IDragAndDropFeature dndFeature = xidget.getFeature( IDragAndDropFeature.class);
+      if ( dndFeature != null && dndFeature.isDropEnabled()) dndFeature.drop( dropContext);
+    }
   };
 
   private JScrollPane jscrollPane;

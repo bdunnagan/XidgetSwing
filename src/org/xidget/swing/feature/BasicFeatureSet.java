@@ -6,9 +6,11 @@ package org.xidget.swing.feature;
 
 import org.xidget.IFeatured;
 import org.xidget.IXidget;
+import org.xidget.feature.DragAndDropFeature;
 import org.xidget.feature.ScriptFeature;
 import org.xidget.feature.WidgetContextFeature;
 import org.xidget.ifeature.IAsyncFeature;
+import org.xidget.ifeature.IDragAndDropFeature;
 import org.xidget.ifeature.IErrorFeature;
 import org.xidget.ifeature.IScriptFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
@@ -29,6 +31,7 @@ public class BasicFeatureSet implements IFeatured
     errorFeature = new TooltipErrorFeature( xidget);
     scriptFeature = new ScriptFeature( xidget);
     contextFeature = new WidgetContextFeature();
+    dndFeature = new DragAndDropFeature( xidget);
   }
   
   /* (non-Javadoc)
@@ -41,6 +44,7 @@ public class BasicFeatureSet implements IFeatured
     if ( clss == IErrorFeature.class) return (T)errorFeature;
     if ( clss == IScriptFeature.class) return (T)scriptFeature;
     if ( clss == IWidgetContextFeature.class) return (T)contextFeature;
+    if ( clss == IDragAndDropFeature.class) return (T)dndFeature;
     return null;
   }
   
@@ -48,4 +52,5 @@ public class BasicFeatureSet implements IFeatured
   private IErrorFeature errorFeature;
   private IScriptFeature scriptFeature;
   private IWidgetContextFeature contextFeature;
+  private IDragAndDropFeature dndFeature;
 }
