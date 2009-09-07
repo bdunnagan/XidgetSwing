@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature.text;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -14,6 +13,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -50,17 +50,19 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     
     // create text widget
     Size size = new Size( Xlate.get( element, "size", (String)null));
-    if ( size.height > 1)
+    if ( element.isType( "password"))
+    {
+      jtext = new JPasswordField( size.width);
+    }
+    else if ( size.height > 1)
     {
       jtext = new JTextArea( size.height, size.width);
       component = new JScrollPane( jtext);
-      component.setBackground( Color.red);
     }
     else if ( Xlate.get( element, "multiline", false))
     {
       jtext = new JTextArea();
       component = new JScrollPane( jtext);
-      component.setBackground( Color.red);
     }
     else
     {

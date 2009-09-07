@@ -29,38 +29,51 @@
     </template>
   </create>
 
-  <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
   <create assign="form">
     <template>
-      <app>
-        <form layout="$layouts/vertical">
+      <application>
+        <package>org.xidget.xaction</package>
+        <package>org.xidget.layout.xaction</package>
+    
+        <form>
+          <layout>
+            <layoutFillX/>
+            <layoutTopBottom/>
+          </layout>
+          
           <text id="1">
             <label>Text1</label>
-            <source>collection('appdb')/text1</source>
+            <source>$data/text1</source>
           </text>
   
           <combo id="2" size="50,1">
             <choices>$choices/choice</choices>        
-            <source>collection('appdb')/text2</source>
+            <source>$data/text2</source>
           </combo>
           
           <text id="3" size="50,1">        
             <label>Text3</label>
-            <source>collection('appdb')/text3</source>
+            <source>$data/text3</source>
           </text>
 
           <!-- debug button source not updated -->
           <button type="radio">
             <label>Option 1</label>
-            <source>collection('appdb')/radio/@b1</source>
+            <onPress>
+              <set source="'option1'">$data/radio</set>
+            </onPress>
           </button>          
           <button type="radio">
             <label>Option 2</label>
-            <source>collection('appdb')/radio/@b2</source>
+            <onPress>
+              <set source="'option2'">$data/radio</set>
+            </onPress>
           </button>          
           <button type="radio">
             <label>Option 3</label>
-            <source>collection('appdb')/radio/@b3</source>
+            <onPress>
+              <set source="'option3'">$data/radio</set>
+            </onPress>
           </button>          
             
           <button type="push">
@@ -70,22 +83,22 @@
             </onPress>
           </button>
                     
-          <trigger name="Listen" when="collection('appdb')/radio/@* = 'true'">
-            <print>collection('appdb')/radio</print>
+          <trigger name="Listen" source="$data/radio">
+            <print>$data/radio</print>
           </trigger>
         </form>
-      </app>
+      </application>
     </template>
   </create>
   
-  <create collection="appdb">
+  <create assign="data">
     <template>
-      <appdb>
+      <data>
         <text1>Time and a Word</text1>
         <text2>Relayer</text2>
         <text3>Close to the Edge</text3>
-        <radio b1="false" b2="true" b3="false"/>
-      </appdb>
+        <radio/>
+      </data>
     </template>
   </create>
   

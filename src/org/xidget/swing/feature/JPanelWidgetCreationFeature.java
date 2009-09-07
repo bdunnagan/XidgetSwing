@@ -138,8 +138,6 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
 
     for( IComputeNode node: nodes)
     {
-      if ( !(node instanceof IComputeNode)) continue;
-        
       if ( node.hasXHandle())
       {
         float nx = node.getValue();

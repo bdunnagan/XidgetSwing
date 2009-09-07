@@ -76,10 +76,10 @@
             <source>collection('appdb')/text2</source>
           </combo>
           
-          <text id="3" size="50,1">        
-            <label>Text3</label>
+          <password id="3" size="20">        
+            <label>Password</label>
             <source>collection('appdb')/text3</source>
-          </text>
+          </password>
           
           <table>
             <onDrop>

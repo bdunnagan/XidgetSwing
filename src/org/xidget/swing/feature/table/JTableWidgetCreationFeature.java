@@ -142,42 +142,6 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
   }
 
   /**
-   * Returns the row beneath the specified display location.
-   * @param point The display location.
-   * @return Returns null or the row.
-   */
-  private Row getRowAt( Point point)
-  {
-    int rIndex = jtable.rowAtPoint( point);
-    if ( rIndex < 0) return null;
-    
-    CustomTableModel model = (CustomTableModel)jtable.getModel();
-    List<Row> rows = model.getRows();
-    if ( rIndex >= rows.size()) return null;
-    
-    return rows.get( rIndex);
-  }
-  
-  /**
-   * Returns the cell beneath the specified display location.
-   * @param point The display location.
-   * @return Returns null or the cell.
-   */
-  private Cell getCellAt( Point point)
-  {
-    int rIndex = jtable.rowAtPoint( point);
-    int cIndex = jtable.columnAtPoint( point);
-    cIndex = jtable.convertColumnIndexToModel( cIndex);
-    
-    CustomTableModel model = (CustomTableModel)jtable.getModel();
-    List<Row> rows = model.getRows();
-    if ( rIndex >= rows.size()) return null;
-    
-    Cell cell = rows.get( rIndex).getCell( cIndex);
-    return cell;
-  }
-  
-  /**
    * Returns the row objects that are selected within the specified table group.
    * @param group The table group.
    * @param selected The current selection indices.
@@ -206,6 +170,23 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
   };
   
   /**
+   * Returns the row beneath the specified display location.
+   * @param point The display location.
+   * @return Returns null or the row.
+   */
+  private Row getRowAt( Point point)
+  {
+    int rIndex = jtable.rowAtPoint( point);
+    if ( rIndex < 0) return null;
+    
+    CustomTableModel model = (CustomTableModel)jtable.getModel();
+    List<Row> rows = model.getRows();
+    if ( rIndex >= rows.size()) return null;
+    
+    return rows.get( rIndex);
+  }
+  
+  /**
    * Create a drop context and populate the appropriate variables.
    * @param location The current drag or drop location.
    * @return Returns the new drop context.
@@ -228,62 +209,50 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     int insert = (location.y < middle)? rIndex: rIndex+1;
     dropContext.set( "insert", insert);
     
-    Cell cell = getCellAt( location);
+    Cell cell = row.getCell( cIndex);
     dropContext.set( "cell", (cell != null)? cell.source: null);
     
     return dropContext;
   }
   
+  /**
+   * Returns true if a drop at the specified location is allowed.
+   * @param location The location.
+   * @return Returns true if a drop at the specified location is allowed.
+   */
+  private boolean canDrop( Point location)
+  {
+    StatefulContext dropContext = createDropContext( location);
+    
+    // local definition takes precedence
+    Row row = getRowAt( location);
+    if ( row != null)
+    {
+      IDragAndDropFeature dndFeature = row.getTable().getFeature( IDragAndDropFeature.class);
+      if ( dndFeature != null && dndFeature.isDropEnabled()) return dndFeature.canDrop( dropContext); 
+    }
+    
+    // global definition
+    IDragAndDropFeature dndFeature = xidget.getFeature( IDragAndDropFeature.class);
+    if ( dndFeature != null) return dndFeature.canDrop( dropContext);
+    
+    return false;
+  }
+  
   private DropTargetListener dndListener = new DropTargetAdapter() {
     public void dragEnter( DropTargetDragEvent event)
     {
-      StatefulContext dropContext = createDropContext( event.getLocation());
-      
-      // local definition takes precedence
-      Row row = getRowAt( event.getLocation());
-      if ( row != null)
-      {
-        IDragAndDropFeature dndFeature = row.getTable().getFeature( IDragAndDropFeature.class);
-        if ( dndFeature != null && dndFeature.isDropEnabled())
-        {
-          if ( dndFeature.canDrop( dropContext)) event.acceptDrag( DnDConstants.ACTION_COPY); 
-          else event.rejectDrag();
-          return;
-        }
-      }
-      
-      // global definition
-      IDragAndDropFeature dndFeature = xidget.getFeature( IDragAndDropFeature.class);
-      if ( dndFeature != null)
-      {
-        if ( dndFeature.canDrop( dropContext)) event.acceptDrag( DnDConstants.ACTION_COPY); 
-        else event.rejectDrag();
-      }
+      if ( canDrop( event.getLocation())) 
+        event.acceptDrag( DnDConstants.ACTION_COPY); 
+      else 
+        event.rejectDrag();
     }
     public void dragOver( DropTargetDragEvent event)
     {
-      StatefulContext dropContext = createDropContext( event.getLocation());
-      
-      // local definition takes precedence
-      Row row = getRowAt( event.getLocation());
-      if ( row != null)
-      {
-        IDragAndDropFeature dndFeature = row.getTable().getFeature( IDragAndDropFeature.class);
-        if ( dndFeature != null && dndFeature.isDropEnabled())
-        {
-          if ( dndFeature.canDrop( dropContext)) event.acceptDrag( DnDConstants.ACTION_COPY); 
-          else event.rejectDrag();
-          return;
-        }
-      }
-      
-      // global definition
-      IDragAndDropFeature dndFeature = xidget.getFeature( IDragAndDropFeature.class);
-      if ( dndFeature != null)
-      {
-        if ( dndFeature.canDrop( dropContext)) event.acceptDrag( DnDConstants.ACTION_COPY); 
-        else event.rejectDrag();
-      }
+      if ( canDrop( event.getLocation())) 
+        event.acceptDrag( DnDConstants.ACTION_COPY); 
+      else 
+        event.rejectDrag();
     }
     public void drop( DropTargetDropEvent event)
     {
