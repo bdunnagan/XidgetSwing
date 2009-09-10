@@ -109,6 +109,14 @@
                 <cell>
                   <source>name()</source>
                 </cell>
+              
+                <onDrag/>
+                <onDrop>
+                  <print>$rowIndex</print>
+                  <print>$columnIndex</print>
+                  <print>$insert</print>
+                </onDrop>
+              
               </table>
             </tree>
           </tree>

@@ -32,6 +32,8 @@ import org.xidget.swing.tree.CustomTreeModel;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
+import org.xmodel.util.HashMultiMap;
+import org.xmodel.util.MultiMap;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -121,22 +123,6 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
   };
   
   /**
-   * Returns the row objects that are selected within the specified table group.
-   * @param rows The selected rows.
-   * @param group The table group.
-   * @param result Returns the row objects that are selected within the specified table group.
-   */
-  private void extractGroupSelection( Row[] rows, IXidget group, List<IModelObject> result)
-  {
-    result.clear();
-    for( Row row: rows)
-    {
-      if ( row.getTable() == group)
-        result.add( row.getContext().getObject());
-    }
-  }
-  
-  /**
    * Update the selection in the selection model.
    */
   private void updateSelection()
@@ -146,6 +132,8 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
 
     // TODO: tree selection is not ordered and causes unnecessary change records
     TreePath[] paths = jtree.getSelectionPaths();
+    if ( paths == null) paths = new TreePath[ 0];
+    
     Row[] rows = new Row[ paths.length];
     for( int i=0; i<paths.length; i++)
       rows[ i] = (Row)paths[ i].getLastPathComponent();
@@ -159,15 +147,17 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
     selectionModelFeature.setSelection( context, allElements);
     
-    // table group selections
-    List<IModelObject> groupElements = new ArrayList<IModelObject>();
-    for( IXidget group: xidget.getChildren())
+    // group rows by table
+    MultiMap<IXidget, IModelObject> map = new HashMultiMap<IXidget, IModelObject>();
+    for( Row row: rows) map.put( row.getTable(), row.getContext().getObject());
+    
+    // update selection for each table
+    for( IXidget table: map.keySet())
     {
-      selectionModelFeature = group.getFeature( ISelectionModelFeature.class);
+      selectionModelFeature = table.getFeature( ISelectionModelFeature.class);
       if ( selectionModelFeature != null)
       {
-        extractGroupSelection( rows, group, groupElements);
-        selectionModelFeature.setSelection( context, groupElements);
+        selectionModelFeature.setSelection( context, map.get( table));
       }
     }
   }
@@ -190,13 +180,15 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   private StatefulContext createDropContext( Point location)
   {
-    TreePath path = jtree.getPathForLocation( location.x, location.y);
+    TreePath path = jtree.getClosestPathForLocation( location.x, location.y);
+    if ( path == null) return null;
+    
     Row row = (Row)path.getLastPathComponent();
     int rIndex = row.getParent().getChildren().indexOf( row);
     int cIndex = 0; // limitation of Swing JTree
     
     StatefulContext rowContext = (row != null)? row.getContext(): null;
-    StatefulContext dropContext = new StatefulContext( rowContext, xidget.getConfig());
+    StatefulContext dropContext = new StatefulContext( rowContext, rowContext.getObject().getParent());
     
     dropContext.set( "row", rowContext.getObject());
     dropContext.set( "rowIndex", rIndex);
@@ -223,7 +215,9 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     StatefulContext dropContext = createDropContext( location);
     
     // local definition takes precedence
-    TreePath path = jtree.getPathForLocation( location.x, location.y);
+    TreePath path = jtree.getClosestPathForLocation( location.x, location.y);
+    if ( path == null) return false;
+    
     Row row = (Row)path.getLastPathComponent();
     if ( row != null)
     {
@@ -259,7 +253,7 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
       
       // local definition goes first
       Point location = event.getLocation();
-      TreePath path = jtree.getPathForLocation( location.x, location.y);
+      TreePath path = jtree.getClosestPathForLocation( location.x, location.y);
       Row row = (Row)path.getLastPathComponent();
       if ( row != null)
       {

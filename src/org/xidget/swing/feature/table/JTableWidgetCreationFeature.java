@@ -198,7 +198,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     
     Row row = getRowAt( location);
     StatefulContext rowContext = (row != null)? row.getContext(): null;
-    StatefulContext dropContext = new StatefulContext( rowContext, xidget.getConfig());
+    StatefulContext dropContext = new StatefulContext( rowContext, rowContext.getObject().getParent());
     
     dropContext.set( "row", rowContext.getObject());
     dropContext.set( "rowIndex", rIndex);
