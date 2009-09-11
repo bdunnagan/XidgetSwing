@@ -107,7 +107,7 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
       List<IModelObject> children = dynamicContainerFeature.getChildren();
       
       int index = jtabbedPane.getSelectedIndex();
-      if ( index < children.size())
+      if ( index >= 0 && index < children.size())
       {
         ISelectionModelFeature feature = xidget.getFeature( ISelectionModelFeature.class);
         feature.setSelection( context, Collections.singletonList( children.get( index)));
