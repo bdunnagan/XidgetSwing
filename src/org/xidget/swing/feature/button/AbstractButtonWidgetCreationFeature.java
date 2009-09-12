@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.feature.button;
 
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -54,8 +53,6 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
       case check:  button = new JCheckBox(); break;
       case radio:  button = createRadioButton(); break;
     }
-    
-    button.setMargin( new Insets( 0, 0, 0, 0));
     
     //
     // HACK:
