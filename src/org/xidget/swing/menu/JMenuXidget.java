@@ -22,7 +22,6 @@ import org.xidget.swing.feature.AbstractButtonIconFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.menu.JMenuWidgetCreationFeature;
 
 /**
  * A xidget implementation for Swing JMenu widgets.

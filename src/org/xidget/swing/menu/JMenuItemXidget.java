@@ -26,8 +26,6 @@ import org.xidget.swing.feature.AbstractButtonIconFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.menu.JMenuItemButtonWidgetFeature;
-import org.xidget.swing.feature.menu.JMenuItemWidgetCreationFeature;
 
 /**
  * A xidget implementation for Swing AbstactButton widgets.

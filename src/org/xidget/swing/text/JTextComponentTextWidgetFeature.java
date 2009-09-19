@@ -2,9 +2,9 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.text;
+package org.xidget.swing.text;
 
-import javax.swing.JComboBox;
+import javax.swing.text.JTextComponent;
 import org.xidget.IXidget;
 import org.xidget.config.util.TextTransform;
 import org.xidget.feature.text.TextModelFeature;
@@ -12,12 +12,13 @@ import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xmodel.xpath.expression.IExpression;
 
 /**
- * An implementation of IWidgetTextAdapter for a JComboBox widget 
- * which supports the <i>all</i> channel.
+ * An implementation of IWidgetTextAdapter for a JTextField or JTextArea widget which
+ * supports both the <i>all</i> and the <i>selected</i> channels. It does not support
+ * a transform for the <i>selected</i> channel.
  */
-public class JComboBoxTextWidgetFeature implements ITextWidgetFeature
+public class JTextComponentTextWidgetFeature implements ITextWidgetFeature
 {
-  public JComboBoxTextWidgetFeature( IXidget xidget)
+  public JTextComponentTextWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }
@@ -27,7 +28,7 @@ public class JComboBoxTextWidgetFeature implements ITextWidgetFeature
    */
   public void setEditable( boolean editable)
   {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
+    JTextComponent widget = xidget.getFeature( JTextComponent.class);
     widget.setEditable( editable);
   }
 
@@ -36,11 +37,17 @@ public class JComboBoxTextWidgetFeature implements ITextWidgetFeature
    */
   public void setText( String channel, String text)
   {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
+    JTextComponent widget = xidget.getFeature( JTextComponent.class);
     if ( channel.equals( TextModelFeature.allChannel))
     {
       if ( transform != null) text = transform.transform( text);
-      widget.setSelectedItem( text);
+      if ( !widget.getText().equals( text)) widget.setText( text);
+    }
+    else if ( channel.equals( TextModelFeature.selectedChannel))
+    {
+      widget.replaceSelection( text);
+      String allText = transform.transform( widget.getText());
+      if ( !widget.getText().equals( allText)) widget.setText( allText);
     }
   }
 

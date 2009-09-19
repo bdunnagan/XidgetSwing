@@ -23,8 +23,6 @@ import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.tree.JTreeWidgetCreationFeature;
-import org.xidget.swing.feature.tree.JTreeWidgetFeature;
 
 /**
  * A tree xidget which uses the Swing JTree class.

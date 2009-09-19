@@ -18,7 +18,6 @@ import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.menu.JPopupMenuWidgetCreationFeature;
 
 /**
  * A xidget implementation for Swing JMenu widgets.

@@ -25,9 +25,6 @@ import org.xidget.ifeature.button.IButtonWidgetFeature;
 import org.xidget.swing.feature.AbstractButtonIconFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.button.AbstractButtonWidgetCreationFeature;
-import org.xidget.swing.feature.button.ButtonLabelFeature;
-import org.xidget.swing.feature.button.ButtonWidgetFeature;
 
 /**
  * A xidget implementation for Swing AbstactButton widgets.

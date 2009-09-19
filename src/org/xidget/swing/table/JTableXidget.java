@@ -25,9 +25,6 @@ import org.xidget.ifeature.tree.IRowSetFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.table.JTableContainerFeature;
-import org.xidget.swing.feature.table.JTableWidgetCreationFeature;
-import org.xidget.swing.feature.table.JTableWidgetFeature;
 
 /**
  * A table xidget implemented with the Swing JTable widget.

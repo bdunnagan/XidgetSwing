@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.menu;
+package org.xidget.swing.menu;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;

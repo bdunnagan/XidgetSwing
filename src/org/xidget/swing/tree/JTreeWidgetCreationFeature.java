@@ -2,9 +2,8 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.table;
+package org.xidget.swing.tree;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.dnd.DnDConstants;
@@ -13,76 +12,74 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.JTree;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IDragAndDropFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
-import org.xidget.swing.table.CustomCellEditor;
-import org.xidget.swing.table.CustomCellRenderer;
-import org.xidget.swing.table.CustomHeaderCellRenderer;
-import org.xidget.swing.table.CustomTableModel;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
+import org.xmodel.util.HashMultiMap;
+import org.xmodel.util.MultiMap;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
- * An implementation of IWidgetCreationFeature for creating a JTable.
+ * An implementation of IWidgetCreationFeature for creating a Swing JTree widget.
  */
-public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
+public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
 {
-  public JTableWidgetCreationFeature( IXidget xidget)
+  public JTreeWidgetCreationFeature( IXidget xidget)
   {
     super( xidget);
   }
-  
+
   /* (non-Javadoc)
    * @see org.xidget.swing.feature.SwingWidgetCreationFeature#createSwingWidget()
    */
   @Override
   protected JComponent createSwingWidget()
   {
-    CustomTableModel tableModel = new CustomTableModel( xidget);
-    
-    jtable = new JTable( tableModel);
-    jtable.setDragEnabled( true);
+    jtree = new JTree( new CustomTreeModel( xidget));
+    jtree.setDragEnabled( true);
     try
     {
-      jtable.getDropTarget().addDropTargetListener( dndListener);
+      jtree.getDropTarget().addDropTargetListener( dndListener);
     }
     catch( Exception e)
     {
       e.printStackTrace( System.err);
     }
     
-    jtable.setShowGrid( true);
-    jtable.setShowHorizontalLines( true);
-    jtable.setShowVerticalLines( true);
-    jtable.setGridColor( Color.LIGHT_GRAY);
+    jtree.setCellRenderer( new CustomTreeCellRenderer());
+    jtree.setShowsRootHandles( true);
+    jtree.setRootVisible( false);
+    jtree.putClientProperty( "JTree.lineStyle", "Angled");
+    jtree.addTreeExpansionListener( expandListener);
     
-    jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
-    jtable.setDefaultEditor( IModelObject.class, new CustomCellEditor());
-    jtable.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
-    jtable.getSelectionModel().addListSelectionListener( selectionListener);
+    if ( xidget.getFeature( ISelectionModelFeature.class) != null)
+      jtree.addTreeSelectionListener( selectionListener);
     
-    jscrollPane = new JScrollPane( jtable);    
+    jscrollPane = new JScrollPane( jtree);
     return jscrollPane;
   }
-
+  
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
    */
   public Object[] getLastWidgets()
   {
-    return new Object[] { jscrollPane, jtable};
+    return new Object[] { jscrollPane, jtree};
   }
 
   /**
@@ -93,98 +90,86 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
   {
     return jscrollPane;
   }
-  
-  /**
-   * Returns the JTable widget.
-   * @return Returns the JTable widget.
-   */
-  public JTable getJTable()
-  {
-    return jtable;
-  }
-  
-  /**
-   * Update the selection in the model.
-   */
-  public void updateSelection()
-  {
-    IWidgetContextFeature widgetContextFeature = xidget.getFeature( IWidgetContextFeature.class);
-    StatefulContext context = widgetContextFeature.getContext( jtable);
 
-    int[] selected = jtable.getSelectedRows();
-    Arrays.sort( selected);
-    
-    CustomTableModel model = (CustomTableModel)jtable.getModel();
-    List<Row> rows = model.getRows();
-    
-    // global table selection
-    List<IModelObject> tableElements = new ArrayList<IModelObject>();
-    for( int i=0; i<selected.length; i++)
+  /**
+   * Returns the JTree widget.
+   * @return Returns the JTree widget.
+   */
+  public JTree getJTree()
+  {
+    return jtree;
+  }
+
+  private TreeExpansionListener expandListener = new TreeExpansionListener() {
+    public void treeExpanded( TreeExpansionEvent event)
     {
-      Row row = rows.get( selected[ i]);
-      tableElements.add( row.getContext().getObject());
+      TreePath path = event.getPath();
+      Row row = (Row)path.getLastPathComponent();
+
+      ITreeExpandFeature feature = xidget.getFeature( ITreeExpandFeature.class);
+      feature.expand( row);
     }
     
-    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-    selectionModelFeature.setSelection( context, tableElements);
-    
-    // table group selections
-    List<IModelObject> groupElements = new ArrayList<IModelObject>();
-    for( IXidget group: xidget.getChildren())
+    public void treeCollapsed( TreeExpansionEvent event)
     {
-      selectionModelFeature = group.getFeature( ISelectionModelFeature.class);
+      TreePath path = event.getPath();
+      Row row = (Row)path.getLastPathComponent();
+
+      ITreeExpandFeature feature = xidget.getFeature( ITreeExpandFeature.class);
+      feature.collapse( row);
+    }
+  };
+  
+  /**
+   * Update the selection in the selection model.
+   */
+  private void updateSelection()
+  {
+    IWidgetContextFeature widgetContextFeature = xidget.getFeature( IWidgetContextFeature.class);
+    StatefulContext context = widgetContextFeature.getContext( jtree);
+
+    // TODO: tree selection is not ordered and causes unnecessary change records
+    TreePath[] paths = jtree.getSelectionPaths();
+    if ( paths == null) paths = new TreePath[ 0];
+    
+    Row[] rows = new Row[ paths.length];
+    for( int i=0; i<paths.length; i++)
+      rows[ i] = (Row)paths[ i].getLastPathComponent();
+    
+    // global selection
+    List<IModelObject> allElements = new ArrayList<IModelObject>();
+    if ( paths != null)
+      for( int i=0; i<paths.length; i++)
+        allElements.add( rows[ i].getContext().getObject());
+    
+    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+    selectionModelFeature.setSelection( context, allElements);
+    
+    // group rows by table
+    MultiMap<IXidget, IModelObject> map = new HashMultiMap<IXidget, IModelObject>();
+    for( Row row: rows) map.put( row.getTable(), row.getContext().getObject());
+    
+    // update selection for each table
+    for( IXidget table: map.keySet())
+    {
+      selectionModelFeature = table.getFeature( ISelectionModelFeature.class);
       if ( selectionModelFeature != null)
       {
-        extractGroupSelection( rows, group, selected, groupElements);
-        selectionModelFeature.setSelection( context, groupElements);
+        selectionModelFeature.setSelection( context, map.get( table));
       }
     }
   }
-
-  /**
-   * Returns the row objects that are selected within the specified table group.
-   * @param group The table group.
-   * @param selected The current selection indices.
-   * @param result Returns the row objects that are selected within the specified table group.
-   */
-  private void extractGroupSelection( List<Row> rows, IXidget group, int[] selected, List<IModelObject> result)
-  {
-    result.clear();
-    for( int i=0; i<selected.length; i++)
-    {
-      Row row = rows.get( selected[ i]);
-      if ( row.getTable() == group)
-        result.add( row.getContext().getObject());
-    }
-  }
   
-  private ListSelectionListener selectionListener = new ListSelectionListener() {
-    public void valueChanged( ListSelectionEvent event)
+  private TreeSelectionListener selectionListener = new TreeSelectionListener() {
+    public void valueChanged( TreeSelectionEvent event)
     {
       if ( updating) return;
-      updating = true;      
+      updating = true;
       try { updateSelection();} finally { updating = false;}
     }
     
     private boolean updating;
   };
-  
-  /**
-   * Returns the row beneath the specified display location.
-   * @param point The display location.
-   * @return Returns null or the row.
-   */
-  private Row getRowAt( Point point)
-  {
-    int rIndex = jtable.rowAtPoint( point);
-    if ( rIndex < 0) return null;
-    
-    CustomTableModel model = (CustomTableModel)jtable.getModel();
-    List<Row> rows = model.getRows();
-    if ( rIndex >= rows.size()) return null;
-    
-    return rows.get( rIndex);
-  }
   
   /**
    * Create a drop context and populate the appropriate variables.
@@ -193,10 +178,13 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   private StatefulContext createDropContext( Point location)
   {
-    int rIndex = jtable.rowAtPoint( location);
-    int cIndex = jtable.columnAtPoint( location);
+    TreePath path = jtree.getClosestPathForLocation( location.x, location.y);
+    if ( path == null) return null;
     
-    Row row = getRowAt( location);
+    Row row = (Row)path.getLastPathComponent();
+    int rIndex = row.getParent().getChildren().indexOf( row);
+    int cIndex = 0; // limitation of Swing JTree
+    
     StatefulContext rowContext = (row != null)? row.getContext(): null;
     StatefulContext dropContext = new StatefulContext( rowContext, rowContext.getObject().getParent());
     
@@ -204,7 +192,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     dropContext.set( "rowIndex", rIndex);
     dropContext.set( "columnIndex", cIndex);
     
-    Rectangle cellBounds = jtable.getCellRect( rIndex, cIndex, false);
+    Rectangle cellBounds = jtree.getPathBounds( path);
     int middle = cellBounds.y + cellBounds.height / 2;
     int insert = (location.y < middle)? rIndex: rIndex+1;
     dropContext.set( "insert", insert);
@@ -225,7 +213,10 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     StatefulContext dropContext = createDropContext( location);
     
     // local definition takes precedence
-    Row row = getRowAt( location);
+    TreePath path = jtree.getClosestPathForLocation( location.x, location.y);
+    if ( path == null) return false;
+    
+    Row row = (Row)path.getLastPathComponent();
     if ( row != null)
     {
       IDragAndDropFeature dndFeature = row.getTable().getFeature( IDragAndDropFeature.class);
@@ -259,7 +250,9 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
       StatefulContext dropContext = createDropContext( event.getLocation());
       
       // local definition goes first
-      Row row = getRowAt( event.getLocation());
+      Point location = event.getLocation();
+      TreePath path = jtree.getClosestPathForLocation( location.x, location.y);
+      Row row = (Row)path.getLastPathComponent();
       if ( row != null)
       {
         IDragAndDropFeature dndFeature = row.getTable().getFeature( IDragAndDropFeature.class);
@@ -277,5 +270,5 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
   };
 
   private JScrollPane jscrollPane;
-  private JTable jtable;
+  private JTree jtree;
 }

@@ -20,9 +20,6 @@ import org.xidget.ifeature.dialog.IDialogFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.dialog.JDialogFeature;
-import org.xidget.swing.feature.dialog.JDialogTitleFeature;
-import org.xidget.swing.feature.dialog.JDialogWidgetCreationFeature;
 
 /**
  * An implementation of IXidget for a Swing JDialog.

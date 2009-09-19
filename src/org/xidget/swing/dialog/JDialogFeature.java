@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.dialog;
+package org.xidget.swing.dialog;
 
 import java.awt.Dimension;
 import javax.swing.JDialog;

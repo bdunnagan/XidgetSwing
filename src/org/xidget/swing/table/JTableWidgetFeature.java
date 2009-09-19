@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.table;
+package org.xidget.swing.table;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.swing.JTable;
 import org.xidget.IXidget;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
-import org.xidget.swing.table.CustomTableModel;
 import org.xidget.tree.Row;
 import org.xmodel.xpath.expression.StatefulContext;
 

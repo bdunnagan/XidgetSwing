@@ -2,14 +2,13 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.menu;
+package org.xidget.swing.menu;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
-import org.xidget.swing.menu.PopupMouseListener;
 
 /**
  * An implementation of IWidgetCreationFeature for the Swing JPopupMenu widget. 

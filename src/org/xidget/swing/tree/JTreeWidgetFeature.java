@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature.tree;
+package org.xidget.swing.tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +16,6 @@ import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
-import org.xidget.swing.tree.CustomTreeModel;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
 import org.xmodel.xpath.expression.StatefulContext;

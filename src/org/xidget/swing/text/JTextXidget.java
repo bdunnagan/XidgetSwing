@@ -22,9 +22,6 @@ import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.text.JTextComponentLabelFeature;
-import org.xidget.swing.feature.text.JTextComponentTextWidgetFeature;
-import org.xidget.swing.feature.text.JTextComponentWidgetCreationFeature;
 
 /**
  * A text xidget implemented with a Swing JTextComponent widget.

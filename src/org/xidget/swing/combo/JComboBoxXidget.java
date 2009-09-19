@@ -22,9 +22,6 @@ import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.feature.text.JComboBoxChoiceListFeature;
-import org.xidget.swing.feature.text.JComboBoxTextWidgetFeature;
-import org.xidget.swing.feature.text.JComboBoxWidgetCreationFeature;
 
 /**
  * A combo xidget implemented with the Swing JComboBox widget.
