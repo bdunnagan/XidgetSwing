@@ -16,6 +16,7 @@ import org.xidget.feature.button.ButtonModelFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -25,6 +26,7 @@ import org.xidget.swing.feature.AbstractButtonIconFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 import org.xidget.swing.feature.button.AbstractButtonWidgetCreationFeature;
+import org.xidget.swing.feature.button.ButtonLabelFeature;
 import org.xidget.swing.feature.button.ButtonWidgetFeature;
 
 /**
@@ -43,6 +45,7 @@ public class AbstractButtonXidget extends Xidget
     buttonWidgetFeature = new ButtonWidgetFeature( this);
     buttonModelFeature = new ButtonModelFeature();
     iconFeature = new AbstractButtonIconFeature( this);
+    labelFeature = new ButtonLabelFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new AbstractButtonWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -56,6 +59,7 @@ public class AbstractButtonXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IIconFeature.class) return (T)iconFeature;
+    if ( clss == ILabelFeature.class) return (T)labelFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)buttonModelFeature;
     if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
@@ -80,6 +84,7 @@ public class AbstractButtonXidget extends Xidget
   private IButtonWidgetFeature buttonWidgetFeature;
   private IButtonModelFeature buttonModelFeature;
   private IIconFeature iconFeature;
+  private ILabelFeature labelFeature;
   private IComputeNodeFeature computeNodeFeature;
   private AbstractButtonWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;

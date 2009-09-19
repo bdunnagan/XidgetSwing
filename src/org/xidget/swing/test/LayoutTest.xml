@@ -122,7 +122,7 @@
           </layout>
           
           <text size="60, -1">
-            <label>Folder</label>
+            <label>'Folder'</label>
             <source>'New Text 1'</source>
           </text>
           <button>

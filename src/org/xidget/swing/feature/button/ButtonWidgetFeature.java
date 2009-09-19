@@ -31,15 +31,6 @@ public class ButtonWidgetFeature implements IButtonWidgetFeature
       model.setSelected( state);
     }
   }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.button.IButtonWidgetFeature#setText(java.lang.String)
-   */
-  public void setText( String text)
-  {
-    AbstractButton button = xidget.getFeature( AbstractButton.class);
-    if ( button != null) button.setText( text);
-  }
   
   private IXidget xidget;
 }

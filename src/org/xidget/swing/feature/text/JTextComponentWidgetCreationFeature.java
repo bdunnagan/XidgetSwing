@@ -72,13 +72,10 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     // pretty
     jtext.setBorder( new EmptyBorder( 1, 1, 1, 1));
      
-    // get label
-    String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
-    
     // create extra container to hold label and widget
-    if ( label != null)
+    if ( xidget.getConfig().getFirstChild( "label") != null)
     {
-      jlabel = new JLabel( label);
+      jlabel = new JLabel( "");
       
       GridBagLayout layout = new GridBagLayout();
       
@@ -145,6 +142,15 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   public JTextComponent getTextWidget()
   {
     return jtext;
+  }
+  
+  /**
+   * Returns the label widget.
+   * @return Returns null or the label widget.
+   */
+  public JLabel getLabelWidget()
+  {
+    return jlabel;
   }
 
   private final KeyListener keyListener = new KeyAdapter() {
