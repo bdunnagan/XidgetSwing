@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing;
+package org.xidget.swing.application;
 
 import java.awt.Container;
 import javax.swing.JComponent;

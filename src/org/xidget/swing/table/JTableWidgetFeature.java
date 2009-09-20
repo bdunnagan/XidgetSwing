@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JTable;
 import org.xidget.IXidget;
+import org.xidget.ifeature.table.ITableWidgetFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.tree.Row;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -16,7 +17,7 @@ import org.xmodel.xpath.expression.StatefulContext;
 /**
  * An implementation of ITableWidgetFeature for use with a Swing JTable.
  */
-public class JTableWidgetFeature implements ITreeWidgetFeature
+public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeature
 {
   public JTableWidgetFeature( IXidget xidget)
   {
@@ -24,6 +25,15 @@ public class JTableWidgetFeature implements ITreeWidgetFeature
     this.map = new HashMap<StatefulContext, Row>();
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.table.ITableWidgetFeature#setShowGrid(boolean)
+   */
+  public void setShowGrid( boolean show)
+  {
+    JTable table = xidget.getFeature( JTable.class);
+    if ( table != null) table.setShowGrid( show);
+  }
+
   /* (non-Javadoc)
    * @see org.xidget.ifeature.tree.ITreeWidgetFeature#insertRows(org.xidget.table.Row, int, org.xidget.table.Row[])
    */
