@@ -23,7 +23,6 @@ import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
-import org.xidget.swing.feature.JPanelWidgetCreationFeature;
 import org.xidget.swing.feature.SwingIconFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;

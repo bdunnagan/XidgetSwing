@@ -23,8 +23,6 @@ import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.DynamicContainerFeature;
-import org.xidget.swing.feature.JTabbedPaneContainerFeature;
-import org.xidget.swing.feature.JTabbedPaneWidgetCreationFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 

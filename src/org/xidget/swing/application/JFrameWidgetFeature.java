@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.feature;
+package org.xidget.swing.application;
 
 import java.awt.Color;
 import java.awt.Dimension;
