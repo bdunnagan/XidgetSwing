@@ -4,6 +4,9 @@
  */
 package org.xidget.swing.dialog;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import javax.swing.JDialog;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -29,6 +32,7 @@ public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
     
     jDialog = new JDialog();
     jDialog.setModal( Xlate.get( config, "modal", true));
+    jDialog.addComponentListener( moveListener);
   }
 
   /* (non-Javadoc)
@@ -57,6 +61,13 @@ public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
     return jDialog;
   }
 
+  private final ComponentListener moveListener = new ComponentAdapter() {
+    public void componentMoved( ComponentEvent e)
+    {
+      
+    }
+  };
+  
   private IXidget xidget;
   private JDialog jDialog;
 }

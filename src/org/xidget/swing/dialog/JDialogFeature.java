@@ -15,7 +15,6 @@ import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IDialogFeature for Swing JDialog.
- * @deprecated Use IWidgetFeature.setVisible.
  */
 public class JDialogFeature implements IDialogFeature
 {
