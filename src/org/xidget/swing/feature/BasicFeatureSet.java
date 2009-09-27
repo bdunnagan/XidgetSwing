@@ -28,7 +28,7 @@ public class BasicFeatureSet implements IFeatured
   public BasicFeatureSet( IXidget xidget)
   {
     asyncFeature = new AsyncFeature();
-    errorFeature = new TooltipErrorFeature( xidget);
+    errorFeature = new AdjacentErrorFeature( xidget);
     scriptFeature = new ScriptFeature( xidget);
     contextFeature = new WidgetContextFeature();
     dndFeature = new DragAndDropFeature( xidget);

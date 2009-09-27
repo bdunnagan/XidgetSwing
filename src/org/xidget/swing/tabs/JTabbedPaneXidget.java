@@ -10,8 +10,8 @@ import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
-import org.xidget.feature.BindFeature;
 import org.xidget.feature.ComputeNodeFeature;
+import org.xidget.feature.DynamicContainerFeature;
 import org.xidget.feature.SelectionModelFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
@@ -22,7 +22,6 @@ import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
-import org.xidget.swing.feature.DynamicContainerFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
@@ -33,7 +32,7 @@ public class JTabbedPaneXidget extends Xidget
 {
   public void createFeatures()
   {
-    bindFeature = new BindFeature( this);
+    bindFeature = new JTabbedPaneBindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     titleFeature = new SwingTitleFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
