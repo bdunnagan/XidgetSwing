@@ -9,6 +9,7 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import org.xidget.IToolkit;
 import org.xidget.IXidget;
@@ -31,6 +32,8 @@ import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.tabs.JTabbedPaneXidget;
 import org.xidget.swing.text.JTextXidget;
 import org.xidget.swing.tree.JTreeXidget;
+import org.xmodel.IDispatcher;
+import org.xmodel.ModelRegistry;
 import org.xmodel.Xlate;
 import org.xmodel.external.caching.IFileAssociation;
 import org.xmodel.xpath.expression.IExpression;
@@ -39,8 +42,19 @@ import org.xmodel.xpath.expression.StatefulContext;
 /**
  * An implementation of IToolkit for the Swing platform.
  */
-public class SwingToolkit implements IToolkit
+public class Toolkit implements IToolkit
 {
+  public Toolkit()
+  {
+    // define the dispatcher in the xmodel
+    ModelRegistry.getInstance().getModel().setDispatcher( new IDispatcher() {
+      public void execute( Runnable runnable)
+      {
+        SwingUtilities.invokeLater( runnable);
+      }
+    });
+  }
+  
   /* (non-Javadoc)
    * @see org.xidget.IToolkit#configure(org.xidget.config.TagProcessor)
    */
