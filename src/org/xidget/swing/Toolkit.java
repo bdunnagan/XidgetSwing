@@ -24,6 +24,7 @@ import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.dialog.JDialogXidget;
 import org.xidget.swing.form.JPanelXidget;
 import org.xidget.swing.image.ImageFileAssociation;
+import org.xidget.swing.label.JLabelXidget;
 import org.xidget.swing.menu.JMenuBarXidget;
 import org.xidget.swing.menu.JMenuItemXidget;
 import org.xidget.swing.menu.MenuTagHandler;
@@ -69,6 +70,7 @@ public class Toolkit implements IToolkit
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "combo", new XidgetTagHandler( JComboBoxXidget.class));
     processor.addHandler( "button", new XidgetTagHandler( AbstractButtonXidget.class));
+    processor.addHandler( "label", new XidgetTagHandler( JLabelXidget.class));
     processor.addHandler( "menubar", new XidgetTagHandler( JMenuBarXidget.class));
     processor.addHandler( "menu", new MenuTagHandler());
     processor.addHandler( "menu", new SubMenuTagHandler());
