@@ -18,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
@@ -70,7 +69,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     }
     
     // pretty
-    jtext.setBorder( new EmptyBorder( 1, 1, 1, 1));
+    //jtext.setBorder( new EmptyBorder( 1, 1, 1, 1));
      
     // create extra container to hold label and widget
     if ( xidget.getConfig().getFirstChild( "label") != null)

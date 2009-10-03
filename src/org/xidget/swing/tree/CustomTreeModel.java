@@ -113,7 +113,7 @@ public class CustomTreeModel implements TreeModel
     // So we need to make sure the row is expanded in this case.  In addition, Swing does not expand
     // the root node, so we need to make sure it is expanded.
     //
-    if ( parent.getParent() == null || expandOnCommit)
+    if ( parent.isExpanded() && (parent.getParent() == null || expandOnCommit))
     {
       ExpandRunnable runnable = new ExpandRunnable();
       runnable.row = parent;
@@ -281,7 +281,7 @@ public class CustomTreeModel implements TreeModel
       Object[] path = createPath( row);
       JTree jTree = root.getTable().getFeature( JTree.class);
       jTree.expandPath( new TreePath( path));
-   }
+    }
   }
   
   private Row root;

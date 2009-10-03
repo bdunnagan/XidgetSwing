@@ -9,13 +9,12 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IIconFeature;
-import org.xidget.ifeature.ILabelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 
 /**
  * An implementation of IWidgetCreationFeature for the Swing JLabel widget.
  */
-public class JLabelWidgetCreationFeature extends SwingWidgetCreationFeature implements IIconFeature, ILabelFeature
+public class JLabelWidgetCreationFeature extends SwingWidgetCreationFeature implements IIconFeature
 {
   public JLabelWidgetCreationFeature( IXidget xidget)
   {
@@ -28,14 +27,6 @@ public class JLabelWidgetCreationFeature extends SwingWidgetCreationFeature impl
   public void setIcon( Object icon)
   {
     jLabel.setIcon( (Icon)icon);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.ILabelFeature#setText(java.lang.String)
-   */
-  public void setText( String text)
-  {
-    jLabel.setText( text);
   }
 
   /* (non-Javadoc)

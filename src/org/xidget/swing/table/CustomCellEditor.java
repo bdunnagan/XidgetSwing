@@ -42,8 +42,6 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    */
   public Component getTableCellEditorComponent( JTable table, Object value, boolean isSelected, int rowIndex, int columnIndex)
   {
-    System.out.println( "GET");
-    
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     List<Row> rows = tableModel.getRows();
     if ( rows.size() <= rowIndex) return null;

@@ -14,12 +14,9 @@ import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IIconFeature;
-import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.button.IButtonModelFeature;
-import org.xidget.ifeature.button.IButtonWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
@@ -36,6 +33,7 @@ public class JLabelXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    sourceFeature = new JLabelSourceFeature( this);
     computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JLabelWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -49,11 +47,8 @@ public class JLabelXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IIconFeature.class) return (T)creationFeature;
-    if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)buttonModelFeature;
-    if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
-    if ( clss == IButtonModelFeature.class) return (T)buttonModelFeature;
+    if ( clss == ISourceFeature.class) return (T)sourceFeature;
     if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
@@ -70,8 +65,7 @@ public class JLabelXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private IButtonWidgetFeature buttonWidgetFeature;
-  private IButtonModelFeature buttonModelFeature;
+  private ISourceFeature sourceFeature;
   private IComputeNodeFeature computeNodeFeature;
   private JLabelWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;
