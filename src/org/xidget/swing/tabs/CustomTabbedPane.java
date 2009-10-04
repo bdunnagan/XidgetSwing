@@ -46,7 +46,7 @@ public class CustomTabbedPane extends JTabbedPane
       Rectangle buttonBounds = getCloseButtonBounds( currentTabBounds);
       int x1 = buttonBounds.x;
       int y1 = buttonBounds.y;
-      int x2 = x1 + buttonBounds.width;
+      int x2 = x1 + buttonBounds.width - 1;
       int y2 = y1 + buttonBounds.height;
       g.drawLine( x1, y1, x2, y2);
       g.drawLine( x1+1, y1, x2+1, y2);
@@ -67,24 +67,33 @@ public class CustomTabbedPane extends JTabbedPane
     int cy = currentTabBounds.y + (currentTabBounds.height / 2);
     int x1 = currentTabBounds.x + currentTabBounds.width - bw - 8;
     int y1 = cy - (bh / 2);
-    return new Rectangle( x1, y1, bw, bh);
+    return new Rectangle( x1, y1, bw+1, bh);
   }
   
   private MouseListener mouseListener = new MouseAdapter() {
     public void mousePressed( MouseEvent e)
     {
-      Rectangle buttonBounds = getCloseButtonBounds( currentTabBounds);
-      if ( buttonBounds.contains( e.getX(), e.getY()))
+      if ( currentTabBounds != null)
       {
-        pressed = true;
-        if ( currentTabBounds != null) repaint( currentTabBounds);
+        Rectangle buttonBounds = getCloseButtonBounds( currentTabBounds);
+        
+        // HACK: trying to get the coverage correct
+        buttonBounds.width *= 2; buttonBounds.height *= 2;
+        
+        if ( buttonBounds.contains( e.getX(), e.getY()))
+        {
+          pressed = true;
+          if ( currentTabBounds != null) repaint( currentTabBounds);
+        }
       }
     }
     public void mouseReleased( MouseEvent e)
     {
+      pressed = false;
       if ( currentTabBounds != null)
       {
         Rectangle buttonBounds = getCloseButtonBounds( currentTabBounds);
+        buttonBounds.width *= 2; buttonBounds.height *= 2;
         if ( buttonBounds.contains( e.getX(), e.getY()))
         {
           Component component = CustomTabbedPane.this.getComponentAt( currentTabIndex);

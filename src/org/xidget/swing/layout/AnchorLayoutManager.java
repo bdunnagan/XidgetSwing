@@ -92,14 +92,14 @@ public class AnchorLayoutManager implements LayoutManager
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
     if ( bounds.width > 0) 
     {
-      IComputeNode right = computeNodeFeature.getComputeNode( Type.right, true);
+      IComputeNode right = computeNodeFeature.getComputeNode( Type.right, true, true);
       right.setDefaultValue( bounds.width - margins.x0 - margins.x1);
       Log.printf( "layout", "Initialize container width of %s to %3.1f\n", xidget, bounds.width);
     }
     
     if ( bounds.height > 0) 
     {
-      IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, true);
+      IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, true, true);
       bottom.setDefaultValue( bounds.height - margins.y0 - margins.y1);
       Log.printf( "layout", "Initialize container height of %s to %3.1f\n", xidget, bounds.height);
     }
@@ -115,10 +115,10 @@ public class AnchorLayoutManager implements LayoutManager
     IComputeNodeFeature computeNodeFeature = xidget.getFeature( IComputeNodeFeature.class);
     if ( computeNodeFeature == null) return; 
 
-    IComputeNode top = computeNodeFeature.getComputeNode( Type.top, false);
-    IComputeNode left = computeNodeFeature.getComputeNode( Type.left, false);
-    IComputeNode right = computeNodeFeature.getComputeNode( Type.right, false);
-    IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, false);
+    IComputeNode top = computeNodeFeature.getComputeNode( Type.top, false, true);
+    IComputeNode left = computeNodeFeature.getComputeNode( Type.left, false, true);
+    IComputeNode right = computeNodeFeature.getComputeNode( Type.right, false, true);
+    IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, false, true);
     
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);    
     Bounds bounds = new Bounds(); widgetFeature.getBounds( bounds);
@@ -156,8 +156,8 @@ public class AnchorLayoutManager implements LayoutManager
     if ( xidget.getConfig().getAttribute( "debug") != null)
       System.out.println( "Stopping.");
     
-    IComputeNode right = computeNodeFeature.getComputeNode( Type.right, true);
-    IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, true);
+    IComputeNode right = computeNodeFeature.getComputeNode( Type.right, true, true);
+    IComputeNode bottom = computeNodeFeature.getComputeNode( Type.bottom, true, true);
     
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
     Bounds bounds = new Bounds(); widgetFeature.getBounds( bounds);
