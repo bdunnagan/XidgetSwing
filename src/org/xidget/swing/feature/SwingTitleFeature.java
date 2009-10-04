@@ -43,7 +43,7 @@ public class SwingTitleFeature implements ITitleFeature
     {
       JTabbedPane jtabbedPane = parent.getFeature( JTabbedPane.class);
       int index = parent.getChildren().indexOf( xidget);
-      jtabbedPane.setTitleAt( index, title);
+      jtabbedPane.setTitleAt( index, title+"  ");
     }
   }
 

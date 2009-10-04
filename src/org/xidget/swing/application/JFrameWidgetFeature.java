@@ -6,6 +6,7 @@ package org.xidget.swing.application;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import org.xidget.IXidget;
@@ -140,6 +141,52 @@ public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
   {
     JFrame widget = xidget.getFeature( JFrame.class);
     widget.setForeground( new Color( color));
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setFont(java.lang.String)
+   */
+  public void setFont( String name)
+  {
+    if ( name.contains( ","))
+    {
+      String[] split = name.split( "\\s*,\\s*");
+      StringBuilder sb = new StringBuilder();
+      for( int i=0; i<split.length; i++)
+      {
+        if ( i > 0) sb.append( '-');
+        sb.append( split[ i]);
+      }
+      name = sb.toString();
+    }
+    
+    JFrame widget = xidget.getFeature( JFrame.class);
+    Font oldFont = widget.getFont();
+    Font font = new Font( name, oldFont.getStyle(), oldFont.getSize());
+    widget.setFont( font);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setFontSize(int)
+   */
+  public void setFontSize( double size)
+  {
+    JFrame widget = xidget.getFeature( JFrame.class);
+    Font font = widget.getFont();
+    widget.setFont( font.deriveFont( (float)size));
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setFontStyle(java.lang.String)
+   */
+  public void setFontStyle( String style)
+  {
+    JFrame widget = xidget.getFeature( JFrame.class);
+    Font font = widget.getFont();
+    int constant = Font.PLAIN;
+    if ( style.equals( "italic") || style.equals( "italics")) constant = Font.ITALIC;
+    if ( style.equals( "bold")) constant = Font.BOLD;
+    widget.setFont( font.deriveFont( constant));
   }
 
   /* (non-Javadoc)

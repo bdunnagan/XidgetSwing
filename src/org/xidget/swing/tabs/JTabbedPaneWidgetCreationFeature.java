@@ -37,9 +37,10 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void createWidgets()
   {
-    jtabbedPane = new JTabbedPane();
+    boolean removable = Xlate.get( xidget.getConfig(), "removable", false);
+    jtabbedPane = removable? new CustomTabbedPane( xidget): new JTabbedPane();
     jtabbedPane.addChangeListener( selectionListener);
-
+    
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();
     String title = getTitle();
@@ -96,7 +97,7 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   {
     return jtabbedPane;
   }
-
+  
   private ChangeListener selectionListener = new ChangeListener() {
     public void stateChanged( ChangeEvent e)
     {

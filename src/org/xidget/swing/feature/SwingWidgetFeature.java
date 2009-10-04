@@ -7,10 +7,12 @@ package org.xidget.swing.feature;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Rectangle;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
 import org.xidget.Log;
+import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
@@ -106,7 +108,7 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void setBackground( int color)
   {
-    JComponent widget = xidget.getFeature( JComponent.class);
+    JComponent widget = getPrimaryWidget( xidget);
     widget.setBackground( new Color( color));
   }
 
@@ -115,10 +117,68 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void setForeground( int color)
   {
-    JComponent widget = xidget.getFeature( JComponent.class);
+    JComponent widget = getPrimaryWidget( xidget);
     widget.setForeground( new Color( color));
   }
 
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setFont(java.lang.String)
+   */
+  public void setFont( String name)
+  {
+    if ( name.contains( ","))
+    {
+      String[] split = name.split( "\\s*,\\s*");
+      StringBuilder sb = new StringBuilder();
+      for( int i=0; i<split.length; i++)
+      {
+        if ( i > 0) sb.append( '-');
+        sb.append( split[ i]);
+      }
+      name = sb.toString();
+    }
+    
+    JComponent widget = getPrimaryWidget( xidget);
+    Font oldFont = widget.getFont();
+    Font font = name.contains( "-")? Font.decode( name): new Font( name, oldFont.getStyle(), oldFont.getSize());
+    widget.setFont( font);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setFontSize(int)
+   */
+  public void setFontSize( double size)
+  {
+    JComponent widget = getPrimaryWidget( xidget);
+    Font font = widget.getFont();
+    widget.setFont( font.deriveFont( (float)size));
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setFontStyle(java.lang.String)
+   */
+  public void setFontStyle( String style)
+  {
+    JComponent widget = getPrimaryWidget( xidget);
+    Font font = widget.getFont();
+    int constant = Font.PLAIN;
+    if ( style.equals( "italic") || style.equals( "italics")) constant = Font.ITALIC;
+    if ( style.equals( "bold")) constant = Font.BOLD;
+    widget.setFont( font.deriveFont( constant));
+  }
+
+  /**
+   * Returns the primary interactive widget associated with the xidget.
+   * @param xidget The xidget.
+   * @return Returns the primary interactive widget associated with the xidget.
+   */
+  private static JComponent getPrimaryWidget( IXidget xidget)
+  {
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    return (JComponent)widgets[ widgets.length - 1];
+  }
+  
   /* (non-Javadoc)
    * @see java.lang.Object#toString()
    */
