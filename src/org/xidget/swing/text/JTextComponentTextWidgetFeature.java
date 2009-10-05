@@ -10,6 +10,7 @@ import org.xidget.config.util.TextTransform;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xmodel.xpath.expression.IExpression;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IWidgetTextAdapter for a JTextField or JTextArea widget which
@@ -35,18 +36,18 @@ public class JTextComponentTextWidgetFeature implements ITextWidgetFeature
   /* (non-Javadoc)
    * @see org.xidget.text.adapter.IWidgetTextAdapter#setText(java.lang.String, java.lang.String)
    */
-  public void setText( String channel, String text)
+  public void setText( StatefulContext context, String channel, String text)
   {
     JTextComponent widget = xidget.getFeature( JTextComponent.class);
     if ( channel.equals( TextModelFeature.allChannel))
     {
-      if ( transform != null) text = transform.transform( text);
+      if ( transform != null) text = transform.transform( context, text);
       if ( !widget.getText().equals( text)) widget.setText( text);
     }
     else if ( channel.equals( TextModelFeature.selectedChannel))
     {
       widget.replaceSelection( text);
-      String allText = transform.transform( widget.getText());
+      String allText = transform.transform( context, widget.getText());
       if ( !widget.getText().equals( allText)) widget.setText( allText);
     }
   }

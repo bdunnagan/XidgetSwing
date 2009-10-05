@@ -17,6 +17,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import org.xidget.IXidget;
 import org.xidget.feature.text.TextModelFeature;
+import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.combo.IChoiceListFeature;
 import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
@@ -126,8 +127,12 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      ITextModelFeature feature = xidget.getFeature( ITextModelFeature.class);
-      if ( feature != null) feature.setText( TextModelFeature.allChannel, jcombo.getSelectedItem().toString());
+      ITextModelFeature textModelFeature = xidget.getFeature( ITextModelFeature.class);
+      if ( textModelFeature != null) 
+      {
+        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, jcombo.getSelectedItem().toString());
+      }
     }
   };
 

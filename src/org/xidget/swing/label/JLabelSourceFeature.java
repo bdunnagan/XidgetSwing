@@ -9,6 +9,7 @@ import org.xidget.IXidget;
 import org.xidget.ifeature.ISourceFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of ISourceFeature for the Swing JLabel widget.
@@ -31,7 +32,7 @@ public class JLabelSourceFeature implements ISourceFeature
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISourceFeature#setSource(java.lang.String, org.xmodel.IModelObject)
    */
-  public void setSource( String channel, IModelObject node)
+  public void setSource( StatefulContext context, String channel, IModelObject node)
   {
     if ( channel == ISourceFeature.allChannel)
     {

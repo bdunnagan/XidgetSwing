@@ -10,6 +10,7 @@ import org.xidget.config.util.TextTransform;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xmodel.xpath.expression.IExpression;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IWidgetTextAdapter for a JComboBox widget 
@@ -34,12 +35,12 @@ public class JComboBoxTextWidgetFeature implements ITextWidgetFeature
   /* (non-Javadoc)
    * @see org.xidget.text.adapter.IWidgetTextAdapter#setText(java.lang.String, java.lang.String)
    */
-  public void setText( String channel, String text)
+  public void setText( StatefulContext context, String channel, String text)
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
     if ( channel.equals( TextModelFeature.allChannel))
     {
-      if ( transform != null) text = transform.transform( text);
+      if ( transform != null) text = transform.transform( context, text);
       widget.setSelectedItem( text);
     }
   }

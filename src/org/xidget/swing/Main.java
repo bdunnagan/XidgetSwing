@@ -34,7 +34,9 @@ public class Main
   {    
     final File file = new File( args[ 0]);
 
-    System.out.println( System.getProperty( "java.class.path"));
+    String classpath = System.getProperty( "java.class.path");
+    String[] entries = classpath.split( String.format( "[%s]", File.pathSeparator));
+    for( String entry: entries) System.out.printf( "%s\n", entry);
     
     // get into the ui thread
     SwingUtilities.invokeLater( new Runnable() {

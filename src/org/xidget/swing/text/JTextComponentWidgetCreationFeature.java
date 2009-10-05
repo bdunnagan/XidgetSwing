@@ -23,6 +23,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
 import org.xidget.IXidget;
 import org.xidget.feature.text.TextModelFeature;
+import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.layout.Size;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
@@ -162,16 +163,24 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   private final CaretListener caretListener = new CaretListener() {
     public void caretUpdate( CaretEvent e)
     {
-      ITextModelFeature adapter = xidget.getFeature( ITextModelFeature.class);
-      if ( adapter != null) adapter.setText( TextModelFeature.selectedChannel, jtext.getSelectedText());
+      ITextModelFeature textModelFeature = xidget.getFeature( ITextModelFeature.class);
+      if ( textModelFeature != null) 
+      {
+        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.selectedChannel, jtext.getSelectedText());
+      }
     }
   };
   
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      ITextModelFeature adapter = xidget.getFeature( ITextModelFeature.class);
-      if ( adapter != null) adapter.setText( TextModelFeature.allChannel, jtext.getText());
+      ITextModelFeature textModelFeature = xidget.getFeature( ITextModelFeature.class);
+      if ( textModelFeature != null) 
+      {
+        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, jtext.getText());
+      }
     }
   };
 
