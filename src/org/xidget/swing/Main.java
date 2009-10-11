@@ -5,13 +5,17 @@
 package org.xidget.swing;
 
 import java.io.File;
-import java.io.FileInputStream;
 import javax.swing.SwingUtilities;
 import org.xidget.Creator;
+import org.xidget.caching.FileSystemCachingPolicy;
 import org.xmodel.IModelObject;
+import org.xmodel.external.ExternalReference;
+import org.xmodel.external.ICachingPolicy;
+import org.xmodel.external.IExternalReference;
+import org.xmodel.external.caching.JarCachingPolicy;
 import org.xmodel.xaction.ScriptAction;
 import org.xmodel.xaction.XActionDocument;
-import org.xmodel.xml.XmlIO;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An application that runs loads and executes an xaction script.
@@ -29,31 +33,43 @@ public class Main
       e.printStackTrace();
     }
   }  
-  
+
   public static void run( String[] args) throws Exception
   {    
-    final File file = new File( args[ 0]);
-
-    String classpath = System.getProperty( "java.class.path");
-    String[] entries = classpath.split( String.format( "[%s]", File.pathSeparator));
-    for( String entry: entries) System.out.printf( "%s\n", entry);
+    final File path = new File( args[ 0]);
     
     // get into the ui thread
     SwingUtilities.invokeLater( new Runnable() {
       public void run()
       {
+        // register toolkit
+        Creator.getInstance().setToolkit( new Toolkit());
+
+        // create caching policy depending on whether we are running in a jar
+        ICachingPolicy cachingPolicy = null;
+        String classpath = System.getProperty( "java.class.path");
+        boolean runningFromJar = classpath.indexOf( File.pathSeparator) < 0 && classpath.endsWith( ".jar");
+        cachingPolicy = (runningFromJar)? new JarCachingPolicy(): new FileSystemCachingPolicy();
+        
         try
         {
-          // register toolkit
-          Creator.getInstance().setToolkit( new Toolkit());
+          String resourcePath = runningFromJar? System.getProperty( "java.class.path"): ".";
           
-          // load xml
-          XmlIO xmlIO = new XmlIO();
-          IModelObject root = xmlIO.read( new FileInputStream( file));
+          IExternalReference resources = new ExternalReference( "resources");
+          resources.setCachingPolicy( cachingPolicy);
+          resources.setAttribute( "path", resourcePath);
+          resources.setDirty( true);
+          
+          // run configuration
+          IModelObject main = resources.getFirstChild( path.getName());
+          if ( main == null) throw new IllegalArgumentException( "Unable to locate startup script: "+path);
+          
           XActionDocument document = new XActionDocument( Main.class.getClassLoader());
-          document.setRoot( root);
+          document.setRoot( main);
+          
+          StatefulContext context = new StatefulContext( resources);
           ScriptAction script = document.createScript();
-          script.run();
+          script.run( context);
         }
         catch( Exception e)
         {

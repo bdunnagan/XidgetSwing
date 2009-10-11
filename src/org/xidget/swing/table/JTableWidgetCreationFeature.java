@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
@@ -50,14 +51,9 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     
     jtable = new JTable( tableModel);
     jtable.setDragEnabled( true);
-    try
-    {
-      jtable.getDropTarget().addDropTargetListener( dndListener);
-    }
-    catch( Exception e)
-    {
-      e.printStackTrace( System.err);
-    }
+    
+    DropTarget dropTarget = new DropTarget( jtable, dndListener);
+    jtable.setDropTarget( dropTarget);
     
     jtable.setShowGrid( true);
     jtable.setShowHorizontalLines( true);

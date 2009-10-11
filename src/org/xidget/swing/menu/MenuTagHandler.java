@@ -25,6 +25,6 @@ public class MenuTagHandler extends XidgetTagHandler
   @Override
   public boolean filter( TagProcessor processor, ITagHandler parent, IModelObject element)
   {
-    return !element.getParent().isType( "menu"); 
+    return !element.getParent().isType( "menu") && !element.getParent().isType( "menubar"); 
   }
 }
