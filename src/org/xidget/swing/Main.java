@@ -6,9 +6,10 @@ package org.xidget.swing;
 
 import java.io.File;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import org.xidget.Creator;
 import org.xidget.caching.FileSystemCachingPolicy;
-import org.xidget.caching.JarCachingPolicy;
+import org.xidget.caching.ZipCachingPolicy;
 import org.xmodel.IModelObject;
 import org.xmodel.external.ExternalReference;
 import org.xmodel.external.ICachingPolicy;
@@ -36,7 +37,9 @@ public class Main
 
   public static void run( String[] args) throws Exception
   {    
-    final File path = new File( args[ 0]);
+    final File path = new File( (args.length > 0)? args[ 0]: "main.xml");
+    
+    UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName());
     
     // get into the ui thread
     SwingUtilities.invokeLater( new Runnable() {
@@ -49,7 +52,7 @@ public class Main
         ICachingPolicy cachingPolicy = null;
         String classpath = System.getProperty( "java.class.path");
         boolean runningFromJar = classpath.indexOf( File.pathSeparator) < 0 && classpath.endsWith( ".jar");
-        cachingPolicy = (runningFromJar)? new JarCachingPolicy(): new FileSystemCachingPolicy();
+        cachingPolicy = (runningFromJar)? new ZipCachingPolicy(): new FileSystemCachingPolicy();
         
         try
         {

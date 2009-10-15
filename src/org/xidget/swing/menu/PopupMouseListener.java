@@ -26,7 +26,7 @@ public class PopupMouseListener extends MouseAdapter
   public void mousePressed( MouseEvent e)
   {
     JPopupMenu widget = xidget.getFeature( JPopupMenu.class);
-    if ( e.isPopupTrigger()) widget.show( e.getComponent(), e.getX(), e.getY());
+    if ( e.getButton() == MouseEvent.BUTTON3) widget.show( e.getComponent(), e.getX(), e.getY());
   }
 
   private IXidget xidget;

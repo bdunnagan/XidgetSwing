@@ -42,9 +42,20 @@ public class JComboBoxTextWidgetFeature implements ITextWidgetFeature
     {
       if ( transform != null) text = transform.transform( context, text);
       widget.setSelectedItem( text);
+      this.text = text;
     }
   }
 
+  /**
+   * Returns the current text. This method is provided because JComboBox does not store the
+   * selected item if it is not a valid choice when the widget is non-editable.
+   * @return Returns the current text.
+   */
+  public String getText()
+  {
+    return text;
+  }
+  
   /* (non-Javadoc)
    * @see org.xidget.text.adapter.IWidgetTextAdapter#setTransform(java.lang.String, org.xmodel.xpath.expression.IExpression)
    */
@@ -55,4 +66,5 @@ public class JComboBoxTextWidgetFeature implements ITextWidgetFeature
 
   private IXidget xidget;
   private TextTransform transform;
+  private String text;
 }

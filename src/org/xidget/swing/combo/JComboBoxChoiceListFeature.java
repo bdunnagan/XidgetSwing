@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import org.xidget.IXidget;
 import org.xidget.ifeature.combo.IChoiceListFeature;
+import org.xidget.ifeature.text.ITextWidgetFeature;
 
 /**
  * An implementation of IChoiceListFeature which is backed by a JComboBox.
@@ -39,6 +40,7 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.addItem( choice);
+    updateChoice( widget, choice);
   }
 
   /* (non-Javadoc)
@@ -48,6 +50,7 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.insertItemAt( choice, index);
+    updateChoice( widget, choice);
   }
 
   /* (non-Javadoc)
@@ -75,6 +78,18 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.removeItem( choice);
+  }
+  
+  /**
+   * Update the selected choice if the choice was added after the text of the widget was set.
+   * @param widget The widget.
+   * @param choice The choice that was added.
+   */
+  private void updateChoice( JComboBox widget, String choice)
+  {
+    ITextWidgetFeature feature = xidget.getFeature( ITextWidgetFeature.class);
+    String text = ((JComboBoxTextWidgetFeature)feature).getText();
+    if ( text != null && text.equals( choice)) widget.setSelectedItem( text);
   }
 
   private IXidget xidget;
