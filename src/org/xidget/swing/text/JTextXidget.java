@@ -10,10 +10,8 @@ import javax.swing.text.JTextComponent;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -35,7 +33,6 @@ public class JTextXidget extends Xidget
     textModelFeature = new TextModelFeature( this);
     textWidgetFeature = new JTextComponentTextWidgetFeature( this);
     labelFeature = new JTextComponentLabelFeature( this);
-    computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JTextComponentWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -52,7 +49,6 @@ public class JTextXidget extends Xidget
     if ( clss == ITextModelFeature.class) return (T)textModelFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == ILabelFeature.class) return (T)labelFeature;
-    if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -70,7 +66,6 @@ public class JTextXidget extends Xidget
   private IWidgetFeature widgetFeature;
   private ITextModelFeature textModelFeature;
   private ITextWidgetFeature textWidgetFeature;
-  private IComputeNodeFeature computeNodeFeature;
   private JTextComponentLabelFeature labelFeature;
   private JTextComponentWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;

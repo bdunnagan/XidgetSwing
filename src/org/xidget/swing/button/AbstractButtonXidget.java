@@ -11,10 +11,8 @@ import javax.swing.JComponent;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.button.ButtonModelFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
@@ -43,7 +41,6 @@ public class AbstractButtonXidget extends Xidget
     buttonModelFeature = new ButtonModelFeature();
     iconFeature = new AbstractButtonIconFeature( this);
     labelFeature = new ButtonLabelFeature( this);
-    computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new AbstractButtonWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -61,7 +58,6 @@ public class AbstractButtonXidget extends Xidget
     if ( clss == ISourceFeature.class) return (T)buttonModelFeature;
     if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
     if ( clss == IButtonModelFeature.class) return (T)buttonModelFeature;
-    if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -82,7 +78,6 @@ public class AbstractButtonXidget extends Xidget
   private IButtonModelFeature buttonModelFeature;
   private IIconFeature iconFeature;
   private ILabelFeature labelFeature;
-  private IComputeNodeFeature computeNodeFeature;
   private AbstractButtonWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;
 }

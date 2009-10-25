@@ -10,10 +10,8 @@ import javax.swing.JComponent;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -35,7 +33,6 @@ public class JComboBoxXidget extends Xidget
     textModelFeature = new TextModelFeature( this);
     textWidgetFeature = new JComboBoxTextWidgetFeature( this);
     choiceListFeature = new JComboBoxChoiceListFeature( this);
-    computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JComboBoxWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -52,7 +49,6 @@ public class JComboBoxXidget extends Xidget
     if ( clss == ISourceFeature.class) return (T)textModelFeature;
     if ( clss == ITextModelFeature.class) return (T)textModelFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
-    if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IChoiceListFeature.class) return (T)choiceListFeature;
     
@@ -70,7 +66,6 @@ public class JComboBoxXidget extends Xidget
   private IWidgetFeature widgetFeature;
   private ITextModelFeature textModelFeature;
   private ITextWidgetFeature textWidgetFeature;
-  private IComputeNodeFeature computeNodeFeature;
   private JComboBoxChoiceListFeature choiceListFeature;
   private JComboBoxWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;

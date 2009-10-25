@@ -10,9 +10,7 @@ import javax.swing.JLabel;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -34,7 +32,6 @@ public class JLabelXidget extends Xidget
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     sourceFeature = new JLabelSourceFeature( this);
-    computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JLabelWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -49,7 +46,6 @@ public class JLabelXidget extends Xidget
     if ( clss == IIconFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)sourceFeature;
-    if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -66,7 +62,6 @@ public class JLabelXidget extends Xidget
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private ISourceFeature sourceFeature;
-  private IComputeNodeFeature computeNodeFeature;
   private JLabelWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;
 }

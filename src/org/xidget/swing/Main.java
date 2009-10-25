@@ -16,6 +16,9 @@ import org.xmodel.external.ICachingPolicy;
 import org.xmodel.external.IExternalReference;
 import org.xmodel.xaction.ScriptAction;
 import org.xmodel.xaction.XActionDocument;
+import org.xmodel.xpath.XPath;
+import org.xmodel.xpath.expression.Context;
+import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -64,7 +67,8 @@ public class Main
           resources.setDirty( true);
           
           // run configuration
-          IModelObject main = resources.getFirstChild( path.getName());
+          IExpression xpath = XPath.createExpression( path.getPath());
+          IModelObject main = xpath.queryFirst( new Context( resources));
           if ( main == null) throw new IllegalArgumentException( "Unable to locate startup script: "+path);
           
           XActionDocument document = new XActionDocument( Main.class.getClassLoader());

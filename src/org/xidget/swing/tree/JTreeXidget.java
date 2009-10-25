@@ -10,11 +10,9 @@ import javax.swing.JTree;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.feature.SelectionModelFeature;
 import org.xidget.feature.tree.TreeExpandFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -41,7 +39,6 @@ public class JTreeXidget extends Xidget
     expandFeature = new TreeExpandFeature( this);
     treeWidgetFeature = new JTreeWidgetFeature( this);
     selectionModelFeature = new SelectionModelFeature( this);
-    computeNodeFeature = new ComputeNodeFeature( this);    
     basicFeatureSet = new BasicFeatureSet( this);
   }
 
@@ -59,7 +56,6 @@ public class JTreeXidget extends Xidget
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISelectionWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
-    if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JComponent.class) return (T)creationFeature.getJScrollPane();
@@ -77,6 +73,5 @@ public class JTreeXidget extends Xidget
   private JTreeWidgetCreationFeature creationFeature;
   private ISelectionModelFeature selectionModelFeature;
   private IWidgetFeature widgetFeature;
-  private IComputeNodeFeature computeNodeFeature;
   private IFeatured basicFeatureSet;
 }

@@ -74,7 +74,7 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
   public void relayout()
   {
     ILayoutFeature layoutFeature = xidget.getFeature( ILayoutFeature.class);
-    if ( layoutFeature != null) layoutFeature.configure();
+    if ( layoutFeature != null) layoutFeature.invalidate();
     
     Container container = xidget.getFeature( Container.class);
     if ( container != null && container.isShowing()) container.validate();

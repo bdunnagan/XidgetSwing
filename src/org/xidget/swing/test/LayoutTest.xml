@@ -13,13 +13,26 @@
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>
   
-  <assign name="test">7</assign>
+  <assign name="test">1</assign>
     
   <create assign="form" when="$test = '1'">
     <template>
       <app>
-        <form id="ROOT" layout="$layouts/vfree" margins="5" spacing="5" handles="true" size="400, -1">
-          <form id="FORM" size="-1, 200"/>
+        <package>org.xidget.layout.xaction</package>
+        
+        <form id="ROOT" size="400, 400">
+          <layout>
+            <layoutAttach xidget="text">
+              <top/>
+              <left/>
+              <right/>
+              <bottom/>
+            </layoutAttach>
+          </layout>
+          
+          <text multiline="true">
+            <source>'Text'</source>
+          </text>
         </form>
       </app>
     </template>

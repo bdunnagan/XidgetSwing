@@ -11,9 +11,7 @@ import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.ComputeNodeFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IComputeNodeFeature;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
@@ -32,7 +30,6 @@ public class JFrameXidget extends Xidget
     bindFeature = new BindFeature( this);
     layoutFeature = new AnchorLayoutFeature( this);
     widgetFeature = new JFrameWidgetFeature( this);
-    computeNodeFeature = new ComputeNodeFeature( this);
     creationFeature = new JFrameWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -49,7 +46,6 @@ public class JFrameXidget extends Xidget
     if ( clss == ILayoutFeature.class) return (T)layoutFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITitleFeature.class) return (T)widgetFeature;
-    if ( clss == IComputeNodeFeature.class) return (T)computeNodeFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
@@ -66,7 +62,6 @@ public class JFrameXidget extends Xidget
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private ILayoutFeature layoutFeature;
-  private IComputeNodeFeature computeNodeFeature;
   private JFrameWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;
   private IFeatured basicFeatureSet;

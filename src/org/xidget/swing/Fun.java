@@ -44,6 +44,10 @@ public class Fun
     frame.setVisible( true);
   }
   
+  private float oscillator( int t)
+  {
+  }
+  
   private static class MyPanel extends JPanel 
   {
     public MyPanel()
