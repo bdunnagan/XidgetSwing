@@ -13,7 +13,7 @@
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>
   
-  <assign name="test">1</assign>
+  <assign name="test">4</assign>
     
   <create assign="form" when="$test = '1'">
     <template>
@@ -41,9 +41,35 @@
   <create assign="form" when="$test = '2'">
     <template>
       <app size="400, 400">
-        <form id="ROOT" layout="$layouts/hgrid" margins="5" spacing="5" handles="true">
-          <form id="LEFT"/>
-          <form id="RIGHT"/>
+        <package>org.xidget.layout.xaction</package>
+        
+        <form id="ROOT">
+          <layout>
+            <layoutFillY/>
+            <layoutGridX/>
+          </layout>
+        
+          <form id="LEFT">
+            <layout>
+              <layoutFillX/>
+              <layoutFillY/>
+            </layout>
+            
+            <text multiline="true">
+              <source>'LEFT'</source>
+            </text>
+          </form>
+          
+          <form id="RIGHT">
+            <layout>
+              <layoutFillX/>
+              <layoutFillY/>
+            </layout>
+            
+            <text multiline="true">
+              <source>'RIGHT'</source>
+            </text>
+          </form>
         </form>
       </app>
     </template>
@@ -51,10 +77,22 @@
   
   <create assign="form" when="$test = '3'">
     <template>
-      <app size="500, -1">
-        <form id="ROOT" layout="$layouts/vfree" margins="5" spacing="5" handles="true">
-          <form id="UPPER" size="-1, 200"/>
-          <form id="LOWER" size="-1, 150"/>
+      <app size="400, -1">
+        <package>org.xidget.layout.xaction</package>
+        
+        <form id="Root">
+          <layout>
+            <layoutFillX/>
+            <layoutTopBottom/>
+            <layoutPackY/>
+          </layout>
+        
+          <text id="Text1">
+            <source>'LEFT'</source>
+          </text>
+          <text id="Text2">
+            <source>'RIGHT'</source>
+          </text>
         </form>
       </app>
     </template>
@@ -63,13 +101,21 @@
   <create assign="form" when="$test = '4'">
     <template>
       <app size="500, -1">
-        <form id="ROOT" layout="$layouts/rightToLeft" margins="5" spacing="5">
-          <text>
-            <source>'New Text 1'</source>
-          </text>
-          <text>
-            <source>'New Text 2'</source>
-          </text>
+        <package>org.xidget.layout.xaction</package>
+        
+        <form id="Root">
+          <layout>
+            <layoutAlignTop/>
+            <layoutRightLeft/>
+            <layoutPackY/>
+          </layout>
+        
+          <button id="Button1">
+            <label>'Button1'</label>
+          </button>
+          <button id="Button2">
+            <label>'Button2'</label>
+          </button>
         </form>
       </app>
     </template>

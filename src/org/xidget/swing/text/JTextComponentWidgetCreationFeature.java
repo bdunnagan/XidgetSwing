@@ -7,6 +7,8 @@ package org.xidget.swing.text;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -67,6 +69,9 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     else
     {
       jtext = new JTextField( size.width);
+      
+      // add action listener so that enter key will be processed
+      ((JTextField)jtext).addActionListener( actionListener);
     }
     
     // pretty
@@ -181,6 +186,12 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
         IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
         textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, jtext.getText());
       }
+    }
+  };
+  
+  private final ActionListener actionListener = new ActionListener() {
+    public void actionPerformed( ActionEvent e)
+    {
     }
   };
 
