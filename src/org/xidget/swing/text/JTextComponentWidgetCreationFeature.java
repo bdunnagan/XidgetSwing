@@ -9,7 +9,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JComponent;
@@ -158,7 +157,15 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     return jlabel;
   }
 
-  private final KeyListener keyListener = new KeyAdapter() {
+  private final KeyListener keyListener = new KeyListener() {
+    public void keyPressed( KeyEvent e)
+    {
+      System.out.println( "KeyDown: "+e.getKeyCode());
+    }
+    public void keyReleased( KeyEvent e)
+    {
+      System.out.println( "KeyUp: "+e.getKeyCode());
+    }
     public void keyTyped( KeyEvent e)
     {
       SwingUtilities.invokeLater( updateRunnable);

@@ -13,7 +13,7 @@
 
   <assign name="layouts">$xml/layouts.xml/layouts</assign>
   
-  <assign name="test">4</assign>
+  <assign name="test">3</assign>
     
   <create assign="form" when="$test = '1'">
     <template>
