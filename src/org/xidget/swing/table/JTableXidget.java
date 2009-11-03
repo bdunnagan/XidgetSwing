@@ -5,8 +5,10 @@
 package org.xidget.swing.table;
 
 import java.awt.Component;
+
 import javax.swing.JComponent;
 import javax.swing.JTable;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -15,6 +17,7 @@ import org.xidget.feature.tree.ColumnSetFeature;
 import org.xidget.feature.tree.RowSetFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
+import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -56,6 +59,7 @@ public class JTableXidget extends Xidget
     if ( clss == ITreeWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
+    if ( clss == ISelectionWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getJScrollPane();
