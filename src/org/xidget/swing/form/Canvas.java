@@ -1,7 +1,7 @@
 /*
  * XidgetSwing - A Java Swing implementation of Xidgets
  * 
- * JMenuItemButtonWidgetFeature.java
+ * Canvas.java
  * 
  * Copyright 2009 Robert Arvin Dunnagan
  * 
@@ -17,24 +17,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.menu;
+package org.xidget.swing.form;
 
+import java.awt.Graphics;
+import java.awt.LayoutManager;
+import javax.swing.JPanel;
 import org.xidget.IXidget;
-import org.xidget.ifeature.button.IButtonWidgetFeature;
+import org.xidget.ifeature.canvas.IPaintFeature;
 
 /**
- * An implementation of IButtonWidgetFeature for the Swing JMenuItem widget.
+ * A custom JPanel that paints children with the IPaintFeature.
  */
-public class JMenuItemButtonWidgetFeature implements IButtonWidgetFeature
+public class Canvas extends JPanel
 {
-  public JMenuItemButtonWidgetFeature( IXidget xidget)
+  public Canvas( IXidget xidget, LayoutManager layout)
   {
+    super( layout);
+    this.xidget = xidget;
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.button.IButtonWidgetFeature#setState(boolean)
+   * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
    */
-  public void setState( boolean state)
+  @Override
+  protected void paintComponent( Graphics graphics)
   {
+    super.paintComponent( graphics);
+    
+    IPaintFeature paintFeature = xidget.getFeature( IPaintFeature.class);
+    if ( paintFeature != null) paintFeature.paint( graphics);
   }
+  
+  private IXidget xidget;
 }
