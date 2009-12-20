@@ -57,7 +57,7 @@ public class Main
   {    
     final File path = new File( (args.length > 0)? args[ 0]: "main.xml");
     
-    UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName());
+    //UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName());
     
     // get into the ui thread
     SwingUtilities.invokeLater( new Runnable() {
