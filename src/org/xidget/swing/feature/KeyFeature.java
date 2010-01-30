@@ -101,6 +101,9 @@ public class KeyFeature extends KeyAdapter implements IKeyFeature
   
   static
   {
+    //
+    // Normal printable keys
+    //
     lookup.put( KeyEvent.VK_0, "0");
     lookup.put( KeyEvent.VK_1, "1");
     lookup.put( KeyEvent.VK_2, "2");
@@ -139,56 +142,6 @@ public class KeyFeature extends KeyAdapter implements IKeyFeature
     lookup.put( KeyEvent.VK_Y, "y");
     lookup.put( KeyEvent.VK_Z, "z");
     
-    lookup.put( KeyEvent.VK_F1, "f1");
-    lookup.put( KeyEvent.VK_F2, "f2");
-    lookup.put( KeyEvent.VK_F3, "f3");
-    lookup.put( KeyEvent.VK_F4, "f4");
-    lookup.put( KeyEvent.VK_F5, "f5");
-    lookup.put( KeyEvent.VK_F6, "f6");
-    lookup.put( KeyEvent.VK_F7, "f7");
-    lookup.put( KeyEvent.VK_F8, "f8");
-    lookup.put( KeyEvent.VK_F9, "f9");
-    lookup.put( KeyEvent.VK_F10, "f10");
-    lookup.put( KeyEvent.VK_F11, "f11");
-    lookup.put( KeyEvent.VK_F12, "f12");
-    lookup.put( KeyEvent.VK_F13, "f13");
-    lookup.put( KeyEvent.VK_F14, "f14");
-    lookup.put( KeyEvent.VK_F15, "f15");
-    lookup.put( KeyEvent.VK_F16, "f16");
-    lookup.put( KeyEvent.VK_F17, "f17");
-    lookup.put( KeyEvent.VK_F18, "f18");
-    lookup.put( KeyEvent.VK_F19, "f19");
-    lookup.put( KeyEvent.VK_F20, "f20");
-    lookup.put( KeyEvent.VK_F21, "f21");
-    lookup.put( KeyEvent.VK_F22, "f22");
-    lookup.put( KeyEvent.VK_F23, "f23");
-    lookup.put( KeyEvent.VK_F24, "f24");
-    
-    lookup.put( KeyEvent.VK_ALT, "alt");
-    lookup.put( KeyEvent.VK_ALT_GRAPH, "altgraph");
-    lookup.put( KeyEvent.VK_CONTROL, "control");
-    lookup.put( KeyEvent.VK_META, "meta");
-    lookup.put( KeyEvent.VK_SHIFT, "shift");
-    
-    lookup.put( KeyEvent.VK_TAB, "tab");
-    lookup.put( KeyEvent.VK_ESCAPE, "escape");
-    lookup.put( KeyEvent.VK_BACK_SPACE, "backspace");
-    lookup.put( KeyEvent.VK_ENTER, "enter");
-    
-    lookup.put( KeyEvent.VK_CAPS_LOCK, "capslock");
-    lookup.put( KeyEvent.VK_NUM_LOCK, "numlock");
-    lookup.put( KeyEvent.VK_SCROLL_LOCK, "scrolllock");
-    
-    lookup.put( KeyEvent.VK_HOME, "home");
-    lookup.put( KeyEvent.VK_END, "end");
-    lookup.put( KeyEvent.VK_INSERT, "insert");
-    lookup.put( KeyEvent.VK_PAGE_UP, "pageup");
-    lookup.put( KeyEvent.VK_PAGE_DOWN, "pagedown");
-    
-    lookup.put( KeyEvent.VK_CUT, "cut");
-    lookup.put( KeyEvent.VK_PASTE, "paste");
-    lookup.put( KeyEvent.VK_COPY, "copy");
-    
     lookup.put( KeyEvent.VK_AMPERSAND, "&");
     lookup.put( KeyEvent.VK_AT, "@");
     lookup.put( KeyEvent.VK_LEFT_PARENTHESIS, "(");
@@ -203,63 +156,115 @@ public class KeyFeature extends KeyAdapter implements IKeyFeature
     lookup.put( KeyEvent.VK_BACK_SLASH, "\\");    
     lookup.put( KeyEvent.VK_MINUS, "-");
     lookup.put( KeyEvent.VK_PLUS, "+");
-    lookup.put( KeyEvent.VK_MULTIPLY, "multiply");
-    lookup.put( KeyEvent.VK_SUBTRACT, "subtract");
     lookup.put( KeyEvent.VK_ASTERISK, "*");
     lookup.put( KeyEvent.VK_NUMBER_SIGN, "#");
-    
-    lookup.put( KeyEvent.VK_ACCEPT, "accept");
-    lookup.put( KeyEvent.VK_AGAIN, "again");
-    lookup.put( KeyEvent.VK_ALL_CANDIDATES, "allcandidates");
-    lookup.put( KeyEvent.VK_ALPHANUMERIC, "alphanumeric");
-    lookup.put( KeyEvent.VK_BEGIN, "begin");
-    lookup.put( KeyEvent.VK_CANCEL, "cancel");
-    lookup.put( KeyEvent.VK_CLEAR, "clear");
-    lookup.put( KeyEvent.VK_CONTEXT_MENU, "contextmenu");
-    lookup.put( KeyEvent.VK_CONVERT, "convert");
-        
-    lookup.put( KeyEvent.VK_EURO_SIGN, "eurosign");
-    lookup.put( KeyEvent.VK_FINAL, "final");
-    lookup.put( KeyEvent.VK_FIND, "find");
-    lookup.put( KeyEvent.VK_FULL_WIDTH, "fullwidth");
-    lookup.put( KeyEvent.VK_HALF_WIDTH, "halfwidth");
-    lookup.put( KeyEvent.VK_HELP, "help");
-        
-    lookup.put( KeyEvent.VK_KP_UP, "keypadup");
-    lookup.put( KeyEvent.VK_KP_LEFT, "keypadleft");
-    lookup.put( KeyEvent.VK_KP_RIGHT, "keypadright");
-    lookup.put( KeyEvent.VK_KP_DOWN, "keypaddown");
-    
-    lookup.put( KeyEvent.VK_UP, "up");
-    lookup.put( KeyEvent.VK_LEFT, "left");
-    lookup.put( KeyEvent.VK_RIGHT, "right");
-    lookup.put( KeyEvent.VK_DOWN, "down");
-    
-    
-    lookup.put( KeyEvent.VK_NUMPAD0, "numpad0");
-    lookup.put( KeyEvent.VK_NUMPAD1, "numpad1");
-    lookup.put( KeyEvent.VK_NUMPAD2, "numpad2");
-    lookup.put( KeyEvent.VK_NUMPAD3, "numpad3");
-    lookup.put( KeyEvent.VK_NUMPAD4, "numpad4");
-    lookup.put( KeyEvent.VK_NUMPAD5, "numpad5");
-    lookup.put( KeyEvent.VK_NUMPAD6, "numpad6");
-    lookup.put( KeyEvent.VK_NUMPAD7, "numpad7");
-    lookup.put( KeyEvent.VK_NUMPAD8, "numpad8");
-    lookup.put( KeyEvent.VK_NUMPAD9, "numpad9");
-    
-    lookup.put( KeyEvent.VK_PAUSE, "pause");
     lookup.put( KeyEvent.VK_PERIOD, ".");
-    lookup.put( KeyEvent.VK_PRINTSCREEN, "printscreen");
     lookup.put( KeyEvent.VK_QUOTE, "'");
     lookup.put( KeyEvent.VK_QUOTEDBL, "\"");
     lookup.put( KeyEvent.VK_SEMICOLON, ";");
-    lookup.put( KeyEvent.VK_SEPARATOR, "separator");
-    lookup.put( KeyEvent.VK_SPACE, "space");
-    lookup.put( KeyEvent.VK_STOP, "stop");
     lookup.put( KeyEvent.VK_UNDERSCORE, "_");
-    lookup.put( KeyEvent.VK_UNDO, "undo");
-    lookup.put( KeyEvent.VK_WINDOWS, "windows");
-    lookup.put( KeyEvent.VK_COMMA, "comma");
     lookup.put( KeyEvent.VK_COLON, ":");
+    
+    //
+    // Special keys enumerated in IKeyFeature
+    //
+    lookup.put( KeyEvent.VK_F1, IKeyFeature.Key.f1.toString());
+    lookup.put( KeyEvent.VK_F2, IKeyFeature.Key.f2.toString());
+    lookup.put( KeyEvent.VK_F3, IKeyFeature.Key.f3.toString());
+    lookup.put( KeyEvent.VK_F4, IKeyFeature.Key.f4.toString());
+    lookup.put( KeyEvent.VK_F5, IKeyFeature.Key.f5.toString());
+    lookup.put( KeyEvent.VK_F6, IKeyFeature.Key.f6.toString());
+    lookup.put( KeyEvent.VK_F7, IKeyFeature.Key.f7.toString());
+    lookup.put( KeyEvent.VK_F8, IKeyFeature.Key.f8.toString());
+    lookup.put( KeyEvent.VK_F9, IKeyFeature.Key.f9.toString());
+    lookup.put( KeyEvent.VK_F10, IKeyFeature.Key.f10.toString());
+    lookup.put( KeyEvent.VK_F11, IKeyFeature.Key.f11.toString());
+    lookup.put( KeyEvent.VK_F12, IKeyFeature.Key.f12.toString());
+    lookup.put( KeyEvent.VK_F13, IKeyFeature.Key.f13.toString());
+    lookup.put( KeyEvent.VK_F14, IKeyFeature.Key.f14.toString());
+    lookup.put( KeyEvent.VK_F15, IKeyFeature.Key.f15.toString());
+    lookup.put( KeyEvent.VK_F16, IKeyFeature.Key.f16.toString());
+    lookup.put( KeyEvent.VK_F17, IKeyFeature.Key.f17.toString());
+    lookup.put( KeyEvent.VK_F18, IKeyFeature.Key.f18.toString());
+    lookup.put( KeyEvent.VK_F19, IKeyFeature.Key.f19.toString());
+    lookup.put( KeyEvent.VK_F20, IKeyFeature.Key.f20.toString());
+    lookup.put( KeyEvent.VK_F21, IKeyFeature.Key.f21.toString());
+    lookup.put( KeyEvent.VK_F22, IKeyFeature.Key.f22.toString());
+    lookup.put( KeyEvent.VK_F23, IKeyFeature.Key.f23.toString());
+    lookup.put( KeyEvent.VK_F24, IKeyFeature.Key.f24.toString());
+    
+    lookup.put( KeyEvent.VK_ALT, IKeyFeature.Key.alt.toString());
+    lookup.put( KeyEvent.VK_ALT_GRAPH, IKeyFeature.Key.altgraph.toString());
+    lookup.put( KeyEvent.VK_CONTROL, IKeyFeature.Key.control.toString());
+    lookup.put( KeyEvent.VK_META, IKeyFeature.Key.meta.toString());
+    lookup.put( KeyEvent.VK_SHIFT, IKeyFeature.Key.shift.toString());
+    
+    lookup.put( KeyEvent.VK_TAB, IKeyFeature.Key.tab.toString());
+    lookup.put( KeyEvent.VK_ESCAPE, IKeyFeature.Key.escape.toString());
+    lookup.put( KeyEvent.VK_BACK_SPACE, IKeyFeature.Key.backspace.toString());
+    lookup.put( KeyEvent.VK_ENTER, IKeyFeature.Key.enter.toString());
+    
+    lookup.put( KeyEvent.VK_CAPS_LOCK, IKeyFeature.Key.capslock.toString());
+    lookup.put( KeyEvent.VK_NUM_LOCK, IKeyFeature.Key.numlock.toString());
+    lookup.put( KeyEvent.VK_SCROLL_LOCK, IKeyFeature.Key.scrolllock.toString());
+    
+    lookup.put( KeyEvent.VK_HOME, IKeyFeature.Key.home.toString());
+    lookup.put( KeyEvent.VK_END, IKeyFeature.Key.end.toString());
+    lookup.put( KeyEvent.VK_INSERT, IKeyFeature.Key.insert.toString());
+    lookup.put( KeyEvent.VK_PAGE_UP, IKeyFeature.Key.pageup.toString());
+    lookup.put( KeyEvent.VK_PAGE_DOWN, IKeyFeature.Key.pagedown.toString());
+    
+    lookup.put( KeyEvent.VK_CUT, IKeyFeature.Key.cut.toString());
+    lookup.put( KeyEvent.VK_PASTE, IKeyFeature.Key.paste.toString());
+    lookup.put( KeyEvent.VK_COPY, IKeyFeature.Key.copy.toString());
+    
+    lookup.put( KeyEvent.VK_MULTIPLY, IKeyFeature.Key.multiply.toString());
+    lookup.put( KeyEvent.VK_SUBTRACT, IKeyFeature.Key.subtract.toString());
+    
+    lookup.put( KeyEvent.VK_ACCEPT, IKeyFeature.Key.accept.toString());
+    lookup.put( KeyEvent.VK_AGAIN, IKeyFeature.Key.again.toString());
+    lookup.put( KeyEvent.VK_ALL_CANDIDATES, IKeyFeature.Key.allcandidates.toString());
+    lookup.put( KeyEvent.VK_ALPHANUMERIC, IKeyFeature.Key.alphanumeric.toString());
+    lookup.put( KeyEvent.VK_BEGIN, IKeyFeature.Key.begin.toString());
+    lookup.put( KeyEvent.VK_CANCEL, IKeyFeature.Key.cancel.toString());
+    lookup.put( KeyEvent.VK_CLEAR, IKeyFeature.Key.clear.toString());
+    lookup.put( KeyEvent.VK_CONTEXT_MENU, IKeyFeature.Key.contextmenu.toString());
+    lookup.put( KeyEvent.VK_CONVERT, IKeyFeature.Key.convert.toString());
+        
+    lookup.put( KeyEvent.VK_EURO_SIGN, IKeyFeature.Key.eurosign.toString());
+    lookup.put( KeyEvent.VK_FIND, IKeyFeature.Key.find.toString());
+    lookup.put( KeyEvent.VK_FULL_WIDTH, IKeyFeature.Key.fullwidth.toString());
+    lookup.put( KeyEvent.VK_HALF_WIDTH, IKeyFeature.Key.halfwidth.toString());
+    lookup.put( KeyEvent.VK_HELP, IKeyFeature.Key.help.toString());
+        
+    lookup.put( KeyEvent.VK_KP_UP, IKeyFeature.Key.keypadup.toString());
+    lookup.put( KeyEvent.VK_KP_LEFT, IKeyFeature.Key.keypadleft.toString());
+    lookup.put( KeyEvent.VK_KP_RIGHT, IKeyFeature.Key.keypadright.toString());
+    lookup.put( KeyEvent.VK_KP_DOWN, IKeyFeature.Key.keypaddown.toString());
+    
+    lookup.put( KeyEvent.VK_UP, IKeyFeature.Key.up.toString());
+    lookup.put( KeyEvent.VK_LEFT, IKeyFeature.Key.left.toString());
+    lookup.put( KeyEvent.VK_RIGHT, IKeyFeature.Key.right.toString());
+    lookup.put( KeyEvent.VK_DOWN, IKeyFeature.Key.down.toString());
+    
+    lookup.put( KeyEvent.VK_NUMPAD0, IKeyFeature.Key.numpad0.toString());
+    lookup.put( KeyEvent.VK_NUMPAD1, IKeyFeature.Key.numpad1.toString());
+    lookup.put( KeyEvent.VK_NUMPAD2, IKeyFeature.Key.numpad2.toString());
+    lookup.put( KeyEvent.VK_NUMPAD3, IKeyFeature.Key.numpad3.toString());
+    lookup.put( KeyEvent.VK_NUMPAD4, IKeyFeature.Key.numpad4.toString());
+    lookup.put( KeyEvent.VK_NUMPAD5, IKeyFeature.Key.numpad5.toString());
+    lookup.put( KeyEvent.VK_NUMPAD6, IKeyFeature.Key.numpad6.toString());
+    lookup.put( KeyEvent.VK_NUMPAD7, IKeyFeature.Key.numpad7.toString());
+    lookup.put( KeyEvent.VK_NUMPAD8, IKeyFeature.Key.numpad8.toString());
+    lookup.put( KeyEvent.VK_NUMPAD9, IKeyFeature.Key.numpad9.toString());
+    
+    lookup.put( KeyEvent.VK_PAUSE, IKeyFeature.Key.pause.toString());
+    lookup.put( KeyEvent.VK_PRINTSCREEN, IKeyFeature.Key.printscreen.toString());
+    lookup.put( KeyEvent.VK_SEPARATOR, IKeyFeature.Key.separator.toString());
+    lookup.put( KeyEvent.VK_SPACE, IKeyFeature.Key.space.toString());
+    lookup.put( KeyEvent.VK_STOP, IKeyFeature.Key.stop.toString());
+    lookup.put( KeyEvent.VK_UNDO, IKeyFeature.Key.undo.toString());
+    lookup.put( KeyEvent.VK_WINDOWS, IKeyFeature.Key.windows.toString());
+    lookup.put( KeyEvent.VK_COMMA, IKeyFeature.Key.comma.toString());
   }
 }
