@@ -3,7 +3,7 @@
 <script>
   <package>org.xidget.xaction</package>
   
-  <create collection="xml">
+  <create collection="xml" assign="xml">
     <template annotated="true">
       <xml path=".">
         <extern:cache class="org.xmodel.external.caching.FileSystemCachingPolicy"/>
@@ -61,11 +61,18 @@
     </template>
   </create>
   
-  <assign name="layouts">collection('xml')/layouts.xml/layouts</assign>  
   <create assign="form">
     <template>
-      <app size="500, -1">
-        <form layout="$layouts/vfree">
+      <app size="500, 300">
+        <package>org.xidget.xaction</package>
+        <package>org.xidget.layout.xaction</package>
+
+        <form>
+          <layout>
+            <layoutGridY/>
+            <layoutFillX/>
+          </layout>
+        
           <text id="1">
             <label>Text1</label>
             <source>collection('appdb')/text1</source>
@@ -85,6 +92,10 @@
             <onDrop>
               <print>printf( "drop 1 at %s %s %s\n", $rowIndex, $columnIndex, $insert)</print>
             </onDrop>
+            
+            <onKeyPress keys="'escape'">
+              <print>"Hello!"</print>
+            </onKeyPress>
           
             <column>'Column 1'</column>
             <column>'Column 2'</column>
@@ -93,6 +104,9 @@
             <selection parent="$selection/selection1" mode="fk1"/>
               
             <table>
+              <onKey>
+              </onKey>
+            
               <onDrop>
                 <print>printf( "drop 2 at %s %s %s\n", $rowIndex, $columnIndex, $insert)</print>
               </onDrop>
@@ -133,7 +147,7 @@
             
             <table>
               <selection parent="$selection/selection2"/>
-              <rows>if ( collection('appdb')/text2 = 'Relayer') then static( $layouts//*/@*) else null</rows>
+              <rows>if ( collection('appdb')/text2 = 'Relayer') then static( $xml//*/@*) else null</rows>
               <cell>
                 <source>name()</source>
               </cell>
@@ -151,7 +165,7 @@
             
             <table>
               <selection parent="$selection/selection3"/>
-              <rows>$layouts//*</rows>
+              <rows>$xml//*</rows>
               <cell>
                 <source>name()</source>
               </cell>
