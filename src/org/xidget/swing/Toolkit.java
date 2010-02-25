@@ -79,6 +79,7 @@ public class Toolkit implements IToolkit
   {
     processor.addHandler( "app", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "application", new XidgetTagHandler( JFrameXidget.class));
+    processor.addHandler( "window", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "dialog", new XidgetTagHandler( JDialogXidget.class));
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));
     processor.addHandler( "password", new XidgetTagHandler( JTextXidget.class));

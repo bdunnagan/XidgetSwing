@@ -42,42 +42,43 @@
           </layout>
           
           <text id="1">
-            <label>Text1</label>
+            <label>'Text1'</label>
             <source>$data/text1</source>
           </text>
-  
+
           <combo id="2" size="50,1">
+            <label>'Combo!'</label>
             <choices>$choices/choice</choices>        
             <source>$data/text2</source>
           </combo>
           
           <text id="3" size="50,1">        
-            <label>Text3</label>
+            <label>'Text3'</label>
             <source>$data/text3</source>
           </text>
 
           <!-- debug button source not updated -->
           <button type="radio">
-            <label>Option 1</label>
+            <label>'Option 1'</label>
             <onPress>
               <set source="'option1'">$data/radio</set>
             </onPress>
           </button>          
           <button type="radio">
-            <label>Option 2</label>
+            <label>'Option 2'</label>
             <onPress>
               <set source="'option2'">$data/radio</set>
             </onPress>
           </button>          
           <button type="radio">
-            <label>Option 3</label>
+            <label>'Option 3'</label>
             <onPress>
               <set source="'option3'">$data/radio</set>
             </onPress>
           </button>          
             
           <button type="push">
-            <label>Push Me!</label>
+            <label>'Push Me!'</label>
             <onPress>
               <print>'Been pushed!'</print>
             </onPress>

@@ -47,7 +47,6 @@ public class JTextXidget extends Xidget
     widgetFeature = new SwingWidgetFeature( this);
     textModelFeature = new TextModelFeature( this);
     textWidgetFeature = new JTextComponentTextWidgetFeature( this);
-    labelFeature = new JTextComponentLabelFeature( this);
     creationFeature = new JTextComponentWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -63,7 +62,7 @@ public class JTextXidget extends Xidget
     if ( clss == ISourceFeature.class) return (T)textModelFeature;
     if ( clss == ITextModelFeature.class) return (T)textModelFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
-    if ( clss == ILabelFeature.class) return (T)labelFeature;
+    if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -81,7 +80,6 @@ public class JTextXidget extends Xidget
   private IWidgetFeature widgetFeature;
   private ITextModelFeature textModelFeature;
   private ITextWidgetFeature textWidgetFeature;
-  private JTextComponentLabelFeature labelFeature;
   private JTextComponentWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }

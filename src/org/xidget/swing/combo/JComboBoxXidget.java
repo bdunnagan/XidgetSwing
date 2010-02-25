@@ -27,6 +27,7 @@ import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -66,9 +67,10 @@ public class JComboBoxXidget extends Xidget
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IChoiceListFeature.class) return (T)choiceListFeature;
+    if ( clss == ILabelFeature.class) return (T)creationFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getComboBox();
-    if ( clss == JComponent.class) return (T)creationFeature.getComboBox();
+    if ( clss == Component.class) return (T)creationFeature.getContainer();
+    if ( clss == JComponent.class) return (T)creationFeature.getContainer();
     if ( clss == JComboBox.class) return (T)creationFeature.getComboBox();
     
     T feature = basicFeatureSet.getFeature( clss);

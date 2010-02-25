@@ -40,6 +40,7 @@ import javax.swing.text.JTextComponent;
 import org.xidget.IXidget;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.layout.Size;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
@@ -49,7 +50,7 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IWidgetCreationFeature which creates a JTextField or JTextArea.
  */
-public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeature
+public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeature implements ILabelFeature
 {
   public JTextComponentWidgetCreationFeature( IXidget xidget)
   {
@@ -68,24 +69,24 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     Size size = new Size( Xlate.get( element, "size", (String)null));
     if ( element.isType( "password"))
     {
-      jtext = new JPasswordField( size.width);
+      jText = new JPasswordField( size.width);
     }
     else if ( size.height > 1)
     {
-      jtext = new JTextArea( size.height, size.width);
-      component = new JScrollPane( jtext);
+      jText = new JTextArea( size.height, size.width);
+      component = new JScrollPane( jText);
     }
     else if ( Xlate.get( element, "multiline", false))
     {
-      jtext = new JTextArea();
-      component = new JScrollPane( jtext);
+      jText = new JTextArea();
+      component = new JScrollPane( jText);
     }
     else
     {
-      jtext = new JTextField( size.width);
+      jText = new JTextField( size.width);
       
       // add action listener so that enter key will be processed
-      ((JTextField)jtext).addActionListener( actionListener);
+      ((JTextField)jText).addActionListener( actionListener);
     }
     
     // pretty
@@ -94,7 +95,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     // create extra container to hold label and widget
     if ( xidget.getConfig().getFirstChild( "label") != null)
     {
-      jlabel = new JLabel( "");
+      jLabel = new JLabel( "");
       
       GridBagLayout layout = new GridBagLayout();
       
@@ -102,7 +103,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
       constraints.fill = GridBagConstraints.NONE;
       constraints.anchor = GridBagConstraints.NORTHWEST;
       constraints.insets = new Insets( 0, 0, 0, 4);
-      layout.setConstraints( jlabel, constraints);
+      layout.setConstraints( jLabel, constraints);
       
       constraints = new GridBagConstraints();
       constraints.fill = GridBagConstraints.BOTH;
@@ -112,25 +113,25 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
       JPanel jPanel = new JPanel( layout);
       if ( component == null)
       {
-        layout.setConstraints( jtext, constraints);
-        jPanel.add( jlabel);
-        jPanel.add( jtext);
+        layout.setConstraints( jText, constraints);
+        jPanel.add( jLabel);
+        jPanel.add( jText);
       }
       else
       {
         layout.setConstraints( component, constraints);
-        jPanel.add( jlabel);
+        jPanel.add( jLabel);
         jPanel.add( component);
       }
       
       component = jPanel;
     }
     
-    if ( component == null) component = jtext;
+    if ( component == null) component = jText;
     
     // add listeners to the widget
-    jtext.addKeyListener( keyListener);
-    jtext.addCaretListener( caretListener);
+    jText.addKeyListener( keyListener);
+    jText.addCaretListener( caretListener);
     
     return component;
   }
@@ -140,7 +141,8 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
    */
   public Object[] getLastWidgets()
   {
-    return new Object[] { component, jtext};
+    if ( component != jText) return new Object[] { component, jText};
+    return new Object[] { jText};
   }
 
   /**
@@ -160,7 +162,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
    */
   public JTextComponent getTextWidget()
   {
-    return jtext;
+    return jText;
   }
   
   /**
@@ -169,17 +171,23 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
    */
   public JLabel getLabelWidget()
   {
-    return jlabel;
+    return jLabel;
   }
 
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ILabelFeature#setText(java.lang.String)
+   */
+  public void setText( String text)
+  {
+    if ( jLabel != null) jLabel.setText( text);
+  }
+  
   private final KeyListener keyListener = new KeyListener() {
     public void keyPressed( KeyEvent e)
     {
-      System.out.println( "KeyDown: "+e.getKeyCode());
     }
     public void keyReleased( KeyEvent e)
     {
-      System.out.println( "KeyUp: "+e.getKeyCode());
     }
     public void keyTyped( KeyEvent e)
     {
@@ -194,7 +202,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
       if ( textModelFeature != null) 
       {
         IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.selectedChannel, jtext.getSelectedText());
+        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.selectedChannel, jText.getSelectedText());
       }
     }
   };
@@ -206,7 +214,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
       if ( textModelFeature != null) 
       {
         IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, jtext.getText());
+        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, jText.getText());
       }
     }
   };
@@ -218,6 +226,6 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   };
 
   private JComponent component;
-  private JLabel jlabel;
-  private JTextComponent jtext;
+  private JLabel jLabel;
+  private JTextComponent jText;
 }

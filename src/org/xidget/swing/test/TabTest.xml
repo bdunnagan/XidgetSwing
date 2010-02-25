@@ -49,44 +49,56 @@
   
   <create assign="selection" name="'selection'"/>
 
-  <assign name="layouts">$xml/layouts.xml/layouts</assign>  
   <create assign="form">
     <template>
-      <app size="600, -1">
-        <tabs layout="$layouts/vfree">
-          <form title="'Tab 1'" layout="$layouts/vfree">
+      <app size="600, 400">
+        <tabs>
+          <tab title="'Tab 1'">
+            <layout>
+              <layoutGridY/>
+              <layoutFillX/>
+            </layout>
+          
             <text id="1">
               <label>Text1</label>
               <source>collection('appdb')/text1</source>
+              <onKeyPress key="'control,f'">
+                <print>'Fred!'</print>
+              </onKeyPress>
             </text>
     
-            <combo id="2" size="50,1">
+            <combo id="2">
               <choices>$choices/choice</choices>        
               <source>collection('appdb')/text2</source>
             </combo>
             
-            <text id="3" size="50,1">        
+            <text id="3">        
               <label>Text3</label>
               <source>collection('appdb')/text3</source>
             </text>
-          </form>
+          </tab>
 
-          <form title="'Tab 2'" layout="$layouts/vfree">
+          <tab title="'Tab 2'">
+            <layout>
+              <layoutGridY/>
+              <layoutFillX/>
+            </layout>
+          
             <button type="radio">
-              <label>Option 1</label>
+              <label>'Option 1'</label>
               <source>collection('appdb')/radio/@b1</source>
             </button>          
             <button type="radio">
-              <label>Option 2</label>
+              <label>'Option 2'</label>
               <source>collection('appdb')/radio/@b2</source>
             </button>          
             <button type="radio">
-              <label>Option 3</label>
+              <label>'Option 3'</label>
               <source>collection('appdb')/radio/@b3</source>
             </button>          
               
             <button type="push">
-              <label>Push Me!</label>
+              <label>'Push Me!'</label>
               <onPress>
                 <print>'Been pushed!'</print>
                 <create parent="$tabs">
@@ -96,12 +108,11 @@
                 </create>
               </onPress>
             </button>
-          </form>
+          </tab>
           
-          <tabs title="'Tab 3'" children="$tabs/tab" layout="$layouts/vfree">
+          <tabs title="'Tab 3'" children="$tabs/tab">
             <selection parent="$selection"/>
-            <form title="." image="trace( $images/add.gif)" when="true()">
-            </form>
+            <form title="." image="trace( $images/add.gif)" when="true()"/>
           </tabs>
                     
           <trigger name="Listen" when="collection('appdb')/radio/@* = 'true'">

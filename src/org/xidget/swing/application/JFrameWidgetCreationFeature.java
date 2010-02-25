@@ -76,7 +76,7 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   {
     return jframe;
   }
-
+  
   private IXidget xidget;
   private JFrame jframe;
 }

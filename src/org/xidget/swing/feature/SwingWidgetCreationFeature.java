@@ -20,6 +20,8 @@
 package org.xidget.swing.feature;
 
 import java.awt.Container;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.JComponent;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetContainerFeature;
@@ -29,7 +31,7 @@ import org.xidget.ifeature.IWidgetCreationFeature;
  * An abstract implementation of IWidgetCreationFeature which performs the common
  * work necessary to relayout the widget hierarchy after a widget is replaced.
  */
-public abstract class SwingWidgetCreationFeature implements IWidgetCreationFeature
+public abstract class SwingWidgetCreationFeature extends ComponentAdapter implements IWidgetCreationFeature
 {
   protected SwingWidgetCreationFeature( IXidget xidget)
   {
@@ -65,5 +67,21 @@ public abstract class SwingWidgetCreationFeature implements IWidgetCreationFeatu
    */
   protected abstract JComponent createSwingWidget();
   
+  /* (non-Javadoc)
+   * @see java.awt.event.ComponentAdapter#componentShown(java.awt.event.ComponentEvent)
+   */
+  @Override
+  public void componentShown( ComponentEvent e)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see java.awt.event.ComponentAdapter#componentHidden(java.awt.event.ComponentEvent)
+   */
+  @Override
+  public void componentHidden( ComponentEvent e)
+  {
+  }
+
   protected IXidget xidget;
 }

@@ -29,10 +29,10 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 import org.xidget.IXidget;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.combo.IChoiceListFeature;
 import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
@@ -42,7 +42,7 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IWidgetCreationFeature which creates a JTextField or JTextArea.
  */
-public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
+public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature implements ILabelFeature
 {
   public JComboBoxWidgetCreationFeature( IXidget xidget)
   {
@@ -56,19 +56,16 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
   protected JComponent createSwingWidget()
   {    
     // create text widget
-    jcombo = new JComboBox();
-    jcombo.setBorder( new EmptyBorder( 2, 3, 2, 3));
+    component = jCombo = new JComboBox();
+    //jCombo.setBorder( new EmptyBorder( 2, 3, 2, 3));
 
     // add statically defined choices if present
     addStaticChoices( xidget);
     
-    // get label
-    String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
-    
     // create extra container to hold label and widget
-    if ( label != null)
+    if ( xidget.getConfig().getFirstChild( "label") != null)
     {
-      jlabel = new JLabel( label);
+      jLabel = new JLabel( "");
       
       GridBagLayout layout = new GridBagLayout();
       
@@ -76,25 +73,21 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
       constraints.fill = GridBagConstraints.NONE;
       constraints.anchor = GridBagConstraints.WEST;
       constraints.insets = new Insets( 0, 0, 0, 6);
-      layout.setConstraints( jlabel, constraints);
+      layout.setConstraints( jLabel, constraints);
       
       constraints = new GridBagConstraints();
       constraints.fill = GridBagConstraints.HORIZONTAL;
       constraints.anchor = GridBagConstraints.WEST;
       constraints.weightx = 1;
-      layout.setConstraints( jcombo, constraints);
+      layout.setConstraints( jCombo, constraints);
       
       component = new JPanel( layout);
-      component.add( jlabel);
-      component.add( jcombo);
-    }
-    else
-    {
-      component = jcombo;
+      component.add( jLabel);
+      component.add( jCombo);
     }
     
     // add listeners to the widget
-    jcombo.addActionListener( actionListener);
+    jCombo.addActionListener( actionListener);
     
     return component;
   }
@@ -120,18 +113,36 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   public Object[] getLastWidgets()
   {
-    return new Object[] { jcombo};
+    if ( component != jCombo) return new Object[] { component, jCombo};
+    return new Object[] { jCombo};
   }
 
+  /**
+   * Returns the container component which will be a JPanel if a label is defined.
+   * @return Returns the container component which will be a JPanel if a label is defined.
+   */
+  public JComponent getContainer()
+  {
+    return component;
+  }
+  
   /**
    * Returns the JComboBox.
    * @return Returns the JComboBox.
    */
   public JComboBox getComboBox()
   {
-    return jcombo;
+    return jCombo;
   }
     
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ILabelFeature#setText(java.lang.String)
+   */
+  public void setText( String text)
+  {
+    if ( jLabel != null) jLabel.setText( text);
+  }
+  
   private final ActionListener actionListener = new ActionListener() {
     public void actionPerformed( ActionEvent e)
     {
@@ -146,12 +157,12 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature
       if ( textModelFeature != null) 
       {
         IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, jcombo.getSelectedItem().toString());
+        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, jCombo.getSelectedItem().toString());
       }
     }
   };
 
   private JComponent component;
-  private JLabel jlabel;
-  private JComboBox jcombo;
+  private JLabel jLabel;
+  private JComboBox jCombo;
 }
