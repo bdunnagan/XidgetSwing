@@ -17,11 +17,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.feature;
+package org.xidget.swing.application;
 
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Insets;
+import javax.swing.JApplet;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import org.xidget.IXidget;
 import org.xidget.Log;
 import org.xidget.ifeature.IAsyncFeature;
@@ -36,11 +39,11 @@ import org.xidget.layout.Margins;
  * An implementation of IWidgetContainerFeature that assumes that the parent xidget exports
  * and instance of a Swing Container.
  */
-public class GenericContainerFeature implements IWidgetContainerFeature
+public class JFrameContainerFeature implements IWidgetContainerFeature
 {
   public final static int validationDelay = 0;
   
-  public GenericContainerFeature( IXidget xidget)
+  public JFrameContainerFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }
@@ -59,34 +62,34 @@ public class GenericContainerFeature implements IWidgetContainerFeature
   public void addWidget( int index, IXidget child)
   {
     Container container = xidget.getFeature( Container.class);
-    if ( container != null)
+    
+    // normal swing widgets
+    IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
+    if ( creationFeature != null)
     {
-      // normal swing widgets
-      IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
-      if ( creationFeature != null)
+      Object[] widgets = creationFeature.getLastWidgets();
+      if ( widgets.length > 0) 
       {
-        Object[] widgets = creationFeature.getLastWidgets();
-        if ( widgets.length > 0) 
+        Log.printf( "xidget", "JFrameContainerFeature.addWidget: %s <- %s\n", xidget, child);
+        if ( child.getConfig().isType( "menubar"))
         {
-          Log.printf( "xidget", "GenericContainerFeature.addWidget: %s <- %s\n", xidget, child);
-          if ( index == -1) container.add( (Component)widgets[ 0]);
-          else container.add( (Component)widgets[ 0], index);
-          
-          // validate the container later to improve performance
-          if ( container.isShowing())
+          if ( container instanceof JFrame || container instanceof JApplet)
           {
-            IAsyncFeature asyncFeature = xidget.getFeature( IAsyncFeature.class);
-            asyncFeature.schedule( this, validationDelay, false, validateRunnable);
+            ((JFrame)container).setJMenuBar( (JMenuBar)widgets[ 0]);
           }
         }
-      }
-      
-      // paintable xidgets
-      IPaintFeature paintFeature = child.getFeature( IPaintFeature.class);
-      if ( paintFeature != null)
-      {
-        ICanvasFeature canvasFeature = xidget.getFeature( ICanvasFeature.class);
-        if ( canvasFeature != null) canvasFeature.addChild( child);
+        else
+        {
+          if ( index == -1) container.add( (Component)widgets[ 0]);
+          else container.add( (Component)widgets[ 0], index);
+        }
+        
+        // validate the container later to improve performance
+        if ( container.isShowing())
+        {
+          IAsyncFeature asyncFeature = xidget.getFeature( IAsyncFeature.class);
+          asyncFeature.schedule( this, validationDelay, false, validateRunnable);
+        }
       }
     }
   }
@@ -97,23 +100,20 @@ public class GenericContainerFeature implements IWidgetContainerFeature
   public void removeWidget( IXidget child)
   {
     Container container = xidget.getFeature( Container.class);
-    if ( container != null)
+    // normal swing widgets
+    IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
+    if ( creationFeature != null)
     {
-      // normal swing widgets
-      IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
-      if ( creationFeature != null)
-      {
-        Object[] widgets = creationFeature.getLastWidgets();
-        if ( widgets.length > 0) container.remove( (Component)widgets[ 0]);
-      }
-      
-      // paintable xidgets
-      IPaintFeature paintFeature = child.getFeature( IPaintFeature.class);
-      if ( paintFeature != null)
-      {
-        ICanvasFeature canvasFeature = xidget.getFeature( ICanvasFeature.class);
-        if ( canvasFeature != null) canvasFeature.removeChild( child);
-      }
+      Object[] widgets = creationFeature.getLastWidgets();
+      if ( widgets.length > 0) container.remove( (Component)widgets[ 0]);
+    }
+    
+    // paintable xidgets
+    IPaintFeature paintFeature = child.getFeature( IPaintFeature.class);
+    if ( paintFeature != null)
+    {
+      ICanvasFeature canvasFeature = xidget.getFeature( ICanvasFeature.class);
+      if ( canvasFeature != null) canvasFeature.removeChild( child);
     }
   }
   
@@ -126,7 +126,7 @@ public class GenericContainerFeature implements IWidgetContainerFeature
     if ( layoutFeature != null) layoutFeature.invalidate();
     
     Container container = xidget.getFeature( Container.class);
-    if ( container != null && container.isShowing()) container.validate();
+    if ( container.isShowing()) container.validate();
   }
   
   /* (non-Javadoc)

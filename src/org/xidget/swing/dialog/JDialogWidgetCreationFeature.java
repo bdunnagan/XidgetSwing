@@ -46,6 +46,7 @@ public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
     IModelObject config = xidget.getConfig();
     
     jDialog = new JDialog();
+    jDialog.setLocationByPlatform( true);
     jDialog.setModal( Xlate.get( config, "modal", true));
     jDialog.addComponentListener( moveListener);
   }

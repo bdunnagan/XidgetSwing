@@ -89,9 +89,6 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
       ((JTextField)jText).addActionListener( actionListener);
     }
     
-    // pretty
-    //jtext.setBorder( new EmptyBorder( 1, 1, 1, 1));
-     
     // create extra container to hold label and widget
     if ( xidget.getConfig().getFirstChild( "label") != null)
     {
