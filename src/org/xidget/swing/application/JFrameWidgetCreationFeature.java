@@ -42,7 +42,7 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jframe = new JFrame();
-    jframe.setLocationByPlatform( true);
+    jframe.setLocationByPlatform(true);    
     jframe.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE);
     jframe.addWindowListener( new WindowAdapter() {
       public void windowClosed( WindowEvent e)

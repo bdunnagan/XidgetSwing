@@ -201,6 +201,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     public void mouseReleased( MouseEvent e)
     {
       grabbed = null;
+      mouseGrab( e.getX(), e.getY());
     }
     public void mouseExited( MouseEvent e)
     {

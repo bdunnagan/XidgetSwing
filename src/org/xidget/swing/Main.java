@@ -21,6 +21,7 @@ package org.xidget.swing;
 
 import java.io.File;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import org.xidget.Creator;
 import org.xidget.caching.FileSystemCachingPolicy;
 import org.xidget.caching.ZipCachingPolicy;

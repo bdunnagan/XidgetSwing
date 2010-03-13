@@ -19,6 +19,7 @@
  */
 package org.xidget.swing.text;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -26,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,10 +35,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
+
 import org.xidget.IXidget;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
@@ -93,12 +97,13 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     if ( xidget.getConfig().getFirstChild( "label") != null)
     {
       jLabel = new JLabel( "");
+      jLabel.setHorizontalAlignment( SwingConstants.RIGHT);
       
       GridBagLayout layout = new GridBagLayout();
       
       GridBagConstraints constraints = new GridBagConstraints();
-      constraints.fill = GridBagConstraints.NONE;
-      constraints.anchor = GridBagConstraints.NORTHWEST;
+      constraints.fill = GridBagConstraints.VERTICAL;
+      constraints.anchor = GridBagConstraints.WEST;
       constraints.insets = new Insets( 0, 0, 0, 4);
       layout.setConstraints( jLabel, constraints);
       
@@ -172,9 +177,32 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.ILabelFeature#setWidth(int)
+   */
+  @Override
+  public void setLabelWidth( int width)
+  {
+    if ( jLabel == null) return;
+    Dimension size = jLabel.getPreferredSize();
+    jLabel.setPreferredSize( new Dimension( width, size.height));
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ILabelFeature#getLabelWidth()
+   */
+  @Override
+  public int getLabelWidth()
+  {
+    if ( jLabel == null) return 0;
+    Dimension size = jLabel.getPreferredSize();
+    return size.width;
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#setText(java.lang.String)
    */
-  public void setText( String text)
+  @Override
+  public void setLabelText( String text)
   {
     if ( jLabel != null) jLabel.setText( text);
   }

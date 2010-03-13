@@ -22,12 +22,14 @@ package org.xidget.swing.tree;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -36,6 +38,7 @@ import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.IDragAndDropFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
@@ -69,6 +72,7 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     jtree.setDragEnabled( true);
     try
     {
+      jtree.setDropTarget( new DropTarget());
       jtree.getDropTarget().addDropTargetListener( dndListener);
     }
     catch( Exception e)
