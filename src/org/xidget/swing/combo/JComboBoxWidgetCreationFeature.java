@@ -143,7 +143,6 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#setWidth(int)
    */
-  @Override
   public void setLabelWidth( int width)
   {
     if ( jLabel == null) return;
@@ -154,7 +153,6 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#getLabelWidth()
    */
-  @Override
   public int getLabelWidth()
   {
     if ( jLabel == null) return 0;
@@ -165,7 +163,6 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#setLabelText(java.lang.String)
    */
-  @Override
   public void setLabelText( String text)
   {
     if ( jLabel != null) jLabel.setText( text);

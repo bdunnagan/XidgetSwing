@@ -75,7 +75,6 @@ public class JMenuWidgetCreationFeature extends SwingWidgetCreationFeature imple
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#getLabelWidth()
    */
-  @Override
   public int getLabelWidth()
   {
     return 0;
@@ -84,7 +83,6 @@ public class JMenuWidgetCreationFeature extends SwingWidgetCreationFeature imple
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#setLabelWidth(int)
    */
-  @Override
   public void setLabelWidth( int width)
   {
   }
@@ -92,7 +90,6 @@ public class JMenuWidgetCreationFeature extends SwingWidgetCreationFeature imple
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#setLabelText(java.lang.String)
    */
-  @Override
   public void setLabelText( String text)
   {
     jMenu.setText( text);

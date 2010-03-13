@@ -179,7 +179,6 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#setWidth(int)
    */
-  @Override
   public void setLabelWidth( int width)
   {
     if ( jLabel == null) return;
@@ -190,7 +189,6 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#getLabelWidth()
    */
-  @Override
   public int getLabelWidth()
   {
     if ( jLabel == null) return 0;
@@ -201,7 +199,6 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#setText(java.lang.String)
    */
-  @Override
   public void setLabelText( String text)
   {
     if ( jLabel != null) jLabel.setText( text);
