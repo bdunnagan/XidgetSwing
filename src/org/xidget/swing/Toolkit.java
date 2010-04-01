@@ -21,11 +21,13 @@ package org.xidget.swing;
 
 import java.awt.Component;
 import java.io.File;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
+
 import org.xidget.IToolkit;
 import org.xidget.IXidget;
 import org.xidget.binding.XidgetTagHandler;
@@ -45,6 +47,7 @@ import org.xidget.swing.menu.JMenuBarXidget;
 import org.xidget.swing.menu.JMenuItemXidget;
 import org.xidget.swing.menu.MenuTagHandler;
 import org.xidget.swing.menu.SubMenuTagHandler;
+import org.xidget.swing.slider.JSliderXidget;
 import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.tabs.JTabbedPaneXidget;
 import org.xidget.swing.text.JTextXidget;
@@ -93,6 +96,7 @@ public class Toolkit implements IToolkit
     processor.addHandler( "menu", new SubMenuTagHandler());
     processor.addHandler( "menuItem", new XidgetTagHandler( JMenuItemXidget.class));
     processor.addHandler( "separator", new XidgetTagHandler( JMenuItemXidget.class));
+    processor.addHandler( "slider", new XidgetTagHandler( JSliderXidget.class));
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
   }

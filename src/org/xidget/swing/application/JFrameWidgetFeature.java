@@ -123,6 +123,15 @@ public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
       widget.setVisible( false);
     }
   }
+  
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getVisible()
+   */
+  public boolean getVisible()
+  {
+    JFrame widget = xidget.getFeature( JFrame.class);
+    return widget.isVisible(); 
+  }
 
   /* (non-Javadoc)
    * @see org.xidget.IWidgetAdapter#setEnabled(boolean)

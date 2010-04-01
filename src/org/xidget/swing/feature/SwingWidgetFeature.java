@@ -24,7 +24,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
+
 import javax.swing.JComponent;
+
 import org.xidget.IXidget;
 import org.xidget.Log;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -98,6 +100,15 @@ public class SwingWidgetFeature implements IWidgetFeature
   {
     Component widget = xidget.getFeature( Component.class);
     widget.setVisible( visible);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getVisible()
+   */
+  public boolean getVisible()
+  {
+    Component widget = xidget.getFeature( Component.class);
+    return widget.isVisible(); 
   }
 
   /* (non-Javadoc)
