@@ -26,6 +26,7 @@ import javax.swing.event.ChangeListener;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.slider.ISliderFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
 
@@ -71,9 +72,10 @@ public class JSliderWidgetCreationFeature extends SwingWidgetCreationFeature
     public void stateChanged( ChangeEvent e)
     {
       //if ( jSlider.getValueIsAdjusting()) return;
+      ISliderFeature sliderFeature = xidget.getFeature( ISliderFeature.class);
       ISourceFeature sourceFeature = xidget.getFeature( ISourceFeature.class);
       IModelObject source = sourceFeature.getSource( ISourceFeature.allChannel);
-      if ( source != null) source.setValue( jSlider.getValue());
+      if ( source != null) source.setValue( sliderFeature.getValue());
     }
   };
   

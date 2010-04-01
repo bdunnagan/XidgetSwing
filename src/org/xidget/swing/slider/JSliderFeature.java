@@ -17,75 +17,78 @@ public class JSliderFeature implements ISliderFeature
   public JSliderFeature( IXidget xidget)
   {
     this.xidget = xidget;
+    this.precision = 1;
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.slider.ISliderFeature#setLogarithmic(double)
+   * @see org.xidget.ifeature.slider.ISliderFeature#setPrecision(int)
    */
-  public void setLogarithmic( double log)
+  public void setPrecision( int precision)
   {
-    this.log = log;
+    this.precision = (int)Math.pow( 10, precision);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.slider.ISliderFeature#getLogarithmic()
+   * @see org.xidget.ifeature.slider.ISliderFeature#getValue()
    */
-  public double getLogarithmic()
-  {
-    return log;
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.slider.ISliderFeature#setMaximum(int)
-   */
-  public void setMaximum( int value)
+  public double getValue()
   {
     JSlider slider = xidget.getFeature( JSlider.class);
-    slider.setMaximum( value);
+    double raw = slider.getValue();
+    double value = (raw * (y1 - y0) / maximum) + y0;
+    return (double)Math.round( value * precision) / precision;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.slider.ISliderFeature#setValue(double)
+   */
+  public void setValue( double raw)
+  {
+    JSlider slider = xidget.getFeature( JSlider.class);
+    double value = (raw - y0) / (y1 - y0) * maximum;
+    slider.setValue( (int)Math.round( value * precision) / precision);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.slider.ISliderFeature#setMaximum(double)
+   */
+  public void setMaximum( double value)
+  {
+    y1 = value;
+    JSlider slider = xidget.getFeature( JSlider.class);
+    slider.setMaximum( maximum);
   }
 
   /* (non-Javadoc)
    * @see org.xidget.ifeature.slider.ISliderFeature#getMaximum()
    */
-  public int getMaximum()
+  public double getMaximum()
   {
-    JSlider slider = xidget.getFeature( JSlider.class);
-    return slider.getMaximum();
+    return y1;
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.slider.ISliderFeature#setMinimum(int)
+   * @see org.xidget.ifeature.slider.ISliderFeature#setMinimum(double)
    */
-  public void setMinimum( int value)
+  public void setMinimum( double value)
   {
+    y0 = value;
     JSlider slider = xidget.getFeature( JSlider.class);
-    slider.setMinimum( value);
+    slider.setMinimum( 0);
   }
 
   /* (non-Javadoc)
    * @see org.xidget.ifeature.slider.ISliderFeature#getMinimum()
    */
-  public int getMinimum()
+  public double getMinimum()
   {
-    JSlider slider = xidget.getFeature( JSlider.class);
-    return slider.getMinimum();
+    return y0;
   }
 
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.slider.ISliderFeature#setAutoLabel(boolean)
-   */
-  public void setAutoLabel( boolean auto)
-  {
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.slider.ISliderFeature#getAutoLabel()
-   */
-  public boolean getAutoLabel()
-  {
-    return false;
-  }
+  private final static int maximum = 1000000;
   
   private IXidget xidget;
-  private double log;
+  private double y0;
+  private double y1;
+  private int precision;
 }
