@@ -19,13 +19,16 @@
  */
 package org.xidget.swing.tabs;
 
+import java.awt.Component;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.JTabbedPane;
 import org.xidget.IXidget;
-import org.xidget.ifeature.IDynamicContainerFeature;
+import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
+import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xmodel.IModelObject;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * @author bdunnagan
@@ -69,14 +72,18 @@ public class JTabbedPaneSelectionWidgetFeature implements ISelectionWidgetFeatur
     
     selection = nodes.get( 0);
     
-    IDynamicContainerFeature containerFeature = xidget.getFeature( IDynamicContainerFeature.class);
-    List<IModelObject> children = containerFeature.getChildren();
-    int index = children.indexOf( selection);
-    
-    if ( index >= 0)
+    for( IXidget child: xidget.getChildren())
     {
-      JTabbedPane jTabbedPane = xidget.getFeature( JTabbedPane.class);
-      jTabbedPane.setSelectedIndex( index);
+      IBindFeature bindFeature = child.getFeature( IBindFeature.class);
+      StatefulContext context = bindFeature.getBoundContext();
+      if ( context.getObject() == selection)
+      {
+        IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
+        Object[] widgets = creationFeature.getLastWidgets();
+        
+        JTabbedPane jTabbedPane = xidget.getFeature( JTabbedPane.class);
+        jTabbedPane.setSelectedComponent( (Component)widgets[ 0]);
+      }
     }
   }
 

@@ -41,7 +41,7 @@ public class JLabelSourceFeature implements ISourceFeature
    */
   public IModelObject getSource( String channel)
   {
-    return null;
+    return source;
   }
 
   /* (non-Javadoc)
@@ -51,10 +51,12 @@ public class JLabelSourceFeature implements ISourceFeature
   {
     if ( channel == ISourceFeature.allChannel)
     {
+      this.source = node;
       JLabel jLabel = xidget.getFeature( JLabel.class);
       jLabel.setText( Xlate.get( node, ""));
     }
   }
   
   private IXidget xidget;
+  private IModelObject source;
 }

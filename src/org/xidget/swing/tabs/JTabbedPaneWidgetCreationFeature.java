@@ -22,11 +22,13 @@ package org.xidget.swing.tabs;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.xidget.IXidget;
-import org.xidget.ifeature.IDynamicContainerFeature;
+import org.xidget.binding.IXidgetBinding;
+import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
@@ -118,17 +120,87 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     {
       IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
       StatefulContext context = contextFeature.getContext( jtabbedPane);
-      
-      IDynamicContainerFeature dynamicContainerFeature = xidget.getFeature( IDynamicContainerFeature.class);
-      List<IModelObject> children = dynamicContainerFeature.getChildren();
-      
+
+      List<IXidget> children = xidget.getChildren();
       int index = jtabbedPane.getSelectedIndex();
       if ( index >= 0 && index < children.size())
       {
-        ISelectionModelFeature feature = xidget.getFeature( ISelectionModelFeature.class);
-        feature.setSelection( context, Collections.singletonList( children.get( index)));
+        IXidget child = children.get( index);
+        IBindFeature bindFeature = child.getFeature( IBindFeature.class);
+        StatefulContext childContext = bindFeature.getBoundContext();
+        if ( childContext != null)
+        {
+          jtabbedPane.removeChangeListener( this);
+          try
+          {
+            ISelectionModelFeature selectionFeature = xidget.getFeature( ISelectionModelFeature.class);
+            selectionFeature.setSelection( context, Collections.singletonList( childContext.getObject()));
+          }
+          finally
+          {
+            jtabbedPane.addChangeListener( this);
+          }
+        }
+        else
+        {
+          //
+          // The initial selection notification happens before the child xidget has been bound. So we need
+          // to add an IXidgetBinding temporarily which will update the selection after the xidget is bound. 
+          //
+          IXidgetBinding binding = new InitialNotificationBinding( child);
+          bindFeature.addBindingAfterChildren( binding);
+        }
       }
     }
+  };
+
+  private class InitialNotificationBinding implements IXidgetBinding
+  {
+    public InitialNotificationBinding( IXidget xidget)
+    {
+      this.xidget = xidget;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.xidget.binding.IXidgetBinding#bind(org.xmodel.xpath.expression.StatefulContext)
+     */
+    public void bind( StatefulContext context)
+    {
+      IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+    
+      // update selection
+      StatefulContext childContext = bindFeature.getBoundContext();
+      jtabbedPane.removeChangeListener( selectionListener);
+      try
+      {
+        ISelectionModelFeature selectionFeature = xidget.getParent().getFeature( ISelectionModelFeature.class);
+        selectionFeature.setSelection( context, Collections.singletonList( childContext.getObject()));
+      }
+      finally
+      {
+        jtabbedPane.addChangeListener( selectionListener);
+      }
+      
+      // remove binding later
+      SwingUtilities.invokeLater( removeInitialNotificationBindingRunnable);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.xidget.binding.IXidgetBinding#unbind(org.xmodel.xpath.expression.StatefulContext)
+     */
+    public void unbind( StatefulContext context)
+    {
+    }
+    
+    private Runnable removeInitialNotificationBindingRunnable = new Runnable() {
+      public void run()
+      {
+        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+        bindFeature.remove( InitialNotificationBinding.this);
+      }
+    };
+    
+    private IXidget xidget;
   };
   
   private IXidget xidget;

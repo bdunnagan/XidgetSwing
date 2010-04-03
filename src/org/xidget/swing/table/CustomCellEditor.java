@@ -20,6 +20,7 @@
 package org.xidget.swing.table;
 
 import java.awt.Component;
+import java.util.EventObject;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComboBox;

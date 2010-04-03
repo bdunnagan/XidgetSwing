@@ -25,10 +25,8 @@ import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
-import org.xidget.feature.DynamicContainerFeature;
 import org.xidget.feature.SelectionModelFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IDynamicContainerFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.ITitleFeature;
@@ -51,7 +49,6 @@ public class JTabbedPaneXidget extends Xidget
     titleFeature = new SwingTitleFeature( this);
     creationFeature = new JTabbedPaneWidgetCreationFeature( this);
     containerFeature = new JTabbedPaneContainerFeature( this);
-    dynamicContainerFeature = new DynamicContainerFeature( this);
     selectionModelFeature = new SelectionModelFeature( this);
     selectionWidgetFeature = new JTabbedPaneSelectionWidgetFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -69,7 +66,6 @@ public class JTabbedPaneXidget extends Xidget
     if ( clss == ITitleFeature.class) return (T)titleFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
-    if ( clss == IDynamicContainerFeature.class) return (T)dynamicContainerFeature;
     if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
     if ( clss == ISelectionWidgetFeature.class) return (T)selectionWidgetFeature;
     
@@ -89,7 +85,6 @@ public class JTabbedPaneXidget extends Xidget
   private ITitleFeature titleFeature;
   private JTabbedPaneWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;
-  private IDynamicContainerFeature dynamicContainerFeature;
   private ISelectionModelFeature selectionModelFeature;
   private ISelectionWidgetFeature selectionWidgetFeature;
   private IFeatured basicFeatureSet;
