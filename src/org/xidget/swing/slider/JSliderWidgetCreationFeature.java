@@ -21,14 +21,15 @@ package org.xidget.swing.slider;
 
 import javax.swing.JComponent;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.ISourceFeature;
-import org.xidget.ifeature.slider.ISliderFeature;
+import org.xidget.ifeature.slider.ISliderWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
+import org.xmodel.Xlate;
 
 /**
  * An implementation of IWidgetCreationFeature for the Swing JSlider widget.
@@ -48,6 +49,10 @@ public class JSliderWidgetCreationFeature extends SwingWidgetCreationFeature
   {
     jSlider = new JSlider();
     jSlider.addChangeListener( changeListener);
+    
+    String orientation = Xlate.get( xidget.getConfig(), "orientation", "horizontal");
+    jSlider.setOrientation( orientation.equals( "vertical")? SwingConstants.VERTICAL: SwingConstants.HORIZONTAL);
+    
     return jSlider;
   }
 
@@ -72,7 +77,7 @@ public class JSliderWidgetCreationFeature extends SwingWidgetCreationFeature
     public void stateChanged( ChangeEvent e)
     {
       //if ( jSlider.getValueIsAdjusting()) return;
-      ISliderFeature sliderFeature = xidget.getFeature( ISliderFeature.class);
+      ISliderWidgetFeature sliderFeature = xidget.getFeature( ISliderWidgetFeature.class);
       ISourceFeature sourceFeature = xidget.getFeature( ISourceFeature.class);
       IModelObject source = sourceFeature.getSource( ISourceFeature.allChannel);
       if ( source != null) source.setValue( sliderFeature.getValue());

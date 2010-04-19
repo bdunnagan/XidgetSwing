@@ -23,6 +23,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import javax.swing.JFrame;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITitleFeature;
@@ -70,11 +73,54 @@ public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
   public void getBounds( Bounds result)
   {
     JFrame widget = xidget.getFeature( JFrame.class);
-    Rectangle rectangle = widget.getBounds();
+    widget.getBounds( rectangle);
     result.x = rectangle.x;
     result.y = rectangle.y;
     result.width = rectangle.width;
     result.height = rectangle.height;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getBoundsNode()
+   */
+  public IModelObject getBoundsNode()
+  {
+    return boundsNode;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setBoundsNode(org.xmodel.IModelObject)
+   */
+  public void setBoundsNode( IModelObject node)
+  {
+    this.boundsNode = node;
+
+    if ( node != null)
+    {
+      // create bounds listener
+      if ( boundsListener == null) boundsListener = new BoundsListener();
+      
+      // add listener to widget
+      JFrame widget = xidget.getFeature( JFrame.class);
+      widget.addComponentListener( boundsListener);
+      
+      // update bounds
+      Bounds bounds = new Bounds();
+      getBounds( bounds);
+      if ( bounds.parse( Xlate.get( node, "")))
+      {
+        setBounds( bounds.x, bounds.y, bounds.width, bounds.height);
+      }
+    }
+    else
+    {
+      // remove listener from widget
+      if ( boundsListener != null)
+      {
+        JFrame widget = xidget.getFeature( JFrame.class);
+        widget.removeComponentListener( boundsListener);
+      }
+    }
   }
 
   /* (non-Javadoc)
@@ -104,16 +150,18 @@ public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
     JFrame widget = xidget.getFeature( JFrame.class);
     if ( visible)
     {
-      // size to fit first
+      //
+      // Convert the size that was specified by the <i>size</i> parameter into a 
+      // preferred size so that the pack() method will use it.
+      //
+      Rectangle rectangle = widget.getBounds();
+      if ( rectangle.width > 0 || rectangle.height > 0)
+      {
+        widget.setPreferredSize( new Dimension( rectangle.width, rectangle.height));
+      }
+
+      // pack
       widget.pack();
-      
-      // set size if requested
-      IModelObject config = xidget.getConfig();
-      Dimension oldSize = widget.getSize();
-      Size newSize = new Size( Xlate.get( config, "size", (String)null), -1, -1);
-      if ( newSize.width < 0) newSize.width = oldSize.width;
-      if ( newSize.height < 0) newSize.height = oldSize.height; 
-      widget.setSize( newSize.width, newSize.height);
       
       // show
       widget.setVisible( true);
@@ -221,6 +269,38 @@ public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
   {
     return xidget.toString();
   }
+  
+  private class BoundsListener extends ComponentAdapter
+  {
+    /* (non-Javadoc)
+     * @see java.awt.event.ComponentListener#componentMoved(java.awt.event.ComponentEvent)
+     */
+    public void componentMoved( ComponentEvent e)
+    {
+      if ( boundsNode != null)
+      {
+        getBounds( bounds);
+        Xlate.set( boundsNode, bounds.toString());
+      }
+    }
 
+    /* (non-Javadoc)
+     * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
+     */
+    public void componentResized( ComponentEvent e)
+    {
+      if ( boundsNode != null)
+      {
+        getBounds( bounds);
+        Xlate.set( boundsNode, bounds.toString());
+      }
+    }
+    
+    private Bounds bounds = new Bounds();
+  }
+  
   private IXidget xidget;
+  private IModelObject boundsNode;
+  private ComponentListener boundsListener;
+  private Rectangle rectangle = new Rectangle( 0, 0, 0, 0);
 }

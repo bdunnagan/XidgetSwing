@@ -155,12 +155,14 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   public void setSelection( List<IModelObject> nodes)
   {
     JTable jtable = xidget.getFeature( JTable.class);
+    jtable.removeRowSelectionInterval( 0, jtable.getRowCount());
+    
     CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
     List<Row> rows = tableModel.getRows();
     for( IModelObject node: nodes)
     {
       int index = findNode( rows, node);
-      jtable.getSelectionModel().addSelectionInterval( index, index);
+      if ( index >= 0) jtable.addRowSelectionInterval( index, index);
     }
   }
 
@@ -187,7 +189,8 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
    */
   public void insertSelected( int index, IModelObject element)
   {
-    System.out.println( "insert selected");
+    JTable jtable = xidget.getFeature( JTable.class);
+    jtable.addRowSelectionInterval( index, index);
   }
 
   /* (non-Javadoc)
@@ -195,7 +198,8 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
    */
   public void removeSelected( int index, IModelObject element)
   {
-    System.out.println( "remove selected");
+    JTable jtable = xidget.getFeature( JTable.class);
+    jtable.removeRowSelectionInterval( index, index);
   }
 
   /**

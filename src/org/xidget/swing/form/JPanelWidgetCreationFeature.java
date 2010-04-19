@@ -40,7 +40,6 @@ import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.layout.AnchorNode;
 import org.xidget.layout.IComputeNode;
-import org.xidget.layout.Size;
 import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -80,11 +79,6 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
       IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
       if ( containerFeature != null) containerFeature.addWidget( xidget);
     }
-    
-    // optionally set the width and height nodes in case children are dependent on them
-    IModelObject config = xidget.getConfig();
-    Size size = new Size( Xlate.get( config, "size", (String)null), -1, -1);
-    if ( size.width >= 0 || size.height >= 0) jPanel.setSize( size.width, size.height); 
   }
   
   /**

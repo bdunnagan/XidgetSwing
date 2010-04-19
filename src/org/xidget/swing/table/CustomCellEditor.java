@@ -20,17 +20,22 @@
 package org.xidget.swing.table;
 
 import java.awt.Component;
-import java.util.EventObject;
 import java.util.List;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
+import javax.swing.text.JTextComponent;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.ifeature.slider.ISliderWidgetFeature;
+import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
@@ -89,9 +94,27 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     Object[] widgets = creationFeature.getLastWidgets();
     if ( widgets.length == 0) return null;
 
-    Component component = (Component)widgets[ 0];
-    if ( component instanceof JComboBox) 
+    JComponent component = (JComponent)widgets[ 0];
+
+    // remove borders from any widget
+    component.setBorder( null);
+    
+    // special treatment for each editor
+    if ( component instanceof JComboBox)
+    {
       ((JComboBox)component).putClientProperty( "JComboBox.isTableCellEditor", Boolean.TRUE);
+    }
+    else if ( component instanceof JTextComponent)
+    {
+      ((JTextComponent)component).selectAll();
+    }
+    else if ( component instanceof JSlider)
+    {
+    }
+    else
+    {
+      throw new UnsupportedOperationException( "The specified editor widget is not supported.");
+    }
     
     return component;
   }
@@ -101,6 +124,35 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    */
   public Object getCellEditorValue()
   {
+    //
+    // The editor widget does not get notified, so we have to update the model here.
+    // Unfortunately, this requires us to know what kind of editor widget we are using.
+    //
+    IWidgetCreationFeature creationFeature = editor.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    JComponent component = (JComponent)widgets[ 0];
+    if ( component instanceof JComboBox)
+    {
+      Object selected = ((JComboBox)component).getSelectedItem();
+      if ( selected != null) 
+      {
+        ITextModelFeature textFeature = editor.getFeature( ITextModelFeature.class);
+        textFeature.setText( editorContext, ISourceFeature.allChannel, selected.toString());
+      }
+    }
+    else if ( component instanceof JTextComponent)
+    {
+      String text = ((JTextComponent)component).getText();
+      ITextModelFeature textFeature = editor.getFeature( ITextModelFeature.class);
+      textFeature.setText( editorContext, ISourceFeature.allChannel, text);
+    }
+    else if ( component instanceof JSlider)
+    {
+      ISliderWidgetFeature sliderFeature = editor.getFeature( ISliderWidgetFeature.class);
+      double value = sliderFeature.getValue();
+      sliderFeature.setValue( value);
+    }
+    
     return Xlate.get( editorContext.getObject(), "");
   }
   
@@ -147,17 +199,10 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
   private CellEditorListener listener = new CellEditorListener() {
     public void editingCanceled( ChangeEvent e)
     {
-      System.out.println( "CANCEL");
       cleanupEditor();
     }
     public void editingStopped( ChangeEvent e)
     {
-      System.out.println( "COMMIT");
-      
-      // commit changes
-      IModelObject clone = editorContext.getObject();
-      editorSource.setValue( clone.getValue());
-      
       // unbind
       cleanupEditor();
     }

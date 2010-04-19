@@ -33,7 +33,6 @@ import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.layout.Size;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
@@ -70,11 +69,6 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     // add panel to parent container
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
     if ( containerFeature != null) containerFeature.addWidget( xidget);
-    
-    // optionally set the width and height nodes in case children are dependent on them
-    IModelObject config = xidget.getConfig();
-    Size size = new Size( Xlate.get( config, "size", (String)null), -1, -1);
-    if ( size.width >= 0 || size.height >= 0) jtabbedPane.setSize( size.width, size.height); 
   }
 
   /**

@@ -7,14 +7,14 @@ package org.xidget.swing.slider;
 import javax.swing.JSlider;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.slider.ISliderFeature;
+import org.xidget.ifeature.slider.ISliderWidgetFeature;
 
 /**
  * An implementation of the ISliderFeature for the Swing JSlider widget.
  */
-public class JSliderFeature implements ISliderFeature
+public class JSliderWidgetFeature implements ISliderWidgetFeature
 {
-  public JSliderFeature( IXidget xidget)
+  public JSliderWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
     this.precision = 1;

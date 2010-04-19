@@ -74,6 +74,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable.setShowHorizontalLines( true);
     jtable.setShowVerticalLines( true);
     jtable.setGridColor( Color.LIGHT_GRAY);
+    jtable.setCellSelectionEnabled( true);
     
     jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
     jtable.setDefaultEditor( IModelObject.class, new CustomCellEditor());
@@ -282,7 +283,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
       if ( dndFeature != null && dndFeature.isDropEnabled()) dndFeature.drop( dropContext);
     }
   };
-
+    
   private JScrollPane jscrollPane;
   private JTable jtable;
 }

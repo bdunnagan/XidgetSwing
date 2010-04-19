@@ -70,7 +70,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     IModelObject element = xidget.getConfig();
     
     // create text widget
-    Size size = new Size( Xlate.get( element, "size", (String)null));
+    Size size = new Size( Xlate.get( element, "textSize", (String)null));
     if ( element.isType( "password"))
     {
       jText = new JPasswordField( size.width);
