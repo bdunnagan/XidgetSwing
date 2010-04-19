@@ -61,7 +61,7 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
   {    
     // create text widget
     component = jCombo = new JComboBox();
-    //jCombo.setBorder( new EmptyBorder( 2, 3, 2, 3));
+    jCombo.setBorder( null);
 
     // add statically defined choices if present
     addStaticChoices( xidget);
