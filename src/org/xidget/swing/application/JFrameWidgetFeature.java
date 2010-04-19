@@ -150,18 +150,16 @@ public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
     JFrame widget = xidget.getFeature( JFrame.class);
     if ( visible)
     {
-      //
-      // Convert the size that was specified by the <i>size</i> parameter into a 
-      // preferred size so that the pack() method will use it.
-      //
+      // save requested bounds
       Rectangle rectangle = widget.getBounds();
-      if ( rectangle.width > 0 || rectangle.height > 0)
-      {
-        widget.setPreferredSize( new Dimension( rectangle.width, rectangle.height));
-      }
 
       // pack
       widget.pack();
+      
+      // set requested dimensions
+      if ( rectangle.width < 0) rectangle.width = widget.getWidth();
+      if ( rectangle.height < 0) rectangle.height = widget.getHeight();
+      widget.setSize( new Dimension( rectangle.width, rectangle.height));
       
       // show
       widget.setVisible( true);

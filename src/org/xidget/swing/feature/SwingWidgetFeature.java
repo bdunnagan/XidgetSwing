@@ -58,7 +58,7 @@ public class SwingWidgetFeature implements IWidgetFeature
     
     Log.printf( "layout", "SET BOUNDS %s -> %2.1f, %2.1f, %2.1f, %2.1f\n", xidget, x, y, width, height);
     
-    JComponent widget = xidget.getFeature( JComponent.class);
+    Component widget = xidget.getFeature( Component.class);
     widget.setBounds( 
       (int)Math.round( x), 
       (int)Math.round( y), 
@@ -71,7 +71,7 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void getBounds( Bounds result)
   {
-    JComponent widget = xidget.getFeature( JComponent.class);
+    Component widget = xidget.getFeature( Component.class);
     widget.getBounds( rectangle);
     result.x = rectangle.x;
     result.y = rectangle.y;
