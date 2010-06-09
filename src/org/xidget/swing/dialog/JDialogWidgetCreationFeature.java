@@ -80,7 +80,10 @@ public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
   private final ComponentListener moveListener = new ComponentAdapter() {
     public void componentMoved( ComponentEvent e)
     {
-      
+    }
+    public void componentResized( ComponentEvent e)
+    {
+      jDialog.getContentPane();
     }
   };
   

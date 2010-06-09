@@ -21,13 +21,11 @@ package org.xidget.swing;
 
 import java.awt.Component;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
-
 import org.xidget.IToolkit;
 import org.xidget.IXidget;
 import org.xidget.binding.XidgetTagHandler;
@@ -37,6 +35,7 @@ import org.xidget.config.TagProcessor;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.application.JFrameXidget;
 import org.xidget.swing.button.AbstractButtonXidget;
+import org.xidget.swing.calendar.CalendarXidget;
 import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.dialog.JDialogXidget;
 import org.xidget.swing.form.JPanelXidget;
@@ -82,6 +81,7 @@ public class Toolkit implements IToolkit
   {
     processor.addHandler( "app", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "application", new XidgetTagHandler( JFrameXidget.class));
+    processor.addHandler( "calendar", new XidgetTagHandler( CalendarXidget.class));
     processor.addHandler( "window", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "dialog", new XidgetTagHandler( JDialogXidget.class));
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));

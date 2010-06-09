@@ -25,14 +25,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-
+import javax.swing.border.EmptyBorder;
 import org.xidget.IXidget;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
@@ -61,7 +60,7 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
   {    
     // create text widget
     component = jCombo = new JComboBox();
-    jCombo.setBorder( null);
+    jCombo.setBorder( new EmptyBorder( 1, 1, 1, 1));
 
     // add statically defined choices if present
     addStaticChoices( xidget);

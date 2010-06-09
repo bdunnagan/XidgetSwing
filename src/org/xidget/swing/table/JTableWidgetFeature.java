@@ -23,9 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JTable;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
@@ -117,16 +115,6 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   {
     return parent.getChildren();
   }
-
-  /* (non-Javadoc)
-   * @see org.xidget.table.features.ITableWidgetFeature#setEditable(int, int, boolean)
-   */
-//  public void setEditable( int rowIndex, int columnIndex, boolean editable)
-//  {
-//    JTable table = xidget.getFeature( JTable.class);
-//    CustomTableModel tableModel = (CustomTableModel)table.getModel();
-//    tableModel.setEditable( rowIndex, columnIndex, editable);
-//  }
 
   /* (non-Javadoc)
    * @see org.xidget.ifeature.tree.ITreeWidgetFeature#setTitle(int, java.lang.String)

@@ -28,6 +28,9 @@ import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +40,9 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.xidget.IXidget;
+import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IDragAndDropFeature;
+import org.xidget.ifeature.IScriptFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
@@ -80,6 +85,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable.setDefaultEditor( IModelObject.class, new CustomCellEditor());
     jtable.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
     jtable.getSelectionModel().addListSelectionListener( selectionListener);
+    jtable.addMouseListener( mouseListener);
     
     jscrollPane = new JScrollPane( jtable);    
     return jscrollPane;
@@ -281,6 +287,18 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
       // global definition
       IDragAndDropFeature dndFeature = xidget.getFeature( IDragAndDropFeature.class);
       if ( dndFeature != null && dndFeature.isDropEnabled()) dndFeature.drop( dropContext);
+    }
+  };
+  
+  private MouseListener mouseListener = new MouseAdapter() {
+    public void mouseClicked( MouseEvent e)
+    {
+      if ( e.getClickCount() == 2)
+      {
+        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+        IScriptFeature scriptFeature = xidget.getFeature( IScriptFeature.class);
+        scriptFeature.runScript( "onDoubleClick", bindFeature.getBoundContext());
+      }
     }
   };
     
