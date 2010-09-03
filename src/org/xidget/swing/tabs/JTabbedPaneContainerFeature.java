@@ -22,7 +22,9 @@ package org.xidget.swing.tabs;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Insets;
+
 import javax.swing.JTabbedPane;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
@@ -59,8 +61,14 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
       Object[] widgets = creationFeature.getLastWidgets();
       if ( widgets.length > 0) 
       {
-        if ( index < 0) container.addTab( "", (Component)widgets[ 0]);
-        else container.insertTab( "", null, (Component)widgets[ 0], null, index);
+        Component component = (Component)widgets[ 0];
+        if ( index < 0) container.addTab( "", component);
+        else container.insertTab( "", null, component, null, index);
+        
+        //
+        // Workaround: Java 6.0 build 17 exhibits refresh problem when opening multiple tabs.
+        //
+        container.setSelectedComponent( component);
       }
     }
   }

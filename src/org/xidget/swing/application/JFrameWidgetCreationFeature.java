@@ -19,12 +19,16 @@
  */
 package org.xidget.swing.application;
 
+import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
+
 import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.swing.layout.AdapterLayoutManager;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
@@ -42,6 +46,7 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jframe = new JFrame();
+    jframe.getContentPane().setLayout( new AdapterLayoutManager( xidget, new BorderLayout()));
     jframe.setLocationByPlatform(true);    
     jframe.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE);
     jframe.addWindowListener( new WindowAdapter() {

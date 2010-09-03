@@ -20,35 +20,44 @@
 package org.xidget.swing.application;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Rectangle;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+
 import javax.swing.JFrame;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITitleFeature;
-import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
-import org.xidget.layout.Size;
-import org.xmodel.IModelObject;
-import org.xmodel.Xlate;
+import org.xidget.swing.feature.SwingContainerWidgetFeature;
 
 /**
- * An implementation of IWidgetFeature for JFrame. This class is similar to SwingWidgetFeature
- * but since the latter class depends on the widget being a JComponent, it cannot be used with
- * a JFrame. This class operates on a JFrame instance explicitly. In other words, this class
- * was added so that the other xidgets don't have to export a Component.class.
+ * An implementation of IWidgetFeature for JFrame.
  */
-public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
+public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements ITitleFeature
 {
   public JFrameWidgetFeature( IXidget xidget)
   {
-    this.xidget = xidget;
+    super( xidget);
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.swing.feature.SwingWidgetFeature#setDefaultBounds(float, float, float, float, boolean)
+   */
+  @Override
+  public void setDefaultBounds( float x, float y, float width, float height, boolean clamp)
+  {
+    super.setDefaultBounds( x, y, width, height, clamp);
+    
+    //
+    // Set the bounds of the frame.  Since the JFrame uses the AdapterLayoutManager which
+    // inherits from BorderLayout, the content pane will be resized and the computed size
+    // of the root form will be set (see AdapterLayoutManager.layoutContainer).
+    //
+    JFrame frame = xidget.getFeature( JFrame.class);
+    frame.setLocation( (int)Math.round( x), (int)Math.round( y));
+    frame.setSize( (int)Math.round( width), (int)Math.round( height));
+  }
+
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ITitleFeature#setTitle(java.lang.String)
    */
@@ -56,82 +65,6 @@ public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
   {
     JFrame widget = xidget.getFeature( JFrame.class);
     widget.setTitle( title);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setBounds(float, float, float, float)
-   */
-  public void setBounds( float x, float y, float width, float height)
-  {
-    JFrame widget = xidget.getFeature( JFrame.class);
-    widget.setBounds( (int)Math.round( x), (int)Math.round( y), (int)Math.round( width), (int)Math.round( height));
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.feature.IWidgetFeature#getBounds(org.xidget.feature.IWidgetFeature.Bounds)
-   */
-  public void getBounds( Bounds result)
-  {
-    JFrame widget = xidget.getFeature( JFrame.class);
-    widget.getBounds( rectangle);
-    result.x = rectangle.x;
-    result.y = rectangle.y;
-    result.width = rectangle.width;
-    result.height = rectangle.height;
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#getBoundsNode()
-   */
-  public IModelObject getBoundsNode()
-  {
-    return boundsNode;
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setBoundsNode(org.xmodel.IModelObject)
-   */
-  public void setBoundsNode( IModelObject node)
-  {
-    this.boundsNode = node;
-
-    if ( node != null)
-    {
-      // create bounds listener
-      if ( boundsListener == null) boundsListener = new BoundsListener();
-      
-      // add listener to widget
-      JFrame widget = xidget.getFeature( JFrame.class);
-      widget.addComponentListener( boundsListener);
-      
-      // update bounds
-      Bounds bounds = new Bounds();
-      getBounds( bounds);
-      if ( bounds.parse( Xlate.get( node, "")))
-      {
-        setBounds( bounds.x, bounds.y, bounds.width, bounds.height);
-      }
-    }
-    else
-    {
-      // remove listener from widget
-      if ( boundsListener != null)
-      {
-        JFrame widget = xidget.getFeature( JFrame.class);
-        widget.removeComponentListener( boundsListener);
-      }
-    }
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#getPreferredSize(org.xidget.layout.Size)
-   */
-  public void getPreferredSize( Size result)
-  {
-    JFrame widget = xidget.getFeature( JFrame.class);
-    Dimension size = widget.getPreferredSize();
-    result.width = size.width;
-    result.height = size.height;
   }
 
   /* (non-Javadoc)
@@ -148,26 +81,16 @@ public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
   public void setVisible( boolean visible)
   {
     JFrame widget = xidget.getFeature( JFrame.class);
-    if ( visible)
-    {
-      // save requested bounds
-      Rectangle rectangle = widget.getBounds();
-
-      // pack
-      widget.pack();
-      
-      // set requested dimensions
-      if ( rectangle.width < 0) rectangle.width = widget.getWidth();
-      if ( rectangle.height < 0) rectangle.height = widget.getHeight();
-      widget.setSize( new Dimension( rectangle.width, rectangle.height));
-      
-      // show
-      widget.setVisible( true);
-    }
-    else
-    {
-      widget.setVisible( false);
-    }
+    
+    //
+    // Pack frame to preferred size of root form if default bounds are not specified.
+    // This is the only case in which the Swing LayoutManager.preferredSize() method
+    // will be called (see AdapterLayoutManager.preferredSize).
+    //
+    Bounds bounds = getDefaultBounds();
+    if ( bounds.width < 0 && bounds.height < 0) widget.pack();
+    
+    widget.setVisible( visible);
   }
   
   /* (non-Javadoc)
@@ -267,38 +190,4 @@ public class JFrameWidgetFeature implements IWidgetFeature, ITitleFeature
   {
     return xidget.toString();
   }
-  
-  private class BoundsListener extends ComponentAdapter
-  {
-    /* (non-Javadoc)
-     * @see java.awt.event.ComponentListener#componentMoved(java.awt.event.ComponentEvent)
-     */
-    public void componentMoved( ComponentEvent e)
-    {
-      if ( boundsNode != null)
-      {
-        getBounds( bounds);
-        Xlate.set( boundsNode, bounds.toString());
-      }
-    }
-
-    /* (non-Javadoc)
-     * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
-     */
-    public void componentResized( ComponentEvent e)
-    {
-      if ( boundsNode != null)
-      {
-        getBounds( bounds);
-        Xlate.set( boundsNode, bounds.toString());
-      }
-    }
-    
-    private Bounds bounds = new Bounds();
-  }
-  
-  private IXidget xidget;
-  private IModelObject boundsNode;
-  private ComponentListener boundsListener;
-  private Rectangle rectangle = new Rectangle( 0, 0, 0, 0);
 }

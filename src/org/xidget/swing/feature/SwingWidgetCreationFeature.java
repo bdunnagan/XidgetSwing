@@ -22,7 +22,9 @@ package org.xidget.swing.feature;
 import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+
 import javax.swing.JComponent;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;

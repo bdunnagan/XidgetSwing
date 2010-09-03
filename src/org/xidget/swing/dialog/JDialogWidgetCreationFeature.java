@@ -19,12 +19,16 @@
  */
 package org.xidget.swing.dialog;
 
+import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+
 import javax.swing.JDialog;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.swing.layout.AdapterLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
@@ -46,6 +50,7 @@ public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
     IModelObject config = xidget.getConfig();
     
     jDialog = new JDialog();
+    jDialog.getContentPane().setLayout( new AdapterLayoutManager( xidget, new BorderLayout()));
     jDialog.setLocationByPlatform( true);
     jDialog.setModal( Xlate.get( config, "modal", true));
     jDialog.addComponentListener( moveListener);

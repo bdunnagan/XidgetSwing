@@ -148,7 +148,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
     for( IModelObject node: nodes)
     {
       int index = findNode( rows, node);
-      jtable.addRowSelectionInterval( index, index);
+      if ( index >= 0) jtable.addRowSelectionInterval( index, index);
     }
   }
 

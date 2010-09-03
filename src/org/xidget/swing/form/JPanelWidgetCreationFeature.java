@@ -21,19 +21,19 @@ package org.xidget.swing.form;
 
 import java.awt.Container;
 import java.awt.Cursor;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
+
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
+
 import org.xidget.IXidget;
-import org.xidget.Log;
 import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
@@ -140,46 +140,68 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   private AnchorNode mouseGrab( int x, int y)
   {
+    AnchorNode grabbed = null;
     AnchorLayoutFeature feature = (AnchorLayoutFeature)xidget.getFeature( ILayoutFeature.class);
     
     List<IComputeNode> nodes = feature.getAllNodes();
-    if ( nodes == null) return null;
-
-    for( IComputeNode node: nodes)
+    if ( nodes != null)
     {
-      if ( node.hasXHandle())
+      for( IComputeNode node: nodes)
       {
-        float nx = node.getValue();
-        if ( Math.abs( nx - x) < 4) 
+        if ( node.hasXHandle())
         {
-          jPanel.setCursor( Cursor.getPredefinedCursor( Cursor.E_RESIZE_CURSOR));
-          return (AnchorNode)node;
+          float nx = node.getValue();
+          if ( Math.abs( nx - x) < 4) 
+          {
+            grabbed = (AnchorNode)node;
+            break;
+          }
         }
-      }
-      else if ( node.hasYHandle())
-      {
-        float ny = node.getValue();
-        if ( Math.abs( ny - y) < 4)
+        else if ( node.hasYHandle())
         {
-          jPanel.setCursor( Cursor.getPredefinedCursor( Cursor.N_RESIZE_CURSOR));
-          return (AnchorNode)node;
+          float ny = node.getValue();
+          if ( Math.abs( ny - y) < 4)
+          {
+            grabbed = (AnchorNode)node;
+            break;
+          }
         }
       }
     }
     
-    jPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR));
-    return null;
+    return grabbed;
+  }
+  
+  /**
+   * Update the cursor based on the current grab state.
+   * @param grabbed The grab state.
+   */
+  private void updateCursor( boolean grabbed)
+  {
+    if ( grabbed)
+    {
+      if ( cursor == null) 
+      {
+        cursor = jPanel.getCursor();
+        jPanel.setCursor( Cursor.getPredefinedCursor( Cursor.E_RESIZE_CURSOR));
+      }
+    }
+    else
+    {
+      if ( cursor != null) 
+      {
+        jPanel.setCursor( cursor);
+        cursor = null;
+      }
+    }
   }
   
   private ComponentListener componentListener = new ComponentAdapter() {
     public void componentMoved( ComponentEvent e)
     {
-      Point point = jPanel.getLocation();
-      Log.printf( "layout", "MOVED: %s (%d, %d)\n", xidget, point.x, point.y);
     }
     public void componentResized( ComponentEvent e)
     {
-      Log.printf( "layout", "RESIZE: %s (%d, %d)\n", xidget, jPanel.getWidth(), jPanel.getHeight());
     }
   };
   
@@ -189,18 +211,19 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
       if ( e.getButton() == MouseEvent.BUTTON1)
       {
         grabbed = mouseGrab( e.getX(), e.getY());
-        Log.printf( "layout", "grab: (%d, %d) %s\n", e.getX(), e.getY(), grabbed);
+        updateCursor( grabbed != null);
       }
     }
     public void mouseReleased( MouseEvent e)
     {
       grabbed = null;
       mouseGrab( e.getX(), e.getY());
+      updateCursor( false);
     }
     public void mouseExited( MouseEvent e)
     {
       if ( grabbed != null) jPanel.grabFocus();
-      else jPanel.setCursor( Cursor.getPredefinedCursor( Cursor.DEFAULT_CURSOR));
+      updateCursor( grabbed != null);
     }
     public void mouseDragged( MouseEvent e)
     {
@@ -223,11 +246,12 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
     public void mouseMoved( MouseEvent e)
     {
-      mouseGrab( e.getX(), e.getY());
+      updateCursor( mouseGrab( e.getX(), e.getY()) != null);
     }
   };
 
   private IXidget xidget;
   private JPanel jPanel;
   private AnchorNode grabbed;
+  private Cursor cursor;
 }

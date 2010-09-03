@@ -1,7 +1,7 @@
 /*
  * XidgetSwing - A Java Swing implementation of Xidgets
  * 
- * Canvas.java
+ * SwingWidgetFeature.java
  * 
  * Copyright 2009 Robert Arvin Dunnagan
  * 
@@ -17,38 +17,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.form;
-
-import java.awt.Graphics;
-import java.awt.LayoutManager;
-
-import javax.swing.JPanel;
+package org.xidget.swing.feature;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.canvas.IPaintFeature;
+import org.xidget.layout.Bounds;
 
 /**
- * A custom JPanel that paints children with the IPaintFeature.
+ * An adapter for Swing/AWT container widgets. This implementation should be used
+ * for all containers that will contain xidget children since we do not use the
+ * getPreferredSize() method to obtain the default bounds of a container.
  */
-public class Canvas extends JPanel
+public class SwingContainerWidgetFeature extends SwingWidgetFeature
 {
-  public Canvas( IXidget xidget, LayoutManager layout)
+  public SwingContainerWidgetFeature( IXidget xidget)
   {
-    super( layout);
-    this.xidget = xidget;
+    super( xidget);
   }
   
   /* (non-Javadoc)
-   * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+   * @see org.xidget.ifeature.IWidgetFeature#getDefaultBounds()
    */
   @Override
-  protected void paintComponent( Graphics graphics)
+  public Bounds getDefaultBounds()
   {
-    super.paintComponent( graphics);
-    
-    IPaintFeature paintFeature = xidget.getFeature( IPaintFeature.class);
-    if ( paintFeature != null) paintFeature.paint( graphics);
+    return defaultBounds;
   }
-  
-  private IXidget xidget;
 }

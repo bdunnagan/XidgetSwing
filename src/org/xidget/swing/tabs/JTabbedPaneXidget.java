@@ -21,8 +21,10 @@ package org.xidget.swing.tabs;
 
 import java.awt.Component;
 import java.awt.Container;
+
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.SelectionModelFeature;
@@ -34,8 +36,8 @@ import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.SwingContainerWidgetFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
-import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
  * A form xidget implemented with the Swing JPanel widget.
@@ -45,7 +47,7 @@ public class JTabbedPaneXidget extends Xidget
   public void createFeatures()
   {
     bindFeature = new JTabbedPaneBindFeature( this);
-    widgetFeature = new SwingWidgetFeature( this);
+    widgetFeature = new SwingContainerWidgetFeature( this);
     titleFeature = new SwingTitleFeature( this);
     creationFeature = new JTabbedPaneWidgetCreationFeature( this);
     containerFeature = new JTabbedPaneContainerFeature( this);

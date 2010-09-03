@@ -21,8 +21,10 @@ package org.xidget.swing.menu;
 
 import java.awt.Component;
 import java.awt.Container;
+
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -32,7 +34,7 @@ import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
-import org.xidget.swing.feature.SwingWidgetFeature;
+import org.xidget.swing.feature.SwingContainerWidgetFeature;
 
 /**
  * A xidget implementation for Swing JMenu widgets.
@@ -46,7 +48,7 @@ public class JPopupMenuXidget extends Xidget
   protected void createFeatures()
   {
     bindFeature = new BindFeature( this);
-    widgetFeature = new SwingWidgetFeature( this);
+    widgetFeature = new SwingContainerWidgetFeature( this);
     containerFeature = new GenericContainerFeature( this);
     creationFeature = new JPopupMenuWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);

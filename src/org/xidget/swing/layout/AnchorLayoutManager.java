@@ -22,9 +22,8 @@ package org.xidget.swing.layout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import java.awt.Rectangle;
+import java.awt.LayoutManager2;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
@@ -32,7 +31,7 @@ import org.xidget.ifeature.IWidgetContextFeature;
 /**
  * An implementation of LayoutManager that uses the AnchorLayoutFeature.
  */
-public class AnchorLayoutManager implements LayoutManager
+public class AnchorLayoutManager implements LayoutManager2
 {
   public AnchorLayoutManager( IXidget xidget)
   {
@@ -40,11 +39,52 @@ public class AnchorLayoutManager implements LayoutManager
   }
   
   /* (non-Javadoc)
+   * @see java.awt.LayoutManager2#addLayoutComponent(java.awt.Component, java.lang.Object)
+   */
+  public void addLayoutComponent( Component comp, Object constraints)
+  {
+    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+    if ( feature != null) feature.invalidate(); 
+  }
+
+  /* (non-Javadoc)
+   * @see java.awt.LayoutManager2#getLayoutAlignmentX(java.awt.Container)
+   */
+  public float getLayoutAlignmentX( Container target)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  /* (non-Javadoc)
+   * @see java.awt.LayoutManager2#getLayoutAlignmentY(java.awt.Container)
+   */
+  public float getLayoutAlignmentY( Container target)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  /* (non-Javadoc)
+   * @see java.awt.LayoutManager2#invalidateLayout(java.awt.Container)
+   */
+  public void invalidateLayout( Container target)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see java.awt.LayoutManager2#maximumLayoutSize(java.awt.Container)
+   */
+  public Dimension maximumLayoutSize( Container target)
+  {
+    return null;
+  }
+
+  /* (non-Javadoc)
    * @see java.awt.LayoutManager#addLayoutComponent(java.lang.String, java.awt.Component)
    */
   public void addLayoutComponent( String name, Component component)
   {
-    preferred = null;
+    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+    if ( feature != null) feature.invalidate(); 
   }
 
   /* (non-Javadoc)
@@ -52,7 +92,8 @@ public class AnchorLayoutManager implements LayoutManager
    */
   public void removeLayoutComponent( Component component)
   {
-    preferred = null;
+    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+    if ( feature != null) feature.invalidate(); 
   }
 
   /* (non-Javadoc)
@@ -84,35 +125,8 @@ public class AnchorLayoutManager implements LayoutManager
    */
   public Dimension preferredLayoutSize( Container parent)
   {
-    if ( preferred == null)
-    {
-      layoutContainer( parent);
-  
-      // see if size already computed
-      Rectangle bounds = new Rectangle();
-      parent.getBounds( bounds);
-      if ( bounds.width > 0 || bounds.height > 0)
-      {
-        preferred = new Dimension( bounds.width, bounds.height);
-        return preferred;
-      }
-      
-      // compute size
-      bounds = new Rectangle();
-      Rectangle childBounds = new Rectangle();
-      for( Component child: parent.getComponents())
-      {
-        child.getBounds( childBounds);
-        bounds.add( childBounds);
-      }
-      
-      Insets insets = parent.getInsets();
-      preferred = new Dimension( bounds.width + insets.left + insets.right, bounds.height + insets.top + insets.bottom);
-    }
-    
-    return preferred;
+    throw new UnsupportedOperationException();
   }
   
   private IXidget xidget;
-  private Dimension preferred;
 }

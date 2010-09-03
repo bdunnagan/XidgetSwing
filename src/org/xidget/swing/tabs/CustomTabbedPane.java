@@ -28,9 +28,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
+
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.TabbedPaneUI;
+
 import org.xidget.Creator;
 import org.xidget.IXidget;
 
@@ -119,6 +121,12 @@ public class CustomTabbedPane extends JTabbedPane
               Creator.getInstance().destroy( child);
               repaint( currentTabBounds);
               currentTabBounds = null;
+              
+              //
+              // Workaround: Swing is not providing a selection change event here.
+              //
+              fireStateChanged();
+              
               break;
             }
           }

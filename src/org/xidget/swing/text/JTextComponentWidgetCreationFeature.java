@@ -25,8 +25,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,6 +42,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
+
 import org.xidget.IXidget;
 import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
@@ -207,13 +210,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     if ( jLabel != null) jLabel.setText( text);
   }
   
-  private final KeyListener keyListener = new KeyListener() {
-    public void keyPressed( KeyEvent e)
-    {
-    }
-    public void keyReleased( KeyEvent e)
-    {
-    }
+  private final KeyListener keyListener = new KeyAdapter() {
     public void keyTyped( KeyEvent e)
     {
       SwingUtilities.invokeLater( updateRunnable);

@@ -22,8 +22,7 @@ package org.xidget.swing.feature;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Insets;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
+
 import org.xidget.IXidget;
 import org.xidget.Log;
 import org.xidget.ifeature.IAsyncFeature;
@@ -71,18 +70,8 @@ public class GenericContainerFeature implements IWidgetContainerFeature
         if ( widgets.length > 0) 
         {
           Log.printf( "xidget", "GenericContainerFeature.addWidget: %s <- %s\n", xidget, child);
-          if ( child.getConfig().isType( "menubar"))
-          {
-            if ( container instanceof JFrame)
-            {
-              ((JFrame)container).setJMenuBar( (JMenuBar)widgets[ 0]);
-            }
-          }
-          else
-          {
-            if ( index == -1) container.add( (Component)widgets[ 0]);
-            else container.add( (Component)widgets[ 0], index);
-          }
+          if ( index == -1) container.add( (Component)widgets[ 0]);
+          else container.add( (Component)widgets[ 0], index);
           
           // validate the container later to improve performance
           if ( container.isShowing())
@@ -178,5 +167,5 @@ public class GenericContainerFeature implements IWidgetContainerFeature
     }
   };
   
-  private IXidget xidget;
+  protected IXidget xidget;
 }

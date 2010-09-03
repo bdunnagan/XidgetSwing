@@ -21,8 +21,11 @@ package org.xidget.swing.dialog;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Window;
+
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -34,7 +37,7 @@ import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.dialog.IDialogFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
-import org.xidget.swing.feature.SwingWidgetFeature;
+import org.xidget.swing.feature.ToplevelWidgetFeature;
 
 /**
  * An implementation of IXidget for a Swing JDialog.
@@ -45,7 +48,7 @@ public class JDialogXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     dialogFeature = new JDialogFeature( this);
-    widgetFeature = new SwingWidgetFeature( this);
+    widgetFeature = new ToplevelWidgetFeature( this);
     titleFeature = new JDialogTitleFeature( this);
     creationFeature = new JDialogWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);
@@ -69,6 +72,7 @@ public class JDialogXidget extends Xidget
     if ( clss == Component.class) return (T)creationFeature.getJDialog();
     if ( clss == JComponent.class) return (T)creationFeature.getJDialog();
     if ( clss == Container.class) return (T)creationFeature.getJDialog();
+    if ( clss == Window.class) return (T)creationFeature.getJDialog();
     if ( clss == JDialog.class) return (T)creationFeature.getJDialog();
     
     T feature = basicFeatureSet.getFeature( clss);

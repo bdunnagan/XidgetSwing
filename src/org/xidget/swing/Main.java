@@ -20,7 +20,12 @@
 package org.xidget.swing;
 
 import java.io.File;
+import java.lang.Thread.UncaughtExceptionHandler;
+
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import org.xidget.Creator;
 import org.xidget.caching.FileSystemCachingPolicy;
 import org.xidget.caching.ZipCachingPolicy;
@@ -56,7 +61,17 @@ public class Main
   {    
     final File path = new File( (args.length > 0)? args[ 0]: "main.xml");
     
-    //UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName());
+    UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName());
+    
+    // handle uncaught exceptions
+    Thread.setDefaultUncaughtExceptionHandler( new UncaughtExceptionHandler() {
+      public void uncaughtException( Thread t, Throwable e)
+      {
+        JOptionPane.showMessageDialog( null, String.format( "Thread: %s\n%s",
+          t.getName(), e.getMessage()));
+        System.exit( 1);
+      }
+    });
     
     // get into the ui thread
     SwingUtilities.invokeLater( new Runnable() {

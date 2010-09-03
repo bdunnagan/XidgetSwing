@@ -122,11 +122,11 @@ public class KeyManager
       IXAction script = tree.keyDown( key);
       if ( script != null)
       {
-        e.consume();
-        
         IXidget xidget = map.get( e.getComponent());
         if ( xidget != null)
         {
+          e.consume();
+          
           IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
           Object[] widgets = creationFeature.getLastWidgets();
           
