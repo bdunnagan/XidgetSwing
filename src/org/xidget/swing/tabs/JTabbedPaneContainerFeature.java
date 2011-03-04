@@ -62,8 +62,16 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
       if ( widgets.length > 0) 
       {
         Component component = (Component)widgets[ 0];
-        if ( index < 0) container.addTab( "", component);
-        else container.insertTab( "", null, component, null, index);
+        if ( index < 0) 
+        {
+          container.addTab( "", component);
+          container.setTabComponentAt( container.getTabCount()-1, new CustomTab());
+        }
+        else 
+        {
+          container.insertTab( "", null, component, null, index);
+          container.setTabComponentAt( index, new CustomTab());
+        }
         
         //
         // Workaround: Java 6.0 build 17 exhibits refresh problem when opening multiple tabs.
