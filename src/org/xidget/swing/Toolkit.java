@@ -21,23 +21,27 @@ package org.xidget.swing;
 
 import java.awt.Component;
 import java.io.File;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
+
 import org.xidget.IToolkit;
 import org.xidget.IXidget;
 import org.xidget.binding.XidgetTagHandler;
 import org.xidget.binding.table.TableTagHandler;
 import org.xidget.binding.tree.TreeTagHandler;
 import org.xidget.config.TagProcessor;
+import org.xidget.ifeature.IAsyncFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.application.JFrameXidget;
 import org.xidget.swing.button.AbstractButtonXidget;
 import org.xidget.swing.calendar.CalendarXidget;
 import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.dialog.JDialogXidget;
+import org.xidget.swing.feature.AsyncFeature;
 import org.xidget.swing.form.JPanelXidget;
 import org.xidget.swing.image.ImageFileAssociation;
 import org.xidget.swing.label.JLabelTagHandler;
@@ -65,6 +69,9 @@ public class Toolkit implements IToolkit
 {
   public Toolkit()
   {
+    // define global async feature
+    asyncFeature = new AsyncFeature();
+    
     // define the dispatcher in the xmodel
     ModelRegistry.getInstance().getModel().setDispatcher( new IDispatcher() {
       public void execute( Runnable runnable)
@@ -74,6 +81,17 @@ public class Toolkit implements IToolkit
     });
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.IFeatured#getFeature(java.lang.Class)
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> T getFeature( Class<T> clss)
+  {
+    if ( clss == IAsyncFeature.class) return (T)asyncFeature;
+    return null;
+  }
+
   /* (non-Javadoc)
    * @see org.xidget.IToolkit#configure(org.xidget.config.TagProcessor)
    */
@@ -232,4 +250,6 @@ public class Toolkit implements IToolkit
     private IExpression filter;
     private String description;
   }
+  
+  private IAsyncFeature asyncFeature;
 }
