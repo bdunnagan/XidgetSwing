@@ -34,6 +34,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -88,6 +90,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable.addMouseListener( mouseListener);
     
     jscrollPane = new JScrollPane( jtable);    
+    jscrollPane.setBorder( BorderFactory.createEmptyBorder());
     return jscrollPane;
   }
 

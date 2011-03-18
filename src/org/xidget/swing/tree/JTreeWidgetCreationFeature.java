@@ -33,6 +33,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -96,6 +97,7 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
       jtree.addTreeSelectionListener( selectionListener);
     
     jscrollPane = new JScrollPane( jtree);
+    jscrollPane.setBorder( BorderFactory.createEmptyBorder());
     return jscrollPane;
   }
   

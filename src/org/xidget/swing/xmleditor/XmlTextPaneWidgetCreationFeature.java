@@ -6,10 +6,14 @@
 package org.xidget.swing.xmleditor;
 
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -39,8 +43,17 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     differ = new XmlDiffer();
     differ.setMatcher( new DefaultXmlMatcher( true));
     errorHighlighter = new ErrorHighlightPainter();
-    parseLock = new Object();
-    parseDone = true;
+    
+    timer = new Timer( 250, new ActionListener() {
+      public void actionPerformed( ActionEvent e)
+      {
+        Thread thread = new Thread( parseRunnable, "XmlTextPane");
+        thread.setDaemon( true);
+        thread.start();
+      }
+    });
+    
+    lock = new Object();
   }
 
   /* (non-Javadoc)
@@ -53,6 +66,7 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     xmlTextPane.getDocument().addDocumentListener( documentListener);
 
     jScrollPane = new JScrollPane( xmlTextPane);
+    jScrollPane.setBorder( BorderFactory.createEmptyBorder());
     return jScrollPane;
   }
 
@@ -143,19 +157,8 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
   private void updateEditor()
   {
     xmlTextPane.getHighlighter().removeAllHighlights();
-    
-    synchronized( parseLock)
-    {
-      text = xmlTextPane.getText();
-      needParse = true;
-      if ( parseDone)
-      {
-        parseDone = false;
-        Thread thread = new Thread( parseRunnable, "XmlTextPane");
-        thread.setDaemon( true);
-        thread.start();
-      }
-    }
+    timer.restart();
+    synchronized( lock) { text = xmlTextPane.getText();}
   }
 
   private DocumentListener documentListener = new DocumentListener() {
@@ -178,34 +181,12 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     {
       try
       {
-        while( true)
-        {
-          String s = null;
-          synchronized( parseLock)
-          {
-            if ( !needParse) 
-            {
-              parseDone = true;
-              break;
-            }
-            
-            needParse = false;
-            s = text;
-          }
-          
-          IModelObject element = xmlIO.read( s);
-          synchronized( this) { parsed = element;}
-                    
-          boolean done = true;
-          synchronized( parseLock)
-          {
-            if ( needParse) done = false;
-          }
-          
-          if ( done) SwingUtilities.invokeAndWait( updateSourceRunnable);
-          Thread.sleep( 1000);
-        } 
-      }
+        String xml = null;
+        synchronized( lock) { xml = text;}
+        IModelObject element = xmlIO.read( xml);
+        synchronized( lock) { parsed = element;}
+        SwingUtilities.invokeAndWait( updateSourceRunnable);
+      } 
       catch( Exception e)
       {
       }
@@ -220,7 +201,7 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
       if ( node != null)
       {
         IModelObject element = null;
-        synchronized( this) { element = parsed;}
+        synchronized( lock) { element = parsed;}
         if ( element != null) 
         {
           ChangeSet changeSet = new ChangeSet();
@@ -254,7 +235,6 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
   private IModelObject parsed;
   private XmlDiffer differ;
   private ErrorHighlightPainter errorHighlighter;
-  private Object parseLock;
-  private boolean needParse;
-  private boolean parseDone;
+  private Timer timer;
+  private Object lock;
 }
