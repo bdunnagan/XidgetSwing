@@ -69,10 +69,9 @@ public class Main
       {
         JOptionPane.showMessageDialog( null, String.format( "Thread: %s\n%s",
           t.getName(), e.getMessage()));
-        System.exit( 1);
       }
     });
-    
+
     // get into the ui thread
     SwingUtilities.invokeLater( new Runnable() {
       public void run()

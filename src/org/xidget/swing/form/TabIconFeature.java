@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.feature;
+package org.xidget.swing.form;
 
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
@@ -27,9 +27,9 @@ import org.xidget.ifeature.IIconFeature;
 /**
  * An implementation of ITitleFeature for suitable for all Swing containers.
  */
-public class SwingIconFeature implements IIconFeature
+public class TabIconFeature implements IIconFeature
 {
-  public SwingIconFeature( IXidget xidget)
+  public TabIconFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }

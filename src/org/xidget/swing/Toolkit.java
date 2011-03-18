@@ -55,6 +55,7 @@ import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.tabs.JTabbedPaneXidget;
 import org.xidget.swing.text.JTextXidget;
 import org.xidget.swing.tree.JTreeXidget;
+import org.xidget.swing.xmleditor.XmlTextPaneXidget;
 import org.xmodel.IDispatcher;
 import org.xmodel.ModelRegistry;
 import org.xmodel.Xlate;
@@ -117,6 +118,7 @@ public class Toolkit implements IToolkit
     processor.addHandler( "slider", new XidgetTagHandler( JSliderXidget.class));
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
+    processor.addHandler( "xml", new XidgetTagHandler( XmlTextPaneXidget.class));
   }
 
   /* (non-Javadoc)

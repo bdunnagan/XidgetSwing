@@ -41,7 +41,6 @@ import org.xidget.swing.canvas.CanvasFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingContainerWidgetFeature;
-import org.xidget.swing.feature.SwingIconFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
 
 /**
@@ -55,7 +54,7 @@ public class JPanelXidget extends Xidget
     layoutFeature = new AnchorLayoutFeature( this);
     widgetFeature = new SwingContainerWidgetFeature( this);
     titleFeature = new SwingTitleFeature( this);
-    iconFeature = new SwingIconFeature( this);
+    iconFeature = new TabIconFeature( this);
     creationFeature = new JPanelWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);
     canvasFeature = new CanvasFeature( this);

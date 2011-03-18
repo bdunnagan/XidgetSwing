@@ -57,10 +57,10 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     boolean removable = Xlate.get( xidget.getConfig(), "removable", false);
-    jtabbedPane = new JTabbedPane();
+    jtabbedPane = removable? new CustomTabbedPane( xidget): new JTabbedPane();
     jtabbedPane.addChangeListener( selectionListener);
     
-    //jtabbedPane.setLayout( new AdapterLayoutManager( xidget, jtabbedPane.getLayout()));
+    jtabbedPane.setLayout( new AdapterLayoutManager( xidget, jtabbedPane.getLayout()));
     
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();

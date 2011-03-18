@@ -18,9 +18,12 @@ package org.xidget.swing.xmleditor;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
+
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+
+import sun.swing.SwingUtilities2;
 
 /**
  * JTextPane implementation that can handle xml text. The IndentKeyListener
