@@ -35,14 +35,13 @@ import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.swing.layout.AdapterLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
- * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
+ * An implementation of IWidgetCreationFeature which creates a Swing JTabbedPane widget.
  */
 public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
 {
@@ -56,11 +55,8 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void createWidgets()
   {
-    boolean removable = Xlate.get( xidget.getConfig(), "removable", false);
-    jtabbedPane = removable? new CustomTabbedPane( xidget): new JTabbedPane();
+    jtabbedPane = new JTabbedPane();
     jtabbedPane.addChangeListener( selectionListener);
-    
-    jtabbedPane.setLayout( new AdapterLayoutManager( xidget, jtabbedPane.getLayout()));
     
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();

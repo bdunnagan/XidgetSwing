@@ -20,8 +20,10 @@
 package org.xidget.swing.feature;
 
 import javax.swing.JTabbedPane;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITitleFeature;
+import org.xidget.swing.tabs.CustomTab;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
@@ -58,7 +60,11 @@ public class SwingTitleFeature implements ITitleFeature
     {
       JTabbedPane jtabbedPane = parent.getFeature( JTabbedPane.class);
       int index = parent.getChildren().indexOf( xidget);
-      jtabbedPane.setTitleAt( index, title+"  ");
+      if ( index < jtabbedPane.getTabCount())
+      {
+        CustomTab tab = (CustomTab)jtabbedPane.getTabComponentAt( index);
+        tab.setTitle( title);
+      }
     }
   }
 

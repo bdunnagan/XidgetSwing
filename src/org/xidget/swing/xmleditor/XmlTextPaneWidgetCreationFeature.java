@@ -52,6 +52,7 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
         thread.start();
       }
     });
+    timer.setRepeats( false);
     
     lock = new Object();
   }
@@ -209,7 +210,6 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
           changeSet.applyChanges();
         }
       }
-      System.out.println( System.currentTimeMillis());
     }
   };
   

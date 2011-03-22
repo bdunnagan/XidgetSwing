@@ -8,9 +8,10 @@ package org.xidget.swing.xmleditor;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ISourceFeature;
 import org.xmodel.IModelObject;
+import org.xmodel.external.IExternalReference;
+import org.xmodel.external.NonSyncingIterator;
 import org.xmodel.xml.XmlIO;
 import org.xmodel.xml.IXmlIO.Style;
-import org.xmodel.xml.IXmlIO.Whitespace;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -41,6 +42,8 @@ public class XmlTextPaneSourceFeature implements ISourceFeature
    */
   public void setSource( StatefulContext context, String channel, IModelObject node)
   {
+    if ( !validate( node)) return;
+    
     if ( channel == allChannel) 
     {
       this.node = node;
@@ -61,6 +64,24 @@ public class XmlTextPaneSourceFeature implements ISourceFeature
         }
       }
     }
+  }
+  
+  /**
+   * Returns true if the specified node is editable element. Elements that have 
+   * descendants that are external references can not be edited.
+   * @param source The node to be validated.
+   * @return Returns true if the node is editable.
+   */
+  private boolean validate( IModelObject source)
+  {
+    NonSyncingIterator iter = new NonSyncingIterator( source);
+    while( iter.hasNext())
+    {
+      IModelObject node = iter.next();
+      if ( node instanceof IExternalReference)
+        return false;
+    }
+    return true;
   }
   
   private IXidget xidget;

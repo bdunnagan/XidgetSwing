@@ -30,6 +30,7 @@ import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.layout.Margins;
+import org.xmodel.Xlate;
 
 /**
  * An implementation of IWidgetContainerFeature for use with JTabbedPane containers.
@@ -57,13 +58,27 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
     JTabbedPane container = xidget.getFeature( JTabbedPane.class);
     if ( container != null)
     {
+      boolean removable = Xlate.get( xidget.getConfig(), "removable", false) ||
+        Xlate.get( child.getConfig(), "removable", false);
+      
       IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
       Object[] widgets = creationFeature.getLastWidgets();
       if ( widgets.length > 0) 
       {
+        CustomTab tab = new CustomTab( child);
+        tab.setCloseButton( removable);
+        
         Component component = (Component)widgets[ 0];
-        if ( index < 0) container.addTab( "", component);
-        else container.insertTab( "", null, component, null, index);
+        if ( index < 0) 
+        {
+          container.addTab( "", component);
+          container.setTabComponentAt( container.getTabCount()-1, tab);
+        }
+        else 
+        {
+          container.insertTab( "", null, component, null, index);
+          container.setTabComponentAt( index, tab);
+        }
         
         //
         // Workaround: Java 6.0 build 17 exhibits refresh problem when opening multiple tabs.
