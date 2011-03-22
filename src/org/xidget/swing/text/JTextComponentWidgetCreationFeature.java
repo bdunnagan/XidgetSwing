@@ -29,6 +29,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -38,7 +39,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
@@ -76,24 +76,26 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     if ( element.isType( "password"))
     {
       jText = new JPasswordField( size.width);
-      jText.setBorder( new EmptyBorder( 1, 1, 1, 1));
+      jText.setBorder( BorderFactory.createEmptyBorder( 1, 1, 1, 1));
     }
     else if ( size.height > 1)
     {
       jText = new JTextArea( size.height, size.width);
-      jText.setBorder( new EmptyBorder( 1, 1, 1, 1));
+      jText.setBorder( BorderFactory.createEmptyBorder( 1, 1, 1, 1));
       component = new JScrollPane( jText);
+      component.setBorder( BorderFactory.createEmptyBorder());
     }
     else if ( Xlate.get( element, "multiline", false))
     {
       jText = new JTextArea();
-      jText.setBorder( new EmptyBorder( 1, 1, 1, 1));
+      jText.setBorder( BorderFactory.createEmptyBorder( 1, 1, 1, 1));
       component = new JScrollPane( jText);
+      component.setBorder( BorderFactory.createEmptyBorder());
     }
     else
     {
       jText = new JTextField( size.width);
-      jText.setBorder( new EmptyBorder( 1, 1, 1, 1));
+      jText.setBorder( BorderFactory.createEmptyBorder( 1, 1, 1, 1));
       
       // add action listener so that enter key will be processed
       ((JTextField)jText).addActionListener( actionListener);

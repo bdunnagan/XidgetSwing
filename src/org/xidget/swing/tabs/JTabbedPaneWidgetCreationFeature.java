@@ -19,6 +19,13 @@
  */
 package org.xidget.swing.tabs;
 
+import java.awt.Canvas;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,6 +64,7 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   {
     jtabbedPane = new JTabbedPane();
     jtabbedPane.addChangeListener( selectionListener);
+    jtabbedPane.addComponentListener( componentListener);
     
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();
@@ -109,6 +117,39 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   {
     return jtabbedPane;
   }
+
+  private ComponentListener componentListener = new ComponentAdapter() {
+    public void componentResized( ComponentEvent e)
+    {
+      Dimension contentSize = null;
+      for( Component child: jtabbedPane.getComponents())
+      {
+        if ( child instanceof Canvas)
+        {
+          Container container = (Container)child;
+          contentSize = container.getSize();
+          break;
+        }
+      }
+      
+      if ( contentSize != null)
+      {
+        for( IXidget child: xidget.getChildren())
+        {
+          IWidgetCreationFeature feature = child.getFeature( IWidgetCreationFeature.class);
+          if ( feature != null)
+          {
+            Object[] widgets = feature.getLastWidgets();
+            if ( widgets.length > 0)
+            {
+              Component content = (Component)widgets[ 0];
+              content.setSize( contentSize);
+            }
+          }
+        }
+      }
+    }
+  };
   
   private ChangeListener selectionListener = new ChangeListener() {
     public void stateChanged( ChangeEvent e)

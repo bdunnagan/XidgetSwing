@@ -39,14 +39,32 @@ public class Canvas extends JPanel
   }
   
   /* (non-Javadoc)
+   * @see java.awt.Container#validate()
+   */
+  @Override
+  public void validate()
+  {
+    super.validate();
+  }
+
+  @Override
+  public void doLayout()
+  {
+    super.doLayout();
+    getComponent( 0).setSize( getSize());
+    System.out.println( getSize());
+  }
+
+  /* (non-Javadoc)
    * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected void paintComponent( Graphics graphics)
   {
     super.paintComponent( graphics);
     
-    IPaintFeature paintFeature = xidget.getFeature( IPaintFeature.class);
+    IPaintFeature<Graphics> paintFeature = xidget.getFeature( IPaintFeature.class);
     if ( paintFeature != null) paintFeature.paint( graphics);
   }
   
