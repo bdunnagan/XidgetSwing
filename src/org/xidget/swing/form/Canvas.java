@@ -21,10 +21,12 @@ package org.xidget.swing.form;
 
 import java.awt.Graphics;
 import java.awt.LayoutManager;
+import java.awt.Rectangle;
 
 import javax.swing.JPanel;
 
 import org.xidget.IXidget;
+import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.canvas.IPaintFeature;
 
 /**
@@ -39,20 +41,19 @@ public class Canvas extends JPanel
   }
   
   /* (non-Javadoc)
-   * @see java.awt.Container#validate()
+   * @see java.awt.Container#doLayout()
    */
-  @Override
-  public void validate()
-  {
-    super.validate();
-  }
-
   @Override
   public void doLayout()
   {
+    if ( xidget.getParent().getConfig().isType( "tabs"))
+    {
+      Rectangle bounds = getBounds();
+      IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+      widgetFeature.setDefaultBounds( bounds.x, bounds.y, bounds.width, bounds.height, true);
+    }
+    
     super.doLayout();
-    getComponent( 0).setSize( getSize());
-    System.out.println( getSize());
   }
 
   /* (non-Javadoc)

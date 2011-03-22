@@ -33,6 +33,8 @@ public class CustomTab extends JPanel
   public CustomTab( IXidget xidget)
   {
     this.xidget = xidget;
+
+    setOpaque( false);
     
     label = new JLabel();
     add( label);
@@ -95,7 +97,7 @@ public class CustomTab extends JPanel
       super.paintComponent( g);
       
       Color color = g.getColor();
-      g.setColor( hovering? Color.red: Color.white);
+      g.setColor( hovering? Color.pink: Color.white);
       g.fillPolygon( closeButtonXs, closeButtonYs, closeButtonXs.length);
       g.setColor( color);
       g.drawPolygon( closeButtonXs, closeButtonYs, closeButtonXs.length);

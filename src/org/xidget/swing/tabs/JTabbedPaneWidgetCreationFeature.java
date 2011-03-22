@@ -65,7 +65,7 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     jtabbedPane = new JTabbedPane();
     jtabbedPane.addChangeListener( selectionListener);
     jtabbedPane.addComponentListener( componentListener);
-    
+
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();
     String title = getTitle();
