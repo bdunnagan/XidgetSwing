@@ -42,7 +42,7 @@ public class XmlTextPaneSourceFeature implements ISourceFeature
    */
   public void setSource( StatefulContext context, String channel, IModelObject node)
   {
-    if ( !validate( node)) return;
+    if ( node != null && !validate( node)) return;
     
     if ( channel == allChannel) 
     {
