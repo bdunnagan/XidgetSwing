@@ -47,9 +47,9 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     timer = new Timer( 250, new ActionListener() {
       public void actionPerformed( ActionEvent e)
       {
-//        Thread thread = new Thread( parseRunnable, "XmlTextPane");
-//        thread.setDaemon( true);
-//        thread.start();
+        Thread thread = new Thread( parseRunnable, "XmlTextPane");
+        thread.setDaemon( true);
+        thread.start();
       }
     });
     timer.setRepeats( false);
