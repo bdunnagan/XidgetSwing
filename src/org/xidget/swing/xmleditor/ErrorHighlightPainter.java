@@ -37,6 +37,7 @@ public class ErrorHighlightPainter implements HighlightPainter
     }
     catch( Exception e)
     {
+      e.printStackTrace( System.err);
     }
   }
 }

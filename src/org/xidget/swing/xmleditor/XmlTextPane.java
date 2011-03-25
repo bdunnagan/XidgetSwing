@@ -466,14 +466,36 @@ public class XmlTextPane extends JTextPane
           String space = new String();
           for( int i=0; i<tabIndent; i++) space += " ";
           
+          // handle first line
+          if ( cs1 == 0) cs1 = 1;
           String text = doc.getText( 0, cs1);
           
           // search backward for first cr
           int cs0 = cs1-1;
           while( text.charAt( cs0) != '\n' && cs0 > 0) cs0--;
+
+          // handle first line
+          if ( cs0 == 0)
+          {
+            if ( increase)
+            {
+              doc.insertString( 0, space, null);
+              cs2 += tabIndent;
+            }
+            else
+            {
+              for( int i=0; i<tabIndent; i++)
+              {
+                if ( text.charAt( i) != ' ')
+                  return;
+              }
+              doc.remove( 0, tabIndent);
+              cs2 -= tabIndent;
+            }
+          }
           
           // get expanded selection
-          text = doc.getText( cs0, cs2 - cs0 - 1);
+          text = doc.getText( cs0, cs2 - cs0 + 1);
           
           // replace cr with cr+indent
           for( int c=cs0, s=0; s<text.length(); s++, c++)
@@ -489,10 +511,11 @@ public class XmlTextPane extends JTextPane
               {
                 for( int i=1; i<=tabIndent; i++)
                 {
-                  if ( text.charAt( s+i) != ' ') 
+                  if ( text.charAt( s+i) != ' ')
                     return;
                 }
                 doc.remove( c+1, tabIndent);
+                c -= tabIndent;
               }
             }
           }
@@ -540,7 +563,7 @@ public class XmlTextPane extends JTextPane
           autoCompleteTag();
       }
       
-      if ( event.getKeyCode() == KeyEvent.VK_BACK_SPACE && event.getModifiers() == KeyEvent.META_MASK)
+      else if ( event.getKeyCode() == KeyEvent.VK_BACK_SPACE && event.getModifiers() == KeyEvent.META_MASK)
       {
         deleteLine();
       }
