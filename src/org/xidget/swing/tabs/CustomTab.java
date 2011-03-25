@@ -6,6 +6,7 @@ package org.xidget.swing.tabs;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -33,8 +34,12 @@ public class CustomTab extends JPanel
   public CustomTab( IXidget xidget)
   {
     this.xidget = xidget;
-
+    
+    setLayout( new FlowLayout( FlowLayout.LEFT, 5, 0));
     setOpaque( false);
+    
+    // official swing hack for center tab content
+    setBorder( BorderFactory.createEmptyBorder( 2, 0, 0, 0));    
     
     label = new JLabel();
     add( label);
@@ -69,7 +74,7 @@ public class CustomTab extends JPanel
   {
     closeButton.setVisible( button);
   }
-  
+
   private class CloseButton extends JButton implements ActionListener
   {
     public CloseButton()
@@ -115,13 +120,13 @@ public class CustomTab extends JPanel
     private final MouseListener mouseListener = new MouseAdapter() {
       public void mouseEntered( MouseEvent e)
       {
-        super.mouseEntered(e);
+        super.mouseEntered( e);
         hovering = true;
         repaint();
       }
       public void mouseExited( MouseEvent e)
       {
-        super.mouseExited(e);
+        super.mouseExited( e);
         hovering = false;
         repaint();
       }

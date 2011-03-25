@@ -160,7 +160,7 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
       List<IXidget> children = xidget.getChildren();
       int index = jtabbedPane.getSelectedIndex();
       if ( index >= 0 && index < children.size())
-      {
+      { 
         IXidget child = children.get( index);
         IBindFeature bindFeature = child.getFeature( IBindFeature.class);
         StatefulContext childContext = bindFeature.getBoundContext();
