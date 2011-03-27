@@ -458,47 +458,52 @@ public class XmlTextPane extends JTextPane
         boolean increase = event.getModifiers() == 0;
 
         Document doc = getDocument();
-        int cs1 = getSelectionStart();
-        int cs2 = getSelectionEnd();
+        int selectStart = getSelectionStart();
+        int selectEnd = getSelectionEnd();
         
         try
         {
           String space = new String();
           for( int i=0; i<tabIndent; i++) space += " ";
           
-          // handle first line
-          if ( cs1 == 0) cs1 = 1;
-          String text = doc.getText( 0, cs1);
+          String text = null;
+          if ( selectStart > 0)
+          {
+            // pick up the first cr
+            selectStart--;
+            
+            // search backward for first cr
+            text = doc.getText( 0, selectStart+1);
+            while( text.charAt( selectStart) != '\n' && selectStart > 0) selectStart--;
+          }
           
-          // search backward for first cr
-          int cs0 = cs1-1;
-          while( text.charAt( cs0) != '\n' && cs0 > 0) cs0--;
-
           // handle first line
-          if ( cs0 == 0)
+          int end = selectEnd;
+          if ( selectStart == 0)
           {
             if ( increase)
             {
               doc.insertString( 0, space, null);
-              cs2 += tabIndent;
+              end += tabIndent;
             }
             else
             {
+              if ( text == null) return;
               for( int i=0; i<tabIndent; i++)
               {
                 if ( text.charAt( i) != ' ')
                   return;
               }
               doc.remove( 0, tabIndent);
-              cs2 -= tabIndent;
+              end -= tabIndent;
             }
           }
           
           // get expanded selection
-          text = doc.getText( cs0, cs2 - cs0 + 1);
+          text = doc.getText( selectStart, end - selectStart - 1);
           
           // replace cr with cr+indent
-          for( int c=cs0, s=0; s<text.length(); s++, c++)
+          for( int c=selectStart, s=0; s<text.length(); s++, c++)
           {
             if ( text.charAt( s) == '\n')
             {
