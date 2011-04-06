@@ -19,9 +19,8 @@
  */
 package org.xidget.swing.button;
 
-import java.awt.Dimension;
-
 import javax.swing.AbstractButton;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILabelFeature;
 
@@ -40,11 +39,12 @@ public class ButtonLabelFeature implements ILabelFeature
    */
   public int getLabelWidth()
   {
-    AbstractButton button = xidget.getFeature( AbstractButton.class);
-    if ( button == null) return 0;
-    
-    Dimension size = button.getPreferredSize();
-    return size.width;
+    return 0;
+//    AbstractButton button = xidget.getFeature( AbstractButton.class);
+//    if ( button == null) return 0;
+//    
+//    Dimension size = button.getPreferredSize();
+//    return size.width;
   }
 
   /* (non-Javadoc)
@@ -52,12 +52,12 @@ public class ButtonLabelFeature implements ILabelFeature
    */
   public void setLabelWidth( int width)
   {
-    AbstractButton button = xidget.getFeature( AbstractButton.class);
-    if ( button != null)
-    {
-      Dimension size = button.getPreferredSize();
-      button.setPreferredSize( new Dimension( width, size.height));
-    }
+//    AbstractButton button = xidget.getFeature( AbstractButton.class);
+//    if ( button != null)
+//    {
+//      Dimension size = button.getPreferredSize();
+//      button.setPreferredSize( new Dimension( width, size.height));
+//    }
   }
 
   /* (non-Javadoc)
