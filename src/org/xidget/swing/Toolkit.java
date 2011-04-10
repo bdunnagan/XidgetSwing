@@ -51,6 +51,7 @@ import org.xidget.swing.menu.JMenuItemXidget;
 import org.xidget.swing.menu.MenuTagHandler;
 import org.xidget.swing.menu.SubMenuTagHandler;
 import org.xidget.swing.slider.JSliderXidget;
+import org.xidget.swing.spinner.JSpinnerXidget;
 import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.tabs.JTabbedPaneXidget;
 import org.xidget.swing.text.JTextXidget;
@@ -116,6 +117,7 @@ public class Toolkit implements IToolkit
     processor.addHandler( "menuItem", new XidgetTagHandler( JMenuItemXidget.class));
     processor.addHandler( "separator", new XidgetTagHandler( JMenuItemXidget.class));
     processor.addHandler( "slider", new XidgetTagHandler( JSliderXidget.class));
+    processor.addHandler( "spinner", new XidgetTagHandler( JSpinnerXidget.class));
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
     processor.addHandler( "xml", new XidgetTagHandler( XmlTextPaneXidget.class));

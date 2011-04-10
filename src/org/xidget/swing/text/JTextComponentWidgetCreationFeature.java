@@ -25,9 +25,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -140,7 +139,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     if ( component == null) component = jText;
     
     // add listeners to the widget
-    jText.addKeyListener( keyListener);
+    jText.addFocusListener( focusListener);
     jText.addCaretListener( caretListener);
     
     return component;
@@ -211,14 +210,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   {
     if ( jLabel != null) jLabel.setText( text);
   }
-  
-  private final KeyListener keyListener = new KeyAdapter() {
-    public void keyTyped( KeyEvent e)
-    {
-      SwingUtilities.invokeLater( updateRunnable);
-    }
-  };
-    
+      
   private final CaretListener caretListener = new CaretListener() {
     public void caretUpdate( CaretEvent e)
     {
@@ -228,6 +220,16 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
         IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
         textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.selectedChannel, jText.getSelectedText());
       }
+    }
+  };
+  
+  private final FocusListener focusListener = new FocusListener() {
+    public void focusGained( FocusEvent event) 
+    {
+    }
+    public void focusLost( FocusEvent event) 
+    {
+      SwingUtilities.invokeLater( updateRunnable);
     }
   };
   
@@ -246,6 +248,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   private final ActionListener actionListener = new ActionListener() {
     public void actionPerformed( ActionEvent e)
     {
+      SwingUtilities.invokeLater( updateRunnable);
     }
   };
 
