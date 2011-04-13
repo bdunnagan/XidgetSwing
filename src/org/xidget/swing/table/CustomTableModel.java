@@ -74,6 +74,7 @@ public class CustomTableModel extends AbstractTableModel
   @Override
   public String getColumnName( int columnIndex)
   {
+    if ( columns.size() <= columnIndex) return "";
     return columns.get( columnIndex).title;
   }
 

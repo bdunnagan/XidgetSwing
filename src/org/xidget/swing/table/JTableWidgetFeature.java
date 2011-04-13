@@ -23,7 +23,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
@@ -59,6 +62,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   public void insertRows( Row parent, int rowIndex, Row[] rows)
   {
     JTable table = xidget.getFeature( JTable.class);
+    createColumns( table);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.insertRows( rowIndex, rows);
   }
@@ -203,6 +207,32 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
     }
     
     return -1;
+  }
+  
+  /**
+   * Create columns of table if necessary.
+   * @param table The table.
+   */
+  private void createColumns( JTable table)
+  {
+    int tableColumnCount = table.getColumnCount();
+    if ( tableColumnCount > 0) return;
+    
+    IModelObject config = xidget.getConfig();
+    if ( config.getNumberOfChildren( "column") == 0)
+    {
+      table.getTableHeader().setVisible( false);
+    }
+
+    CustomTableModel model = (CustomTableModel)table.getModel();
+    int configColumnCount = config.getNumberOfChildren( "cell");
+    for( int i=tableColumnCount; i<configColumnCount; i++)
+    {
+      model.setColumnName( i, "");
+      table.addColumn( new TableColumn( i));
+    }
+    
+    model.fireTableStructureChanged();
   }
 
   private IXidget xidget;
