@@ -39,7 +39,7 @@ public class CalendarTextWidgetFeature implements ITextWidgetFeature
       if ( transform != null) text = transform.transform( context, text);
       try
       {
-        long time = Long.parseLong( text);
+        long time = (long)Double.parseDouble( text);
         if ( widget.getTime() != time) widget.setTime( time);
       }
       catch( NumberFormatException e)
