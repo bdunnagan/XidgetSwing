@@ -24,7 +24,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.border.Border;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -44,7 +46,6 @@ public class SwingWidgetFeature implements IWidgetFeature
     this.xidget = xidget;
     this.defaultBounds = new Bounds( 0, 0, -1, -1);
     this.computedBounds = new Bounds( 0, 0, -1, -1);
-    this.margins = new Margins();
   }
   
   /* (non-Javadoc)
@@ -145,15 +146,13 @@ public class SwingWidgetFeature implements IWidgetFeature
   @Override
   public void setOutsideMargins( Margins margins)
   {
-    this.margins = margins;
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#getOutsideMargins()
-   */
-  public Margins getOutsideMargins()
-  {
-    return margins;
+    JComponent widget = xidget.getFeature( JComponent.class);
+    if ( widget != null) 
+    {
+      Border border = widget.getBorder();
+      Border outside = BorderFactory.createEmptyBorder( margins.y0, margins.x0, margins.y1, margins.x1);
+      widget.setBorder( (border == null)? outside: BorderFactory.createCompoundBorder( outside, border));
+    }
   }
 
   /* (non-Javadoc)
@@ -282,5 +281,4 @@ public class SwingWidgetFeature implements IWidgetFeature
   protected Bounds defaultBounds = new Bounds();
   protected Bounds computedBounds = new Bounds();
   protected boolean clampBounds;
-  private Margins margins;
 }
