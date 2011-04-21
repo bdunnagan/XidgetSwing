@@ -28,7 +28,6 @@ import javax.swing.SpinnerModel;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.combo.IChoiceListFeature;
-import org.xidget.ifeature.text.ITextWidgetFeature;
 
 /**
  * An implementation of IChoiceListFeature which is backed by a JSpinner.
@@ -43,7 +42,6 @@ public class JSpinnerChoiceListFeature implements IChoiceListFeature
   /* (non-Javadoc)
    * @see org.xidget.text.feature.IChoiceListFeature#getChoices()
    */
-  @SuppressWarnings("unchecked")
   public List<String> getChoices()
   {
     List<String> list = getList();
@@ -58,7 +56,7 @@ public class JSpinnerChoiceListFeature implements IChoiceListFeature
   {
     List<String> list = getList();
     if ( list != null) list.add( choice);
-    updateChoice( choice);
+    //updateChoice( choice);
   }
 
   /* (non-Javadoc)
@@ -68,7 +66,7 @@ public class JSpinnerChoiceListFeature implements IChoiceListFeature
   {
     List<String> list = getList();
     if ( list != null) list.add( index, choice);
-    updateChoice( choice);
+    //updateChoice( choice);
   }
 
   /* (non-Javadoc)
@@ -102,12 +100,12 @@ public class JSpinnerChoiceListFeature implements IChoiceListFeature
    * Update the selected choice if the choice was added after the text of the widget was set.
    * @param choice The choice that was added.
    */
-  private void updateChoice( String choice)
-  {
-    ITextWidgetFeature feature = xidget.getFeature( ITextWidgetFeature.class);
-    String text = ((JSpinnerTextWidgetFeature)feature).getText();
-    if ( text != null && text.equals( choice)) widget.setSelectedItem( text);
-  }
+//  private void updateChoice( String choice)
+//  {
+//    ITextWidgetFeature feature = xidget.getFeature( ITextWidgetFeature.class);
+//    String text = ((JSpinnerTextWidgetFeature)feature).getText();
+//    if ( text != null && text.equals( choice)) widget.setSelectedItem( text);
+//  }
 
   /**
    * @return Returns null or the SpinnerListModel.

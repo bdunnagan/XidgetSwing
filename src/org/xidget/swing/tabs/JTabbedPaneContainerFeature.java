@@ -119,18 +119,48 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#setInsideMargins(org.xidget.layout.Margins)
+   */
+  @Override
+  public void setInsideMargins( Margins margins)
+  {
+    this.margins = margins;
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetContainerFeature#getInsideMargins()
    */
   public Margins getInsideMargins()
   {
-    Container container = xidget.getFeature( Container.class);
-    Insets insets = container.getInsets();
-    Margins margins = new Margins();
-    margins.x0 = insets.left;
-    margins.y0 = insets.top;
-    margins.x1 = insets.right;
-    margins.y1 = insets.bottom;
+    if ( margins == null)
+    {
+      Container container = xidget.getFeature( Container.class);
+      Insets insets = container.getInsets();
+      margins = new Margins();
+      margins.x0 = insets.left;
+      margins.y0 = insets.top;
+      margins.x1 = insets.right;
+      margins.y1 = insets.bottom;
+    }
     return margins;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#setSpacing(int)
+   */
+  @Override
+  public void setSpacing( int spacing)
+  {
+    this.spacing = spacing;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#getSpacing()
+   */
+  @Override
+  public int getSpacing()
+  {
+    return spacing;
   }
 
   /**
@@ -150,4 +180,6 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
   }
   
   private IXidget xidget;
+  private Margins margins;
+  private int spacing;
 }

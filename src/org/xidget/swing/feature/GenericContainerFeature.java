@@ -21,6 +21,7 @@ package org.xidget.swing.feature;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Graphics;
 import java.awt.Insets;
 
 import org.xidget.IXidget;
@@ -57,6 +58,7 @@ public class GenericContainerFeature implements IWidgetContainerFeature
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetContainerFeature#addWidget(int, org.xidget.IXidget)
    */
+  @SuppressWarnings("unchecked")
   public void addWidget( int index, IXidget child)
   {
     Container container = xidget.getFeature( Container.class);
@@ -83,7 +85,7 @@ public class GenericContainerFeature implements IWidgetContainerFeature
       }
       
       // paintable xidgets
-      IPaintFeature paintFeature = child.getFeature( IPaintFeature.class);
+      IPaintFeature<Graphics> paintFeature = child.getFeature( IPaintFeature.class);
       if ( paintFeature != null)
       {
         ICanvasFeature canvasFeature = xidget.getFeature( ICanvasFeature.class);
@@ -95,6 +97,7 @@ public class GenericContainerFeature implements IWidgetContainerFeature
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetContainerFeature#removeWidget(org.xidget.IXidget)
    */
+  @SuppressWarnings("unchecked")
   public void removeWidget( IXidget child)
   {
     Container container = xidget.getFeature( Container.class);
@@ -109,7 +112,7 @@ public class GenericContainerFeature implements IWidgetContainerFeature
       }
       
       // paintable xidgets
-      IPaintFeature paintFeature = child.getFeature( IPaintFeature.class);
+      IPaintFeature<Graphics> paintFeature = child.getFeature( IPaintFeature.class);
       if ( paintFeature != null)
       {
         ICanvasFeature canvasFeature = xidget.getFeature( ICanvasFeature.class);
@@ -131,23 +134,51 @@ public class GenericContainerFeature implements IWidgetContainerFeature
   }
   
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#setInsideMargins(org.xidget.layout.Margins)
+   */
+  @Override
+  public void setInsideMargins( Margins margins)
+  {
+    this.margins = margins;
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetContainerFeature#getInsideMargins()
    */
   public Margins getInsideMargins()
   {
-    Margins margins = new Margins();
-    
-    Container container = xidget.getFeature( Container.class);
-    if ( container != null)
+    if ( margins == null)
     {
-      Insets insets = container.getInsets();
-      margins.x0 = insets.left;
-      margins.y0 = insets.top;
-      margins.x1 = insets.right;
-      margins.y1 = insets.bottom;
+      margins = new Margins();
+      Container container = xidget.getFeature( Container.class);
+      if ( container != null)
+      {
+        Insets insets = container.getInsets();
+        margins.x0 = insets.left;
+        margins.y0 = insets.top;
+        margins.x1 = insets.right;
+        margins.y1 = insets.bottom;
+      }
     }
-    
     return margins;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#setSpacing(int)
+   */
+  @Override
+  public void setSpacing( int spacing)
+  {
+    this.spacing = spacing;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetContainerFeature#getSpacing()
+   */
+  @Override
+  public int getSpacing()
+  {
+    return spacing;
   }
 
   /* (non-Javadoc)
@@ -168,4 +199,6 @@ public class GenericContainerFeature implements IWidgetContainerFeature
   };
   
   protected IXidget xidget;
+  private Margins margins;
+  private int spacing;
 }

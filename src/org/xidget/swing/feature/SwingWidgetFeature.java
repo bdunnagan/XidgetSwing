@@ -44,6 +44,7 @@ public class SwingWidgetFeature implements IWidgetFeature
     this.xidget = xidget;
     this.defaultBounds = new Bounds( 0, 0, -1, -1);
     this.computedBounds = new Bounds( 0, 0, -1, -1);
+    this.margins = new Margins();
   }
   
   /* (non-Javadoc)
@@ -139,12 +140,20 @@ public class SwingWidgetFeature implements IWidgetFeature
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setOutsideMargins(org.xidget.layout.Margins)
+   */
+  @Override
+  public void setOutsideMargins( Margins margins)
+  {
+    this.margins = margins;
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetFeature#getOutsideMargins()
    */
   public Margins getOutsideMargins()
   {
-    // not used yet
-    return new Margins();
+    return margins;
   }
 
   /* (non-Javadoc)
@@ -273,4 +282,5 @@ public class SwingWidgetFeature implements IWidgetFeature
   protected Bounds defaultBounds = new Bounds();
   protected Bounds computedBounds = new Bounds();
   protected boolean clampBounds;
+  private Margins margins;
 }

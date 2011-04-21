@@ -58,7 +58,7 @@ public class JSpinnerWidgetFeature implements ISliderWidgetFeature
   {
     y1 = value;
     SpinnerNumberModel model = getModel();
-    model.setMaximum( maximum);
+    model.setMaximum( y1);
   }
 
   /* (non-Javadoc)
@@ -76,7 +76,7 @@ public class JSpinnerWidgetFeature implements ISliderWidgetFeature
   {
     y0 = value;
     SpinnerNumberModel model = getModel();
-    model.setMinimum( 0);
+    model.setMinimum( y0);
   }
 
   /* (non-Javadoc)

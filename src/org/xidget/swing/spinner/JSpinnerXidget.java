@@ -6,8 +6,8 @@ package org.xidget.swing.spinner;
 
 import java.awt.Component;
 
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JSpinner;
 
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
@@ -22,8 +22,6 @@ import org.xidget.ifeature.combo.IChoiceListFeature;
 import org.xidget.ifeature.slider.ISliderWidgetFeature;
 import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
-import org.xidget.swing.combo.JComboBoxTextWidgetFeature;
-import org.xidget.swing.combo.JComboBoxWidgetCreationFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
@@ -37,10 +35,10 @@ public class JSpinnerXidget extends Xidget
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     textModelFeature = new TextModelFeature( this);
-    textWidgetFeature = new JComboBoxTextWidgetFeature( this);
+    textWidgetFeature = new JSpinnerTextWidgetFeature( this);
     sliderFeature = new JSpinnerWidgetFeature( this);
     choiceListFeature = new JSpinnerChoiceListFeature( this);
-    creationFeature = new JComboBoxWidgetCreationFeature( this);
+    creationFeature = new JSpinnerWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -63,7 +61,7 @@ public class JSpinnerXidget extends Xidget
     
     if ( clss == Component.class) return (T)creationFeature.getContainer();
     if ( clss == JComponent.class) return (T)creationFeature.getContainer();
-    if ( clss == JComboBox.class) return (T)creationFeature.getComboBox();
+    if ( clss == JSpinner.class) return (T)creationFeature.getJSpinner();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
@@ -77,6 +75,6 @@ public class JSpinnerXidget extends Xidget
   private ITextWidgetFeature textWidgetFeature;
   private ISliderWidgetFeature sliderFeature;
   private JSpinnerChoiceListFeature choiceListFeature;
-  private JComboBoxWidgetCreationFeature creationFeature;
+  private JSpinnerWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }
