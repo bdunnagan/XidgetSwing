@@ -38,6 +38,8 @@ public class CustomHeaderCellRenderer extends DefaultTableCellRenderer
   @Override
   public Component getTableCellRendererComponent( JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
   {
+    setBackground( Color.WHITE);
+    
     // allow super-class to do its thing
     super.getTableCellRendererComponent( table, value, isSelected, hasFocus, row, column);
 

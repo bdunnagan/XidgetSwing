@@ -20,6 +20,7 @@
 package org.xidget.swing.table;
 
 import java.awt.Component;
+
 import javax.swing.Icon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;

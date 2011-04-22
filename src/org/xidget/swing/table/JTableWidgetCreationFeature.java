@@ -41,6 +41,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IDragAndDropFeature;
@@ -89,8 +90,9 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable.getSelectionModel().addListSelectionListener( selectionListener);
     jtable.addMouseListener( mouseListener);
     
-    jscrollPane = new JScrollPane( jtable);    
+    jscrollPane = new JScrollPane( jtable);
     jscrollPane.setBorder( BorderFactory.createEmptyBorder());
+    jscrollPane.getViewport().setBackground( Color.WHITE);
     return jscrollPane;
   }
 
