@@ -24,8 +24,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
@@ -178,6 +180,14 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
 //    tableModel.setColumnName( columnIndex, title);
   }
 
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#setColumnWidth(int, int)
+   */
+  @Override
+  public void setColumnWidth( int columnIndex, int width)
+  {
+  }
+  
   /* (non-Javadoc)
    * @see org.xidget.ifeature.tree.ITreeWidgetFeature#updateCell(org.xidget.table.Row, int)
    */

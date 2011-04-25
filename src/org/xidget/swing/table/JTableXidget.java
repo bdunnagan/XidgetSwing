@@ -37,9 +37,11 @@ import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.tree.IColumnSetFeature;
+import org.xidget.ifeature.tree.IColumnWidthFeature;
 import org.xidget.ifeature.tree.IRowSetFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.SwingColumnWidthFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
@@ -55,6 +57,7 @@ public class JTableXidget extends Xidget
     widgetFeature = new SwingWidgetFeature( this);
     containerFeature = new JTableContainerFeature( this);
     treeWidgetFeature = new JTableWidgetFeature( this);
+    columnWidthFeature = new SwingColumnWidthFeature( this);
     creationFeature = new JTableWidgetCreationFeature( this);
     selectionModelFeature = new SelectionModelFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -72,6 +75,7 @@ public class JTableXidget extends Xidget
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == ITreeWidgetFeature.class) return (T)treeWidgetFeature;
+    if ( clss == IColumnWidthFeature.class) return (T)columnWidthFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
     if ( clss == ISelectionWidgetFeature.class) return (T)treeWidgetFeature;
@@ -93,6 +97,7 @@ public class JTableXidget extends Xidget
   private IWidgetFeature widgetFeature;
   private IWidgetContainerFeature containerFeature;
   private ITreeWidgetFeature treeWidgetFeature;
+  private IColumnWidthFeature columnWidthFeature;
   private JTableWidgetCreationFeature creationFeature;  
   private ISelectionModelFeature selectionModelFeature;
   private IFeatured basicFeatureSet;

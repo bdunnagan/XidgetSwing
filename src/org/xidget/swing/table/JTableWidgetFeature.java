@@ -26,8 +26,10 @@ import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.xidget.IXidget;
+import org.xidget.feature.tree.ColumnWidthFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
@@ -129,6 +131,19 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.setColumnName( columnIndex, title);
     tableModel.fireTableStructureChanged();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.tree.ITreeWidgetFeature#setColumnWidth(int, int)
+   */
+  @Override
+  public void setColumnWidth( int columnIndex, int width)
+  {
+    JTable table = xidget.getFeature( JTable.class);
+    TableColumnModel model = table.getColumnModel();
+    TableColumn column = model.getColumn( columnIndex);
+    column.setMaxWidth( width);
+    column.setPreferredWidth( width);
   }
 
   /* (non-Javadoc)
@@ -237,4 +252,5 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
 
   private IXidget xidget;
   private Map<StatefulContext, Row> map;
+  private ColumnWidthFeature columnSizeCalculator;
 }
