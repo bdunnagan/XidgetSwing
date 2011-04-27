@@ -52,7 +52,7 @@ public class HorizontalScale extends JPanel
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
     int width = getWidth() - 1;
-    int height = getHeight();
+    int height = getHeight() - metrics.getAscent();
     int divisions = scale.getDivisions() + 1;
     for( Tick tick: scale.getTicks())
     {
@@ -60,10 +60,13 @@ public class HorizontalScale extends JPanel
       int y = height * (divisions - tick.depth) / divisions;
       g2d.drawLine( x, 0, x, y);
       
-      if ( tick.text == null) tick.text = String.format( "%1.5g", tick.value);
-      int textWidth = metrics.stringWidth( tick.text);
-      int tx = x - (textWidth / 2);
-      g2d.drawString( tick.text, tx, y);
+      if ( tick.depth < 5)
+      {
+        if ( tick.text == null) tick.text = String.format( "%1.4g", tick.value);
+        int textWidth = metrics.stringWidth( tick.text);
+        int tx = x - (textWidth / 2);
+        g2d.drawString( tick.text, tx, y + metrics.getAscent());
+      }
     }
   }
   

@@ -65,7 +65,7 @@ public class VerticalScale extends JPanel
       
       if ( tick.depth < 4)
       {
-        if ( tick.text == null) tick.text = String.format( "%1.5g", tick.value);
+        if ( tick.text == null) tick.text = String.format( "%1.4g", tick.value);
         int textWidth = metrics.stringWidth( tick.text);
         int x0 = width - lastLength - textWidth - 10;
         int x1 = width - length;
