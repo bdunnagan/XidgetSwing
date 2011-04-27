@@ -5,8 +5,11 @@
 package org.xidget.swing.graph;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -28,6 +31,8 @@ public class HorizontalScale extends JPanel
     this.max = max;
     this.log = log;
     
+    setFont( Font.decode( "times-10"));
+    
     setBackground( Color.white);
     addComponentListener( resizeListener);
   }
@@ -42,19 +47,24 @@ public class HorizontalScale extends JPanel
     
     if ( scale == null) scale = new Scale( min, max, getWidth() / 3, log);
     
-    // draw ticks
+    FontMetrics metrics = g.getFontMetrics();
     Graphics2D g2d = (Graphics2D)g;
-    
+    g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+
     int width = getWidth() - 1;
     int height = getHeight();
     int divisions = scale.getDivisions() + 1;
     for( Tick tick: scale.getTicks())
     {
       int x = (int)(tick.scale * width);
-      g2d.drawLine( x, 0, x, height * (divisions - tick.depth) / divisions);
+      int y = height * (divisions - tick.depth) / divisions;
+      g2d.drawLine( x, 0, x, y);
+      
+      if ( tick.text == null) tick.text = String.format( "%1.5g", tick.value);
+      int textWidth = metrics.stringWidth( tick.text);
+      int tx = x - (textWidth / 2);
+      g2d.drawString( tick.text, tx, y);
     }
-    
-    // draw labels
   }
   
   private ComponentListener resizeListener = new ComponentAdapter() {
@@ -76,7 +86,7 @@ public class HorizontalScale extends JPanel
     HorizontalScale vscale = new HorizontalScale( 0, 100, 0);
     frame.getContentPane().add( vscale);
     
-    frame.setSize( 500, 10);
+    frame.setSize( 500, 100);
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
     frame.setVisible( true);
   }
