@@ -13,6 +13,10 @@ import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,6 +27,7 @@ import org.xidget.graph.Scale.Tick;
 /**
  * A custom widget that paints a horizontal scale.
  */
+@SuppressWarnings("serial")
 public class HorizontalScale extends JPanel
 {
   public HorizontalScale( double min, double max, double log)
@@ -35,6 +40,7 @@ public class HorizontalScale extends JPanel
     
     setBackground( Color.white);
     addComponentListener( resizeListener);
+    addMouseMotionListener( mouseListener);
   }
   
   /* (non-Javadoc)
@@ -51,11 +57,20 @@ public class HorizontalScale extends JPanel
     Graphics2D g2d = (Graphics2D)g;
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
+    g2d.setColor( Color.red);
+    for( int i=0; i<5; i++)
+    {
+      g2d.drawLine( mouse-i, i, mouse+i, i);
+    }
+    
+    g2d.setColor( Color.black);
     int width = getWidth() - 1;
     int height = getHeight() - metrics.getAscent();
     int divisions = scale.getDivisions() + 1;
-    for( Tick tick: scale.getTicks())
+    List<Tick> ticks = scale.getTicks();
+    for( int i=0; i<ticks.size(); i++)
     {
+      Tick tick = ticks.get( i);
       int x = (int)(tick.scale * width);
       int y = height * (divisions - tick.depth) / divisions;
       g2d.drawLine( x, 0, x, y);
@@ -64,16 +79,26 @@ public class HorizontalScale extends JPanel
       {
         if ( tick.text == null) tick.text = String.format( "%1.4g", tick.value);
         int textWidth = metrics.stringWidth( tick.text);
-        int tx = x - (textWidth / 2);
+        int tx = x;
+        if ( i > 0) tx -= (textWidth / 2);
+        if ( i == ticks.size() - 1) tx -= (textWidth / 2);
         g2d.drawString( tick.text, tx, y + metrics.getAscent());
       }
     }
   }
   
   private ComponentListener resizeListener = new ComponentAdapter() {
-    public void componentResized( ComponentEvent e)
+    public void componentResized( ComponentEvent event)
     {
       scale = null;
+    }
+  };
+  
+  private MouseMotionListener mouseListener = new MouseAdapter() {
+    public void mouseMoved( MouseEvent event) 
+    {
+      mouse = event.getX();
+      repaint();
     }
   };
   
@@ -81,6 +106,7 @@ public class HorizontalScale extends JPanel
   private double min;
   private double max;
   private double log;
+  private int mouse;
   
   public static void main( String[] args) throws Exception
   {

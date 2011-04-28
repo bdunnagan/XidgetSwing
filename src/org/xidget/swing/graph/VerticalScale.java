@@ -13,6 +13,10 @@ import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,6 +27,7 @@ import org.xidget.graph.Scale.Tick;
 /**
  * A custom widget that paints a vertical scale.
  */
+@SuppressWarnings("serial")
 public class VerticalScale extends JPanel
 {
   public VerticalScale( double min, double max, double log)
@@ -35,6 +40,7 @@ public class VerticalScale extends JPanel
     
     setBackground( Color.white);
     addComponentListener( resizeListener);
+    addMouseMotionListener( mouseListener);
   }
   
   /* (non-Javadoc)
@@ -54,10 +60,20 @@ public class VerticalScale extends JPanel
     int width = getWidth();
     int height = getHeight() - 1;
     int halfWidth = width / 2;
+    
+    g2d.setColor( Color.red);
+    for( int i=0; i<5; i++)
+    {
+      g2d.drawLine( width - i, mouse-i, width - i, mouse+i);
+    }
+
+    g2d.setColor( Color.black);
     double divisions = scale.getDivisions();
     int lastLength = 0;
-    for( Tick tick: scale.getTicks())
+    List<Tick> ticks = scale.getTicks();
+    for( int i=0; i<ticks.size(); i++)
     {
+      Tick tick = ticks.get( i);
       double depth = (divisions - tick.depth) / divisions;
       int length = (int)(depth * halfWidth);
       int y = (int)(tick.scale * height);
@@ -70,6 +86,8 @@ public class VerticalScale extends JPanel
         int x0 = width - lastLength - textWidth - 10;
         int x1 = width - length;
         if ( x1 < x0) x0 = x1;
+        
+        if ( i == 0) y += metrics.getAscent() + 2;
         g2d.drawString( tick.text, x0, y-1);
       }
       
@@ -84,10 +102,19 @@ public class VerticalScale extends JPanel
     }
   };
   
+  private MouseMotionListener mouseListener = new MouseAdapter() {
+    public void mouseMoved( MouseEvent event) 
+    {
+      mouse = event.getY();
+      repaint();
+    }
+  };
+  
   private Scale scale;
   private double min;
   private double max;
   private double log;
+  private int mouse;
   
   public static void main( String[] args) throws Exception
   {
