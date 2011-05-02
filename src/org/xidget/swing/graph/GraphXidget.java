@@ -20,19 +20,15 @@
 package org.xidget.swing.graph;
 
 import java.awt.Component;
+
 import javax.swing.JComponent;
-import javax.swing.text.JTextComponent;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
-import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 

@@ -51,7 +51,7 @@ public class HorizontalScale extends JPanel
    */
   public Scale getScale()
   {
-    if ( scale == null) scale = new Scale( min, max, getWidth() / 3, log);
+    if ( scale == null) scale = new Scale( min, max, getWidth() / 2, log);
     return scale;
   }
   
@@ -63,7 +63,7 @@ public class HorizontalScale extends JPanel
   {
     super.paintComponent( g);
     
-    if ( scale == null) scale = new Scale( min, max, getWidth() / 3, log);
+    if ( scale == null) scale = new Scale( min, max, getWidth() / 2, log);
     
     FontMetrics metrics = g.getFontMetrics();
     Graphics2D g2d = (Graphics2D)g;
@@ -80,14 +80,14 @@ public class HorizontalScale extends JPanel
     }
     
     g2d.setColor( Color.black);
-    int adjHeight = height - metrics.getAscent();
-    int divisions = scale.getDivisions() + 1;
+    int adjHeight = height - metrics.getHeight();
     List<Tick> ticks = scale.getTicks();
+    int divisions = ticks.get( 1).depth;
     for( int i=0; i<ticks.size(); i++)
     {
       Tick tick = ticks.get( i);
       
-      int x = (int)(tick.scale * width);
+      int x = (int)Math.round( tick.scale * width);
       int y = adjHeight * (divisions - tick.depth) / divisions;
       if ( top)
       {
@@ -98,7 +98,7 @@ public class HorizontalScale extends JPanel
         g2d.drawLine( x, 0, x, y);
       }
       
-      if ( tick.depth < 5)
+      if ( tick.depth < divisions)
       {
         if ( tick.text == null) tick.text = String.format( "%1.4g", tick.value);
         

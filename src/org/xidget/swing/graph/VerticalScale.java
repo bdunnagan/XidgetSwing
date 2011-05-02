@@ -51,7 +51,7 @@ public class VerticalScale extends JPanel
    */
   public Scale getScale()
   {
-    if ( scale == null) scale = new Scale( min, max, getWidth() / 3, log);
+    if ( scale == null) scale = new Scale( min, max, getHeight() / 2, log);
     return scale;
   }
   
@@ -63,7 +63,7 @@ public class VerticalScale extends JPanel
   {
     super.paintComponent( g);
     
-    if ( scale == null) scale = new Scale( min, max, getHeight() / 3, log);
+    if ( scale == null) scale = new Scale( min, max, getHeight() / 2, log);
     
     FontMetrics metrics = g.getFontMetrics();
     Graphics2D g2d = (Graphics2D)g;
@@ -86,18 +86,16 @@ public class VerticalScale extends JPanel
     }
 
     g2d.setColor( Color.black);
-    
-    double divisions = scale.getDivisions() + 1;
     int lastLength = 0;
-    
     List<Tick> ticks = scale.getTicks();
+    double divisions = ticks.get( 1).depth;
     for( int i=0; i<ticks.size(); i++)
     {
       Tick tick = ticks.get( i);
       
       double depth = (divisions - tick.depth) / divisions;
       int length = (int)(depth * width);
-      int y = (int)(tick.scale * height);
+      int y = (int)Math.round( tick.scale * height);
       if ( left)
       {
         g2d.drawLine( width, y, width - length, y);
@@ -107,7 +105,7 @@ public class VerticalScale extends JPanel
         g2d.drawLine( 0, y, length, y);
       }
       
-      if ( tick.depth < 4)
+      if ( tick.depth < divisions)
       {
         if ( i == 0) y += metrics.getAscent() + 2;
         
