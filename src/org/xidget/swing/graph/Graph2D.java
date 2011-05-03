@@ -29,6 +29,22 @@ public class Graph2D extends JPanel implements IPointsFeature
   @Override
   public void add( Point point)
   {
+    points.add( point);
+
+    // repaint point
+    int x1 = (int)(point.coords[ 0]);
+    int y1 = (int)(point.coords[ 1]);
+    repaint( x1-5, y1-5, 10, 10);
+    
+    // repaint line
+    if ( points.size() > 1)
+    {
+      Point last = points.get( points.size() - 2);
+      int x0 = (int)(last.coords[ 0]);
+      int y0 = (int)(last.coords[ 1]);
+      
+      repaint( x0-5, y0-5, (x1-x0)+10, (y1-y0)+10);
+    }
   }
 
   /* (non-Javadoc)
