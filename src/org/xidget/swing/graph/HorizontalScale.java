@@ -98,7 +98,7 @@ public class HorizontalScale extends JPanel
         g2d.drawLine( x, 0, x, y);
       }
       
-      if ( tick.depth < divisions)
+      if ( tick.depth < (divisions - 2))
       {
         if ( tick.text == null) tick.text = String.format( "%1.4g", tick.value);
         

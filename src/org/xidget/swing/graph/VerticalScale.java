@@ -88,7 +88,11 @@ public class VerticalScale extends JPanel
     g2d.setColor( Color.black);
     int lastLength = 0;
     List<Tick> ticks = scale.getTicks();
-    double divisions = ticks.get( 1).depth;
+    double divisions = ticks.get( 1).depth + 1;
+    double a = (height + 4) / ticks.size() / metrics.getHeight();
+    double b = height / 2.0 / ticks.size();
+    int textDepth = (int)(a / b);
+    System.out.printf( "a=%f, b=%f\n", a, b);
     for( int i=0; i<ticks.size(); i++)
     {
       Tick tick = ticks.get( i);
@@ -105,7 +109,7 @@ public class VerticalScale extends JPanel
         g2d.drawLine( 0, y, length, y);
       }
       
-      if ( tick.depth < divisions)
+      if ( tick.depth < textDepth)
       {
         if ( i == 0) y += metrics.getAscent() + 2;
         
