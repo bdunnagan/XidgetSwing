@@ -51,7 +51,11 @@ public class VerticalScale extends JPanel
    */
   public Scale getScale()
   {
-    if ( scale == null) scale = new Scale( min, max, getHeight() / 2, log);
+    if ( scale == null) 
+    {
+      scale = new Scale( min, max, getHeight() / 4, log);
+      textDepth = -1;
+    }
     return scale;
   }
   
@@ -63,7 +67,7 @@ public class VerticalScale extends JPanel
   {
     super.paintComponent( g);
     
-    if ( scale == null) scale = new Scale( min, max, getHeight() / 2, log);
+    Scale scale = getScale();
     
     FontMetrics metrics = g.getFontMetrics();
     Graphics2D g2d = (Graphics2D)g;
@@ -85,14 +89,14 @@ public class VerticalScale extends JPanel
       }
     }
 
+    if ( textDepth == -1) 
+    {
+      textDepth = findTextDepth( metrics.getAscent());
+    }
+    
     g2d.setColor( Color.black);
-    int lastLength = 0;
     List<Tick> ticks = scale.getTicks();
     double divisions = ticks.get( 1).depth + 1;
-    double a = (height + 4) / ticks.size() / metrics.getHeight();
-    double b = height / 2.0 / ticks.size();
-    int textDepth = (int)(a / b);
-    System.out.printf( "a=%f, b=%f\n", a, b);
     for( int i=0; i<ticks.size(); i++)
     {
       Tick tick = ticks.get( i);
@@ -108,32 +112,50 @@ public class VerticalScale extends JPanel
       {
         g2d.drawLine( 0, y, length, y);
       }
-      
-      if ( tick.depth < textDepth)
+     
+      if ( tick.depth <= textDepth)
       {
         if ( i == 0) y += metrics.getAscent() + 2;
         
         if ( tick.text == null) tick.text = String.format( "%1.4g", tick.value);
         int textWidth = metrics.stringWidth( tick.text);
         
+        double nextDepth = (divisions - tick.depth - 1) / divisions;
+        int nextLength = (int)(nextDepth * width);
         if ( left)
         {
-          int x0 = width - lastLength - textWidth - 10;
+          int x0 = width - nextLength - textWidth - 2;
           int x1 = width - length;
           if ( x1 < x0) x0 = x1;
           g2d.drawString( tick.text, x0, y-1);
         }
         else
         {
-          int x0 = lastLength + 10;
+          int x0 = nextLength + 2;
           int x1 = length - textWidth;
           if ( x1 > x0) x0 = x1;
           g2d.drawString( tick.text, x0, y-1);
         }
       }
-      
-      lastLength = length;
     }
+  }
+  
+  /**
+   * Find the tick depth at which ticks are spaced far enough apart for the specified height.
+   * @param textHeight The height of a label.
+   * @return Returns the maximum tick depth for labelling.
+   */
+  private int findTextDepth( int textHeight)
+  {
+    int height = getHeight();
+    List<Integer> counts = scale.getTickCounts();
+    for( int i=counts.size()-1; i>=0; i--)
+    {
+      int count = counts.get( i);
+      if ( textHeight <= (height / count))
+        return i;
+    }
+    return 0;
   }
   
   private ComponentListener resizeListener = new ComponentAdapter() {
@@ -167,6 +189,7 @@ public class VerticalScale extends JPanel
   private double log;
   private int cursor;
   private boolean left;
+  private int textDepth;
   
   public static void main( String[] args) throws Exception
   {
