@@ -51,7 +51,11 @@ public class HorizontalScale extends JPanel
    */
   public Scale getScale()
   {
-    if ( scale == null) scale = new Scale( min, max, getWidth() / 2, log);
+    if ( scale == null) 
+    {
+      scale = new Scale( min, max, getWidth() / 4, log);
+      textDepth = -1;
+    }
     return scale;
   }
   
@@ -63,7 +67,7 @@ public class HorizontalScale extends JPanel
   {
     super.paintComponent( g);
     
-    if ( scale == null) scale = new Scale( min, max, getWidth() / 2, log);
+    Scale scale = getScale();
     
     FontMetrics metrics = g.getFontMetrics();
     Graphics2D g2d = (Graphics2D)g;
@@ -79,9 +83,15 @@ public class HorizontalScale extends JPanel
       g2d.drawLine( cursor-i, y, cursor+i, y);
     }
     
+    List<Tick> ticks = scale.getTicks();
+    if ( textDepth == -1) 
+    {
+      String text = String.format( "%1.4g", ticks.get( 0).value);      
+      textDepth = findTextDepth( metrics.stringWidth( text) + 2);
+    }
+    
     g2d.setColor( Color.black);
     int adjHeight = height - metrics.getHeight();
-    List<Tick> ticks = scale.getTicks();
     int divisions = ticks.get( 1).depth;
     for( int i=0; i<ticks.size(); i++)
     {
@@ -98,7 +108,7 @@ public class HorizontalScale extends JPanel
         g2d.drawLine( x, 0, x, y);
       }
       
-      if ( tick.depth < (divisions - 2))
+      if ( tick.depth <= textDepth)
       {
         if ( tick.text == null) tick.text = String.format( "%1.4g", tick.value);
         
@@ -117,6 +127,24 @@ public class HorizontalScale extends JPanel
         }
       }
     }
+  }
+  
+  /**
+   * Find the tick depth at which ticks are spaced far enough apart for the specified width.
+   * @param textWidth The width of a label.
+   * @return Returns the maximum tick depth for labelling.
+   */
+  private int findTextDepth( int textWidth)
+  {
+    int width = getWidth();
+    List<Integer> counts = scale.getTickCounts();
+    for( int i=counts.size()-1; i>=0; i--)
+    {
+      int count = counts.get( i);
+      if ( textWidth <= (width / count))
+        return i;
+    }
+    return 0;
   }
   
   private ComponentListener resizeListener = new ComponentAdapter() {
@@ -151,6 +179,7 @@ public class HorizontalScale extends JPanel
   private double log;
   private int cursor;
   private boolean top;
+  private int textDepth;
   
   public static void main( String[] args) throws Exception
   {
