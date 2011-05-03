@@ -43,7 +43,6 @@ public class GraphXidget extends Xidget
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     creationFeature = new GraphWidgetCreationFeature( this);
-    pointsFeature = new GraphPointsFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -54,7 +53,7 @@ public class GraphXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IPointsFeature.class) return (T)pointsFeature;
+    if ( clss == IPointsFeature.class) return (T)creationFeature.getGraphWidget();
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
@@ -72,6 +71,5 @@ public class GraphXidget extends Xidget
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private GraphWidgetCreationFeature creationFeature;
-  private GraphPointsFeature pointsFeature;
   private IFeatured basicFeatureSet;
 }
