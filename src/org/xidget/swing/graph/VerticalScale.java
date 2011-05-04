@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.xidget.graph.Scale;
+import org.xidget.graph.Scale.Format;
 import org.xidget.graph.Scale.Tick;
 
 /**
@@ -32,8 +33,9 @@ import org.xidget.graph.Scale.Tick;
 @SuppressWarnings("serial")
 public class VerticalScale extends JPanel
 {
-  public VerticalScale( double min, double max, double log, boolean left)
+  public VerticalScale( double min, double max, double log, boolean left, Format format)
   {
+    this.format = format;
     this.min = min;
     this.max = max;
     this.log = log;
@@ -53,7 +55,7 @@ public class VerticalScale extends JPanel
   {
     if ( scale == null) 
     {
-      scale = new Scale( min, max, getHeight() / 4, log);
+      scale = new Scale( min, max, getHeight() / 4, log, format);
       textDepth = -1;
     }
     return scale;
@@ -103,7 +105,7 @@ public class VerticalScale extends JPanel
       
       double depth = (divisions - tick.depth) / divisions;
       int length = (int)(depth * width);
-      int y = (int)Math.round( tick.scale * height);
+      int y = (int)Math.round( (1.0 - tick.scale) * height);
       if ( left)
       {
         g2d.drawLine( width, y, width - length, y);
@@ -115,10 +117,9 @@ public class VerticalScale extends JPanel
      
       if ( tick.depth <= textDepth)
       {
-        if ( i == 0) y += metrics.getAscent() + 2;
+        if ( i == (ticks.size() - 1)) y += metrics.getAscent() + 2;
         
-        if ( tick.text == null) tick.text = String.format( "%1.4g", tick.value);
-        int textWidth = metrics.stringWidth( tick.text);
+        int textWidth = metrics.stringWidth( tick.label);
         
         double nextDepth = (divisions - tick.depth - 1) / divisions;
         int nextLength = (int)(nextDepth * width);
@@ -127,14 +128,16 @@ public class VerticalScale extends JPanel
           int x0 = width - nextLength - textWidth - 2;
           int x1 = width - length;
           if ( x1 < x0) x0 = x1;
-          g2d.drawString( tick.text, x0, y-1);
+          if ( x0 < 0) x0 = 0;
+          g2d.drawString( tick.label, x0, y-1);
         }
         else
         {
           int x0 = nextLength + 2;
           int x1 = length - textWidth;
           if ( x1 > x0) x0 = x1;
-          g2d.drawString( tick.text, x0, y-1);
+          if ( (x0 + textWidth) > width) x0 = width - textWidth;
+          g2d.drawString( tick.label, x0, y-1);
         }
       }
     }
@@ -183,6 +186,7 @@ public class VerticalScale extends JPanel
     }
   };
   
+  private Format format;
   private Scale scale;
   private double min;
   private double max;
@@ -195,7 +199,7 @@ public class VerticalScale extends JPanel
   {
     JFrame frame = new JFrame();
     
-    VerticalScale vscale = new VerticalScale( 0, 100, 0, true);
+    VerticalScale vscale = new VerticalScale( 30, 4000000, 0, false, Format.engineering);
     frame.getContentPane().add( vscale);
     
     frame.setSize( 10, 500);

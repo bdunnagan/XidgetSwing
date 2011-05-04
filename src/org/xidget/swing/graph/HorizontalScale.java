@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.xidget.graph.Scale;
+import org.xidget.graph.Scale.Format;
 import org.xidget.graph.Scale.Tick;
 
 /**
@@ -34,6 +35,7 @@ public class HorizontalScale extends JPanel
 {
   public HorizontalScale( double min, double max, double log, boolean top)
   {
+    this.format = Format.decimal;
     this.min = min;
     this.max = max;
     this.log = log;
@@ -53,7 +55,7 @@ public class HorizontalScale extends JPanel
   {
     if ( scale == null) 
     {
-      scale = new Scale( min, max, getWidth() / 4, log);
+      scale = new Scale( min, max, getWidth() / 4, log, format);
       textDepth = -1;
     }
     return scale;
@@ -86,8 +88,14 @@ public class HorizontalScale extends JPanel
     List<Tick> ticks = scale.getTicks();
     if ( textDepth == -1) 
     {
-      String text = String.format( "%1.4g", ticks.get( 0).value);      
-      textDepth = findTextDepth( metrics.stringWidth( text) + 2);
+      int maxWidth = 0;
+      for( Tick tick: ticks)
+      {
+        int textWidth = metrics.stringWidth( tick.label) + 2;
+        if ( maxWidth < textWidth) maxWidth = textWidth;
+      }
+      textDepth = findTextDepth( maxWidth);
+      System.out.printf( "textDepth = %d\n", textDepth);
     }
     
     g2d.setColor( Color.black);
@@ -110,20 +118,18 @@ public class HorizontalScale extends JPanel
       
       if ( tick.depth <= textDepth)
       {
-        if ( tick.text == null) tick.text = String.format( "%1.4g", tick.value);
-        
-        int textWidth = metrics.stringWidth( tick.text);
+        int textWidth = metrics.stringWidth( tick.label);
         int tx = x;
         if ( i > 0) tx -= (textWidth / 2);
         if ( i == ticks.size() - 1) tx -= (textWidth / 2);
 
         if ( top)
         {
-          g2d.drawString( tick.text, tx, height - y);
+          g2d.drawString( tick.label, tx, height - y);
         }
         else
         {
-          g2d.drawString( tick.text, tx, y + metrics.getAscent());
+          g2d.drawString( tick.label, tx, y + metrics.getAscent());
         }
       }
     }
@@ -138,11 +144,11 @@ public class HorizontalScale extends JPanel
   {
     int width = getWidth();
     List<Integer> counts = scale.getTickCounts();
-    for( int i=counts.size()-1; i>=0; i--)
+    for( int i=1; i < counts.size(); i++)
     {
-      int count = counts.get( i);
-      if ( textWidth <= (width / count))
-        return i;
+      int count = counts.get( i) - 2;
+      System.out.printf( "N=%d, S=%d\n", count, (width / count));
+      if ( textWidth > (width / count)) return i-1;
     }
     return 0;
   }
@@ -173,6 +179,7 @@ public class HorizontalScale extends JPanel
     }
   };
   
+  private Format format;
   private Scale scale;
   private double min;
   private double max;
