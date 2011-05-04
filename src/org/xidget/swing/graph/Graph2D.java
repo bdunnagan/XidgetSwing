@@ -29,22 +29,7 @@ public class Graph2D extends JPanel implements IPointsFeature
   @Override
   public void add( Point point)
   {
-    points.add( point);
-
-    // repaint point
-    int x1 = (int)(point.coords[ 0]);
-    int y1 = (int)(point.coords[ 1]);
-    repaint( x1-5, y1-5, 10, 10);
-    
-    // repaint line
-    if ( points.size() > 1)
-    {
-      Point last = points.get( points.size() - 2);
-      int x0 = (int)(last.coords[ 0]);
-      int y0 = (int)(last.coords[ 1]);
-      
-      repaint( x0-5, y0-5, (x1-x0)+10, (y1-y0)+10);
-    }
+    add( points.size(), point);
   }
 
   /* (non-Javadoc)
@@ -53,6 +38,19 @@ public class Graph2D extends JPanel implements IPointsFeature
   @Override
   public void add( int index, Point point)
   {
+    if ( index < 0 || index > points.size()) return;
+    
+    if ( index > 0)
+    {
+      Point prev = points.get( index - 1);
+      if ( prev.next != null) prev.next.prev = point;
+      prev.next = point;
+      point.prev = prev;
+      point.next = prev.next;
+    }
+    
+    points.add( index, point);
+    repaint( index);
   }
 
   /* (non-Javadoc)
@@ -61,6 +59,7 @@ public class Graph2D extends JPanel implements IPointsFeature
   @Override
   public void update( Point point)
   {
+    repaint( point);
   }
 
   /* (non-Javadoc)
@@ -69,6 +68,41 @@ public class Graph2D extends JPanel implements IPointsFeature
   @Override
   public void remove( int index)
   {
+    if ( index < 0 || index >= points.size()) return;
+    
+    Point point = points.remove( index);
+    if ( point.prev != null) point.prev.next = point.next;
+    if ( point.next != null) point.next.prev = point.prev;
+    
+    repaint( index);
+  }
+  
+  /**
+   * Repaint the specified point and connecting lines.
+   * @param point The point to repaint.
+   */
+  private void repaint( Point point)
+  {
+    // repaint point
+    int x1 = (int)(point.coords[ 0]);
+    int y1 = (int)(point.coords[ 1]);
+    repaint( x1-5, y1-5, 10, 10);
+    
+    // repaint line to the new point
+    if ( point.prev != null)
+    {
+      int x0 = (int)(point.prev.coords[ 0]);
+      int y0 = (int)(point.prev.coords[ 1]);
+      repaint( x0, y0, (x1-x0), (y1-y0));
+    }
+    
+    // repaint line from the new point
+    if ( point.next != null)
+    {
+      int x0 = (int)(point.next.coords[ 0]);
+      int y0 = (int)(point.next.coords[ 1]);
+      repaint( x0, y0, (x1-x0), (y1-y0));
+    }
   }
   
   /**
