@@ -86,21 +86,11 @@ public class HorizontalScale extends JPanel
     }
     
     List<Tick> ticks = scale.getTicks();
-    if ( textDepth == -1) 
-    {
-      int maxWidth = 0;
-      for( Tick tick: ticks)
-      {
-        int textWidth = metrics.stringWidth( tick.label) + 2;
-        if ( maxWidth < textWidth) maxWidth = textWidth;
-      }
-      textDepth = findTextDepth( maxWidth);
-      System.out.printf( "textDepth = %d\n", textDepth);
-    }
+    if ( textDepth == -1) textDepth = findTextDepth( metrics);
     
     g2d.setColor( Color.black);
     int adjHeight = height - metrics.getHeight();
-    int divisions = ticks.get( 1).depth;
+    int divisions = ticks.get( 1).depth + 1;
     for( int i=0; i<ticks.size(); i++)
     {
       Tick tick = ticks.get( i);
@@ -137,20 +127,35 @@ public class HorizontalScale extends JPanel
   
   /**
    * Find the tick depth at which ticks are spaced far enough apart for the specified width.
-   * @param textWidth The width of a label.
-   * @return Returns the maximum tick depth for labelling.
+   * @param metric The FontMetrics instance.
+   * @return Returns the maximum tick depth for labeling.
    */
-  private int findTextDepth( int textWidth)
+  private int findTextDepth( FontMetrics metrics)
   {
     int width = getWidth();
-    List<Integer> counts = scale.getTickCounts();
-    for( int i=1; i < counts.size(); i++)
+    List<Tick> ticks = scale.getTicks();
+    for( int i=0; i<=ticks.get( 1).depth; i++)
     {
-      int count = counts.get( i) - 2;
-      System.out.printf( "N=%d, S=%d\n", count, (width / count));
+      int max = 0;
+      int count = 0;
+      String maxLabel = "";
+      for( Tick tick: ticks)
+      {
+        if ( tick.depth == i)
+        {
+          if ( max < tick.label.length())
+          {
+            max = tick.label.length();
+            maxLabel = tick.label;
+          }
+          count++;
+        }
+      }
+      
+      int textWidth = metrics.stringWidth( maxLabel) + 5; 
       if ( textWidth > (width / count)) return i-1;
     }
-    return 0;
+    return ticks.get( 1).depth - 1;
   }
   
   private ComponentListener resizeListener = new ComponentAdapter() {

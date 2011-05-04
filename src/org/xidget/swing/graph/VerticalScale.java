@@ -93,7 +93,7 @@ public class VerticalScale extends JPanel
 
     if ( textDepth == -1) 
     {
-      textDepth = findTextDepth( metrics.getAscent());
+      textDepth = findTextDepth( metrics.getAscent() + 2);
     }
     
     g2d.setColor( Color.black);
