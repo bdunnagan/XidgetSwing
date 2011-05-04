@@ -33,9 +33,9 @@ import org.xidget.graph.Scale.Tick;
 @SuppressWarnings("serial")
 public class HorizontalScale extends JPanel
 {
-  public HorizontalScale( double min, double max, double log, boolean top)
+  public HorizontalScale( double min, double max, double log, boolean top, Format format)
   {
-    this.format = Format.decimal;
+    this.format = format;
     this.min = min;
     this.max = max;
     this.log = log;
@@ -152,7 +152,7 @@ public class HorizontalScale extends JPanel
         }
       }
       
-      int textWidth = metrics.stringWidth( maxLabel) + 5; 
+      int textWidth = metrics.stringWidth( maxLabel) + 10; 
       if ( textWidth > (width / count)) return i-1;
     }
     return ticks.get( 1).depth - 1;
@@ -225,7 +225,7 @@ public class HorizontalScale extends JPanel
 //    
     JFrame frame = new JFrame();
     
-    HorizontalScale vscale = new HorizontalScale( 0, 100, 0, false);
+    HorizontalScale vscale = new HorizontalScale( 0.00001, 0.00002, 0, false, Format.engineering);
     frame.getContentPane().add( vscale);
     
     frame.setSize( 500, 50);
