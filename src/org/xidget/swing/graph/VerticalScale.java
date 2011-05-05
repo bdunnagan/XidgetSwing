@@ -78,24 +78,15 @@ public class VerticalScale extends JPanel
     int width = getWidth();
     int height = getHeight() - 1;
     
-    g2d.setColor( Color.red);
-    for( int i=0; i<5; i++)
-    {
-      if ( left)
-      {
-        g2d.drawLine( width - i, cursor-i, width - i, cursor+i);
-      }
-      else
-      {
-        g2d.drawLine( i, cursor-i, i, cursor+i);
-      }
-    }
+    // draw cursor
+    int cursorY = (int)Math.round( scale.plot( cursor) * height);
+    g2d.setColor( Color.lightGray);
+    g2d.drawLine( 0, cursorY, width, cursorY);
 
-    if ( textDepth == -1) 
-    {
-      textDepth = findTextDepth( metrics.getAscent() + 2);
-    }
+    // find tick depth at which labels do not overlap
+    if ( textDepth == -1) textDepth = findTextDepth( metrics.getAscent() + 2);
     
+    // draw ticks and labels
     g2d.setColor( Color.black);
     List<Tick> ticks = scale.getTicks();
     double divisions = ticks.get( 1).depth + 1;
@@ -171,18 +162,16 @@ public class VerticalScale extends JPanel
   private MouseMotionListener mouseListener = new MouseAdapter() {
     public void mouseMoved( MouseEvent event) 
     {
-      if ( left)
-      {
-        repaint( getWidth()-5, cursor-5, 10, 10);
-        cursor = event.getY();
-        repaint( getWidth()-5, cursor-5, 10, 10);
-      }
-      else
-      {
-        repaint( 0, cursor-5, 10, 10);
-        cursor = event.getY();
-        repaint( 0, cursor-5, 10, 10);
-      }
+      // redraw old cursor region
+      int y = (int)Math.round( scale.plot( cursor));
+      repaint( 0, y-1, getWidth(), y+1);
+
+      // set cursor
+      y = event.getY();
+      cursor = scale.value( (double)y / (getHeight()-1));
+      
+      // redraw new cursor region
+      repaint( 0, y-1, getWidth(), y+1);
     }
   };
   
@@ -191,7 +180,7 @@ public class VerticalScale extends JPanel
   private double min;
   private double max;
   private double log;
-  private int cursor;
+  private double cursor;
   private boolean left;
   private int textDepth;
   

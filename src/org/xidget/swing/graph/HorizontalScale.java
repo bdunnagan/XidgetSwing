@@ -77,17 +77,17 @@ public class HorizontalScale extends JPanel
 
     int width = getWidth() - 1;
     int height = getHeight();
+
+    // draw cursor
+    int cursorX = (int)Math.round( scale.plot( cursor) * width);
+    g2d.setColor( Color.lightGray);
+    g2d.drawLine( cursorX, 0, cursorX, height);
     
-    g2d.setColor( Color.red);
-    for( int i=0; i<5; i++)
-    {
-      int y = top? (height - i): i;
-      g2d.drawLine( cursor-i, y, cursor+i, y);
-    }
-    
+    // find tick depth at which labels do not overlap
     List<Tick> ticks = scale.getTicks();
     if ( textDepth == -1) textDepth = findTextDepth( metrics);
     
+    // draw ticks and labels
     g2d.setColor( Color.black);
     int adjHeight = height - metrics.getHeight();
     int divisions = ticks.get( 1).depth + 1;
@@ -168,19 +168,17 @@ public class HorizontalScale extends JPanel
   private MouseMotionListener mouseListener = new MouseAdapter() {
     public void mouseMoved( MouseEvent event) 
     {
-      if ( top)
-      {
-        int height = getHeight();
-        repaint( cursor-5, height-10, 10, 10);
-        cursor = event.getX();
-        repaint( cursor-5, height-10, 10, 10);
-      }
-      else
-      {
-        repaint( cursor-5, 0, 10, 10);
-        cursor = event.getX();
-        repaint( cursor-5, 0, 10, 10);        
-      }
+      // redraw old cursor region
+      int x = (int)Math.round( scale.plot( cursor));
+      repaint( x-1, 0, x+1, getHeight());
+
+      // set cursor
+      x = event.getX();
+      cursor = scale.value( x, getWidth() - 1);
+      System.out.printf( "%f\n", cursor);
+      
+      // redraw new cursor region
+      repaint( x-1, 0, x+1, getHeight());
     }
   };
   
@@ -189,7 +187,7 @@ public class HorizontalScale extends JPanel
   private double min;
   private double max;
   private double log;
-  private int cursor;
+  private double cursor;
   private boolean top;
   private int textDepth;
   
@@ -225,7 +223,7 @@ public class HorizontalScale extends JPanel
 //    
     JFrame frame = new JFrame();
     
-    HorizontalScale vscale = new HorizontalScale( 0.0001, 0.0002, 0, false, Format.engineering);
+    HorizontalScale vscale = new HorizontalScale( 3, 5, 0, false, Format.engineering);
     frame.getContentPane().add( vscale);
     
     frame.setSize( 500, 50);
