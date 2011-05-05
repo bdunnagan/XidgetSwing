@@ -225,7 +225,7 @@ public class HorizontalScale extends JPanel
 //    
     JFrame frame = new JFrame();
     
-    HorizontalScale vscale = new HorizontalScale( 0.00001, 0.00002, 0, false, Format.engineering);
+    HorizontalScale vscale = new HorizontalScale( 0.0001, 0.0002, 0, false, Format.engineering);
     frame.getContentPane().add( vscale);
     
     frame.setSize( 500, 50);
