@@ -23,9 +23,11 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.xidget.IXidget;
 import org.xidget.graph.Scale;
 import org.xidget.graph.Scale.Format;
 import org.xidget.graph.Scale.Tick;
+import org.xidget.ifeature.graph.IScaleFeature;
 
 /**
  * A custom widget that paints a horizontal scale.  The ticks of the scale may be oriented
@@ -33,7 +35,7 @@ import org.xidget.graph.Scale.Tick;
  * and positioned. 
  */
 @SuppressWarnings("serial")
-public class HorizontalScale extends JPanel
+public class HorizontalScale extends JPanel implements IScaleFeature
 {
   public HorizontalScale( double min, double max, double log, boolean top, Format format)
   {
@@ -51,6 +53,16 @@ public class HorizontalScale extends JPanel
     addMouseWheelListener( wheelListener);
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.graph.IScaleFeature#setGraph(java.lang.String, org.xidget.IXidget)
+   */
+  @Override
+  public void setGraph( String axis, IXidget xidget)
+  {
+    this.axis = axis; 
+    this.graph = xidget.getFeature( Graph2D.class);
+  }
+
   /**
    * @return Returns the scale used by this widget.
    */
@@ -165,6 +177,7 @@ public class HorizontalScale extends JPanel
     public void componentResized( ComponentEvent event)
     {
       scale = null;
+      graph.axisResized( axis);
     }
   };
   
@@ -180,6 +193,7 @@ public class HorizontalScale extends JPanel
       // set cursor
       x = event.getX();
       cursor = scale.value( x, getWidth() - 1);
+      graph.setAxisCursor( axis, cursor);
       
       // redraw new cursor region
       repaint( x-1, 0, x+1, getHeight());
@@ -220,6 +234,8 @@ public class HorizontalScale extends JPanel
     }
   };
   
+  private Graph2D graph;
+  private String axis;
   private Format format;
   private Scale scale;
   private double min;

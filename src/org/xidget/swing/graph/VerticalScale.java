@@ -21,9 +21,11 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.xidget.IXidget;
 import org.xidget.graph.Scale;
 import org.xidget.graph.Scale.Format;
 import org.xidget.graph.Scale.Tick;
+import org.xidget.ifeature.graph.IScaleFeature;
 
 /**
  * A custom widget that paints a vertical scale.  The ticks of the scale may be oriented
@@ -31,7 +33,7 @@ import org.xidget.graph.Scale.Tick;
  * and positioned. 
  */
 @SuppressWarnings("serial")
-public class VerticalScale extends JPanel
+public class VerticalScale extends JPanel implements IScaleFeature
 {
   public VerticalScale( double min, double max, double log, boolean left, Format format)
   {
@@ -48,6 +50,16 @@ public class VerticalScale extends JPanel
     addMouseMotionListener( mouseListener);
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.graph.IScaleFeature#setGraph(java.lang.String, org.xidget.IXidget)
+   */
+  @Override
+  public void setGraph( String axis, IXidget xidget)
+  {
+    this.axis = axis; 
+    this.graph = xidget.getFeature( Graph2D.class);
+  }
+
   /**
    * @return Returns the scale used by this widget.
    */
@@ -156,6 +168,7 @@ public class VerticalScale extends JPanel
     public void componentResized( ComponentEvent e)
     {
       scale = null;
+      graph.axisResized( axis);
     }
   };
   
@@ -169,13 +182,15 @@ public class VerticalScale extends JPanel
       // set cursor
       y = event.getY();
       cursor = scale.value( y, getHeight() - 1);
-      System.out.printf( "%f\n", cursor);
+      graph.setAxisCursor( axis, cursor);
       
       // redraw new cursor region
       repaint( 0, y-1, getWidth(), y+1);
     }
   };
   
+  private Graph2D graph;
+  private String axis;
   private Format format;
   private Scale scale;
   private double min;
