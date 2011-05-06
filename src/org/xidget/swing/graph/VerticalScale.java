@@ -168,7 +168,8 @@ public class VerticalScale extends JPanel
 
       // set cursor
       y = event.getY();
-      cursor = scale.value( (double)y / (getHeight()-1));
+      cursor = scale.value( y, getHeight() - 1);
+      System.out.printf( "%f\n", cursor);
       
       // redraw new cursor region
       repaint( 0, y-1, getWidth(), y+1);
