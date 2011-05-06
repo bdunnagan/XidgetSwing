@@ -16,6 +16,8 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -46,6 +48,7 @@ public class HorizontalScale extends JPanel
     setBackground( Color.white);
     addComponentListener( resizeListener);
     addMouseMotionListener( mouseListener);
+    addMouseWheelListener( wheelListener);
   }
   
   /**
@@ -168,6 +171,8 @@ public class HorizontalScale extends JPanel
   private MouseMotionListener mouseListener = new MouseAdapter() {
     public void mouseMoved( MouseEvent event) 
     {
+      Scale scale = getScale();
+      
       // redraw old cursor region
       int x = (int)Math.round( scale.plot( cursor));
       repaint( x-1, 0, x+1, getHeight());
@@ -175,10 +180,43 @@ public class HorizontalScale extends JPanel
       // set cursor
       x = event.getX();
       cursor = scale.value( x, getWidth() - 1);
-      System.out.printf( "%f\n", cursor);
       
       // redraw new cursor region
       repaint( x-1, 0, x+1, getHeight());
+    }
+  };
+  
+  private MouseWheelListener wheelListener = new MouseWheelListener() {
+    public void mouseWheelMoved( MouseWheelEvent e)
+    {
+      if ( scale == null) return;
+      
+      List<Tick> ticks = scale.getTicks();
+      double d = ticks.get( 1).value - ticks.get( 0).value;
+//      for( int i=1; i<ticks.size(); i++)
+//      {
+//        if ( ticks.get( i).depth == 0)
+//        {
+//          d = ticks.get( i).value - ticks.get( 0).value;
+//          break;
+//        }
+//      }
+      
+      System.out.printf( "%f\n", d);
+      int delta = e.getWheelRotation();
+      if ( delta < 0)
+      {
+        min -= d;
+        max += d;
+      }
+      else
+      {
+        min += d;
+        max -= d;
+      }
+      
+      scale = null;
+      repaint();
     }
   };
   

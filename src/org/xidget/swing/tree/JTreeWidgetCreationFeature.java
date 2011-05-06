@@ -27,9 +27,6 @@ import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +41,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IDragAndDropFeature;
-import org.xidget.ifeature.IScriptFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.tree.ITreeExpandFeature;
@@ -91,7 +86,6 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     jtree.setRootVisible( false);
     jtree.putClientProperty( "JTree.lineStyle", "Angled");
     jtree.addTreeExpansionListener( expandListener);
-    jtree.addMouseListener( mouseListener);
     
     if ( xidget.getFeature( ISelectionModelFeature.class) != null)
       jtree.addTreeSelectionListener( selectionListener);
@@ -293,18 +287,6 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
       // global definition
       IDragAndDropFeature dndFeature = xidget.getFeature( IDragAndDropFeature.class);
       if ( dndFeature != null && dndFeature.isDropEnabled()) dndFeature.drop( dropContext);
-    }
-  };
-
-  private MouseListener mouseListener = new MouseAdapter() {
-    public void mouseClicked( MouseEvent e)
-    {
-      if ( e.getClickCount() == 2)
-      {
-        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        IScriptFeature scriptFeature = xidget.getFeature( IScriptFeature.class);
-        scriptFeature.runScript( "onDoubleClick", bindFeature.getBoundContext());
-      }
     }
   };
     

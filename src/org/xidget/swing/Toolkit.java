@@ -188,8 +188,11 @@ public class Toolkit implements IToolkit
     if ( type != FileDialogType.save) 
       fileChooser.setFileSelectionMode( JFileChooser.FILES_AND_DIRECTORIES);
     
-    FileFilter fileFilter = new ExpressionFileFilter( context, filter, description);
-    fileChooser.setFileFilter( fileFilter);
+    if ( filter != null)
+    {
+      FileFilter fileFilter = new ExpressionFileFilter( context, filter, description);
+      fileChooser.setFileFilter( fileFilter);
+    }
     
     IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
     if ( creationFeature == null) return new String[ 0];

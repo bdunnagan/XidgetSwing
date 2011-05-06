@@ -22,10 +22,15 @@ package org.xidget.swing.feature;
 import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JComponent;
 
 import org.xidget.IXidget;
+import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.IScriptFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 
@@ -50,7 +55,19 @@ public abstract class SwingWidgetCreationFeature extends ComponentAdapter implem
     
     // attach to parent
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
-    if ( containerFeature != null) containerFeature.addWidget( xidget);    
+    if ( containerFeature != null) containerFeature.addWidget( xidget);  
+    
+    // add single click listener
+    IScriptFeature scriptFeature = xidget.getFeature( IScriptFeature.class);
+    if ( scriptFeature != null && (scriptFeature.hasScript( "onClick") || scriptFeature.hasScript( "onDoubleClick")))
+    {
+      Object[] widgets = getLastWidgets();
+      if ( widgets.length > 0)
+      {
+        JComponent component = (JComponent)widgets[ widgets.length - 1];
+        component.addMouseListener( mouseListener);
+      }
+    }
   }
  
   /* (non-Javadoc)
@@ -85,5 +102,21 @@ public abstract class SwingWidgetCreationFeature extends ComponentAdapter implem
   {
   }
 
+  private final MouseListener mouseListener = new MouseAdapter() {
+    public void mouseClicked( MouseEvent e)
+    {
+      IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+      IScriptFeature scriptFeature = xidget.getFeature( IScriptFeature.class);
+      if ( e.getClickCount() == 1)
+      {
+        scriptFeature.runScript( "onClick", bindFeature.getBoundContext());
+      }
+      else if ( e.getClickCount() == 2)
+      {
+        scriptFeature.runScript( "onDoubleClick", bindFeature.getBoundContext());
+      }
+    }
+  };
+  
   protected IXidget xidget;
 }
