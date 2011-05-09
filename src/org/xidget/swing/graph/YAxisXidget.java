@@ -18,11 +18,10 @@ import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
- * A horizontal or vertical scale xidget.
+ * A horizontal or vertical axis xidget.
  */
-public class ScaleXidget extends Xidget
+public class YAxisXidget extends Xidget
 {
-
   /* (non-Javadoc)
    * @see org.xidget.Xidget#createFeatures()
    */
@@ -31,7 +30,7 @@ public class ScaleXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    creationFeature = new ScaleWidgetCreationFeature( this);
+    creationFeature = new YAxisWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -46,8 +45,9 @@ public class ScaleXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getContainer();
-    if ( clss == JComponent.class) return (T)creationFeature.getContainer();
+    if ( clss == Component.class) return (T)creationFeature.getComponent();
+    if ( clss == JComponent.class) return (T)creationFeature.getComponent();
+    if ( clss == Axis.class) return (T)creationFeature.getAxis();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
@@ -57,6 +57,6 @@ public class ScaleXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private ScaleWidgetCreationFeature creationFeature;
+  private YAxisWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }

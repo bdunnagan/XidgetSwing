@@ -5,29 +5,18 @@
 package org.xidget.swing.graph;
 
 import java.awt.Color;
-import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-import org.xidget.IXidget;
 import org.xidget.graph.Scale;
 import org.xidget.graph.Scale.Format;
 import org.xidget.graph.Scale.Tick;
-import org.xidget.ifeature.graph.IScaleFeature;
 
 /**
  * A custom widget that paints a horizontal scale.  The ticks of the scale may be oriented
@@ -35,45 +24,12 @@ import org.xidget.ifeature.graph.IScaleFeature;
  * and positioned. 
  */
 @SuppressWarnings("serial")
-public class HorizontalScale extends JPanel implements IScaleFeature
+public class XAxis extends Axis
 {
-  public HorizontalScale( double min, double max, double log, boolean top, Format format)
+  public XAxis( boolean top)
   {
-    this.format = format;
-    this.min = min;
-    this.max = max;
-    this.log = log;
     this.top = top;
-    
-    setFont( Font.decode( "times-10"));
-    
-    setBackground( Color.white);
-    addComponentListener( resizeListener);
-    addMouseMotionListener( mouseListener);
-    addMouseWheelListener( wheelListener);
-  }
-  
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.graph.IScaleFeature#setGraph(java.lang.String, org.xidget.IXidget)
-   */
-  @Override
-  public void setGraph( String axis, IXidget xidget)
-  {
-    this.axis = axis; 
-    this.graph = xidget.getFeature( Graph2D.class);
-  }
-
-  /**
-   * @return Returns the scale used by this widget.
-   */
-  public Scale getScale()
-  {
-    if ( scale == null) 
-    {
-      scale = new Scale( min, max, getWidth() / 4, log, format);
-      textDepth = -1;
-    }
-    return scale;
+    setPreferredSize( new Dimension( -1, 30));
   }
   
   /* (non-Javadoc)
@@ -140,6 +96,49 @@ public class HorizontalScale extends JPanel implements IScaleFeature
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.swing.graph.Axis#mouseMoved(int, int)
+   */
+  @Override
+  protected void mouseMoved( int x, int y)
+  {
+    Scale scale = getScale();
+    
+    // redraw old cursor region
+    int ox = (int)Math.round( scale.plot( cursor));
+    repaint( ox-1, 0, 3, getHeight());
+
+    // set cursor
+    cursor = scale.value( x, getWidth());
+    //graph.setAxisCursor( axis, cursor);
+    
+    // redraw new cursor region
+    repaint( x-1, 0, 3, getHeight());
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.swing.graph.Axis#mouseWheelMoved(int)
+   */
+  @Override
+  protected void mouseWheelMoved( int delta)
+  {
+    List<Tick> ticks = scale.getTicks();
+    double d = ticks.get( 1).value - ticks.get( 0).value;
+    if ( delta < 0)
+    {
+      min -= d;
+      max += d;
+    }
+    else
+    {
+      min += d;
+      max -= d;
+    }
+    
+    scale = null;
+    repaint();
+  }
+
   /**
    * Find the tick depth at which ticks are spaced far enough apart for the specified width.
    * @param metric The FontMetrics instance.
@@ -147,6 +146,8 @@ public class HorizontalScale extends JPanel implements IScaleFeature
    */
   private int findTextDepth( FontMetrics metrics)
   {
+    if ( scale == null) return 0;
+    
     int width = getWidth();
     List<Tick> ticks = scale.getTicks();
     for( int i=0; i<=ticks.get( 1).depth; i++)
@@ -173,77 +174,7 @@ public class HorizontalScale extends JPanel implements IScaleFeature
     return ticks.get( 1).depth - 1;
   }
   
-  private ComponentListener resizeListener = new ComponentAdapter() {
-    public void componentResized( ComponentEvent event)
-    {
-      scale = null;
-      graph.axisResized( axis);
-    }
-  };
-  
-  private MouseMotionListener mouseListener = new MouseAdapter() {
-    public void mouseMoved( MouseEvent event) 
-    {
-      Scale scale = getScale();
-      
-      // redraw old cursor region
-      int x = (int)Math.round( scale.plot( cursor));
-      repaint( x-1, 0, x+1, getHeight());
-
-      // set cursor
-      x = event.getX();
-      cursor = scale.value( x, getWidth() - 1);
-      graph.setAxisCursor( axis, cursor);
-      
-      // redraw new cursor region
-      repaint( x-1, 0, x+1, getHeight());
-    }
-  };
-  
-  private MouseWheelListener wheelListener = new MouseWheelListener() {
-    public void mouseWheelMoved( MouseWheelEvent e)
-    {
-      if ( scale == null) return;
-      
-      List<Tick> ticks = scale.getTicks();
-      double d = ticks.get( 1).value - ticks.get( 0).value;
-//      for( int i=1; i<ticks.size(); i++)
-//      {
-//        if ( ticks.get( i).depth == 0)
-//        {
-//          d = ticks.get( i).value - ticks.get( 0).value;
-//          break;
-//        }
-//      }
-      
-      System.out.printf( "%f\n", d);
-      int delta = e.getWheelRotation();
-      if ( delta < 0)
-      {
-        min -= d;
-        max += d;
-      }
-      else
-      {
-        min += d;
-        max -= d;
-      }
-      
-      scale = null;
-      repaint();
-    }
-  };
-  
-  private Graph2D graph;
-  private String axis;
-  private Format format;
-  private Scale scale;
-  private double min;
-  private double max;
-  private double log;
-  private double cursor;
   private boolean top;
-  private int textDepth;
   
   public static void main( String[] args) throws Exception
   {
@@ -277,8 +208,10 @@ public class HorizontalScale extends JPanel implements IScaleFeature
 //    
     JFrame frame = new JFrame();
     
-    HorizontalScale vscale = new HorizontalScale( 3, 5, 0, false, Format.engineering);
-    frame.getContentPane().add( vscale);
+    XAxis axis = new XAxis( false);
+    axis.setExtrema( 3, 5);
+    axis.setFormat( Format.engineering);
+    frame.getContentPane().add( axis);
     
     frame.setSize( 500, 50);
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);

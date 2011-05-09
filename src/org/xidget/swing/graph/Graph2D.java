@@ -11,27 +11,28 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
-import org.xidget.IXidget;
 import org.xidget.graph.Point;
 import org.xidget.graph.Scale;
 import org.xidget.graph.Scale.Tick;
 import org.xidget.ifeature.IPointsFeature;
-import org.xidget.ifeature.graph.IGraphFeature;
 
 /**
  * A custom widget that plots points on a two dimensional graph.  
  */
 @SuppressWarnings("serial")
-public class Graph2D extends JPanel implements IPointsFeature, IGraphFeature
+public class Graph2D extends JPanel implements IPointsFeature
 {
   public Graph2D()
   {
-    hscales = new ArrayList<HorizontalScale>();
-    vscales = new ArrayList<VerticalScale>();
+    axes = new HashMap<String, Axis>();
+    points = new ArrayList<Point>();
+    setBackground( Color.white);
   }
   
   /* (non-Javadoc)
@@ -58,15 +59,31 @@ public class Graph2D extends JPanel implements IPointsFeature, IGraphFeature
       prev.next = point;
       point.prev = prev;
       point.next = prev.next;
+      
+      if ( minX > point.coords[ 0]) minX = point.coords[ 0];
+      if ( minY > point.coords[ 1]) minY = point.coords[ 1];
+      if ( maxX < point.coords[ 0]) maxX = point.coords[ 0];
+      if ( maxY < point.coords[ 1]) maxY = point.coords[ 1];
+    }
+    else
+    {
+      findExtrema();
     }
     
-    if ( minX > point.coords[ 0]) minX = point.coords[ 0];
-    if ( minY > point.coords[ 1]) minY = point.coords[ 1];
-    if ( maxX < point.coords[ 0]) maxX = point.coords[ 0];
-    if ( maxY < point.coords[ 1]) maxY = point.coords[ 1];
+    for( Axis axis: axes.values())
+    {
+      if ( axis instanceof XAxis)
+      {
+        axis.setExtrema( minX, maxX);
+      }
+      else
+      {
+        axis.setExtrema( minY, maxY);
+      }
+    }
     
     points.add( index, point);
-    repaint( index);
+    repaint( point);
   }
 
   /* (non-Javadoc)
@@ -100,7 +117,19 @@ public class Graph2D extends JPanel implements IPointsFeature, IGraphFeature
       findExtrema();
     }
     
-    repaint( index);
+    for( Axis axis: axes.values())
+    {
+      if ( axis instanceof XAxis)
+      {
+        axis.setExtrema( minX, maxX);
+      }
+      else
+      {
+        axis.setExtrema( minY, maxY);
+      }
+    }
+    
+    repaint( point);
   }
   
   /**
@@ -159,16 +188,16 @@ public class Graph2D extends JPanel implements IPointsFeature, IGraphFeature
     }
   }
   
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.graph.IAxisScaleFeature#setScale(java.lang.String, org.xidget.IXidget)
+  /**
+   * Add an axis to the graph.
+   * @param name The name.
+   * @param axis The axis widget.
    */
-  @Override
-  public void setScale( String axis, IXidget xidget)
+  public void addAxis( String name, Axis axis)
   {
-    
-    repaint();
+    axes.put( name, axis);
   }
-
+  
   /**
    * Called when a scale widget is resized.
    * @param axis The axis that was resized.
@@ -176,15 +205,6 @@ public class Graph2D extends JPanel implements IPointsFeature, IGraphFeature
   public void axisResized( String axis)
   {
     repaint();
-  }
-
-  /**
-   * Called when a scale widget cursor moves.
-   * @param axis The axis whose cursor was moved.
-   * @param cursor The new cursor position.
-   */
-  public void setAxisCursor( String axis, double cursor)
-  {
   }
       
   /* (non-Javadoc)
@@ -200,26 +220,32 @@ public class Graph2D extends JPanel implements IPointsFeature, IGraphFeature
     g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
+    Axis xaxis = axes.get( "x");
+    Axis yaxis = axes.get( "x");
+    if ( xaxis == null || yaxis == null) return;
+    
     // draw vertical grid-lines
+    Scale xscale = xaxis.getScale();
     int graphHeight = getHeight();
     if ( xGrid != null)
     {
       g2d.setColor( Color.lightGray);
       for( Tick tick: xGrid)
       {
-        int x = (int)Math.round( hscale.plot( tick.value));
+        int x = (int)Math.round( xscale.plot( tick.value));
         g2d.drawLine( x, 0, x, graphHeight);
       }
     }
     
     // draw horizontal grid-lines
+    Scale yscale = yaxis.getScale();
     int graphWidth = getWidth();
     if ( yGrid != null)
     {
       g2d.setColor( Color.lightGray);
       for( Tick tick: yGrid)
       {
-        int y = (int)Math.round( vscale.plot( tick.value));
+        int y = (int)Math.round( yscale.plot( tick.value));
         g2d.drawLine( 0, y, graphWidth, y);
       }
     }
@@ -227,11 +253,13 @@ public class Graph2D extends JPanel implements IPointsFeature, IGraphFeature
     // draw graph
     int prevX = 0;
     int prevY = 0;
+    int width = getWidth() - 1;
+    int height = getHeight() - 1;
     for( int i=0; i<points.size(); i++)
     {
       Point point = points.get( i);
-      double x = hscale.plot( point.coords[ 0]);
-      double y = vscale.plot( point.coords[ 1]);
+      double x = xscale.plot( point.coords[ 0]) * width;
+      double y = yscale.plot( point.coords[ 1]) * height;
       
       g2d.setColor( Color.black);
       if ( lines && i > 0)
@@ -243,6 +271,7 @@ public class Graph2D extends JPanel implements IPointsFeature, IGraphFeature
       
       Shape shape = PointShapes.getShape( point.style);
       AffineTransform locate = new AffineTransform();
+      locate.setToTranslation( x, y);
       shape = locate.createTransformedShape( shape);
       g2d.draw( shape);
       
@@ -274,14 +303,11 @@ public class Graph2D extends JPanel implements IPointsFeature, IGraphFeature
     }
   }
 
-  private Scale vscale;
-  private Scale hscale;
   private List<Tick> xGrid;
   private List<Tick> yGrid;
   private List<Point> points;
   private boolean lines;
   private double minX, minY;
   private double maxX, maxY;
-  private List<HorizontalScale> hscales;
-  private List<VerticalScale> vscales;
+  private Map<String, Axis> axes;
 }

@@ -23,13 +23,14 @@ import javax.swing.JComponent;
 
 import org.xidget.IXidget;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
+import org.xmodel.Xlate;
 
 /**
- * An implementation of IWidgetCreationFeature which creates a Graph2D widget.
+ * An implementation of IWidgetCreationFeature which creates an Axis widget.
  */
-public class ScaleWidgetCreationFeature extends SwingWidgetCreationFeature
+public class XAxisWidgetCreationFeature extends SwingWidgetCreationFeature
 {
-  public ScaleWidgetCreationFeature( IXidget xidget)
+  public XAxisWidgetCreationFeature( IXidget xidget)
   {
     super( xidget);
   }
@@ -40,8 +41,9 @@ public class ScaleWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget()
   {
-    Graph2D graph = new Graph2D();
-    return graph;
+    boolean top = Xlate.get( xidget.getConfig(), "top", false);
+    axis = new XAxis( top);
+    return axis;
   }
 
   /* (non-Javadoc)
@@ -49,29 +51,24 @@ public class ScaleWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   public Object[] getLastWidgets()
   {
-    return new Object[] { graph};
+    return new Object[] { axis};
   }
 
   /**
-   * Returns the container widget which holds the label and text widgets.
-   * @return Returns the container widget which holds the label and text widgets.
+   * @return Returns the component that was created.
    */
-  public JComponent getContainer()
+  public JComponent getComponent()
   {
-    return component;
+    return axis;
   }
-    
+
   /**
-   * Returns the text widget which may be different from the widget returned
-   * by the <code>getWidget</code> method which will return a container if
-   * a label is defined.
-   * @return Returns the text widget.
+   * @return Returns the Axis widget.
    */
-  public Graph2D getGraphWidget()
+  public Axis getAxis()
   {
-    return graph;
+    return axis;
   }
   
-  private JComponent component;
-  private Graph2D graph;
+  private Axis axis;
 }

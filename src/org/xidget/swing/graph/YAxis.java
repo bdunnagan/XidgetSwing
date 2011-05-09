@@ -5,27 +5,18 @@
 package org.xidget.swing.graph;
 
 import java.awt.Color;
-import java.awt.Font;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-import org.xidget.IXidget;
 import org.xidget.graph.Scale;
 import org.xidget.graph.Scale.Format;
 import org.xidget.graph.Scale.Tick;
-import org.xidget.ifeature.graph.IScaleFeature;
 
 /**
  * A custom widget that paints a vertical scale.  The ticks of the scale may be oriented
@@ -33,44 +24,12 @@ import org.xidget.ifeature.graph.IScaleFeature;
  * and positioned. 
  */
 @SuppressWarnings("serial")
-public class VerticalScale extends JPanel implements IScaleFeature
+public class YAxis extends Axis
 {
-  public VerticalScale( double min, double max, double log, boolean left, Format format)
+  public YAxis( boolean left)
   {
-    this.format = format;
-    this.min = min;
-    this.max = max;
-    this.log = log;
     this.left = left;
-    
-    setFont( Font.decode( "times-10"));
-    
-    setBackground( Color.white);
-    addComponentListener( resizeListener);
-    addMouseMotionListener( mouseListener);
-  }
-  
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.graph.IScaleFeature#setGraph(java.lang.String, org.xidget.IXidget)
-   */
-  @Override
-  public void setGraph( String axis, IXidget xidget)
-  {
-    this.axis = axis; 
-    this.graph = xidget.getFeature( Graph2D.class);
-  }
-
-  /**
-   * @return Returns the scale used by this widget.
-   */
-  public Scale getScale()
-  {
-    if ( scale == null) 
-    {
-      scale = new Scale( min, max, getHeight() / 4, log, format);
-      textDepth = -1;
-    }
-    return scale;
+    setPreferredSize( new Dimension( 30, -1));
   }
   
   /* (non-Javadoc)
@@ -164,48 +123,42 @@ public class VerticalScale extends JPanel implements IScaleFeature
     return 0;
   }
   
-  private ComponentListener resizeListener = new ComponentAdapter() {
-    public void componentResized( ComponentEvent e)
-    {
-      scale = null;
-      graph.axisResized( axis);
-    }
-  };
-  
-  private MouseMotionListener mouseListener = new MouseAdapter() {
-    public void mouseMoved( MouseEvent event) 
-    {
-      // redraw old cursor region
-      int y = (int)Math.round( scale.plot( cursor));
-      repaint( 0, y-1, getWidth(), y+1);
+  /* (non-Javadoc)
+   * @see org.xidget.swing.graph.Axis#mouseMoved(int, int)
+   */
+  @Override
+  protected void mouseMoved( int x, int y)
+  {
+    // redraw old cursor region
+    int oy = (int)Math.round( scale.plot( cursor));
+    repaint( 0, oy-1, getWidth(), 3);
 
-      // set cursor
-      y = event.getY();
-      cursor = scale.value( y, getHeight() - 1);
-      graph.setAxisCursor( axis, cursor);
-      
-      // redraw new cursor region
-      repaint( 0, y-1, getWidth(), y+1);
-    }
-  };
-  
-  private Graph2D graph;
-  private String axis;
-  private Format format;
-  private Scale scale;
-  private double min;
-  private double max;
-  private double log;
-  private double cursor;
+    // set cursor
+    cursor = scale.value( y, getHeight());
+    //graph.setAxisCursor( axis, cursor);
+    
+    // redraw new cursor region
+    repaint( 0, y-1, getWidth(), 3);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.swing.graph.Axis#mouseWheelMoved(int)
+   */
+  @Override
+  protected void mouseWheelMoved( int clicks)
+  {
+  }
+
   private boolean left;
-  private int textDepth;
   
   public static void main( String[] args) throws Exception
   {
     JFrame frame = new JFrame();
     
-    VerticalScale vscale = new VerticalScale( 30, 4000000, 0, false, Format.engineering);
-    frame.getContentPane().add( vscale);
+    YAxis axis = new YAxis( false);
+    axis.setExtrema( 30, 40000);
+    axis.setFormat( Format.engineering);
+    frame.getContentPane().add( axis);
     
     frame.setSize( 10, 500);
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);

@@ -43,6 +43,9 @@ import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.dialog.JDialogXidget;
 import org.xidget.swing.feature.AsyncFeature;
 import org.xidget.swing.form.JPanelXidget;
+import org.xidget.swing.graph.GraphXidget;
+import org.xidget.swing.graph.XAxisXidget;
+import org.xidget.swing.graph.YAxisXidget;
 import org.xidget.swing.image.ImageFileAssociation;
 import org.xidget.swing.label.JLabelTagHandler;
 import org.xidget.swing.label.JLabelXidget;
@@ -105,6 +108,7 @@ public class Toolkit implements IToolkit
     processor.addHandler( "window", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "dialog", new XidgetTagHandler( JDialogXidget.class));
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));
+    processor.addHandler( "graph", new XidgetTagHandler( GraphXidget.class));
     processor.addHandler( "password", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "tabs", new XidgetTagHandler( JTabbedPaneXidget.class));
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
@@ -121,6 +125,8 @@ public class Toolkit implements IToolkit
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
     processor.addHandler( "xml", new XidgetTagHandler( XmlTextPaneXidget.class));
+    processor.addHandler( "xaxis", new XidgetTagHandler( XAxisXidget.class));
+    processor.addHandler( "yaxis", new XidgetTagHandler( YAxisXidget.class));
   }
 
   /* (non-Javadoc)

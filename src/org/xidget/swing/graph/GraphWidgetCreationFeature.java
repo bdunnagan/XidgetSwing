@@ -23,6 +23,8 @@ import javax.swing.JComponent;
 
 import org.xidget.IXidget;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
+import org.xmodel.IModelObject;
+import org.xmodel.Xlate;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a Graph2D widget.
@@ -40,10 +42,42 @@ public class GraphWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget()
   {
-    Graph2D graph = new Graph2D();
+    graph = new Graph2D();
+    findGraphAxes( graph);
     return graph;
   }
 
+  /**
+   * Find the graph axes and associate to the graph.
+   * @param graph The graph.
+   */
+  private void findGraphAxes( Graph2D graph)
+  {
+    IModelObject parent = xidget.getConfig().getParent();
+    
+    for( IModelObject node: parent.getChildren( "xaxis"))
+    {
+      IXidget xidget = (IXidget)node.getAttribute( "instance");
+      if ( xidget != null)
+      {
+        Axis axis = xidget.getFeature( Axis.class);
+        String name = Xlate.get( node, "name", "x");
+        graph.addAxis( name, axis);
+      }
+    }
+    
+    for( IModelObject node: parent.getChildren( "yaxis"))
+    {
+      IXidget xidget = (IXidget)node.getAttribute( "instance");
+      if ( xidget != null)
+      {
+        Axis axis = xidget.getFeature( Axis.class);
+        String name = Xlate.get( node, "name", "y");
+        graph.addAxis( name, axis);
+      }
+    }
+  }
+  
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
    */
@@ -53,12 +87,11 @@ public class GraphWidgetCreationFeature extends SwingWidgetCreationFeature
   }
 
   /**
-   * Returns the container widget which holds the label and text widgets.
-   * @return Returns the container widget which holds the label and text widgets.
+   * @return Returns the component that was created.
    */
-  public JComponent getContainer()
+  public JComponent getComponent()
   {
-    return component;
+    return graph;
   }
     
   /**
@@ -67,11 +100,10 @@ public class GraphWidgetCreationFeature extends SwingWidgetCreationFeature
    * a label is defined.
    * @return Returns the text widget.
    */
-  public Graph2D getGraphWidget()
+  public Graph2D getGraph()
   {
     return graph;
   }
-  
-  private JComponent component;
+
   private Graph2D graph;
 }

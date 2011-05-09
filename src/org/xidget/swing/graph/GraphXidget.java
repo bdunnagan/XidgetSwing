@@ -53,14 +53,14 @@ public class GraphXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IPointsFeature.class) return (T)creationFeature.getGraphWidget();
+    if ( clss == IPointsFeature.class) return (T)creationFeature.getGraph();
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getContainer();
-    if ( clss == JComponent.class) return (T)creationFeature.getContainer();
-    if ( clss == Graph2D.class) return (T)creationFeature.getGraphWidget();
+    if ( clss == Component.class) return (T)creationFeature.getComponent();
+    if ( clss == JComponent.class) return (T)creationFeature.getComponent();
+    if ( clss == Graph2D.class) return (T)creationFeature.getGraph();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
