@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.graph;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,6 +20,7 @@ import javax.swing.JPanel;
 
 import org.xidget.graph.Point;
 import org.xidget.graph.Scale;
+import org.xidget.graph.Point.Style;
 import org.xidget.graph.Scale.Tick;
 import org.xidget.ifeature.IPointsFeature;
 
@@ -32,6 +34,7 @@ public class Graph2D extends JPanel implements IPointsFeature
   {
     axes = new HashMap<String, Axis>();
     points = new ArrayList<Point>();
+    stroke = new BasicStroke( 0.5f);
     setBackground( Color.white);
   }
   
@@ -251,6 +254,7 @@ public class Graph2D extends JPanel implements IPointsFeature
     }
     
     // draw graph
+    g2d.setStroke( stroke);
     int prevX = 0;
     int prevY = 0;
     int width = getWidth() - 1;
@@ -269,11 +273,20 @@ public class Graph2D extends JPanel implements IPointsFeature
         prevY = (int)y;
       }
       
-      Shape shape = PointShapes.getShape( point.style);
-      AffineTransform locate = new AffineTransform();
-      locate.setToTranslation( x, y);
-      shape = locate.createTransformedShape( shape);
-      g2d.draw( shape);
+      if ( point.style == Style.dot)
+      {
+        int ix = (int)x;
+        int iy = (int)y;
+        g2d.drawLine( ix, iy, ix, iy);
+      }
+      else
+      {
+        Shape shape = PointShapes.getShape( point.style);
+        AffineTransform locate = new AffineTransform();
+        locate.setToTranslation( x, y);
+        shape = locate.createTransformedShape( shape);
+        g2d.draw( shape);
+      }
       
 //      if ( point.color != null) g2d.setColor( point.color);
 //      
@@ -310,4 +323,5 @@ public class Graph2D extends JPanel implements IPointsFeature
   private double minX, minY;
   private double maxX, maxY;
   private Map<String, Axis> axes;
+  private BasicStroke stroke;
 }

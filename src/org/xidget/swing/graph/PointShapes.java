@@ -35,6 +35,7 @@ public class PointShapes
         shape.moveTo( segments[ i][ 0], segments[ i][ 1]);
         shape.lineTo( segments[ i+1][ 0], segments[ i+1][ 1]);
       }
+      shapes.put( style, shape);
     }
     
     return shape;
