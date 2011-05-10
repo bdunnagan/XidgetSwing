@@ -28,6 +28,7 @@ import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -65,10 +66,11 @@ public class JSliderXidget extends Xidget
     if ( clss == ISourceFeature.class) return (T)sourceFeature;
     if ( clss == ISliderWidgetFeature.class) return (T)sliderFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
+    if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJSlider();
-    if ( clss == JComponent.class) return (T)creationFeature.getJSlider();
+    if ( clss == Component.class) return (T)creationFeature.getContainer();
+    if ( clss == JComponent.class) return (T)creationFeature.getContainer();
     if ( clss == JSlider.class) return (T)creationFeature.getJSlider();
     
     T feature = basicFeatureSet.getFeature( clss);
