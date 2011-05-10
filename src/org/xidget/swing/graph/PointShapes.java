@@ -4,6 +4,7 @@
  */
 package org.xidget.swing.graph;
 
+import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,33 @@ import org.xidget.graph.Point.Style;
  */
 public class PointShapes
 {
+  /**
+   * Draw the specified shape on the specified device.
+   * @param g The graphics device.
+   * @param style The point style to draw.
+   * @param x The x-coordinate.
+   * @param y The y-coordinate.
+   */
+  public static final void drawShape( Graphics2D g, Style style, double x, double y)
+  {
+    int ix = (int)x;
+    int iy = (int)y;
+    
+    int[][] segments = PointStyles.getLineSegments( style);
+    for( int i=0; i<segments.length; )
+    {
+      int x0 = segments[ i][ 0] + ix;
+      int y0 = segments[ i][ 1] + iy;
+      i++;
+      
+      int x1 = segments[ i][ 0] + ix;
+      int y1 = segments[ i][ 1] + iy;
+      i++;
+      
+      g.drawLine( x0, y0, x1, y1);
+    }
+  }
+  
   /**
    * Returns a Polygon containing the specified point style.
    * @param style The point style.

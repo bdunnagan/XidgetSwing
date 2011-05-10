@@ -9,8 +9,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -224,7 +222,7 @@ public class Graph2D extends JPanel implements IPointsFeature
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
     Axis xaxis = axes.get( "x");
-    Axis yaxis = axes.get( "x");
+    Axis yaxis = axes.get( "y");
     if ( xaxis == null || yaxis == null) return;
     
     // draw vertical grid-lines
@@ -281,11 +279,13 @@ public class Graph2D extends JPanel implements IPointsFeature
       }
       else
       {
-        Shape shape = PointShapes.getShape( point.style);
-        AffineTransform locate = new AffineTransform();
-        locate.setToTranslation( x, y);
-        shape = locate.createTransformedShape( shape);
-        g2d.draw( shape);
+//        Shape shape = PointShapes.getShape( point.style);
+//        AffineTransform locate = new AffineTransform();
+//        locate.setToTranslation( x, y);
+//        shape = locate.createTransformedShape( shape);
+//        g2d.draw( shape);
+        
+        PointShapes.drawShape( g2d, point.style, x, y);
       }
       
 //      if ( point.color != null) g2d.setColor( point.color);
