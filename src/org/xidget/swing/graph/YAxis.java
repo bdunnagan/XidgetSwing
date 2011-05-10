@@ -130,15 +130,16 @@ public class YAxis extends Axis
   protected void mouseMoved( int x, int y)
   {
     // redraw old cursor region
-    int oy = (int)Math.round( scale.plot( cursor));
-    repaint( 0, oy-1, getWidth(), 3);
+    int y0 = (int)Math.round( scale.plot( cursor));
+    repaint( 0, y0-1, getWidth(), 3);
 
     // set cursor
     cursor = scale.value( y, getHeight());
     //graph.setAxisCursor( axis, cursor);
     
     // redraw new cursor region
-    repaint( 0, y-1, getWidth(), 3);
+    int y1 = (int)Math.round( scale.plot( cursor));
+    repaint( 0, y1-1, getWidth(), 3);
   }
 
   /* (non-Javadoc)

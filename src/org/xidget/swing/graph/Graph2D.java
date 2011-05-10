@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.graph;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -32,7 +31,6 @@ public class Graph2D extends JPanel implements IPointsFeature
   {
     axes = new HashMap<String, Axis>();
     points = new ArrayList<Point>();
-    stroke = new BasicStroke( 0.5f);
     setBackground( Color.white);
   }
   
@@ -88,11 +86,14 @@ public class Graph2D extends JPanel implements IPointsFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.graph.Point)
+   * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.graph.Point, int, double)
    */
   @Override
-  public void update( Point point)
+  public void update( Point point, int coordinate, double value)
   {
+    repaint( point);
+
+    point.coords[ coordinate] = value;
     if ( minX > point.coords[ 0] || minY > point.coords[ 1] || maxX < point.coords[ 0] || maxY < point.coords[ 1])
     {
       findExtrema();
@@ -167,25 +168,36 @@ public class Graph2D extends JPanel implements IPointsFeature
    */
   private void repaint( Point point)
   {
+    Axis xaxis = axes.get( "x");
+    Axis yaxis = axes.get( "y");
+    if ( xaxis == null || yaxis == null) return;
+    
+    Scale xscale = xaxis.getScale();
+    Scale yscale = yaxis.getScale();
+    if ( xscale == null || yscale == null) return;
+    
+    int width = getWidth() - 1;
+    int height = getHeight() - 1;
+    
     // repaint point
-    int x1 = (int)(point.coords[ 0]);
-    int y1 = (int)(point.coords[ 1]);
+    int x1 = (int)(xscale.plot( point.coords[ 0]) * width);
+    int y1 = (int)(yscale.plot( point.coords[ 1]) * height);
     repaint( x1-5, y1-5, 10, 10);
     
     // repaint line to the new point
     if ( point.prev != null)
     {
-      int x0 = (int)(point.prev.coords[ 0]);
-      int y0 = (int)(point.prev.coords[ 1]);
-      repaint( x0, y0, (x1-x0), (y1-y0));
+      int x0 = (int)(xscale.plot( point.prev.coords[ 0]) * width);
+      int y0 = (int)(yscale.plot( point.prev.coords[ 1]) * height);
+      repaint( x0, y0, (x1-x0)+2, (y1-y0)+2);
     }
     
     // repaint line from the new point
     if ( point.next != null)
     {
-      int x0 = (int)(point.next.coords[ 0]);
-      int y0 = (int)(point.next.coords[ 1]);
-      repaint( x0, y0, (x1-x0), (y1-y0));
+      int x0 = (int)(xscale.plot( point.next.coords[ 0]) * width);
+      int y0 = (int)(yscale.plot( point.next.coords[ 1]) * height);
+      repaint( x1, y1, (x0-x1)+2, (y0-y1)+2);
     }
   }
   
@@ -252,7 +264,6 @@ public class Graph2D extends JPanel implements IPointsFeature
     }
     
     // draw graph
-    g2d.setStroke( stroke);
     int prevX = 0;
     int prevY = 0;
     int width = getWidth() - 1;
@@ -263,6 +274,7 @@ public class Graph2D extends JPanel implements IPointsFeature
       double x = xscale.plot( point.coords[ 0]) * width;
       double y = yscale.plot( point.coords[ 1]) * height;
       
+      lines = true;
       g2d.setColor( Color.black);
       if ( lines && i > 0)
       {
@@ -271,21 +283,19 @@ public class Graph2D extends JPanel implements IPointsFeature
         prevY = (int)y;
       }
       
-      if ( point.style == Style.dot)
+      if ( false && point.style == Style.dot)
       {
         int ix = (int)x;
         int iy = (int)y;
         g2d.drawLine( ix, iy, ix, iy);
       }
+      else if ( point.style == Style.bar)
+      {
+        // TODO Implement bar graph
+      }
       else
       {
-//        Shape shape = PointShapes.getShape( point.style);
-//        AffineTransform locate = new AffineTransform();
-//        locate.setToTranslation( x, y);
-//        shape = locate.createTransformedShape( shape);
-//        g2d.draw( shape);
-        
-        PointShapes.drawShape( g2d, point.style, x, y);
+        PointShapes.drawShape( g2d, Style.circle, x, y);
       }
       
 //      if ( point.color != null) g2d.setColor( point.color);
@@ -323,5 +333,4 @@ public class Graph2D extends JPanel implements IPointsFeature
   private double minX, minY;
   private double maxX, maxY;
   private Map<String, Axis> axes;
-  private BasicStroke stroke;
 }

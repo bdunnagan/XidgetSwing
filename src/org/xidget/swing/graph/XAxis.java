@@ -105,15 +105,16 @@ public class XAxis extends Axis
     Scale scale = getScale();
     
     // redraw old cursor region
-    int ox = (int)Math.round( scale.plot( cursor));
-    repaint( ox-1, 0, 3, getHeight());
+    int x0 = (int)Math.round( scale.plot( cursor));
+    repaint( x0-1, 0, 3, getHeight());
 
     // set cursor
     cursor = scale.value( x, getWidth());
     //graph.setAxisCursor( axis, cursor);
     
     // redraw new cursor region
-    repaint( x-1, 0, 3, getHeight());
+    int x1 = (int)Math.round( scale.plot( cursor));
+    repaint( x1-1, 0, 3, getHeight());
   }
 
   /* (non-Javadoc)

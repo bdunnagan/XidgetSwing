@@ -92,7 +92,7 @@ public abstract class Axis extends JPanel implements IAxisFeature
    */
   public Scale getScale()
   {
-    if ( scale == null) 
+    if ( scale == null && min != max) 
     {
       scale = new Scale( min, max, getWidth() / 4, log, format);
       textDepth = -1;
