@@ -69,7 +69,6 @@ public class JSliderWidgetCreationFeature extends SwingWidgetCreationFeature imp
       jLabel.setHorizontalAlignment( vertical? SwingConstants.CENTER: SwingConstants.RIGHT);
       
       GridBagLayout layout = new GridBagLayout();
-      
       GridBagConstraints constraints = new GridBagConstraints();
       if ( vertical)
       {
@@ -91,6 +90,7 @@ public class JSliderWidgetCreationFeature extends SwingWidgetCreationFeature imp
       {
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.weighty = 1;
+        constraints.gridy = 1;
       }
       else
       {
