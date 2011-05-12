@@ -202,7 +202,7 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
       
       try
       {
-        IModelObject node = feature.getSource( ISourceFeature.allChannel);
+        IModelObject node = feature.getSource();
         if ( node != null)
         {
           IModelObject element = null;

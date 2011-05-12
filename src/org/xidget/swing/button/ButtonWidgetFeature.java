@@ -21,17 +21,19 @@ package org.xidget.swing.button;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
+
 import org.xidget.IXidget;
+import org.xidget.feature.AbstractValueFeature;
 import org.xidget.ifeature.button.IButtonWidgetFeature;
 
 /**
  * An implementation of IButtonWidgetFeature for Swing AbstractButton widgets.
  */
-public class ButtonWidgetFeature implements IButtonWidgetFeature
+public class ButtonWidgetFeature extends AbstractValueFeature implements IButtonWidgetFeature
 {
   public ButtonWidgetFeature( IXidget xidget)
   {
-    this.xidget = xidget;
+    super( xidget);
   }
   
   /* (non-Javadoc)
@@ -40,12 +42,37 @@ public class ButtonWidgetFeature implements IButtonWidgetFeature
   public void setState( boolean state)
   {
     AbstractButton button = xidget.getFeature( AbstractButton.class);
-    if ( button != null)
-    {
-      ButtonModel model = button.getModel();
-      model.setSelected( state);
-    }
+    ButtonModel model = button.getModel();
+    model.setSelected( state);
   }
   
-  private IXidget xidget;
+  /* (non-Javadoc)
+   * @see org.xidget.feature.AbstractValueFeature#setValue(java.lang.Object)
+   */
+  @Override
+  protected void setValue( Object value)
+  {
+    if ( value instanceof Boolean)
+    {
+      setState( (Boolean)value);
+    }
+    else if ( value instanceof Number)
+    {
+      setState( ((Number)value).doubleValue() != 0d);
+    }
+    else
+    {
+      String text = (value != null)? value.toString(): "";
+      setState( text.equals( "true"));
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IValueFeature#getValue()
+   */
+  @Override
+  public Object getValue()
+  {
+    return null;
+  }
 }

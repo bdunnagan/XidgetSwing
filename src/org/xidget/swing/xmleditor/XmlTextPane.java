@@ -15,6 +15,9 @@
  */
 package org.xidget.swing.xmleditor;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
@@ -22,8 +25,6 @@ import java.util.Arrays;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-
-import sun.swing.SwingUtilities2;
 
 /**
  * JTextPane implementation that can handle xml text. The IndentKeyListener
@@ -579,6 +580,16 @@ public class XmlTextPane extends JTextPane
     }
   }
 
+  /* (non-Javadoc)
+   * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+   */
+  @Override
+  protected void paintComponent( Graphics g)
+  {
+    Graphics2D g2d = (Graphics2D)g;
+    g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);    
+    super.paintComponent(g);
+  }
   private int tabIndent;
   private String foundTag;
 }

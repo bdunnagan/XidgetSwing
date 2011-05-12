@@ -20,14 +20,18 @@
 package org.xidget.swing.label;
 
 import java.awt.Component;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
+import org.xidget.feature.SourceFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
@@ -47,7 +51,7 @@ public class JLabelXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    sourceFeature = new JLabelSourceFeature( this);
+    sourceFeature = new SourceFeature( this);
     textFeature = new JLabelTextWidgetFeature( this);
     creationFeature = new JLabelWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -63,6 +67,7 @@ public class JLabelXidget extends Xidget
     if ( clss == IIconFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)sourceFeature;
+    if ( clss == IValueFeature.class) return (T)widgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;

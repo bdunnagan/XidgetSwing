@@ -48,7 +48,6 @@ public class JTextXidget extends Xidget
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     sourceFeature = new SourceFeature( this);
-    valueFeature = new JTextValueFeature( this);
     textWidgetFeature = new JTextComponentTextWidgetFeature( this);
     creationFeature = new JTextComponentWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -63,7 +62,7 @@ public class JTextXidget extends Xidget
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)sourceFeature;
-    if ( clss == IValueFeature.class) return (T)valueFeature;
+    if ( clss == IValueFeature.class) return (T)textWidgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
@@ -82,7 +81,6 @@ public class JTextXidget extends Xidget
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private ISourceFeature sourceFeature;
-  private IValueFeature valueFeature;
   private ITextWidgetFeature textWidgetFeature;
   private JTextComponentWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;

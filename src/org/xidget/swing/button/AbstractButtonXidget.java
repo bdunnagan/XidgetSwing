@@ -20,20 +20,22 @@
 package org.xidget.swing.button;
 
 import java.awt.Component;
+
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.button.ButtonModelFeature;
+import org.xidget.feature.SourceFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.button.IButtonModelFeature;
 import org.xidget.ifeature.button.IButtonWidgetFeature;
 import org.xidget.swing.feature.AbstractButtonIconFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
@@ -52,8 +54,8 @@ public class AbstractButtonXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    sourceFeature = new SourceFeature( this);
     buttonWidgetFeature = new ButtonWidgetFeature( this);
-    buttonModelFeature = new ButtonModelFeature();
     iconFeature = new AbstractButtonIconFeature( this);
     labelFeature = new ButtonLabelFeature( this);
     creationFeature = new AbstractButtonWidgetCreationFeature( this);
@@ -70,9 +72,9 @@ public class AbstractButtonXidget extends Xidget
     if ( clss == IIconFeature.class) return (T)iconFeature;
     if ( clss == ILabelFeature.class) return (T)labelFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)buttonModelFeature;
+    if ( clss == ISourceFeature.class) return (T)sourceFeature;
+    if ( clss == IValueFeature.class) return (T)widgetFeature;
     if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
-    if ( clss == IButtonModelFeature.class) return (T)buttonModelFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -90,7 +92,7 @@ public class AbstractButtonXidget extends Xidget
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private IButtonWidgetFeature buttonWidgetFeature;
-  private IButtonModelFeature buttonModelFeature;
+  private ISourceFeature sourceFeature;
   private IIconFeature iconFeature;
   private ILabelFeature labelFeature;
   private AbstractButtonWidgetCreationFeature creationFeature;  

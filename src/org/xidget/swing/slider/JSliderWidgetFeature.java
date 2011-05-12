@@ -84,7 +84,7 @@ public class JSliderWidgetFeature implements ISliderWidgetFeature
   {
     return y0;
   }
-
+  
   private final static int maximum = 1000000;
   
   private IXidget xidget;

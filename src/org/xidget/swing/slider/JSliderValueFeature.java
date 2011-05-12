@@ -4,11 +4,9 @@
  */
 package org.xidget.swing.slider;
 
-import javax.swing.JSlider;
-import javax.swing.JSpinner;
-
 import org.xidget.IXidget;
 import org.xidget.feature.AbstractValueFeature;
+import org.xidget.ifeature.slider.ISliderWidgetFeature;
 
 /**
  * An implementation of IValueFeature for a Swing text component.
@@ -26,14 +24,14 @@ public class JSliderValueFeature extends AbstractValueFeature
   @Override
   protected void setValue( Object value)
   {
-    JSlider widget = xidget.getFeature( JSlider.class);
+    ISliderWidgetFeature feature = xidget.getFeature( ISliderWidgetFeature.class);
     if ( value instanceof Number)
     {
-      widget.setValue( ((Number)value).intValue());
+      feature.setValue( ((Number)value).doubleValue());
     }
     else
     {
-      widget.setValue( (int)Double.parseDouble( value.toString()));
+      feature.setValue( (int)Double.parseDouble( value.toString()));
     }
   }
 
@@ -43,7 +41,7 @@ public class JSliderValueFeature extends AbstractValueFeature
   @Override
   public Object getValue()
   {
-    JSpinner widget = xidget.getFeature( JSpinner.class);
-    return widget.getValue();
+    ISliderWidgetFeature feature = xidget.getFeature( ISliderWidgetFeature.class);
+    return feature.getValue();
   }
 }

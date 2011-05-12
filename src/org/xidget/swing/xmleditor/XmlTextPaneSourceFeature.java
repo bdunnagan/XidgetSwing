@@ -11,9 +11,8 @@ import org.xmodel.IModelObject;
 import org.xmodel.external.IExternalReference;
 import org.xmodel.external.NonSyncingIterator;
 import org.xmodel.external.NonSyncingListener;
-import org.xmodel.xml.IXmlIO.Style;
 import org.xmodel.xml.XmlIO;
-import org.xmodel.xpath.expression.StatefulContext;
+import org.xmodel.xml.IXmlIO.Style;
 
 /**
  * An implementation of ISourceFeature for a net.boplicity.xmleditor.XmlTextPane.
@@ -30,30 +29,25 @@ public class XmlTextPaneSourceFeature implements ISourceFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISourceFeature#getSource(java.lang.String)
+   * @see org.xidget.ifeature.ISourceFeature#getSource()
    */
-  public IModelObject getSource( String channel)
+  public IModelObject getSource()
   {
-    if ( channel == allChannel) return node;
-    return null;
+    return node;
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISourceFeature#setSource(java.lang.String, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.ISourceFeature#setSource(org.xmodel.IModelObject)
    */
-  public void setSource( StatefulContext context, String channel, IModelObject node)
+  public void setSource( IModelObject node)
   {
     if ( node != null && !validate( node)) return;
     
-    if ( channel == allChannel) 
-    {
-      if ( this.node != null) listener.uninstall( this.node);
-      this.node = node;
-      if ( this.node != null) listener.install( this.node);
-      
-      // update content of editor
-      update();
-    }
+    if ( this.node != null) listener.uninstall( this.node);
+    this.node = node;
+    if ( this.node != null) listener.install( this.node);
+    
+    update();
   }
   
   /**

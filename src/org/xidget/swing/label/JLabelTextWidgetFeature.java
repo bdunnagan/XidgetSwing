@@ -22,16 +22,17 @@ package org.xidget.swing.label;
 import javax.swing.JLabel;
 
 import org.xidget.IXidget;
+import org.xidget.feature.AbstractValueFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 
 /**
  * An implementation of IWidgetTextAdapter for a JLabel widget.
  */
-public class JLabelTextWidgetFeature implements ITextWidgetFeature
+public class JLabelTextWidgetFeature extends AbstractValueFeature implements ITextWidgetFeature
 {
   public JLabelTextWidgetFeature( IXidget xidget)
   {
-    this.xidget = xidget;
+    super( xidget);
   }
   
   /* (non-Javadoc)
@@ -50,5 +51,22 @@ public class JLabelTextWidgetFeature implements ITextWidgetFeature
     if ( !widget.getText().equals( text)) widget.setText( text);
   }
 
-  private IXidget xidget;
+  /* (non-Javadoc)
+   * @see org.xidget.feature.AbstractValueFeature#setValue(java.lang.Object)
+   */
+  @Override
+  protected void setValue( Object value)
+  {
+    setText( (value != null)? value.toString(): "");
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IValueFeature#getValue()
+   */
+  @Override
+  public Object getValue()
+  {
+    JLabel widget = xidget.getFeature( JLabel.class);
+    return widget.getText();
+  }
 }

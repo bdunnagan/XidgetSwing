@@ -22,6 +22,7 @@ package org.xidget.swing.text;
 import javax.swing.text.JTextComponent;
 
 import org.xidget.IXidget;
+import org.xidget.feature.AbstractValueFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 
 /**
@@ -29,11 +30,11 @@ import org.xidget.ifeature.text.ITextWidgetFeature;
  * supports both the <i>all</i> and the <i>selected</i> channels. It does not support
  * a transform for the <i>selected</i> channel.
  */
-public class JTextComponentTextWidgetFeature implements ITextWidgetFeature
+public class JTextComponentTextWidgetFeature extends AbstractValueFeature implements ITextWidgetFeature
 {
   public JTextComponentTextWidgetFeature( IXidget xidget)
   {
-    this.xidget = xidget;
+    super( xidget);
   }
   
   /* (non-Javadoc)
@@ -54,5 +55,22 @@ public class JTextComponentTextWidgetFeature implements ITextWidgetFeature
     if ( !widget.getText().equals( text)) widget.setText( text);
   }
 
-  private IXidget xidget;
+  /* (non-Javadoc)
+   * @see org.xidget.feature.AbstractValueFeature#setValue(java.lang.Object)
+   */
+  @Override
+  protected void setValue( Object value)
+  {
+    setText( (value != null)? value.toString(): "");
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IValueFeature#getValue()
+   */
+  @Override
+  public Object getValue()
+  {
+    JTextComponent jText = xidget.getFeature( JTextComponent.class);
+    return jText.getText();
+  }
 }

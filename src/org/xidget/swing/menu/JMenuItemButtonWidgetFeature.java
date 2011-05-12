@@ -19,16 +19,20 @@
  */
 package org.xidget.swing.menu;
 
+import javax.swing.JMenuItem;
+
 import org.xidget.IXidget;
+import org.xidget.feature.AbstractValueFeature;
 import org.xidget.ifeature.button.IButtonWidgetFeature;
 
 /**
  * An implementation of IButtonWidgetFeature for the Swing JMenuItem widget.
  */
-public class JMenuItemButtonWidgetFeature implements IButtonWidgetFeature
+public class JMenuItemButtonWidgetFeature extends AbstractValueFeature implements IButtonWidgetFeature
 {
   public JMenuItemButtonWidgetFeature( IXidget xidget)
   {
+    super( xidget);
   }
   
   /* (non-Javadoc)
@@ -36,5 +40,23 @@ public class JMenuItemButtonWidgetFeature implements IButtonWidgetFeature
    */
   public void setState( boolean state)
   {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.feature.AbstractValueFeature#setValue(java.lang.Object)
+   */
+  @Override
+  protected void setValue( Object value)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IValueFeature#getValue()
+   */
+  @Override
+  public Object getValue()
+  {
+    JMenuItem menuItem = xidget.getFeature( JMenuItem.class);
+    return menuItem.getSelectedObjects() != null;
   }
 }
