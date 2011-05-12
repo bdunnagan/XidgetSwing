@@ -34,10 +34,8 @@ import javax.swing.event.ChangeListener;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.ISourceFeature;
-import org.xidget.ifeature.slider.ISliderWidgetFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
-import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
 /**
@@ -177,11 +175,8 @@ public class JSliderWidgetCreationFeature extends SwingWidgetCreationFeature imp
   private ChangeListener changeListener = new ChangeListener() {
     public void stateChanged( ChangeEvent e)
     {
-      //if ( jSlider.getValueIsAdjusting()) return;
-      ISliderWidgetFeature sliderFeature = xidget.getFeature( ISliderWidgetFeature.class);
-      ISourceFeature sourceFeature = xidget.getFeature( ISourceFeature.class);
-      IModelObject source = sourceFeature.getSource( ISourceFeature.allChannel);
-      if ( source != null) source.setValue( sliderFeature.getValue());
+      IValueFeature feature = xidget.getFeature( IValueFeature.class);
+      feature.commit();
     }
   };
   

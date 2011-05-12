@@ -12,15 +12,15 @@ import javax.swing.JSpinner;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.text.TextModelFeature;
+import org.xidget.feature.SourceFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.combo.IChoiceListFeature;
 import org.xidget.ifeature.slider.ISliderWidgetFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
@@ -34,7 +34,8 @@ public class JSpinnerXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    textModelFeature = new TextModelFeature( this);
+    sourceFeature = new SourceFeature( this);
+    valueFeature = new JSpinnerValueFeature( this);
     textWidgetFeature = new JSpinnerTextWidgetFeature( this);
     sliderFeature = new JSpinnerWidgetFeature( this);
     choiceListFeature = new JSpinnerChoiceListFeature( this);
@@ -51,8 +52,8 @@ public class JSpinnerXidget extends Xidget
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)textModelFeature;
-    if ( clss == ITextModelFeature.class) return (T)textModelFeature;
+    if ( clss == ISourceFeature.class) return (T)sourceFeature;
+    if ( clss == IValueFeature.class) return (T)valueFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == ISliderWidgetFeature.class) return (T)sliderFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
@@ -71,7 +72,8 @@ public class JSpinnerXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private ITextModelFeature textModelFeature;
+  private ISourceFeature sourceFeature;
+  private IValueFeature valueFeature;
   private ITextWidgetFeature textWidgetFeature;
   private ISliderWidgetFeature sliderFeature;
   private JSpinnerChoiceListFeature choiceListFeature;

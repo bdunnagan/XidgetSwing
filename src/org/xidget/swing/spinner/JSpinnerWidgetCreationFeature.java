@@ -35,11 +35,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.xidget.IXidget;
-import org.xidget.feature.text.TextModelFeature;
-import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ILabelFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.combo.IChoiceListFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -179,12 +177,8 @@ public class JSpinnerWidgetCreationFeature extends SwingWidgetCreationFeature im
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      ITextModelFeature textModelFeature = xidget.getFeature( ITextModelFeature.class);
-      if ( textModelFeature != null) 
-      {
-        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        textModelFeature.setText( jSpinner.getValue().toString());
-      }
+      IValueFeature feature = xidget.getFeature( IValueFeature.class);
+      feature.commit();
     }
   };
   

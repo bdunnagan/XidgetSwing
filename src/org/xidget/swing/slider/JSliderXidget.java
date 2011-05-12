@@ -27,9 +27,11 @@ import javax.swing.JSlider;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
+import org.xidget.feature.SourceFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.slider.ISliderWidgetFeature;
@@ -49,7 +51,8 @@ public class JSliderXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    sourceFeature = new JSliderSourceFeature( this);
+    sourceFeature = new SourceFeature( this);
+    valueFeature = new JSliderValueFeature( this);
     sliderFeature = new JSliderWidgetFeature( this);
     creationFeature = new JSliderWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -64,6 +67,7 @@ public class JSliderXidget extends Xidget
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)sourceFeature;
+    if ( clss == IValueFeature.class) return (T)valueFeature;
     if ( clss == ISliderWidgetFeature.class) return (T)sliderFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == ILabelFeature.class) return (T)creationFeature;
@@ -82,6 +86,7 @@ public class JSliderXidget extends Xidget
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private ISourceFeature sourceFeature;
+  private IValueFeature valueFeature;
   private ISliderWidgetFeature sliderFeature;
   private JSliderWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;

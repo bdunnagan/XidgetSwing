@@ -219,7 +219,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     public void run()
     {
       IValueFeature feature = xidget.getFeature( IValueFeature.class);
-      feature.commit( jText.getText());
+      feature.commit();
     }
   };
   
