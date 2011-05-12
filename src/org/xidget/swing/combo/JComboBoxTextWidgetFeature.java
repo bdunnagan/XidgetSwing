@@ -50,8 +50,7 @@ public class JComboBoxTextWidgetFeature extends AbstractValueFeature implements 
    */
   public void setText( String text)
   {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
-    widget.setSelectedItem( text);
+    setValue( text);
   }
 
   /* (non-Javadoc)
@@ -60,7 +59,8 @@ public class JComboBoxTextWidgetFeature extends AbstractValueFeature implements 
   @Override
   protected void setValue( Object value)
   {
-    setText( (value != null)? value.toString(): "");
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    widget.setSelectedItem( value);
   }
 
   /* (non-Javadoc)
