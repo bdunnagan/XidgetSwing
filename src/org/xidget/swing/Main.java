@@ -59,7 +59,7 @@ public class Main
 
   public static void run( String[] args) throws Exception
   {    
-    final File path = new File( (args.length > 0)? args[ 0]: "main.xml");
+    final String path = (args.length > 0)? args[ 0]: "main.xml";
     
     UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName());
     
@@ -67,6 +67,7 @@ public class Main
     Thread.setDefaultUncaughtExceptionHandler( new UncaughtExceptionHandler() {
       public void uncaughtException( Thread t, Throwable e)
       {
+        e.printStackTrace( System.err);
         JOptionPane.showMessageDialog( null, String.format( "Thread: %s\n%s",
           t.getName(), e.getMessage()));
       }
@@ -95,7 +96,7 @@ public class Main
           resources.setDirty( true);
           
           // run configuration
-          IExpression xpath = XPath.createExpression( path.getPath());
+          IExpression xpath = XPath.createExpression( path);
           IModelObject main = xpath.queryFirst( new Context( resources));
           if ( main == null) throw new IllegalArgumentException( "Unable to locate startup script: "+path);
           

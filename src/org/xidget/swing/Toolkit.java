@@ -61,11 +61,12 @@ import org.xidget.swing.text.JTextXidget;
 import org.xidget.swing.tree.JTreeXidget;
 import org.xidget.swing.xmleditor.XmlTextPaneXidget;
 import org.xmodel.IDispatcher;
+import org.xmodel.IModelObject;
 import org.xmodel.ModelRegistry;
-import org.xmodel.Xlate;
 import org.xmodel.external.caching.IFileAssociation;
 import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.StatefulContext;
+import org.xmodel.xpath.expression.IExpression.ResultType;
 
 /**
  * An implementation of IToolkit for the Swing platform.
@@ -182,12 +183,12 @@ public class Toolkit implements IToolkit
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.IToolkit#openFileDialog(org.xidget.IXidget, org.xmodel.xpath.expression.StatefulContext, org.xmodel.xpath.expression.IExpression, java.lang.String, org.xidget.IToolkit.FileDialogType)
+   * @see org.xidget.IToolkit#openFileDialog(org.xidget.IXidget, org.xmodel.xpath.expression.StatefulContext, 
+   * org.xmodel.xpath.expression.IExpression, java.lang.String, org.xidget.IToolkit.FileDialogType)
    */
-  public String[] openFileDialog( IXidget xidget, StatefulContext context, IExpression filter, String description, FileDialogType type)
+  public String[] openFileDialog( IXidget xidget, StatefulContext context, IExpression dir, IExpression filter, String desc, FileDialogType type)
   {
-    File dir = new File( Xlate.get( context.getObject(), "/"));
-    JFileChooser fileChooser = new JFileChooser( dir);
+    JFileChooser fileChooser = new JFileChooser( dir.evaluateString( context));
     fileChooser.setMultiSelectionEnabled( type == FileDialogType.openMany);
     
     // allow selecting directories unless the dialog is intended for picking a non-existing file 
@@ -196,7 +197,7 @@ public class Toolkit implements IToolkit
     
     if ( filter != null)
     {
-      FileFilter fileFilter = new ExpressionFileFilter( context, filter, description);
+      FileFilter fileFilter = new ExpressionFileFilter( context, filter, desc);
       fileChooser.setFileFilter( fileFilter);
     }
     
@@ -212,6 +213,12 @@ public class Toolkit implements IToolkit
     
     if ( status == JFileChooser.APPROVE_OPTION)
     {
+      if ( dir.getType( context) == ResultType.NODES)
+      {
+        IModelObject dirNode = dir.queryFirst( context);
+        if ( dirNode != null) dirNode.setValue( fileChooser.getCurrentDirectory());
+      }
+      
       if ( type == FileDialogType.openMany)
       {
         File[] files = fileChooser.getSelectedFiles();
