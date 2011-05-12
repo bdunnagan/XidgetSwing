@@ -20,19 +20,21 @@
 package org.xidget.swing.combo;
 
 import java.awt.Component;
+
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.text.TextModelFeature;
+import org.xidget.feature.SourceFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.combo.IChoiceListFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
@@ -46,7 +48,7 @@ public class JComboBoxXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    textModelFeature = new TextModelFeature( this);
+    sourceFeature = new SourceFeature( this);
     textWidgetFeature = new JComboBoxTextWidgetFeature( this);
     choiceListFeature = new JComboBoxChoiceListFeature( this);
     creationFeature = new JComboBoxWidgetCreationFeature( this);
@@ -62,8 +64,8 @@ public class JComboBoxXidget extends Xidget
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)textModelFeature;
-    if ( clss == ITextModelFeature.class) return (T)textModelFeature;
+    if ( clss == ISourceFeature.class) return (T)sourceFeature;
+    if ( clss == IValueFeature.class) return (T)textWidgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IChoiceListFeature.class) return (T)choiceListFeature;
@@ -81,8 +83,8 @@ public class JComboBoxXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private ITextModelFeature textModelFeature;
-  private ITextWidgetFeature textWidgetFeature;
+  private ISourceFeature sourceFeature;
+  private JComboBoxTextWidgetFeature textWidgetFeature;
   private JComboBoxChoiceListFeature choiceListFeature;
   private JComboBoxWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;

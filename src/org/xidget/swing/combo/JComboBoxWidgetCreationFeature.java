@@ -178,7 +178,7 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     public void run()
     {
       IValueFeature feature = xidget.getFeature( IValueFeature.class);
-      feature.commit( jCombo.getSelectedItem());
+      feature.commit();
     }
   };
   

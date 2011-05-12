@@ -196,7 +196,7 @@ public class CalendarPanel extends JPanel
     public void run()
     {
       IValueFeature feature = xidget.getFeature( IValueFeature.class);
-      feature.commit( time);
+      feature.commit();
     }
   };
   

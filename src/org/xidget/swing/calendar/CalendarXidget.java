@@ -20,17 +20,18 @@
 package org.xidget.swing.calendar;
 
 import java.awt.Component;
+
 import javax.swing.JComponent;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.text.TextModelFeature;
+import org.xidget.feature.SourceFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
-import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
@@ -43,8 +44,8 @@ public class CalendarXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    textModelFeature = new TextModelFeature( this);
-    textWidgetFeature = new CalendarTextWidgetFeature( this);
+    sourceFeature = new SourceFeature( this);
+    valueFeature = new CalendarValueFeature( this);
     creationFeature = new CalendarWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -57,9 +58,8 @@ public class CalendarXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)textModelFeature;
-    if ( clss == ITextModelFeature.class) return (T)textModelFeature;
-    if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
+    if ( clss == ISourceFeature.class) return (T)sourceFeature;
+    if ( clss == IValueFeature.class) return (T)valueFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -75,8 +75,8 @@ public class CalendarXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private TextModelFeature textModelFeature;
-  private CalendarTextWidgetFeature textWidgetFeature;
+  private ISourceFeature sourceFeature;
+  private CalendarValueFeature valueFeature;
   private CalendarWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }
