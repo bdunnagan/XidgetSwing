@@ -21,10 +21,12 @@ package org.xidget.swing.combo;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JComboBox;
+
 import org.xidget.IXidget;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.combo.IChoiceListFeature;
-import org.xidget.ifeature.text.ITextWidgetFeature;
 
 /**
  * An implementation of IChoiceListFeature which is backed by a JComboBox.
@@ -102,9 +104,8 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   private void updateChoice( JComboBox widget, String choice)
   {
-    ITextWidgetFeature feature = xidget.getFeature( ITextWidgetFeature.class);
-    String text = ((JComboBoxTextWidgetFeature)feature).getText();
-    if ( text != null && text.equals( choice)) widget.setSelectedItem( text);
+    IValueFeature feature = xidget.getFeature( IValueFeature.class);
+    widget.setSelectedItem( feature.getValue());
   }
 
   private IXidget xidget;
