@@ -21,6 +21,7 @@ package org.xidget.swing.table;
 
 import java.awt.Component;
 import java.util.List;
+
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -30,22 +31,21 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.JTextComponent;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.ifeature.slider.ISliderWidgetFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
-import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An custom TableCellEditor that chooses the type of editor depending on the content of the cell
  * being edited.
  */
+@SuppressWarnings("serial")
 public class CustomCellEditor extends AbstractCellEditor implements TableCellEditor
 {
   /**
@@ -124,36 +124,9 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    */
   public Object getCellEditorValue()
   {
-    //
-    // The editor widget does not get notified, so we have to update the model here.
-    // Unfortunately, this requires us to know what kind of editor widget we are using.
-    //
-    IWidgetCreationFeature creationFeature = editor.getFeature( IWidgetCreationFeature.class);
-    Object[] widgets = creationFeature.getLastWidgets();
-    JComponent component = (JComponent)widgets[ 0];
-    if ( component instanceof JComboBox)
-    {
-      Object selected = ((JComboBox)component).getSelectedItem();
-      if ( selected != null) 
-      {
-        ITextModelFeature textFeature = editor.getFeature( ITextModelFeature.class);
-        textFeature.setText( editorContext, ISourceFeature.allChannel, selected.toString());
-      }
-    }
-    else if ( component instanceof JTextComponent)
-    {
-      String text = ((JTextComponent)component).getText();
-      ITextModelFeature textFeature = editor.getFeature( ITextModelFeature.class);
-      textFeature.setText( editorContext, ISourceFeature.allChannel, text);
-    }
-    else if ( component instanceof JSlider)
-    {
-      ISliderWidgetFeature sliderFeature = editor.getFeature( ISliderWidgetFeature.class);
-      double value = sliderFeature.getValue();
-      sliderFeature.setValue( value);
-    }
-    
-    return Xlate.get( editorContext.getObject(), "");
+    IValueFeature feature = editor.getFeature( IValueFeature.class);
+    feature.commit();
+    return feature.getValue();
   }
   
   /**

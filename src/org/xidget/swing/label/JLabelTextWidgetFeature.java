@@ -20,12 +20,9 @@
 package org.xidget.swing.label;
 
 import javax.swing.JLabel;
+
 import org.xidget.IXidget;
-import org.xidget.config.util.TextTransform;
-import org.xidget.feature.text.TextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
-import org.xmodel.xpath.expression.IExpression;
-import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IWidgetTextAdapter for a JLabel widget.
@@ -47,24 +44,11 @@ public class JLabelTextWidgetFeature implements ITextWidgetFeature
   /* (non-Javadoc)
    * @see org.xidget.text.adapter.IWidgetTextAdapter#setText(java.lang.String, java.lang.String)
    */
-  public void setText( StatefulContext context, String channel, String text)
+  public void setText( String text)
   {
     JLabel widget = xidget.getFeature( JLabel.class);
-    if ( channel.equals( TextModelFeature.allChannel))
-    {
-      if ( transform != null) text = transform.transform( context, text);
-      if ( !widget.getText().equals( text)) widget.setText( text);
-    }
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.text.adapter.IWidgetTextAdapter#setTransform(java.lang.String, org.xmodel.xpath.expression.IExpression)
-   */
-  public void setTransform( String channel, IExpression expression)
-  {
-    this.transform = new TextTransform( expression);
+    if ( !widget.getText().equals( text)) widget.setText( text);
   }
 
   private IXidget xidget;
-  private TextTransform transform;
 }

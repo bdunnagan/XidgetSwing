@@ -20,18 +20,20 @@
 package org.xidget.swing.text;
 
 import java.awt.Component;
+
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.text.TextModelFeature;
+import org.xidget.feature.SourceFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
@@ -45,7 +47,8 @@ public class JTextXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    textModelFeature = new TextModelFeature( this);
+    sourceFeature = new SourceFeature( this);
+    valueFeature = new JTextValueFeature( this);
     textWidgetFeature = new JTextComponentTextWidgetFeature( this);
     creationFeature = new JTextComponentWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -59,8 +62,8 @@ public class JTextXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)textModelFeature;
-    if ( clss == ITextModelFeature.class) return (T)textModelFeature;
+    if ( clss == ISourceFeature.class) return (T)sourceFeature;
+    if ( clss == IValueFeature.class) return (T)valueFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
@@ -78,7 +81,8 @@ public class JTextXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private ITextModelFeature textModelFeature;
+  private ISourceFeature sourceFeature;
+  private IValueFeature valueFeature;
   private ITextWidgetFeature textWidgetFeature;
   private JTextComponentWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;

@@ -38,15 +38,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
 
 import org.xidget.IXidget;
-import org.xidget.feature.text.TextModelFeature;
-import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.layout.Size;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
@@ -138,9 +134,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     
     if ( component == null) component = jText;
     
-    // add listeners to the widget
     jText.addFocusListener( focusListener);
-    jText.addCaretListener( caretListener);
     
     return component;
   }
@@ -211,18 +205,6 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     if ( jLabel != null) jLabel.setText( text);
   }
       
-  private final CaretListener caretListener = new CaretListener() {
-    public void caretUpdate( CaretEvent e)
-    {
-      ITextModelFeature textModelFeature = xidget.getFeature( ITextModelFeature.class);
-      if ( textModelFeature != null) 
-      {
-        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.selectedChannel, jText.getSelectedText());
-      }
-    }
-  };
-  
   private final FocusListener focusListener = new FocusListener() {
     public void focusGained( FocusEvent event) 
     {
@@ -236,12 +218,8 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      ITextModelFeature textModelFeature = xidget.getFeature( ITextModelFeature.class);
-      if ( textModelFeature != null) 
-      {
-        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, jText.getText());
-      }
+      IValueFeature feature = xidget.getFeature( IValueFeature.class);
+      feature.commit( jText.getText());
     }
   };
   

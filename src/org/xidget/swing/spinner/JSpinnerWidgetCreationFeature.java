@@ -183,7 +183,7 @@ public class JSpinnerWidgetCreationFeature extends SwingWidgetCreationFeature im
       if ( textModelFeature != null) 
       {
         IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, jSpinner.getValue().toString());
+        textModelFeature.setText( jSpinner.getValue().toString());
       }
     }
   };

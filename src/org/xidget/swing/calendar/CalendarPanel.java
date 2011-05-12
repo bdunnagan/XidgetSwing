@@ -12,12 +12,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.util.Calendar;
+
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
 import org.xidget.IXidget;
-import org.xidget.feature.text.TextModelFeature;
-import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.text.ITextModelFeature;
+import org.xidget.ifeature.IValueFeature;
 
 /**
  * A canvas which displays a calendar month.
@@ -195,12 +195,8 @@ public class CalendarPanel extends JPanel
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      ITextModelFeature textModelFeature = xidget.getFeature( ITextModelFeature.class);
-      if ( textModelFeature != null) 
-      {
-        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        textModelFeature.setText( bindFeature.getBoundContext(), TextModelFeature.allChannel, Long.toString( time));
-      }
+      IValueFeature feature = xidget.getFeature( IValueFeature.class);
+      feature.commit( time);
     }
   };
   
