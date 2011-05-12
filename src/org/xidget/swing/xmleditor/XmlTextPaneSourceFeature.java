@@ -10,8 +10,9 @@ import org.xidget.ifeature.ISourceFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.external.IExternalReference;
 import org.xmodel.external.NonSyncingIterator;
-import org.xmodel.xml.XmlIO;
+import org.xmodel.external.NonSyncingListener;
 import org.xmodel.xml.IXmlIO.Style;
+import org.xmodel.xml.XmlIO;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -46,24 +47,22 @@ public class XmlTextPaneSourceFeature implements ISourceFeature
     
     if ( channel == allChannel) 
     {
+      if ( this.node != null) listener.uninstall( this.node);
       this.node = node;
+      if ( this.node != null) listener.install( this.node);
       
       // update content of editor
-      XmlTextPane xmlTextPane = xidget.getFeature( XmlTextPane.class);
-      if ( xmlTextPane != null)
-      {
-        if ( node != null)
-        {
-          String xml = xmlIO.write( node);
-          xmlTextPane.setText( xml);
-          xmlTextPane.setCaretPosition( 0);
-        }
-        else
-        {
-          xmlTextPane.setText( "");
-        }
-      }
+      update();
     }
+  }
+  
+  /**
+   * Set the updating flag.
+   * @param updating The updating flag.
+   */
+  void setUpdating( boolean updating)
+  {
+    this.updating = updating;
   }
   
   /**
@@ -83,8 +82,56 @@ public class XmlTextPaneSourceFeature implements ISourceFeature
     }
     return true;
   }
+
+  /**
+   * Update the context from the source node.
+   */
+  private void update()
+  {
+    if ( updating) return;
+    
+    XmlTextPane xmlTextPane = xidget.getFeature( XmlTextPane.class);
+    if ( xmlTextPane != null)
+    {
+      if ( node != null)
+      {
+        String xml = xmlIO.write( node);
+        xmlTextPane.setText( xml);
+        xmlTextPane.setCaretPosition( 0);
+      }
+      else
+      {
+        xmlTextPane.setText( "");
+      }
+    }
+  }
+  
+  private NonSyncingListener listener = new NonSyncingListener() {
+    public void notifyAddChild(IModelObject parent, IModelObject child, int index) 
+    {
+      super.notifyAddChild(parent, child, index);
+      update(); 
+    }
+
+    public void notifyRemoveChild(IModelObject parent, IModelObject child, int index) 
+    {
+      super.notifyRemoveChild( parent, child, index);
+      update(); 
+    }
+
+    public void notifyChange(IModelObject object, String attrName, Object newValue, Object oldValue) 
+    {
+      update(); 
+    }
+
+    public void notifyClear(IModelObject object, String attrName, Object oldValue) 
+    {
+      update(); 
+    }
+  };
   
   private IXidget xidget;
   private IModelObject node;
   private XmlIO xmlIO;
+  private boolean updating;
 }

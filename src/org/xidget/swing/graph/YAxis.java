@@ -108,7 +108,7 @@ public class YAxis extends Axis
   /**
    * Find the tick depth at which ticks are spaced far enough apart for the specified height.
    * @param textHeight The height of a label.
-   * @return Returns the maximum tick depth for labelling.
+   * @return Returns the maximum tick depth for labeling.
    */
   private int findTextDepth( int textHeight)
   {

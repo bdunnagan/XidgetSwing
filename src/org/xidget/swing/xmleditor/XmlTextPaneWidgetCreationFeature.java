@@ -197,18 +197,27 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
   private Runnable updateSourceRunnable = new Runnable() {
     public void run()
     {
-      ISourceFeature feature = XmlTextPaneWidgetCreationFeature.this.xidget.getFeature( ISourceFeature.class);
-      IModelObject node = feature.getSource( ISourceFeature.allChannel);
-      if ( node != null)
+      XmlTextPaneSourceFeature feature = (XmlTextPaneSourceFeature)xidget.getFeature( ISourceFeature.class);
+      feature.setUpdating( true);
+      
+      try
       {
-        IModelObject element = null;
-        synchronized( lock) { element = parsed;}
-        if ( element != null) 
+        IModelObject node = feature.getSource( ISourceFeature.allChannel);
+        if ( node != null)
         {
-          ChangeSet changeSet = new ChangeSet();
-          differ.diff( node, parsed, changeSet);
-          changeSet.applyChanges();
+          IModelObject element = null;
+          synchronized( lock) { element = parsed;}
+          if ( element != null) 
+          {
+            ChangeSet changeSet = new ChangeSet();
+            differ.diff( node, parsed, changeSet);
+            changeSet.applyChanges();
+          }
         }
+      }
+      finally
+      {
+        feature.setUpdating( false);
       }
     }
   };

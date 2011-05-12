@@ -272,9 +272,8 @@ public class Graph2D extends JPanel implements IPointsFeature
     {
       Point point = points.get( i);
       double x = xscale.plot( point.coords[ 0]) * width;
-      double y = yscale.plot( point.coords[ 1]) * height;
+      double y = height - yscale.plot( point.coords[ 1]) * height;
       
-      lines = true;
       g2d.setColor( Color.black);
       if ( lines && i > 0)
       {
@@ -283,7 +282,7 @@ public class Graph2D extends JPanel implements IPointsFeature
         prevY = (int)y;
       }
       
-      if ( false && point.style == Style.dot)
+      if ( point.style == Style.dot)
       {
         int ix = (int)x;
         int iy = (int)y;
@@ -295,7 +294,7 @@ public class Graph2D extends JPanel implements IPointsFeature
       }
       else
       {
-        PointShapes.drawShape( g2d, Style.circle, x, y);
+        PointShapes.drawShape( g2d, point.style, x, y);
       }
       
 //      if ( point.color != null) g2d.setColor( point.color);
