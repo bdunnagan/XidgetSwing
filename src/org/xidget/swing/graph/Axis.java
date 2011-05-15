@@ -90,15 +90,7 @@ public abstract class Axis extends JPanel implements IAxisFeature
   /**
    * @return Returns the scale used by this widget.
    */
-  public Scale getScale()
-  {
-    if ( scale == null && min != max) 
-    {
-      scale = new Scale( min, max, getWidth() / 4, log, format);
-      textDepth = -1;
-    }
-    return scale;
-  }
+  public abstract Scale getScale();
   
   /**
    * Called when the mouse is moved.

@@ -33,6 +33,20 @@ public class XAxis extends Axis
   }
   
   /* (non-Javadoc)
+   * @see org.xidget.swing.graph.Axis#getScale()
+   */
+  public Scale getScale()
+  {
+    int width = getWidth();
+    if ( scale == null && min != max && width > 4) 
+    {
+      scale = new Scale( min, max, width / 4, log, format);
+      textDepth = -1;
+    }
+    return scale;
+  }
+  
+  /* (non-Javadoc)
    * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
    */
   @Override

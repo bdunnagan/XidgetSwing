@@ -33,6 +33,20 @@ public class YAxis extends Axis
   }
   
   /* (non-Javadoc)
+   * @see org.xidget.swing.graph.Axis#getScale()
+   */
+  public Scale getScale()
+  {
+    int height = getHeight();
+    if ( scale == null && min != max && height > 4) 
+    {
+      scale = new Scale( min, max, height / 4, log, format);
+      textDepth = -1;
+    }
+    return scale;
+  }
+  
+  /* (non-Javadoc)
    * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
    */
   @Override
@@ -48,14 +62,19 @@ public class YAxis extends Axis
 
     int width = getWidth();
     int height = getHeight() - 1;
+    int textHeight = metrics.getAscent() + 2;
     
     // draw cursor
     int cursorY = (int)Math.round( scale.plot( cursor) * height);
     g2d.setColor( Color.lightGray);
     g2d.drawLine( 0, cursorY, width, cursorY);
 
-    // find tick depth at which labels do not overlap
-    if ( textDepth == -1) textDepth = findTextDepth( metrics.getAscent() + 2);
+    // find tick depth at which labels do not overlap, and max label width
+    if ( textDepth == -1) 
+    {
+      textDepth = findTextDepth( textHeight);
+      findMaxWidths( metrics);
+    }
     
     // draw ticks and labels
     g2d.setColor( Color.black);
@@ -66,7 +85,7 @@ public class YAxis extends Axis
       Tick tick = ticks.get( i);
       
       double depth = (divisions - tick.depth) / divisions;
-      int length = (int)(depth * width);
+      int length = (int)(depth * (width - maxWidths[ tick.depth] - 2));
       int y = (int)Math.round( (1.0 - tick.scale) * height);
       if ( left)
       {
@@ -79,29 +98,36 @@ public class YAxis extends Axis
      
       if ( tick.depth <= textDepth)
       {
-        if ( i == (ticks.size() - 1)) y += metrics.getAscent() + 2;
+        if ( i == 0) y -= (textHeight / 2);
+        if ( i == (ticks.size() - 1)) y += (textHeight / 2);
         
         int textWidth = metrics.stringWidth( tick.label);
-        
-        double nextDepth = (divisions - tick.depth - 1) / divisions;
-        int nextLength = (int)(nextDepth * width);
         if ( left)
         {
-          int x0 = width - nextLength - textWidth - 2;
-          int x1 = width - length;
-          if ( x1 < x0) x0 = x1;
-          if ( x0 < 0) x0 = 0;
-          g2d.drawString( tick.label, x0, y-1);
+          int x0 = width - length - textWidth - 2;
+          g2d.drawString( tick.label, x0, y + (textHeight / 2) - 1);
         }
         else
         {
-          int x0 = nextLength + 2;
-          int x1 = length - textWidth;
-          if ( x1 > x0) x0 = x1;
-          if ( (x0 + textWidth) > width) x0 = width - textWidth;
-          g2d.drawString( tick.label, x0, y-1);
+          int x0 = length + 2;
+          g2d.drawString( tick.label, x0, y + (textHeight / 2) - 1);
         }
       }
+    }
+  }
+  
+  /**
+   * Find the max width of the labels at each tick depth.
+   * @param metrics The font metrics.
+   */
+  private void findMaxWidths( FontMetrics metrics)
+  {
+    List<Tick> ticks = scale.getTicks();
+    maxWidths = new int[ ticks.get( 1).depth + 1];
+    for( Tick tick: ticks)
+    {
+      int labelWidth = metrics.stringWidth( tick.label);
+      if ( labelWidth > maxWidths[ tick.depth]) maxWidths[ tick.depth] = labelWidth;
     }
   }
   
@@ -117,7 +143,7 @@ public class YAxis extends Axis
     for( int i=counts.size()-1; i>=0; i--)
     {
       int count = counts.get( i);
-      if ( textHeight <= (height / count))
+      if ( textHeight <= (height / count / 1.5))
         return i;
     }
     return 0;
@@ -151,14 +177,15 @@ public class YAxis extends Axis
   }
 
   private boolean left;
+  private int[] maxWidths;
   
   public static void main( String[] args) throws Exception
   {
     JFrame frame = new JFrame();
     
-    YAxis axis = new YAxis( false);
+    YAxis axis = new YAxis( true);
     axis.setExtrema( 30, 40000);
-    axis.setFormat( Format.engineering);
+    axis.setFormat( Format.scientific);
     frame.getContentPane().add( axis);
     
     frame.setSize( 10, 500);
