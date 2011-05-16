@@ -188,7 +188,9 @@ public class Toolkit implements IToolkit
    */
   public String[] openFileDialog( IXidget xidget, StatefulContext context, IExpression dir, IExpression filter, String desc, FileDialogType type)
   {
-    JFileChooser fileChooser = new JFileChooser( dir.evaluateString( context));
+    String folder = (dir != null)? dir.evaluateString( context): ".";
+    
+    JFileChooser fileChooser = new JFileChooser( folder);
     fileChooser.setMultiSelectionEnabled( type == FileDialogType.openMany);
     
     // allow selecting directories unless the dialog is intended for picking a non-existing file 
@@ -213,7 +215,7 @@ public class Toolkit implements IToolkit
     
     if ( status == JFileChooser.APPROVE_OPTION)
     {
-      if ( dir.getType( context) == ResultType.NODES)
+      if ( dir != null && dir.getType( context) == ResultType.NODES)
       {
         IModelObject dirNode = dir.queryFirst( context);
         if ( dirNode != null) dirNode.setValue( fileChooser.getCurrentDirectory());
