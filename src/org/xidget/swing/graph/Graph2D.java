@@ -51,6 +51,12 @@ public class Graph2D extends JPanel implements IPointsFeature
   {
     if ( index < 0 || index > points.size()) return;
     
+    if ( points.size() == 0)
+    {
+      minX = maxX = point.coords[ 0];
+      minY = maxY = point.coords[ 1];
+    }
+    
     if ( index > 0)
     {
       Point prev = points.get( index - 1);
@@ -58,16 +64,12 @@ public class Graph2D extends JPanel implements IPointsFeature
       prev.next = point;
       point.prev = prev;
       point.next = prev.next;
-      
-      if ( minX > point.coords[ 0]) minX = point.coords[ 0];
-      if ( minY > point.coords[ 1]) minY = point.coords[ 1];
-      if ( maxX < point.coords[ 0]) maxX = point.coords[ 0];
-      if ( maxY < point.coords[ 1]) maxY = point.coords[ 1];
     }
-    else
-    {
-      findExtrema();
-    }
+    
+    if ( minX > point.coords[ 0]) minX = point.coords[ 0];
+    if ( minY > point.coords[ 1]) minY = point.coords[ 1];
+    if ( maxX < point.coords[ 0]) maxX = point.coords[ 0];
+    if ( maxY < point.coords[ 1]) maxY = point.coords[ 1];
     
     for( Axis axis: axes.values())
     {
@@ -148,10 +150,8 @@ public class Graph2D extends JPanel implements IPointsFeature
       return;
     }
     
-    minX = points.get( 0).coords[ 0];
-    minY = points.get( 0).coords[ 1];
-    maxX = minX;
-    maxY = minY;
+    minX = maxX = points.get( 0).coords[ 0];
+    minY = maxY = points.get( 0).coords[ 1];
     for( int i=1; i<points.size(); i++)
     {
       Point point = points.get( i);
