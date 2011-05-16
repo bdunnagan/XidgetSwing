@@ -6,6 +6,7 @@ package org.xidget.swing.graph;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -56,24 +57,28 @@ public class YAxis extends Axis
     
     Scale scale = getScale();
     
-    FontMetrics metrics = g.getFontMetrics();
     Graphics2D g2d = (Graphics2D)g;
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
     int width = getWidth();
     int height = getHeight() - 1;
-    int textHeight = metrics.getAscent() + 2;
     
     // draw cursor
     int cursorY = (int)Math.round( scale.plot( cursor) * height);
     g2d.setColor( Color.lightGray);
     g2d.drawLine( 0, cursorY, width, cursorY);
 
+    // get label fonts
+    Font[] fonts = getLabelFonts( g2d);
+    
     // find tick depth at which labels do not overlap, and max label width
     if ( textDepth == -1) 
     {
-      textDepth = findTextDepth( textHeight);
-      findMaxWidths( metrics);
+      // find maximum depth at which labels do not overlap
+      textDepth = findTextDepth( g2d);
+      
+      // find maximum width of text at each tick depth
+      findMaxWidths( g2d);
     }
     
     // draw ticks and labels
@@ -98,53 +103,87 @@ public class YAxis extends Axis
      
       if ( tick.depth <= textDepth)
       {
-        if ( i == 0) y -= (textHeight / 2);
-        if ( i == (ticks.size() - 1)) y += (textHeight / 2);
+        int fontDepth = (tick.depth < fonts.length)? tick.depth: (fonts.length - 1);
+        g2d.setFont( fonts[ fontDepth]);
+        FontMetrics metrics = g2d.getFontMetrics();
+        int halfHeight = metrics.getAscent() / 2;
+        
+        if ( i == 0) y -= halfHeight;
+        if ( i == (ticks.size() - 1)) y += halfHeight;
         
         int textWidth = metrics.stringWidth( tick.label);
         if ( left)
         {
           int x0 = width - length - textWidth - 2;
-          g2d.drawString( tick.label, x0, y + (textHeight / 2) - 1);
+          g2d.drawString( tick.label, x0, y + halfHeight - 1);
         }
         else
         {
           int x0 = length + 2;
-          g2d.drawString( tick.label, x0, y + (textHeight / 2) - 1);
+          g2d.drawString( tick.label, x0, y + halfHeight - 1);
         }
       }
     }
+    
+    g2d.setFont( fonts[ 0]);
+  }
+  
+  /**
+   * Create the tick label fonts.
+   * @param g The graphics context.
+   * @return Returns the label fonts for each tick depth.
+   */
+  private Font[] getLabelFonts( Graphics2D g)
+  {
+    if ( fonts == null || g.getFont() != fonts[ 0])
+    {
+      fonts = new Font[ 4];
+      fonts[ 0] = getFont();
+      for( int i=1; i<fonts.length; i++)
+      {
+        fonts[ i] = fonts[ i-1].deriveFont( fonts[ i-1].getSize() * 0.85f);
+      }
+    }
+    return fonts;
   }
   
   /**
    * Find the max width of the labels at each tick depth.
-   * @param metrics The font metrics.
+   * @param g The graphics context.
    */
-  private void findMaxWidths( FontMetrics metrics)
+  private void findMaxWidths( Graphics2D g)
   {
     List<Tick> ticks = scale.getTicks();
     maxWidths = new int[ ticks.get( 1).depth + 1];
     for( Tick tick: ticks)
     {
-      int labelWidth = metrics.stringWidth( tick.label);
-      if ( labelWidth > maxWidths[ tick.depth]) maxWidths[ tick.depth] = labelWidth;
+      if ( tick.depth <= textDepth)
+      {
+        FontMetrics metrics = g.getFontMetrics( fonts[ tick.depth]);
+        int labelWidth = metrics.stringWidth( tick.label);
+        if ( labelWidth > maxWidths[ tick.depth]) maxWidths[ tick.depth] = labelWidth;
+      }
     }
   }
   
   /**
-   * Find the tick depth at which ticks are spaced far enough apart for the specified height.
-   * @param textHeight The height of a label.
+   * Find the tick depth at which ticks are spaced far enough apart.
+   * @param g The graphics context.
    * @return Returns the maximum tick depth for labeling.
    */
-  private int findTextDepth( int textHeight)
+  private int findTextDepth( Graphics2D g)
   {
     int height = getHeight();
     List<Integer> counts = scale.getTickCounts();
     for( int i=counts.size()-1; i>=0; i--)
     {
-      int count = counts.get( i);
-      if ( textHeight <= (height / count / 1.5))
-        return i;
+      if ( i < fonts.length)
+      {
+        int count = counts.get( i);
+        int textHeight = g.getFontMetrics( fonts[ i]).getHeight();
+        if ( textHeight <= (height / count))
+          return i;
+      }
     }
     return 0;
   }
@@ -178,6 +217,7 @@ public class YAxis extends Axis
 
   private boolean left;
   private int[] maxWidths;
+  private Font[] fonts;
   
   public static void main( String[] args) throws Exception
   {
