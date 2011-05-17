@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 
 import org.xidget.graph.Point;
 import org.xidget.graph.Scale;
-import org.xidget.graph.Point.Style;
 import org.xidget.graph.Scale.Tick;
 import org.xidget.ifeature.IPointsFeature;
 
@@ -282,20 +281,7 @@ public class Graph2D extends JPanel implements IPointsFeature
         prevY = (int)y;
       }
       
-      if ( point.style == Style.dot)
-      {
-        int ix = (int)x;
-        int iy = (int)y;
-        g2d.drawLine( ix, iy, ix, iy);
-      }
-      else if ( point.style == Style.bar)
-      {
-        // TODO Implement bar graph
-      }
-      else
-      {
-        PointShapes.drawShape( g2d, point.style, x, y);
-      }
+      PointShapes.drawShape( g2d, point.shape, x, y);
       
 //      if ( point.color != null) g2d.setColor( point.color);
 //      
