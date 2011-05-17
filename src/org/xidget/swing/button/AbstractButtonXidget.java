@@ -73,7 +73,7 @@ public class AbstractButtonXidget extends Xidget
     if ( clss == ILabelFeature.class) return (T)labelFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)sourceFeature;
-    if ( clss == IValueFeature.class) return (T)widgetFeature;
+    if ( clss == IValueFeature.class) return (T)buttonWidgetFeature;
     if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;

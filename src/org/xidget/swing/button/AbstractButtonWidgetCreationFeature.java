@@ -25,6 +25,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -69,6 +70,13 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
       case radio:  button = createRadioButton(); break;
     }
     
+    // remove border
+    if ( type == Type.check || type == Type.radio)
+      button.setBorder( BorderFactory.createEmptyBorder());
+
+    // put label on left
+    button.setHorizontalTextPosition( SwingConstants.LEFT);
+    
     //
     // HACK:
     // Force the button to use center alignment so that it will work seamlessly with 
@@ -77,8 +85,8 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
     button.setHorizontalAlignment( SwingConstants.CENTER);
     
     // set button label
-    String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
-    if ( label != null) button.setText( label);
+//    String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
+//    if ( label != null) button.setText( label);
     
     // add button listener
     button.addActionListener( actionListener);
