@@ -40,33 +40,31 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
   /* (non-Javadoc)
    * @see org.xidget.text.feature.IChoiceListFeature#getChoices()
    */
-  public List<String> getChoices()
+  public List<Object> getChoices()
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
     int count = widget.getItemCount();
-    List<String> result = new ArrayList<String>( count);
+    List<Object> result = new ArrayList<Object>( count);
     for( int i=0; i<count; i++) result.add( widget.getItemAt( i).toString());
     return result;
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.text.feature.IChoiceListFeature#addChoice(java.lang.String)
+   * @see org.xidget.text.feature.IChoiceListFeature#addChoice(java.lang.Object)
    */
-  public void addChoice( String choice)
+  public void addChoice( Object choice)
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.addItem( choice);
-    //updateChoice( widget, choice);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.text.feature.IChoiceListFeature#insertChoice(int, java.lang.String)
+   * @see org.xidget.text.feature.IChoiceListFeature#insertChoice(int, java.lang.Object)
    */
-  public void insertChoice( int index, String choice)
+  public void insertChoice( int index, Object choice)
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.insertItemAt( choice, index);
-    //updateChoice( widget, choice);
   }
 
   /* (non-Javadoc)
@@ -88,24 +86,13 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.text.feature.IChoiceListFeature#removeChoice(java.lang.String)
+   * @see org.xidget.text.feature.IChoiceListFeature#removeChoice(java.lang.Object)
    */
-  public void removeChoice( String choice)
+  public void removeChoice( Object choice)
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.removeItem( choice);
   }
-  
-  /**
-   * Update the selected choice if the choice was added after the text of the widget was set.
-   * @param widget The widget.
-   * @param choice The choice that was added.
-   */
-//  private void updateChoice( JComboBox widget, String choice)
-//  {
-//    IValueFeature feature = xidget.getFeature( IValueFeature.class);
-//    widget.setSelectedItem( feature.getValue());
-//  }
 
   private IXidget xidget;
 }

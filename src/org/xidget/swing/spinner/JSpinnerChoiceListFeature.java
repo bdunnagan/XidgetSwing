@@ -42,31 +42,29 @@ public class JSpinnerChoiceListFeature implements IChoiceListFeature
   /* (non-Javadoc)
    * @see org.xidget.text.feature.IChoiceListFeature#getChoices()
    */
-  public List<String> getChoices()
+  public List<Object> getChoices()
   {
-    List<String> list = getList();
+    List<Object> list = getList();
     if ( list != null) return list;
     return Collections.emptyList();
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.text.feature.IChoiceListFeature#addChoice(java.lang.String)
+   * @see org.xidget.text.feature.IChoiceListFeature#addChoice(java.lang.Object)
    */
-  public void addChoice( String choice)
+  public void addChoice( Object choice)
   {
-    List<String> list = getList();
+    List<Object> list = getList();
     if ( list != null) list.add( choice);
-    //updateChoice( choice);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.text.feature.IChoiceListFeature#insertChoice(int, java.lang.String)
+   * @see org.xidget.text.feature.IChoiceListFeature#insertChoice(int, java.lang.Object)
    */
-  public void insertChoice( int index, String choice)
+  public void insertChoice( int index, Object choice)
   {
-    List<String> list = getList();
+    List<Object> list = getList();
     if ( list != null) list.add( index, choice);
-    //updateChoice( choice);
   }
 
   /* (non-Javadoc)
@@ -74,7 +72,7 @@ public class JSpinnerChoiceListFeature implements IChoiceListFeature
    */
   public void removeAllChoices()
   {
-    List<String> list = getList();
+    List<Object> list = getList();
     if ( list != null) list.clear();
   }
 
@@ -83,30 +81,19 @@ public class JSpinnerChoiceListFeature implements IChoiceListFeature
    */
   public void removeChoice( int index)
   {
-    List<String> list = getList();
+    List<Object> list = getList();
     if ( list != null) list.remove( index);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.text.feature.IChoiceListFeature#removeChoice(java.lang.String)
+   * @see org.xidget.text.feature.IChoiceListFeature#removeChoice(java.lang.Object)
    */
-  public void removeChoice( String choice)
+  public void removeChoice( Object choice)
   {
-    List<String> list = getList();
+    List<Object> list = getList();
     if ( list != null) list.remove( choice);
   }
   
-  /**
-   * Update the selected choice if the choice was added after the text of the widget was set.
-   * @param choice The choice that was added.
-   */
-//  private void updateChoice( String choice)
-//  {
-//    ITextWidgetFeature feature = xidget.getFeature( ITextWidgetFeature.class);
-//    String text = ((JSpinnerTextWidgetFeature)feature).getText();
-//    if ( text != null && text.equals( choice)) widget.setSelectedItem( text);
-//  }
-
   /**
    * @return Returns null or the SpinnerListModel.
    */
@@ -122,11 +109,11 @@ public class JSpinnerChoiceListFeature implements IChoiceListFeature
    * @return Returns the list from the SpinnerListModel or null.
    */
   @SuppressWarnings("unchecked")
-  private List<String> getList()
+  private List<Object> getList()
   {
     SpinnerListModel model = getModel();
     List<?> list = model.getList();
-    return (List<String>)list;
+    return (List<Object>)list;
   }
   
   private IXidget xidget;
