@@ -38,6 +38,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
 
 import org.xidget.IXidget;
@@ -134,6 +136,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     
     if ( component == null) component = jText;
     
+    jText.addCaretListener( caretListener);
     jText.addFocusListener( focusListener);
     
     return component;
@@ -205,6 +208,13 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     if ( jLabel != null) jLabel.setText( text);
   }
       
+  private final CaretListener caretListener = new CaretListener() {
+    public void caretUpdate( CaretEvent e)
+    {
+      SwingUtilities.invokeLater( updateRunnable);
+    }
+  };
+  
   private final FocusListener focusListener = new FocusListener() {
     public void focusGained( FocusEvent event) 
     {

@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
+
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -33,10 +34,11 @@ import javax.swing.JComponent;
 import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.IScriptFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
-import org.xidget.ifeature.button.IButtonModelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -167,8 +169,8 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
   private ItemListener itemListener = new ItemListener() {
     public void itemStateChanged( ItemEvent e)
     {
-      IButtonModelFeature feature = xidget.getFeature( IButtonModelFeature.class);
-      if ( feature != null) feature.setState( e.getStateChange() == ItemEvent.SELECTED);
+      IValueFeature feature = xidget.getFeature( IValueFeature.class);
+      feature.commit();
     }
   };
   

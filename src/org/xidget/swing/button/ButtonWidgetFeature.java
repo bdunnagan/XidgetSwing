@@ -73,6 +73,8 @@ public class ButtonWidgetFeature extends AbstractValueFeature implements IButton
   @Override
   public Object getValue()
   {
-    return null;
+    AbstractButton button = xidget.getFeature( AbstractButton.class);
+    ButtonModel model = button.getModel();
+    return model.isSelected();
   }
 }
