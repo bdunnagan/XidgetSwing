@@ -170,19 +170,29 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
   private final ActionListener actionListener = new ActionListener() {
     public void actionPerformed( ActionEvent e)
     {
-      SwingUtilities.invokeLater( updateRunnable);      
+      if ( updating) return;
+      updating = true;
+      SwingUtilities.invokeLater( updateRunnable);
     }
   };
       
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      IValueFeature feature = xidget.getFeature( IValueFeature.class);
-      feature.commit();
+      try
+      {
+        IValueFeature feature = xidget.getFeature( IValueFeature.class);
+        feature.commit();
+      }
+      finally
+      {
+        updating = false;
+      }
     }
   };
   
   private JComponent component;
   private JLabel jLabel;
   private JComboBox jCombo;
+  private boolean updating;
 }
