@@ -65,7 +65,7 @@ public class JComboBoxXidget extends Xidget
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)sourceFeature;
-    if ( clss == IValueFeature.class) return (T)textWidgetFeature;
+    //if ( clss == IValueFeature.class) return (T)textWidgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IChoiceListFeature.class) return (T)choiceListFeature;

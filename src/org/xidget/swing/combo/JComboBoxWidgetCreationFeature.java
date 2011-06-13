@@ -60,6 +60,7 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
   {    
     // create text widget
     component = jCombo = new JComboBox();
+    jCombo.setModel( new CustomComboModel( jCombo, xidget));
     jCombo.setBorder( new EmptyBorder( 1, 1, 1, 1));
 
     // add statically defined choices if present
@@ -94,6 +95,18 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     jCombo.addActionListener( actionListener);
     
     return component;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#destroyWidgets()
+   */
+  @Override
+  public void destroyWidgets()
+  {
+    CustomComboModel model = (CustomComboModel)jCombo.getModel();
+    model.uninstall();
+    
+    super.destroyWidgets();
   }
 
   /**

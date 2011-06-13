@@ -68,8 +68,8 @@ public class Main
       public void uncaughtException( Thread t, Throwable e)
       {
         e.printStackTrace( System.err);
-        JOptionPane.showMessageDialog( null, String.format( "Thread: %s\n%s",
-          t.getName(), e.getMessage()));
+        JOptionPane.showMessageDialog( null, String.format( "Thread: %s\n%s: %s",
+          t.getName(), e.getClass().getName(), e.getMessage()));
       }
     });
 
