@@ -35,9 +35,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.xidget.IXidget;
+import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.IValueFeature;
-import org.xidget.ifeature.combo.IChoiceListFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -194,8 +193,8 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     {
       try
       {
-        IValueFeature feature = xidget.getFeature( IValueFeature.class);
-        feature.commit();
+        //IValueFeature feature = xidget.getFeature( IValueFeature.class);
+        //feature.commit();
       }
       finally
       {

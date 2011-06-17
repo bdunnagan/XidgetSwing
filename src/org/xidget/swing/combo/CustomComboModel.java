@@ -13,9 +13,12 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.IValueFeature;
+import org.xidget.ifeature.IBindFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.ModelListener;
+import org.xmodel.Xlate;
+import org.xmodel.xpath.expression.IExpression;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of MutableComboBoxModel backed by IModelObject elements. 
@@ -26,8 +29,9 @@ public class CustomComboModel implements MutableComboBoxModel
   {
     this.widget = widget;
     this.xidget = xidget;
-    items = new ArrayList<Item>();
-    listeners = new ArrayList<ListDataListener>( 3);
+    this.display = Xlate.childGet( xidget.getConfig(), "display", (IExpression)null);
+    this.items = new ArrayList<Item>();
+    this.listeners = new ArrayList<ListDataListener>( 3);
   }
   
   /**
@@ -48,10 +52,14 @@ public class CustomComboModel implements MutableComboBoxModel
    */
   private Item createItem( Object object)
   {
-    IValueFeature feature = xidget.getFeature( IValueFeature.class);
     Item item = new Item();
     item.node = (IModelObject)object;
-    item.value = feature.toDisplay( item.node.getValue());
+    
+    IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+    StatefulContext parent = bindFeature.getBoundContext();
+    StatefulContext context = new StatefulContext( parent, item.node); 
+    
+    item.value = display.evaluateString( context);
     return item;
   }
   
@@ -119,7 +127,7 @@ public class CustomComboModel implements MutableComboBoxModel
   @Override
   public Object getSelectedItem()
   {
-    return selected;
+    return null;
   }
 
   /* (non-Javadoc)
@@ -128,7 +136,6 @@ public class CustomComboModel implements MutableComboBoxModel
   @Override
   public void setSelectedItem( Object object)
   {
-    selected = (Item)object;
   }
 
   /* (non-Javadoc)
@@ -209,6 +216,6 @@ public class CustomComboModel implements MutableComboBoxModel
   private JComboBox widget;
   private IXidget xidget;
   private List<Item> items;
-  private Item selected;
+  private IExpression display;
   private List<ListDataListener> listeners;
 }

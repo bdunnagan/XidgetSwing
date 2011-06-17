@@ -35,9 +35,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.xidget.IXidget;
+import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.IValueFeature;
-import org.xidget.ifeature.combo.IChoiceListFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;

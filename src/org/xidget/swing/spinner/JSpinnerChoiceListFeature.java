@@ -27,7 +27,7 @@ import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.combo.IChoiceListFeature;
+import org.xidget.ifeature.IChoiceListFeature;
 
 /**
  * An implementation of IChoiceListFeature which is backed by a JSpinner.
