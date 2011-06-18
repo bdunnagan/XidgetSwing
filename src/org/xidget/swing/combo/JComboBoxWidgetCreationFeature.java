@@ -40,6 +40,7 @@ import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
+import org.xidget.ifeature.IValueFeature;
 import org.xidget.swing.combo.CustomComboModel.Item;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
@@ -198,8 +199,8 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     {
       try
       {
-        //IValueFeature feature = xidget.getFeature( IValueFeature.class);
-        //feature.commit();
+        IValueFeature feature = xidget.getFeature( IValueFeature.class);
+        feature.commit();
         
         IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
         StatefulContext context = bindFeature.getBoundContext();

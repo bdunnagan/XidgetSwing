@@ -51,13 +51,24 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   private Item createItem( Object object)
   {
     Item item = new Item();
-    item.node = (IModelObject)object;
+    if ( object instanceof IModelObject) 
+    {
+      item.node = (IModelObject)object;
+      item.value = item.node.getValue();
     
-    IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-    StatefulContext parent = bindFeature.getBoundContext();
-    StatefulContext context = new StatefulContext( parent, item.node); 
+      if ( display != null)
+      {
+        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+        StatefulContext parent = bindFeature.getBoundContext();
+        StatefulContext context = new StatefulContext( parent, item.node); 
+        item.value = display.evaluateString( context);
+      }
+    }
+    else
+    {
+      item.value = object;
+    }
     
-    item.value = display.evaluateString( context);
     return item;
   }
   
@@ -128,7 +139,7 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   @Override
   public void setSelectedItem( Object object)
   {
-    if ( object instanceof IModelObject)
+    if ( !(object instanceof Item))
     {
       Item item = createItem( object);
       object = item;
@@ -198,6 +209,11 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
       if ( object instanceof Item) 
       {
         Item item = (Item)object;
+        if ( item.node == null || node == null)
+        {
+          if ( item.value == null || value == null) return item == value;
+          return item.value.equals( value);
+        }
         return item.node.equals( node);
       }
       

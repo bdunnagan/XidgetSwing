@@ -24,6 +24,7 @@ import javax.swing.JComboBox;
 import org.xidget.IXidget;
 import org.xidget.feature.AbstractValueFeature;
 import org.xidget.ifeature.text.ITextWidgetFeature;
+import org.xidget.swing.combo.CustomComboModel.Item;
 
 /**
  * An implementation of IWidgetTextAdapter for a JComboBox widget 
@@ -59,8 +60,9 @@ public class JComboBoxTextWidgetFeature extends AbstractValueFeature implements 
   @Override
   protected void setValue( Object value)
   {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
-    widget.setSelectedItem( value);
+    JComboBox jCombo = xidget.getFeature( JComboBox.class);
+    CustomComboModel model = (CustomComboModel)jCombo.getModel();
+    model.setSelectedItem( value);
   }
 
   /* (non-Javadoc)
@@ -69,7 +71,13 @@ public class JComboBoxTextWidgetFeature extends AbstractValueFeature implements 
   @Override
   public Object getValue()
   {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
-    return widget.getSelectedItem();
+    JComboBox jCombo = xidget.getFeature( JComboBox.class);
+    CustomComboModel model = (CustomComboModel)jCombo.getModel();
+    Object selected = model.getSelectedItem();
+    if ( selected instanceof Item)
+    {
+      return ((Item)selected).value;
+    }
+    return selected;
   }
 }
