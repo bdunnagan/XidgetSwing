@@ -27,10 +27,10 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
    * @see org.xidget.ifeature.ISelectionWidgetFeature#setSelection(java.util.List)
    */
   @Override
-  public void setSelection( List<IModelObject> nodes)
+  public void setSelection( List<? extends Object> objects)
   {
     JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    if ( nodes.size() > 0) jCombo.setSelectedItem( nodes.get( 0));
+    if ( objects.size() > 0) jCombo.setSelectedItem( objects.get( 0));
   }
 
   /* (non-Javadoc)
@@ -49,21 +49,21 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, java.lang.Object)
    */
   @Override
-  public void insertSelected( int index, IModelObject element)
+  public void insertSelected( int index, Object object)
   {
     JComboBox jCombo = xidget.getFeature( JComboBox.class);
     CustomComboModel model = (CustomComboModel)jCombo.getModel();
-    model.setSelectedItem( element);
+    model.setSelectedItem( object);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, java.lang.Object)
    */
   @Override
-  public void removeSelected( int index, IModelObject element)
+  public void removeSelected( int index, Object object)
   {
     JComboBox jCombo = xidget.getFeature( JComboBox.class);
     CustomComboModel model = (CustomComboModel)jCombo.getModel();

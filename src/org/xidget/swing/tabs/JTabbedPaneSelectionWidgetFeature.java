@@ -22,17 +22,17 @@ package org.xidget.swing.tabs;
 import java.awt.Component;
 import java.util.Collections;
 import java.util.List;
+
 import javax.swing.JTabbedPane;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xmodel.IModelObject;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
- * @author bdunnagan
- *
+ * Implementation of ISelectionWidgetFeature for JTabbedPane widget.
  */
 public class JTabbedPaneSelectionWidgetFeature implements ISelectionWidgetFeature
 {
@@ -44,39 +44,41 @@ public class JTabbedPaneSelectionWidgetFeature implements ISelectionWidgetFeatur
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#getSelection()
    */
-  public List<IModelObject> getSelection()
+  public List<? extends Object> getSelection()
   {
     return Collections.singletonList( selection);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, java.lang.Object)
    */
-  public void insertSelected( int index, IModelObject element)
+  @Override
+  public void insertSelected( int index, Object object)
   {
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, java.lang.Object)
    */
-  public void removeSelected( int index, IModelObject element)
+  @Override
+  public void removeSelected( int index, Object object)
   {
   }
 
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#setSelection(java.util.List)
    */
-  public void setSelection( List<IModelObject> nodes)
+  public void setSelection( List<? extends Object> objects)
   {
-    if ( nodes == null || nodes.size() == 0) return;
+    if ( objects == null || objects.size() == 0) return;
     
-    selection = nodes.get( 0);
+    selection = objects.get( 0);
     
     for( IXidget child: xidget.getChildren())
     {
       IBindFeature bindFeature = child.getFeature( IBindFeature.class);
       StatefulContext context = bindFeature.getBoundContext();
-      if ( context.getObject() == selection)
+      if ( context.getObject().equals( selection))
       {
         IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
         Object[] widgets = creationFeature.getLastWidgets();
@@ -88,5 +90,5 @@ public class JTabbedPaneSelectionWidgetFeature implements ISelectionWidgetFeatur
   }
 
   private IXidget xidget;
-  private IModelObject selection;
+  private Object selection;
 }

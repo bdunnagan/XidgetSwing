@@ -159,14 +159,14 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#setSelection(java.util.List)
    */
-  public void setSelection( List<IModelObject> nodes)
+  public void setSelection( List<? extends Object> objects)
   {
     JTable jtable = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
     List<Row> rows = tableModel.getRows();
-    for( IModelObject node: nodes)
+    for( Object object: objects)
     {
-      int index = findNode( rows, node);
+      int index = findNode( rows, object);
       if ( index >= 0) jtable.addRowSelectionInterval( index, index);
     }
   }
@@ -174,7 +174,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#getSelection()
    */
-  public List<IModelObject> getSelection()
+  public List<? extends Object> getSelection()
   {
     JTable jtable = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
@@ -190,45 +190,44 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, java.lang.Object)
    */
-  public void insertSelected( int at, IModelObject element)
+  public void insertSelected( int at, Object object)
   {
     JTable jtable = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
     List<Row> rows = tableModel.getRows();
-    int index = findNode( rows, element);
+    int index = findNode( rows, object);
     if ( index >= 0) jtable.addRowSelectionInterval( index, index);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, java.lang.Object)
    */
-  public void removeSelected( int at, IModelObject element)
+  public void removeSelected( int at, Object object)
   {
     JTable jtable = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
     List<Row> rows = tableModel.getRows();
-    int index = findNode( rows, element);
+    int index = findNode( rows, object);
     if ( index >= 0) jtable.removeRowSelectionInterval( index, index);
   }
 
   /**
-   * Returns the first index of the row containing the specified node.
+   * Returns the first index of the row containing the specified object.
    * @param rows The rows.
-   * @param node The node.
+   * @param object The object.
    * @return Returns -1 or the first index.
    */
-  private int findNode( List<Row> rows, IModelObject node)
+  private int findNode( List<Row> rows, Object object)
   {
     ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-    Object identity = selectionModelFeature.getIdentity( node);
+    Object identity = selectionModelFeature.getIdentity( object);
     for( int i=0; i<rows.size(); i++)
     {
       if ( selectionModelFeature.getIdentity( rows.get( i).getContext().getObject()).equals( identity))
         return i;
     }
-    
     return -1;
   }
   

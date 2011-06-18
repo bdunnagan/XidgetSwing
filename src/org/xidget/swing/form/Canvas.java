@@ -32,6 +32,7 @@ import org.xidget.ifeature.canvas.IPaintFeature;
 /**
  * A custom JPanel that paints children with the IPaintFeature.
  */
+@SuppressWarnings("serial")
 public class Canvas extends JPanel
 {
   public Canvas( IXidget xidget, LayoutManager layout)

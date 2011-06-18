@@ -199,15 +199,15 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, java.lang.Object)
    */
-  public void insertSelected( int index, IModelObject element)
+  public void insertSelected( int index, Object object)
   {
     JTree jtree = xidget.getFeature( JTree.class);
     CustomTreeModel model = (CustomTreeModel)jtree.getModel();
     
     ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-    Object identity = selectionModelFeature.getIdentity( element);
+    Object identity = selectionModelFeature.getIdentity( object);
     Row row = this.index.get( identity);
     
     TreePath path = new TreePath( model.createPath( row));
@@ -215,15 +215,15 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, org.xmodel.IModelObject)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, java.lang.Object)
    */
-  public void removeSelected( int index, IModelObject element)
+  public void removeSelected( int index, Object object)
   {
     JTree jtree = xidget.getFeature( JTree.class);
     CustomTreeModel model = (CustomTreeModel)jtree.getModel();
     
     ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-    Object identity = selectionModelFeature.getIdentity( element);
+    Object identity = selectionModelFeature.getIdentity( object);
     Row row = this.index.get( identity);
     
     TreePath path = new TreePath( model.createPath( row));
@@ -233,18 +233,18 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#setSelection(java.util.List)
    */
-  public void setSelection( List<IModelObject> nodes)
+  public void setSelection( List<? extends Object> objects)
   {
     if ( index == null) return;
     
     JTree jtree = xidget.getFeature( JTree.class);
     CustomTreeModel model = (CustomTreeModel)jtree.getModel();
 
-    TreePath[] paths = new TreePath[ nodes.size()];
+    TreePath[] paths = new TreePath[ objects.size()];
     ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-    for( int i=0; i<nodes.size(); i++)
+    for( int i=0; i<objects.size(); i++)
     {
-      Object identity = selectionModelFeature.getIdentity( nodes.get( i));
+      Object identity = selectionModelFeature.getIdentity( objects.get( i));
       Row row = index.get( identity);
       if ( row == null) row = searchModel( identity);
       paths[ i] = new TreePath( model.createPath( row));
@@ -288,7 +288,7 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#getSelection()
    */
-  public List<IModelObject> getSelection()
+  public List<? extends Object> getSelection()
   {
     JTree jtree = xidget.getFeature( JTree.class);
     TreePath[] paths = jtree.getSelectionPaths();

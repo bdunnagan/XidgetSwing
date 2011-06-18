@@ -30,6 +30,7 @@ import org.xidget.tree.Row;
 /**
  * An implementatino of TreeCellRenderer for rendering the cells of a tree.
  */
+@SuppressWarnings("serial")
 public class CustomTreeCellRenderer extends DefaultTreeCellRenderer
 {
   public CustomTreeCellRenderer()

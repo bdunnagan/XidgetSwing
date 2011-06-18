@@ -29,6 +29,7 @@ import org.xidget.IXidget;
  * text, background gradient and close button similar to the SWT style close
  * button.
  */
+@SuppressWarnings("serial")
 public class CustomTab extends JPanel
 {
   public CustomTab( IXidget xidget)
