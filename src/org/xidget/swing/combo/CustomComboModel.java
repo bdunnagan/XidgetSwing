@@ -7,10 +7,9 @@ package org.xidget.swing.combo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractListModel;
 import javax.swing.JComboBox;
 import javax.swing.MutableComboBoxModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
@@ -23,15 +22,14 @@ import org.xmodel.xpath.expression.StatefulContext;
 /**
  * An implementation of MutableComboBoxModel backed by IModelObject elements. 
  */
-public class CustomComboModel implements MutableComboBoxModel
+@SuppressWarnings("serial")
+public class CustomComboModel extends AbstractListModel implements MutableComboBoxModel
 {
-  public CustomComboModel( JComboBox widget, IXidget xidget)
+  public CustomComboModel( IXidget xidget)
   {
-    this.widget = widget;
     this.xidget = xidget;
     this.display = Xlate.childGet( xidget.getConfig(), "display", (IExpression)null);
     this.items = new ArrayList<Item>();
-    this.listeners = new ArrayList<ListDataListener>( 3);
   }
   
   /**
@@ -73,11 +71,9 @@ public class CustomComboModel implements MutableComboBoxModel
     item.node.addModelListener( listener);
     items.add( item);
 
-    // notify listeners
+    JComboBox widget = xidget.getFeature( JComboBox.class);
     int index = items.size() - 1;
-    ListDataEvent event = new ListDataEvent( widget, ListDataEvent.INTERVAL_ADDED, index, index);
-    ListDataListener[] array = listeners.toArray( new ListDataListener[ 0]);
-    for( ListDataListener listener: array) listener.intervalAdded( event);
+    fireIntervalAdded( widget, index, index);
   }
 
   /* (non-Javadoc)
@@ -90,10 +86,8 @@ public class CustomComboModel implements MutableComboBoxModel
     item.node.addModelListener( listener);
     items.add( index, item);
     
-    // notify listeners
-    ListDataEvent event = new ListDataEvent( widget, ListDataEvent.INTERVAL_ADDED, index, index);
-    ListDataListener[] array = listeners.toArray( new ListDataListener[ 0]);
-    for( ListDataListener listener: array) listener.intervalAdded( event);
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    fireIntervalAdded( widget, index, index);
   }
 
   /* (non-Javadoc)
@@ -115,10 +109,8 @@ public class CustomComboModel implements MutableComboBoxModel
     Item item = items.remove( index);
     item.node.removeModelListener( listener);
     
-    // notify listeners
-    ListDataEvent event = new ListDataEvent( widget, ListDataEvent.INTERVAL_REMOVED, index, index);
-    ListDataListener[] array = listeners.toArray( new ListDataListener[ 0]);
-    for( ListDataListener listener: array) listener.intervalRemoved( event);
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    fireIntervalRemoved( widget, index, index);
   }
 
   /* (non-Javadoc)
@@ -127,7 +119,7 @@ public class CustomComboModel implements MutableComboBoxModel
   @Override
   public Object getSelectedItem()
   {
-    return null;
+    return selected;
   }
 
   /* (non-Javadoc)
@@ -136,24 +128,19 @@ public class CustomComboModel implements MutableComboBoxModel
   @Override
   public void setSelectedItem( Object object)
   {
-  }
-
-  /* (non-Javadoc)
-   * @see javax.swing.ListModel#addListDataListener(javax.swing.event.ListDataListener)
-   */
-  @Override
-  public void addListDataListener( ListDataListener listener)
-  {
-    listeners.add( listener);
-  }
-
-  /* (non-Javadoc)
-   * @see javax.swing.ListModel#removeListDataListener(javax.swing.event.ListDataListener)
-   */
-  @Override
-  public void removeListDataListener( ListDataListener listener)
-  {
-    listeners.remove( listener);
+    if ( object instanceof IModelObject)
+    {
+      Item item = createItem( object);
+      object = item;
+    }
+    
+    selected = object;
+    
+    int index = items.indexOf( object);
+    if ( index < 0) return;
+    
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    fireContentsChanged( widget, index, index);
   }
 
   /* (non-Javadoc)
@@ -179,9 +166,8 @@ public class CustomComboModel implements MutableComboBoxModel
    */
   private void updateListeners( int index)
   {
-    ListDataEvent event = new ListDataEvent( widget, ListDataEvent.CONTENTS_CHANGED, index, index);
-    ListDataListener[] array = listeners.toArray( new ListDataListener[ 0]);
-    for( ListDataListener listener: array) listener.contentsChanged( event);
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    fireContentsChanged( widget, index, index);
   }
   
   private final ModelListener listener = new ModelListener() {
@@ -197,14 +183,25 @@ public class CustomComboModel implements MutableComboBoxModel
     }
   };
   
-  private final static class Item
+  public final static class Item
   {
     public IModelObject node;
     public Object value;
 
     public boolean equals( Object object)
     {
-      return object == node;
+      if ( object instanceof IModelObject)
+      {
+        return object.equals( node);
+      }
+     
+      if ( object instanceof Item) 
+      {
+        Item item = (Item)object;
+        return item.node.equals( node);
+      }
+      
+      return super.equals( object);
     }
     
     public String toString()
@@ -213,9 +210,8 @@ public class CustomComboModel implements MutableComboBoxModel
     }
   }
   
-  private JComboBox widget;
   private IXidget xidget;
   private List<Item> items;
   private IExpression display;
-  private List<ListDataListener> listeners;
+  private Object selected;
 }

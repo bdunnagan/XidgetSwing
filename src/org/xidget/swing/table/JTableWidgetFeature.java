@@ -192,17 +192,25 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, org.xmodel.IModelObject)
    */
-  public void insertSelected( int index, IModelObject element)
+  public void insertSelected( int at, IModelObject element)
   {
-    System.out.println( "insert selected");
+    JTable jtable = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
+    List<Row> rows = tableModel.getRows();
+    int index = findNode( rows, element);
+    if ( index >= 0) jtable.addRowSelectionInterval( index, index);
   }
 
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, org.xmodel.IModelObject)
    */
-  public void removeSelected( int index, IModelObject element)
+  public void removeSelected( int at, IModelObject element)
   {
-    System.out.println( "remove selected");
+    JTable jtable = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
+    List<Row> rows = tableModel.getRows();
+    int index = findNode( rows, element);
+    if ( index >= 0) jtable.removeRowSelectionInterval( index, index);
   }
 
   /**

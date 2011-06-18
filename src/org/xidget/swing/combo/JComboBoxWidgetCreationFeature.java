@@ -25,6 +25,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -35,11 +36,15 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.xidget.IXidget;
+import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
+import org.xidget.ifeature.ISelectionModelFeature;
+import org.xidget.swing.combo.CustomComboModel.Item;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a JTextField or JTextArea.
@@ -59,7 +64,7 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
   {    
     // create text widget
     component = jCombo = new JComboBox();
-    jCombo.setModel( new CustomComboModel( jCombo, xidget));
+    jCombo.setModel( new CustomComboModel( xidget));
     jCombo.setBorder( new EmptyBorder( 1, 1, 1, 1));
 
     // add statically defined choices if present
@@ -195,6 +200,20 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
       {
         //IValueFeature feature = xidget.getFeature( IValueFeature.class);
         //feature.commit();
+        
+        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+        StatefulContext context = bindFeature.getBoundContext();
+        
+        Object selected = jCombo.getSelectedItem();
+        if ( selected != null)
+        {
+          Item item = (Item)selected;
+          if ( item.node != null)
+          {
+            ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+            selectionModelFeature.setSelection( context, Collections.singletonList( item.node));
+          }
+        }
       }
       finally
       {
