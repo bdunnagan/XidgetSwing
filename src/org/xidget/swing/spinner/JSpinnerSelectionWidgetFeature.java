@@ -2,23 +2,25 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.combo;
+package org.xidget.swing.spinner;
 
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JComboBox;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.ISelectionWidgetFeature;
+import org.xidget.swing.combo.CustomComboModel;
 import org.xmodel.IModelObject;
 
 /**
- * An implementation of ISelectionWidgetFeature for use with JComboBox widgets.
+ * An implementation of ISelectionWidgetFeature for use with JSpinner widgets.
  */
-public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
+public class JSpinnerSelectionWidgetFeature implements ISelectionWidgetFeature
 {
-  public JComboBoxSelectionWidgetFeature( IXidget xidget)
+  public JSpinnerSelectionWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }
@@ -29,8 +31,8 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public void setSelection( List<? extends Object> objects)
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    if ( objects.size() > 0) jCombo.setSelectedItem( objects.get( 0));
+    JSpinner jSpinner = xidget.getFeature( JSpinner.class);
+    if ( objects.size() > 0) jSpinner.setValue( objects.get( 0));
   }
 
   /* (non-Javadoc)
@@ -39,8 +41,8 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public List<IModelObject> getSelection()
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    Object selected = jCombo.getSelectedItem();
+    JSpinner jSpinner = xidget.getFeature( JSpinner.class);
+    Object selected = jSpinner.getValue();
     if ( selected != null && selected instanceof IModelObject)
     {
       return Collections.singletonList( (IModelObject)selected);
@@ -54,9 +56,9 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public void insertSelected( int index, Object object)
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    CustomComboModel model = (CustomComboModel)jCombo.getModel();
-    model.setSelectedItem( object);
+    JSpinner jSpinner = xidget.getFeature( JSpinner.class);
+    SpinnerListModel model = (SpinnerListModel)jSpinner.getModel();
+    model.setValue( object);
   }
 
   /* (non-Javadoc)
@@ -65,8 +67,8 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public void removeSelected( Object object)
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    CustomComboModel model = (CustomComboModel)jCombo.getModel();
+    JSpinner jSpinner = xidget.getFeature( JSpinner.class);
+    CustomComboModel model = (CustomComboModel)jSpinner.getModel();
     model.setSelectedItem( null);
   }
 

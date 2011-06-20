@@ -94,6 +94,16 @@ public class JSpinnerChoiceListFeature implements IChoiceListFeature
     if ( list != null) list.remove( choice);
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IChoiceListFeature#updateChoice(int, java.lang.Object)
+   */
+  @Override
+  public void updateChoice( int index, Object choice)
+  {
+    List<Object> list = getList();
+    if ( list != null) list.set( index, choice);
+  }
+
   /**
    * @return Returns null or the SpinnerListModel.
    */

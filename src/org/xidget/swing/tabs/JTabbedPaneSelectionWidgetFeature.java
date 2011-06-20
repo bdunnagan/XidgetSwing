@@ -61,7 +61,7 @@ public class JTabbedPaneSelectionWidgetFeature implements ISelectionWidgetFeatur
    * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, java.lang.Object)
    */
   @Override
-  public void removeSelected( int index, Object object)
+  public void removeSelected( Object object)
   {
   }
 

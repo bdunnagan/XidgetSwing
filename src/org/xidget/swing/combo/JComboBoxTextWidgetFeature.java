@@ -74,10 +74,7 @@ public class JComboBoxTextWidgetFeature extends AbstractValueFeature implements 
     JComboBox jCombo = xidget.getFeature( JComboBox.class);
     CustomComboModel model = (CustomComboModel)jCombo.getModel();
     Object selected = model.getSelectedItem();
-    if ( selected instanceof Item)
-    {
-      return ((Item)selected).value;
-    }
+    if ( selected instanceof Item) return ((Item)selected).getValue();
     return selected;
   }
 }

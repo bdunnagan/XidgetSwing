@@ -94,5 +94,16 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
     widget.removeItem( choice);
   }
 
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IChoiceListFeature#updateChoice(int, java.lang.Object)
+   */
+  @Override
+  public void updateChoice( int index, Object choice)
+  {
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    CustomComboModel model = (CustomComboModel)widget.getModel();
+    model.updateElementAt( choice, index);
+  }
+
   private IXidget xidget;
 }

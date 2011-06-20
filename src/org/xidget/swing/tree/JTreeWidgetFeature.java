@@ -217,7 +217,7 @@ public class JTreeWidgetFeature implements ITreeWidgetFeature, ISelectionWidgetF
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, java.lang.Object)
    */
-  public void removeSelected( int index, Object object)
+  public void removeSelected( Object object)
   {
     JTree jtree = xidget.getFeature( JTree.class);
     CustomTreeModel model = (CustomTreeModel)jtree.getModel();

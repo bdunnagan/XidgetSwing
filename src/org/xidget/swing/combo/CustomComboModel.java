@@ -14,7 +14,6 @@ import javax.swing.MutableComboBoxModel;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
 import org.xmodel.IModelObject;
-import org.xmodel.ModelListener;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -33,17 +32,6 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   }
   
   /**
-   * Uninstall model listeners.
-   */
-  public void uninstall()
-  {
-    for( Item item: items)
-    {
-      item.node.removeModelListener( listener);
-    }
-  }
-  
-  /**
    * Create an item for the specified node.
    * @param object The node.
    * @return Returns the new item.
@@ -55,20 +43,11 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
     {
       item.node = (IModelObject)object;
       item.value = item.node.getValue();
-    
-      if ( display != null)
-      {
-        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        StatefulContext parent = bindFeature.getBoundContext();
-        StatefulContext context = new StatefulContext( parent, item.node); 
-        item.value = display.evaluateString( context);
-      }
     }
     else
     {
       item.value = object;
     }
-    
     return item;
   }
   
@@ -79,7 +58,6 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   public void addElement( Object object)
   {
     Item item = createItem( object);
-    item.node.addModelListener( listener);
     items.add( item);
 
     JComboBox widget = xidget.getFeature( JComboBox.class);
@@ -94,7 +72,6 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   public void insertElementAt( Object object, int index)
   {
     Item item = createItem( object);
-    item.node.addModelListener( listener);
     items.add( index, item);
     
     JComboBox widget = xidget.getFeature( JComboBox.class);
@@ -117,13 +94,21 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   @Override
   public void removeElementAt( int index)
   {
-    Item item = items.remove( index);
-    item.node.removeModelListener( listener);
-    
     JComboBox widget = xidget.getFeature( JComboBox.class);
     fireIntervalRemoved( widget, index, index);
   }
 
+  /**
+   * Update the element at the specified index.
+   * @param object The updated element.
+   * @param index The index.
+   */
+  public void updateElementAt( Object object, int index)
+  {
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    fireContentsChanged( widget, index, index);
+  }
+  
   /* (non-Javadoc)
    * @see javax.swing.ComboBoxModel#getSelectedItem()
    */
@@ -171,34 +156,29 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   {
     return items.size();
   }
-
-  /**
-   * Notify listeners that the value of an item has changed.
-   */
-  private void updateListeners( int index)
-  {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
-    fireContentsChanged( widget, index, index);
-  }
   
-  private final ModelListener listener = new ModelListener() {
-    public void notifyChange( IModelObject object, String attrName, Object newValue, Object oldValue)
-    {
-      int index = items.indexOf( object);
-      if ( index >= 0) updateListeners( index);
-    }
-    public void notifyClear( IModelObject object, String attrName, Object oldValue)
-    {
-      int index = items.indexOf( object);
-      if ( index >= 0) updateListeners( index);
-    }
-  };
-  
-  public final static class Item
+  public final class Item
   {
     public IModelObject node;
     public Object value;
 
+    public Object getValue()
+    {
+      if ( value == null && node != null)
+      {
+        Object result = node.getValue();
+        if ( display != null)
+        {
+          IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+          StatefulContext parent = bindFeature.getBoundContext();
+          StatefulContext context = new StatefulContext( parent, node); 
+          result = display.evaluateString( context);
+        }
+        return result;
+      }
+      return value;
+    }
+    
     public boolean equals( Object object)
     {
       if ( object instanceof IModelObject)
@@ -208,11 +188,11 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
      
       if ( object instanceof Item) 
       {
-        Item item = (Item)object;
+        Item item = (Item)object; 
         if ( item.node == null || node == null)
         {
-          if ( item.value == null || value == null) return item == value;
-          return item.value.equals( value);
+          if ( item.getValue() == null || getValue() == null) return item.getValue() == getValue();
+          return item.getValue().equals( getValue());
         }
         return item.node.equals( node);
       }
@@ -222,6 +202,7 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
     
     public String toString()
     {
+      Object value = getValue();
       return (value != null)? value.toString(): ""; 
     }
   }

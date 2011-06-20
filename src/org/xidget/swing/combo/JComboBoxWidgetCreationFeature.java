@@ -102,18 +102,6 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     return component;
   }
 
-  /* (non-Javadoc)
-   * @see org.xidget.swing.feature.SwingWidgetCreationFeature#destroyWidgets()
-   */
-  @Override
-  public void destroyWidgets()
-  {
-    CustomComboModel model = (CustomComboModel)jCombo.getModel();
-    model.uninstall();
-    
-    super.destroyWidgets();
-  }
-
   /**
    * Add the static choices defined in choices/choice.
    * @param xidget The combo xidget.
@@ -199,12 +187,13 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     {
       try
       {
+        // update value
         IValueFeature feature = xidget.getFeature( IValueFeature.class);
         feature.commit();
         
+        // update selection model
         IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
         StatefulContext context = bindFeature.getBoundContext();
-        
         Object selected = jCombo.getSelectedItem();
         if ( selected != null)
         {

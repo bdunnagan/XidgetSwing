@@ -204,7 +204,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   /* (non-Javadoc)
    * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, java.lang.Object)
    */
-  public void removeSelected( int at, Object object)
+  public void removeSelected( Object object)
   {
     JTable jtable = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)jtable.getModel();

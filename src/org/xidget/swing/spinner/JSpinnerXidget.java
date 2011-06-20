@@ -12,10 +12,13 @@ import javax.swing.JSpinner;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
+import org.xidget.feature.SelectionModelFeature;
 import org.xidget.feature.SourceFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
+import org.xidget.ifeature.ISelectionModelFeature;
+import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.ISourceFeature;
 import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -39,6 +42,8 @@ public class JSpinnerXidget extends Xidget
     textWidgetFeature = new JSpinnerTextWidgetFeature( this);
     sliderFeature = new JSpinnerWidgetFeature( this);
     choiceListFeature = new JSpinnerChoiceListFeature( this);
+    selectionModelFeature = new SelectionModelFeature( this);
+    selectionWidgetFeature = new JSpinnerSelectionWidgetFeature( this);
     creationFeature = new JSpinnerWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -58,6 +63,8 @@ public class JSpinnerXidget extends Xidget
     if ( clss == ISliderWidgetFeature.class) return (T)sliderFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IChoiceListFeature.class) return (T)choiceListFeature;
+    if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
+    if ( clss == ISelectionWidgetFeature.class) return (T)selectionWidgetFeature;
     if ( clss == ILabelFeature.class) return (T)creationFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getContainer();
@@ -78,5 +85,7 @@ public class JSpinnerXidget extends Xidget
   private ISliderWidgetFeature sliderFeature;
   private JSpinnerChoiceListFeature choiceListFeature;
   private JSpinnerWidgetCreationFeature creationFeature;
+  private ISelectionModelFeature selectionModelFeature;
+  private ISelectionWidgetFeature selectionWidgetFeature;
   private IFeatured basicFeatureSet;
 }

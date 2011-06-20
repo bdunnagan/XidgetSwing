@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Collections;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -35,12 +36,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.xidget.IXidget;
+import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
+import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IValueFeature;
+import org.xidget.swing.combo.CustomComboModel.Item;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a JTextField or JTextArea.
@@ -177,12 +182,38 @@ public class JSpinnerWidgetCreationFeature extends SwingWidgetCreationFeature im
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      IValueFeature feature = xidget.getFeature( IValueFeature.class);
-      feature.commit();
+      if ( updating) return;
+      updating = true;
+      
+      try
+      {
+        // update value
+        IValueFeature feature = xidget.getFeature( IValueFeature.class);
+        feature.commit();
+        
+        // update selection model
+        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+        StatefulContext context = bindFeature.getBoundContext();
+        Object selected = jSpinner.getValue();
+        if ( selected != null)
+        {
+          Item item = (Item)selected;
+          if ( item.node != null)
+          {
+            ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+            selectionModelFeature.setSelection( context, Collections.singletonList( item.node));
+          }
+        }
+      }
+      finally
+      {
+        updating = false;
+      }
     }
   };
   
   private JComponent component;
   private JLabel jLabel;
   private JSpinner jSpinner;
+  private boolean updating;
 }
