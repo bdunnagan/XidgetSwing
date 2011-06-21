@@ -25,7 +25,7 @@ public class JTableColumnWidthFeature extends ColumnWidthFeature
    * @see org.xidget.feature.tree.ColumnWidthFeature#getWidth(java.lang.String)
    */
   @Override
-  protected int getWidth( String text)
+  protected int getTextWidth( String text)
   {
     JTable jTable = xidget.getFeature( JTable.class);
     if ( jTable != null)

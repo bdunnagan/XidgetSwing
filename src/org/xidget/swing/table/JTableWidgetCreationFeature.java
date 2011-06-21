@@ -39,8 +39,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableColumnModelEvent;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.xidget.IXidget;
 import org.xidget.feature.tree.ColumnWidthFeature;
@@ -82,8 +87,9 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable.setShowHorizontalLines( true);
     jtable.setShowVerticalLines( true);
     jtable.setGridColor( Color.LIGHT_GRAY);
-    //jtable.setCellSelectionEnabled( true);
     jtable.getTableHeader().setVisible( false);
+    jtable.getTableHeader().setReorderingAllowed( false);
+    //jtable.setCellSelectionEnabled( true);
     
     jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
     jtable.setDefaultEditor( IModelObject.class, new CustomCellEditor());
@@ -98,6 +104,9 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     widthFeature.configure( xidget);
     jtable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF);
     jscrollPane.addComponentListener( componentListener);
+    
+    // add listener for column resize events
+    jtable.getColumnModel().addColumnModelListener( columnResizeListener);
     
     return jscrollPane;
   }
@@ -301,12 +310,59 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     }
   };
 
+  /**
+   * Returns the index of the specified column.
+   * @param column The column.
+   * @return Returns -1 or the index of the specified column.
+   */
+  private int getColumnIndex( TableColumn column)
+  {
+    TableColumnModel model = jtable.getColumnModel();
+    for( int i=0; i<model.getColumnCount(); i++)
+    {
+      if ( column == model.getColumn( i))
+        return i;
+    }
+    return -1;
+  }
+  
   private ComponentListener componentListener = new ComponentAdapter() {
     public void componentResized( ComponentEvent e)
     {
       IColumnWidthFeature feature = xidget.getFeature( IColumnWidthFeature.class);
-      feature.setWidth( jscrollPane.getWidth());
-      //jscrollPane.invalidate();
+      feature.setTotalWidth( jscrollPane.getWidth());
+    }
+  };
+  
+  private TableColumnModelListener columnResizeListener = new TableColumnModelListener() {
+    public void columnMarginChanged( ChangeEvent e)
+    {
+      TableColumn resizing = jtable.getTableHeader().getResizingColumn();
+      if ( resizing == null) return;
+      
+      int index = getColumnIndex( resizing);
+      if ( index < 0) return;
+      
+      IColumnWidthFeature feature = xidget.getFeature( IColumnWidthFeature.class);
+      int width = resizing.getWidth();
+      if ( width > 0 && width != feature.getWidth( index) && feature.isResizeable( index))
+      {
+        feature.setFreeWidth( index, width, width, 0);
+      }
+      
+      feature.setTotalWidth( jscrollPane.getWidth());
+    }
+    public void columnAdded( TableColumnModelEvent e)
+    {
+    }
+    public void columnMoved( TableColumnModelEvent e)
+    {
+    }
+    public void columnRemoved( TableColumnModelEvent e)
+    {
+    }
+    public void columnSelectionChanged( ListSelectionEvent e)
+    {
     }
   };
   
