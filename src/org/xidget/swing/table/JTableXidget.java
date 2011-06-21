@@ -41,7 +41,6 @@ import org.xidget.ifeature.tree.IColumnWidthFeature;
 import org.xidget.ifeature.tree.IRowSetFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
-import org.xidget.swing.feature.SwingColumnWidthFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
@@ -57,7 +56,7 @@ public class JTableXidget extends Xidget
     widgetFeature = new SwingWidgetFeature( this);
     containerFeature = new JTableContainerFeature( this);
     treeWidgetFeature = new JTableWidgetFeature( this);
-    columnWidthFeature = new SwingColumnWidthFeature( this);
+    columnWidthFeature = new JTableColumnWidthFeature( this);
     creationFeature = new JTableWidgetCreationFeature( this);
     selectionModelFeature = new SelectionModelFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);

@@ -29,10 +29,10 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.xidget.IXidget;
-import org.xidget.feature.tree.ColumnWidthFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
+import org.xidget.ifeature.tree.IColumnWidthFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
@@ -65,8 +65,12 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   {
     JTable table = xidget.getFeature( JTable.class);
     createColumns( table);
+    
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.insertRows( rowIndex, rows);
+    
+    IColumnWidthFeature widthFeature = xidget.getFeature( IColumnWidthFeature.class);
+    for( int i=0; i<rows.length; i++) widthFeature.insertRow( rowIndex + i);
   }
 
   /* (non-Javadoc)
@@ -75,8 +79,15 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   public void removeRows( Row parent, int rowIndex, Row[] rows, boolean dummy)
   {
     JTable table = xidget.getFeature( JTable.class);
+    
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.removeRows( rowIndex, rows.length);
+    
+    if ( !dummy)
+    {
+      IColumnWidthFeature widthFeature = xidget.getFeature( IColumnWidthFeature.class);
+      for( int i=0; i<rows.length; i++) widthFeature.removeRow( rowIndex);
+    }
   }
 
   /* (non-Javadoc)
@@ -130,6 +141,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.setColumnName( columnIndex, title);
+    if ( title.length() > 0) table.getTableHeader().setVisible( true);
     tableModel.fireTableStructureChanged();
   }
 
@@ -140,10 +152,12 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   public void setColumnWidth( int columnIndex, int width)
   {
     JTable table = xidget.getFeature( JTable.class);
-    TableColumnModel model = table.getColumnModel();
+    TableColumnModel model = (TableColumnModel)table.getColumnModel();
     TableColumn column = model.getColumn( columnIndex);
-    column.setMaxWidth( width);
+    column.setMinWidth( 0);
+    column.setMaxWidth( Integer.MAX_VALUE);
     column.setPreferredWidth( width);
+    column.setWidth( width);
   }
 
   /* (non-Javadoc)
@@ -153,7 +167,30 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   {
     JTable table = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
-    tableModel.fireTableCellUpdated( tableModel.getRows().indexOf( row), columnIndex);
+    
+    int rowIndex = findRowIndex( tableModel, row);
+    tableModel.fireTableCellUpdated( rowIndex, columnIndex);
+    
+    IColumnWidthFeature widthFeature = xidget.getFeature( IColumnWidthFeature.class);
+    widthFeature.setColumnText( rowIndex, columnIndex, row.getCell( columnIndex).text);
+  }
+  
+  /**
+   * Returns the index of the specified row.
+   * @param model The table model.
+   * @param row The row.
+   * @return Returns -1 or the index of the specified row.
+   */
+  private int findRowIndex( CustomTableModel model, Row row)
+  {
+    List<Row> rows = model.getRows();
+    if ( rows.size() == 0) return -1;
+    
+    // check end of list first for fast initial population
+    if ( rows.get( rows.size() - 1) == row) return rows.size() - 1;
+    
+    // check list
+    return model.getRows().indexOf( row);
   }
 
   /* (non-Javadoc)
@@ -237,21 +274,16 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
    */
   private void createColumns( JTable table)
   {
-    int tableColumnCount = table.getColumnCount();
-    if ( tableColumnCount > 0) return;
-    
     IModelObject config = xidget.getConfig();
-    if ( config.getNumberOfChildren( "column") == 0)
-    {
-      table.getTableHeader().setVisible( false);
-    }
-
     CustomTableModel model = (CustomTableModel)table.getModel();
     int configColumnCount = config.getNumberOfChildren( "cell");
+    int tableColumnCount = table.getColumnCount();
+    
     for( int i=tableColumnCount; i<configColumnCount; i++)
     {
       model.setColumnName( i, "");
-      table.addColumn( new TableColumn( i));
+      TableColumn column = new TableColumn( i);
+      table.addColumn( column);
     }
     
     model.fireTableStructureChanged();
@@ -259,5 +291,4 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
 
   private IXidget xidget;
   private Map<StatefulContext, Row> map;
-  private ColumnWidthFeature columnSizeCalculator;
 }

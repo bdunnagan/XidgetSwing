@@ -28,6 +28,9 @@ import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,9 +43,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.xidget.IXidget;
+import org.xidget.feature.tree.ColumnWidthFeature;
 import org.xidget.ifeature.IDragAndDropFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.tree.IColumnWidthFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
@@ -70,6 +75,8 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable = new JTable( tableModel);
     jtable.setDragEnabled( true);
     
+    System.out.println( "margin: "+jtable.getColumnModel().getColumnMargin());
+    
     DropTarget dropTarget = new DropTarget( jtable, dndListener);
     jtable.setDropTarget( dropTarget);
     
@@ -78,6 +85,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable.setShowVerticalLines( true);
     jtable.setGridColor( Color.LIGHT_GRAY);
     //jtable.setCellSelectionEnabled( true);
+    jtable.getTableHeader().setVisible( false);
     
     jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
     jtable.setDefaultEditor( IModelObject.class, new CustomCellEditor());
@@ -87,6 +95,13 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jscrollPane = new JScrollPane( jtable);
     jscrollPane.setBorder( BorderFactory.createEmptyBorder());
     jscrollPane.getViewport().setBackground( Color.WHITE);
+    
+    // configure column size feature
+    ColumnWidthFeature widthFeature = (ColumnWidthFeature)xidget.getFeature( IColumnWidthFeature.class);
+    widthFeature.configure( xidget);
+    jtable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF);
+    jscrollPane.addComponentListener( componentListener);
+    
     return jscrollPane;
   }
 
@@ -288,7 +303,15 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
       if ( dndFeature != null && dndFeature.isDropEnabled()) dndFeature.drop( dropContext);
     }
   };
-    
+
+  private ComponentListener componentListener = new ComponentAdapter() {
+    public void componentResized( ComponentEvent e)
+    {
+      IColumnWidthFeature feature = xidget.getFeature( IColumnWidthFeature.class);
+      feature.setWidth( jscrollPane.getWidth());
+    }
+  };
+  
   private JScrollPane jscrollPane;
   private JTable jtable;
 }
