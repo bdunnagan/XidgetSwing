@@ -75,8 +75,6 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable = new JTable( tableModel);
     jtable.setDragEnabled( true);
     
-    System.out.println( "margin: "+jtable.getColumnModel().getColumnMargin());
-    
     DropTarget dropTarget = new DropTarget( jtable, dndListener);
     jtable.setDropTarget( dropTarget);
     
@@ -89,7 +87,6 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     
     jtable.setDefaultRenderer( IModelObject.class, new CustomCellRenderer());
     jtable.setDefaultEditor( IModelObject.class, new CustomCellEditor());
-    jtable.getTableHeader().setDefaultRenderer( new CustomHeaderCellRenderer());
     jtable.getSelectionModel().addListSelectionListener( selectionListener);
     
     jscrollPane = new JScrollPane( jtable);
@@ -309,6 +306,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     {
       IColumnWidthFeature feature = xidget.getFeature( IColumnWidthFeature.class);
       feature.setWidth( jscrollPane.getWidth());
+      //jscrollPane.invalidate();
     }
   };
   
