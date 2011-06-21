@@ -98,15 +98,18 @@ public class XmlView extends PlainView
       }
     }
 
-    // TODO: check the map for overlapping parts
-
     int i = 0;
 
     // Colour the parts
+    int pos = 0;
     for (Map.Entry<Integer, Integer> entry : startMap.entrySet())
     {
       int start = entry.getKey();
       int end = entry.getValue();
+
+      if ( end < pos) continue;
+      if ( start < pos) start = pos;
+      pos = end;
 
       if (i < start)
       {
