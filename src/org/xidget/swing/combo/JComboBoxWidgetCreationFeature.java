@@ -113,7 +113,7 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     if ( choices != null)
     {
       IChoiceListFeature feature = xidget.getFeature( IChoiceListFeature.class);
-      for( IModelObject choice: choices.getChildren())
+      for( IModelObject choice: choices.getChildren( "choice"))
         feature.addChoice( Xlate.get( choice, ""));
     }
   }

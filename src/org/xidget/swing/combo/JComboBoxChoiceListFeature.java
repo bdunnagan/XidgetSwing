@@ -25,7 +25,11 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import org.xidget.IXidget;
+import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IChoiceListFeature;
+import org.xmodel.IModelObject;
+import org.xmodel.xpath.expression.IExpression;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IChoiceListFeature which is backed by a JComboBox.
@@ -35,6 +39,35 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
   public JComboBoxChoiceListFeature( IXidget xidget)
   {
     this.xidget = xidget;
+    this.choices = new ArrayList<Object>();
+  }
+  
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IChoiceListFeature#setTransform(org.xmodel.xpath.expression.IExpression)
+   */
+  @Override
+  public void setTransform( IExpression transform)
+  {
+    this.transform = transform;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IChoiceListFeature#transform(java.lang.Object)
+   */
+  public Object transform( Object value)
+  {
+    System.out.printf( "%s\n", value);
+    if ( transform == null) return value;
+
+    IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+    StatefulContext parent = bindFeature.getBoundContext();
+    
+    StatefulContext context = new StatefulContext( parent, (IModelObject)value);
+    context.set( "v", (IModelObject)value);
+    
+    String s = transform.evaluateString( context);
+    System.out.printf( "    -> %s\n", s);
+    return s;
   }
   
   /* (non-Javadoc)
@@ -42,11 +75,7 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public List<Object> getChoices()
   {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
-    int count = widget.getItemCount();
-    List<Object> result = new ArrayList<Object>( count);
-    for( int i=0; i<count; i++) result.add( widget.getItemAt( i).toString());
-    return result;
+    return choices;
   }
 
   /* (non-Javadoc)
@@ -54,7 +83,10 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void addChoice( Object choice)
   {
+    choices.add( choice);
+    
     JComboBox widget = xidget.getFeature( JComboBox.class);
+    choice = transform( choice);
     widget.addItem( choice);
   }
 
@@ -63,7 +95,10 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void insertChoice( int index, Object choice)
   {
+    choices.add( index, choice);
+    
     JComboBox widget = xidget.getFeature( JComboBox.class);
+    choice = transform( choice);
     widget.insertItemAt( choice, index);
   }
 
@@ -72,6 +107,8 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void removeAllChoices()
   {
+    choices.clear();
+    
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.removeAllItems();
   }
@@ -81,6 +118,8 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void removeChoice( int index)
   {
+    choices.remove( index);
+    
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.removeItemAt( index);
   }
@@ -90,7 +129,10 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
    */
   public void removeChoice( Object choice)
   {
+    choices.remove( choice);
+    
     JComboBox widget = xidget.getFeature( JComboBox.class);
+    choice = transform( choice);
     widget.removeItem( choice);
   }
 
@@ -100,10 +142,15 @@ public class JComboBoxChoiceListFeature implements IChoiceListFeature
   @Override
   public void updateChoice( int index, Object choice)
   {
+    choices.set( index, choice);
+    
     JComboBox widget = xidget.getFeature( JComboBox.class);
     CustomComboModel model = (CustomComboModel)widget.getModel();
+    choice = transform( choice);
     model.updateElementAt( choice, index);
   }
-
+  
   private IXidget xidget;
+  private IExpression transform;
+  private List<Object> choices;
 }
