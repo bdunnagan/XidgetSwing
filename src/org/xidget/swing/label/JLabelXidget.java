@@ -67,7 +67,7 @@ public class JLabelXidget extends Xidget
     if ( clss == IIconFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ISourceFeature.class) return (T)sourceFeature;
-    if ( clss == IValueFeature.class) return (T)widgetFeature;
+    if ( clss == IValueFeature.class) return (T)textFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
