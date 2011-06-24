@@ -103,6 +103,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     ColumnWidthFeature widthFeature = (ColumnWidthFeature)xidget.getFeature( IColumnWidthFeature.class);
     widthFeature.configure( xidget);
     jtable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF);
+    jtable.addComponentListener( componentListener);
     jscrollPane.addComponentListener( componentListener);
     
     // add listener for column resize events

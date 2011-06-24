@@ -36,6 +36,8 @@ import org.xidget.ifeature.tree.IColumnWidthFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
+import org.xmodel.xpath.XPath;
+import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -153,11 +155,14 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   {
     JTable table = xidget.getFeature( JTable.class);
     TableColumnModel model = (TableColumnModel)table.getColumnModel();
-    TableColumn column = model.getColumn( columnIndex);
-    column.setMinWidth( 0);
-    column.setMaxWidth( Integer.MAX_VALUE);
-    column.setPreferredWidth( width);
-    column.setWidth( width);
+    if ( columnIndex < model.getColumnCount())
+    {
+      TableColumn column = model.getColumn( columnIndex);
+      column.setMinWidth( 0);
+      column.setMaxWidth( Integer.MAX_VALUE);
+      column.setPreferredWidth( width);
+      column.setWidth( width);
+    }
   }
 
   /* (non-Javadoc)
@@ -276,7 +281,7 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   {
     IModelObject config = xidget.getConfig();
     CustomTableModel model = (CustomTableModel)table.getModel();
-    int configColumnCount = config.getNumberOfChildren( "cell");
+    int configColumnCount = getConfiguredColumnCount( config);
     int tableColumnCount = table.getColumnCount();
     
     for( int i=tableColumnCount; i<configColumnCount; i++)
@@ -288,7 +293,27 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
     
     model.fireTableStructureChanged();
   }
-
+  
+  /**
+   * Returns the maximum number of columns configured by column or cell declarations.
+   * @param config The table configuration.
+   * @return Returns the maximum number of configured columns.
+   */
+  private static int getConfiguredColumnCount( IModelObject config)
+  {
+    int max = 0;
+    IExpression tableExpr = XPath.createExpression( "nested-or-self::table");
+    List<IModelObject> tables = tableExpr.query( config, null);
+    for( IModelObject table: tables)
+    {
+      int columns = table.getNumberOfChildren( "column");
+      int cells = table.getNumberOfChildren( "cell");
+      if ( max < columns) max = columns;
+      if ( max < cells) max = cells;
+    }
+    return max;
+  }
+  
   private IXidget xidget;
   private Map<StatefulContext, Row> map;
 }
