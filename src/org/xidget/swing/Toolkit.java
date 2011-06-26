@@ -20,7 +20,10 @@
 package org.xidget.swing;
 
 import java.awt.Component;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -65,8 +68,8 @@ import org.xmodel.IModelObject;
 import org.xmodel.ModelRegistry;
 import org.xmodel.external.caching.IFileAssociation;
 import org.xmodel.xpath.expression.IExpression;
-import org.xmodel.xpath.expression.StatefulContext;
 import org.xmodel.xpath.expression.IExpression.ResultType;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IToolkit for the Swing platform.
@@ -128,6 +131,17 @@ public class Toolkit implements IToolkit
     processor.addHandler( "xml", new XidgetTagHandler( XmlTextPaneXidget.class));
     processor.addHandler( "xaxis", new XidgetTagHandler( XAxisXidget.class));
     processor.addHandler( "yaxis", new XidgetTagHandler( YAxisXidget.class));
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.IToolkit#getFonts()
+   */
+  @Override
+  public List<String> getFonts()
+  {
+    GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    String[] families = environment.getAvailableFontFamilyNames();
+    return Arrays.asList( families);
   }
 
   /* (non-Javadoc)

@@ -23,11 +23,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
+import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -214,22 +216,47 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void setFont( String name)
   {
-    if ( name.contains( ","))
-    {
-      String[] split = name.split( "\\s*,\\s*");
-      StringBuilder sb = new StringBuilder();
-      for( int i=0; i<split.length; i++)
-      {
-        if ( i > 0) sb.append( '-');
-        sb.append( split[ i]);
-      }
-      name = sb.toString();
-    }
-    
     JComponent widget = getPrimaryWidget( xidget);
     Font oldFont = widget.getFont();
-    Font font = name.contains( "-")? Font.decode( name): new Font( name, oldFont.getStyle(), oldFont.getSize());
-    widget.setFont( font);
+    
+    String family = oldFont.getFamily();
+    int size = oldFont.getSize();
+    int style = oldFont.getStyle();
+    
+    String[] split = name.split( "\\s*[,\\- /]\\s*");
+    if ( split.length > 0)
+    {
+      String newFamily = matchFamily( split[ 0]);
+      if ( newFamily != null) family = newFamily;
+    }
+    
+    if ( split.length > 1)
+    {
+      try { size = Integer.parseInt( split[ 1]);} catch( Exception e) {}
+    }
+    
+    if ( split.length > 2)
+    {
+      style = parseFontStyle( split[ 2]);
+    }
+    
+    widget.setFont( new Font( family, style, size));
+  }
+
+  /**
+   * Finds the first family containig the complete family string.
+   * @param families The complete list of families.
+   * @return Returns the first match.
+   */
+  public String matchFamily( String family)
+  {
+    List<String> names = Creator.getInstance().getToolkit().getFonts();
+    for( String name: names)
+    {
+      if ( name.contains( family))
+        return name;
+    }
+    return null;
   }
 
   /* (non-Javadoc)
@@ -245,14 +272,29 @@ public class SwingWidgetFeature implements IWidgetFeature
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetFeature#setFontStyle(java.lang.String)
    */
-  public void setFontStyle( String style)
+  public void setFontStyle( String styles)
   {
     JComponent widget = getPrimaryWidget( xidget);
     Font font = widget.getFont();
-    int constant = Font.PLAIN;
-    if ( style.equals( "italic") || style.equals( "italics")) constant = Font.ITALIC;
-    if ( style.equals( "bold")) constant = Font.BOLD;
+    int constant = parseFontStyle( styles);
     widget.setFont( font.deriveFont( constant));
+  }
+  
+  /**
+   * Parse the font style from the specified styles string.
+   * @param styles The styles string.
+   * @return Returns the font style.
+   */
+  private int parseFontStyle( String styles)
+  {
+    int constant = Font.PLAIN;
+    String[] split = styles.split( "[,\\- /]");
+    for( String style: split)
+    {
+      if ( style.equalsIgnoreCase( "italic") || style.equalsIgnoreCase( "italics")) constant |= Font.ITALIC;
+      if ( style.equalsIgnoreCase( "bold")) constant |= Font.BOLD;
+    }
+    return constant;
   }
 
   /**

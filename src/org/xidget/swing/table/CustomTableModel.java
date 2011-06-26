@@ -103,6 +103,7 @@ public class CustomTableModel extends AbstractTableModel
    */
   public void insertRows( int rowIndex, Row[] newRows)
   {
+    fireTableRowsInserted( rowIndex, rowIndex + newRows.length - 1);
   }
   
   /**
@@ -112,6 +113,7 @@ public class CustomTableModel extends AbstractTableModel
    */
   public void removeRows( int rowIndex, int count)
   {
+    fireTableRowsDeleted( rowIndex, rowIndex + count - 1);
   }
   
   /**
@@ -120,8 +122,8 @@ public class CustomTableModel extends AbstractTableModel
    */
   public void commit( Row parent)
   {
-    // TODO: need better record keeping for finer grained events
-    fireTableStructureChanged();
+    // this causes the selection to be cleared
+    //fireTableStructureChanged();
   }
   
   /**

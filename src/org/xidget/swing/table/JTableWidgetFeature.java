@@ -296,8 +296,11 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
       TableColumn column = new TableColumn( i);
       table.addColumn( column);
     }
-    
-    model.fireTableStructureChanged();
+   
+    if ( tableColumnCount < configColumnCount)
+    {
+      model.fireTableStructureChanged();
+    }
   }
   
   /**
