@@ -4,7 +4,10 @@
  */
 package org.xidget.swing.table;
 
+import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JTable;
 
@@ -22,18 +25,36 @@ public class JTableColumnWidthFeature extends ColumnWidthFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.feature.tree.ColumnWidthFeature#getWidth(java.lang.String)
+   * @see org.xidget.feature.tree.ColumnWidthFeature#getMaxWidth()
    */
   @Override
-  protected int getTextWidth( String text)
+  protected int getMaxWidth()
+  {
+    JTable jTable = xidget.getFeature( JTable.class);
+    if ( jTable != null)
+    {
+      FontMetrics metrics = jTable.getFontMetrics( jTable.getFont());
+      return metrics.getMaxAdvance(); 
+    }
+    return 0;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.feature.tree.ColumnWidthFeature#getTextWidth(java.lang.String, boolean)
+   */
+  @Override
+  protected int getTextWidth( String text, boolean header)
   {
     if ( text == null) return 0;
     
     JTable jTable = xidget.getFeature( JTable.class);
     if ( jTable != null)
     {
-      FontMetrics metrics = jTable.getFontMetrics( jTable.getFont());
-      return metrics.stringWidth( text) + 3;
+      Font font = header? jTable.getTableHeader().getFont(): jTable.getFont();
+      Graphics graphics = jTable.getGraphics();
+      FontMetrics metrics = jTable.getFontMetrics( font);
+      Rectangle2D bounds = metrics.getStringBounds( text, graphics);
+      return (int)Math.ceil( bounds.getWidth() + 6);
     }
     return 1;
   }

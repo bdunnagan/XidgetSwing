@@ -141,10 +141,16 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   public void setTitle( int columnIndex, String title)
   {
     JTable table = xidget.getFeature( JTable.class);
+    
     CustomTableModel tableModel = (CustomTableModel)table.getModel();
     tableModel.setColumnName( columnIndex, title);
+    
     if ( title.length() > 0) table.getTableHeader().setVisible( true);
+    
     tableModel.fireTableStructureChanged();
+    
+    IColumnWidthFeature widthFeature = xidget.getFeature( IColumnWidthFeature.class);
+    widthFeature.setColumnTitle( columnIndex, title);
   }
 
   /* (non-Javadoc)

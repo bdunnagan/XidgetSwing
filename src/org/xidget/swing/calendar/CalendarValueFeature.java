@@ -52,6 +52,4 @@ public class CalendarValueFeature extends AbstractValueFeature
     CalendarPanel widget = xidget.getFeature( CalendarPanel.class);
     return widget.getTime();
   }
-
-  private IXidget xidget;
 }
