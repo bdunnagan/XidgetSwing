@@ -105,6 +105,9 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
    */
   public void updateElementAt( Object object, int index)
   {
+    Item item = createItem( object);
+    items.set( index, item);
+    
     JComboBox widget = xidget.getFeature( JComboBox.class);
     fireContentsChanged( widget, index, index);
   }
