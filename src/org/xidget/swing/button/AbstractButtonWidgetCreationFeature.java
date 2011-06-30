@@ -37,8 +37,8 @@ import javax.swing.SwingConstants;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.IScriptFeature;
-import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -169,8 +169,8 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
   private ItemListener itemListener = new ItemListener() {
     public void itemStateChanged( ItemEvent e)
     {
-      IValueFeature feature = xidget.getFeature( IValueFeature.class);
-      feature.commit();
+      ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
+      feature.updateModel();
     }
   };
   

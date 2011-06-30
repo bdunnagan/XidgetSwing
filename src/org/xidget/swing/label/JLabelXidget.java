@@ -27,14 +27,15 @@ import javax.swing.JLabel;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.SourceFeature;
+import org.xidget.feature.model.SingleValueModelFeature;
+import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IIconFeature;
-import org.xidget.ifeature.ISourceFeature;
-import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.text.ITextWidgetFeature;
+import org.xidget.ifeature.model.ISingleValueModelFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
+import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
@@ -51,8 +52,9 @@ public class JLabelXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    sourceFeature = new SourceFeature( this);
-    textFeature = new JLabelTextWidgetFeature( this);
+    singleValueModelFeature = new SingleValueModelFeature( this);
+    singleValueUpdateFeature = new SingleValueUpdateFeature( this);
+    singleValueWidgetFeature = new JLabelSingleValueWidgetFeature( this);
     creationFeature = new JLabelWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -66,9 +68,9 @@ public class JLabelXidget extends Xidget
   {
     if ( clss == IIconFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)sourceFeature;
-    if ( clss == IValueFeature.class) return (T)textFeature;
-    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
+    if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;
+    if ( clss == ISingleValueUpdateFeature.class) return (T)singleValueUpdateFeature;
+    if ( clss == ISingleValueWidgetFeature.class) return (T)singleValueWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -84,8 +86,9 @@ public class JLabelXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private ISourceFeature sourceFeature;
-  private ITextWidgetFeature textFeature;
+  private ISingleValueModelFeature singleValueModelFeature;
+  private ISingleValueUpdateFeature singleValueUpdateFeature;
+  private ISingleValueWidgetFeature singleValueWidgetFeature;
   private JLabelWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }

@@ -185,6 +185,15 @@ public class SwingWidgetFeature implements IWidgetFeature
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setEditable(boolean)
+   */
+  @Override
+  public void setEditable( boolean editable)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.IWidgetAdapter#setTooltip(java.lang.String)
    */
   public void setTooltip( String tooltip)

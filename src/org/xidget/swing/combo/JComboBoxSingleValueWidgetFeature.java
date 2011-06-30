@@ -22,51 +22,21 @@ package org.xidget.swing.combo;
 import javax.swing.JComboBox;
 
 import org.xidget.IXidget;
-import org.xidget.feature.AbstractValueFeature;
-import org.xidget.ifeature.text.ITextWidgetFeature;
+import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.swing.combo.CustomComboModel.Item;
 
 /**
- * An implementation of IWidgetTextAdapter for a JComboBox widget 
- * which supports the <i>all</i> channel.
+ * An implementation of ISingleValueWidgetFeature for JComboBox.
  */
-public class JComboBoxTextWidgetFeature extends AbstractValueFeature implements ITextWidgetFeature
+public class JComboBoxSingleValueWidgetFeature implements ISingleValueWidgetFeature
 {
-  public JComboBoxTextWidgetFeature( IXidget xidget)
+  public JComboBoxSingleValueWidgetFeature( IXidget xidget)
   {
-    super( xidget);
+    this.xidget = xidget;
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.text.adapter.IWidgetTextAdapter#setEditable(boolean)
-   */
-  public void setEditable( boolean editable)
-  {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
-    widget.setEditable( editable);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.text.adapter.IWidgetTextAdapter#setText(java.lang.String, java.lang.String)
-   */
-  public void setText( String text)
-  {
-    setValue( text);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.feature.AbstractValueFeature#setValue(java.lang.Object)
-   */
-  @Override
-  protected void setValue( Object value)
-  {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    CustomComboModel model = (CustomComboModel)jCombo.getModel();
-    model.setSelectedItem( value);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IValueFeature#getValue()
+   * @see org.xidget.ifeature.model.ISingleValueWidgetFeature#getValue()
    */
   @Override
   public Object getValue()
@@ -77,4 +47,17 @@ public class JComboBoxTextWidgetFeature extends AbstractValueFeature implements 
     if ( selected instanceof Item) return ((Item)selected).getValue();
     return selected;
   }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.model.ISingleValueWidgetFeature#setValue(java.lang.Object)
+   */
+  @Override
+  public void setValue( Object value)
+  {
+    JComboBox jCombo = xidget.getFeature( JComboBox.class);
+    CustomComboModel model = (CustomComboModel)jCombo.getModel();
+    model.setSelectedItem( value);
+  }
+
+  private IXidget xidget;
 }

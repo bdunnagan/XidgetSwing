@@ -6,27 +6,25 @@
 package org.xidget.swing.xmleditor;
 
 import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.ISourceFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import org.xmodel.ChangeSet;
 import org.xmodel.IModelObject;
-import org.xmodel.diff.DefaultXmlMatcher;
-import org.xmodel.diff.XmlDiffer;
 import org.xmodel.xml.XmlIO;
 
 /**
@@ -40,21 +38,9 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     
     xmlIO = new XmlIO();
     xmlIO.setErrorHandler( errorHandler);
-    differ = new XmlDiffer();
-    differ.setMatcher( new DefaultXmlMatcher( true));
     errorHighlighter = new ErrorHighlightPainter();
-    
-    timer = new Timer( 250, new ActionListener() {
-      public void actionPerformed( ActionEvent e)
-      {
-        Thread thread = new Thread( parseRunnable, "XmlTextPane");
-        thread.setDaemon( true);
-        thread.start();
-      }
-    });
-    timer.setRepeats( false);
-    
-    lock = new Object();
+
+    executor = Executors.newCachedThreadPool();
   }
 
   /* (non-Javadoc)
@@ -157,9 +143,14 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   private void updateEditor()
   {
+    ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
+    if ( feature.isUpdating()) return;
+    
+    // update
     xmlTextPane.getHighlighter().removeAllHighlights();
-    timer.restart();
-    synchronized( lock) { text = xmlTextPane.getText();}
+    if ( future != null) future.cancel( false);
+    future = new FutureTask<IModelObject>( parseCallable);
+    executor.submit( future);
   }
 
   private DocumentListener documentListener = new DocumentListener() {
@@ -177,50 +168,31 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     }
   };
   
-  private Runnable parseRunnable = new Runnable() {
-    public void run()
+  private Callable<IModelObject> parseCallable = new Callable<IModelObject>() {
+    public IModelObject call() throws Exception
     {
-      try
-      {
-        String xml = null;
-        synchronized( lock) { xml = text;}
-        IModelObject element = xmlIO.read( xml);
-        synchronized( lock) { parsed = element;}
-        SwingUtilities.invokeAndWait( updateSourceRunnable);
-      } 
-      catch( Exception e)
-      {
-      }
+      String text = xmlTextPane.getText();
+      IModelObject element = xmlIO.read( text);
+      SwingUtilities.invokeLater( new Commiter( element));
+      return element;
     }
   };
   
-  private Runnable updateSourceRunnable = new Runnable() {
+  private class Commiter implements Runnable
+  {
+    public Commiter( IModelObject element)
+    {
+      this.element = element;
+    }
+    
     public void run()
     {
-      XmlTextPaneSourceFeature feature = (XmlTextPaneSourceFeature)xidget.getFeature( ISourceFeature.class);
-      feature.setUpdating( true);
-      
-      try
-      {
-        IModelObject node = feature.getSource();
-        if ( node != null)
-        {
-          IModelObject element = null;
-          synchronized( lock) { element = parsed;}
-          if ( element != null) 
-          {
-            ChangeSet changeSet = new ChangeSet();
-            differ.diff( node, parsed, changeSet);
-            changeSet.applyChanges();
-          }
-        }
-      }
-      finally
-      {
-        feature.setUpdating( false);
-      }
+      ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
+      feature.commit( element);
     }
-  };
+    
+    private IModelObject element;
+  }
   
   private ErrorHandler errorHandler = new ErrorHandler() {
     public void warning( SAXParseException exception) throws SAXException
@@ -239,11 +211,8 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
 
   private JScrollPane jScrollPane;
   private XmlTextPane xmlTextPane;
-  private XmlIO xmlIO;
-  private String text;
-  private IModelObject parsed;
-  private XmlDiffer differ;
   private ErrorHighlightPainter errorHighlighter;
-  private Timer timer;
-  private Object lock;
+  private XmlIO xmlIO;
+  private FutureTask<IModelObject> future;
+  private ExecutorService executor;
 }

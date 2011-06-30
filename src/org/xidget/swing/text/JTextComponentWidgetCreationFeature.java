@@ -44,7 +44,7 @@ import javax.swing.text.JTextComponent;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.IValueFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.layout.Size;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
@@ -228,8 +228,8 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      IValueFeature feature = xidget.getFeature( IValueFeature.class);
-      feature.commit();
+      ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
+      feature.updateModel();
     }
   };
   

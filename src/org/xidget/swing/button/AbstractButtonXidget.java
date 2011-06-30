@@ -28,15 +28,16 @@ import javax.swing.JComponent;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.SourceFeature;
+import org.xidget.feature.model.SingleValueModelFeature;
+import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.ISourceFeature;
-import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.button.IButtonWidgetFeature;
+import org.xidget.ifeature.model.ISingleValueModelFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
+import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.swing.feature.AbstractButtonIconFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
@@ -54,8 +55,9 @@ public class AbstractButtonXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    sourceFeature = new SourceFeature( this);
-    buttonWidgetFeature = new ButtonWidgetFeature( this);
+    singleValueModelFeature = new SingleValueModelFeature( this);    
+    singleValueUpdateFeature = new SingleValueUpdateFeature( this);    
+    singleValueWidgetFeature = new AbstractButtonSingleValueWidgetFeature( this);
     iconFeature = new AbstractButtonIconFeature( this);
     labelFeature = new ButtonLabelFeature( this);
     creationFeature = new AbstractButtonWidgetCreationFeature( this);
@@ -72,9 +74,9 @@ public class AbstractButtonXidget extends Xidget
     if ( clss == IIconFeature.class) return (T)iconFeature;
     if ( clss == ILabelFeature.class) return (T)labelFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)sourceFeature;
-    if ( clss == IValueFeature.class) return (T)buttonWidgetFeature;
-    if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
+    if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;
+    if ( clss == ISingleValueUpdateFeature.class) return (T)singleValueUpdateFeature;
+    if ( clss == ISingleValueWidgetFeature.class) return (T)singleValueWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -91,8 +93,9 @@ public class AbstractButtonXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private IButtonWidgetFeature buttonWidgetFeature;
-  private ISourceFeature sourceFeature;
+  private ISingleValueModelFeature singleValueModelFeature;
+  private ISingleValueUpdateFeature singleValueUpdateFeature;
+  private ISingleValueWidgetFeature singleValueWidgetFeature;
   private IIconFeature iconFeature;
   private ILabelFeature labelFeature;
   private AbstractButtonWidgetCreationFeature creationFeature;  

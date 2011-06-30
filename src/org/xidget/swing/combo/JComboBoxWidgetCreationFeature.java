@@ -40,7 +40,7 @@ import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
-import org.xidget.ifeature.IValueFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.swing.combo.CustomComboModel.Item;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
@@ -188,22 +188,22 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
       try
       {
         // update value
-        IValueFeature feature = xidget.getFeature( IValueFeature.class);
-        feature.commit();
+        ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
+        feature.updateModel();
         
         // update selection model
-        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        StatefulContext context = bindFeature.getBoundContext();
-        Object selected = jCombo.getSelectedItem();
-        if ( selected != null)
-        {
-          Item item = (Item)selected;
-          if ( item.node != null)
-          {
-            ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-            selectionModelFeature.setSelection( context, Collections.singletonList( item.node));
-          }
-        }
+//        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+//        StatefulContext context = bindFeature.getBoundContext();
+//        Object selected = jCombo.getSelectedItem();
+//        if ( selected != null)
+//        {
+//          Item item = (Item)selected;
+//          if ( item.node != null)
+//          {
+//            ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
+//            selectionModelFeature.setSelection( context, Collections.singletonList( item.node));
+//          }
+//        }
       }
       finally
       {

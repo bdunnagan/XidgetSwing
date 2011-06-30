@@ -34,7 +34,7 @@ import javax.swing.event.ChangeListener;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.IValueFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.Xlate;
 
@@ -175,8 +175,8 @@ public class JSliderWidgetCreationFeature extends SwingWidgetCreationFeature imp
   private ChangeListener changeListener = new ChangeListener() {
     public void stateChanged( ChangeEvent e)
     {
-      IValueFeature feature = xidget.getFeature( IValueFeature.class);
-      feature.commit();
+      ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
+      feature.updateModel();
     }
   };
   

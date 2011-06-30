@@ -29,16 +29,17 @@ import javax.swing.JMenuItem;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.SourceFeature;
+import org.xidget.feature.model.SingleValueModelFeature;
+import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.ISourceFeature;
-import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.button.IButtonWidgetFeature;
+import org.xidget.ifeature.model.ISingleValueModelFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
+import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.swing.feature.AbstractButtonIconFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
@@ -59,8 +60,9 @@ public class JMenuItemXidget extends Xidget
     iconFeature = new AbstractButtonIconFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     containerFeature = new GenericContainerFeature( this);
-    sourceFeature = new SourceFeature( this);
-    buttonWidgetFeature = new JMenuItemButtonWidgetFeature( this);
+    singleValueModelFeature = new SingleValueModelFeature( this);    
+    singleValueUpdateFeature = new SingleValueUpdateFeature( this);    
+    singleValueWidgetFeature = new JMenuItemSingleValueWidgetFeature( this);
     creationFeature = new JMenuItemWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -75,9 +77,9 @@ public class JMenuItemXidget extends Xidget
     if ( clss == IIconFeature.class) return (T)iconFeature;
     if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)sourceFeature;
-    if ( clss == IValueFeature.class) return (T)buttonWidgetFeature;
-    if ( clss == IButtonWidgetFeature.class) return (T)buttonWidgetFeature;
+    if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;
+    if ( clss == ISingleValueUpdateFeature.class) return (T)singleValueUpdateFeature;
+    if ( clss == ISingleValueWidgetFeature.class) return (T)singleValueWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
@@ -98,8 +100,9 @@ public class JMenuItemXidget extends Xidget
   private IIconFeature iconFeature;
   private IWidgetFeature widgetFeature;
   private IWidgetContainerFeature containerFeature;
-  private ISourceFeature sourceFeature;
-  private IButtonWidgetFeature buttonWidgetFeature;
+  private ISingleValueModelFeature singleValueModelFeature;
+  private ISingleValueUpdateFeature singleValueUpdateFeature;
+  private ISingleValueWidgetFeature singleValueWidgetFeature;
   private JMenuItemWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;
 }

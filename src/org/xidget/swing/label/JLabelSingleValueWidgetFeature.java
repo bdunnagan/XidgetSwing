@@ -22,46 +22,28 @@ package org.xidget.swing.label;
 import javax.swing.JLabel;
 
 import org.xidget.IXidget;
-import org.xidget.feature.AbstractValueFeature;
-import org.xidget.ifeature.text.ITextWidgetFeature;
+import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 
-/**
- * An implementation of IWidgetTextAdapter for a JLabel widget.
- */
-public class JLabelTextWidgetFeature extends AbstractValueFeature implements ITextWidgetFeature
+public class JLabelSingleValueWidgetFeature implements ISingleValueWidgetFeature
 {
-  public JLabelTextWidgetFeature( IXidget xidget)
+  public JLabelSingleValueWidgetFeature( IXidget xidget)
   {
-    super( xidget);
+    this.xidget = xidget;
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.text.adapter.IWidgetTextAdapter#setEditable(boolean)
+   * @see org.xidget.ifeature.model.ISingleValueWidgetFeature#setValue(java.lang.Object)
    */
-  public void setEditable( boolean editable)
+  @Override
+  public void setValue( Object value)
   {
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.text.adapter.IWidgetTextAdapter#setText(java.lang.String, java.lang.String)
-   */
-  public void setText( String text)
-  {
+    String text = (value != null)? value.toString(): "";
     JLabel widget = xidget.getFeature( JLabel.class);
     if ( !widget.getText().equals( text)) widget.setText( text);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.feature.AbstractValueFeature#setValue(java.lang.Object)
-   */
-  @Override
-  protected void setValue( Object value)
-  {
-    setText( (value != null)? value.toString(): "");
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IValueFeature#getValue()
+   * @see org.xidget.ifeature.model.ISingleValueWidgetFeature#getValue()
    */
   @Override
   public Object getValue()
@@ -69,4 +51,6 @@ public class JLabelTextWidgetFeature extends AbstractValueFeature implements ITe
     JLabel widget = xidget.getFeature( JLabel.class);
     return widget.getText();
   }
+  
+  private IXidget xidget;
 }

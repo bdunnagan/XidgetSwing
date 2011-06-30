@@ -28,19 +28,19 @@ import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.SelectionModelFeature;
-import org.xidget.feature.SourceFeature;
+import org.xidget.feature.model.SingleValueModelFeature;
+import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.ISelectionWidgetFeature;
-import org.xidget.ifeature.ISourceFeature;
-import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.text.ITextWidgetFeature;
+import org.xidget.ifeature.model.ISingleValueModelFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
+import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
-import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
  * A combo xidget implemented with the Swing JComboBox widget.
@@ -50,11 +50,12 @@ public class JComboBoxXidget extends Xidget
   public void createFeatures()
   {
     bindFeature = new BindFeature( this);
-    widgetFeature = new SwingWidgetFeature( this);
-    sourceFeature = new SourceFeature( this);
-    textWidgetFeature = new JComboBoxTextWidgetFeature( this);
+    widgetFeature = new JComboBoxWidgetFeature( this);
     choiceListFeature = new JComboBoxChoiceListFeature( this);
     creationFeature = new JComboBoxWidgetCreationFeature( this);
+    singleValueModelFeature = new SingleValueModelFeature( this);    
+    singleValueUpdateFeature = new SingleValueUpdateFeature( this);    
+    singleValueWidgetFeature = new JComboBoxSingleValueWidgetFeature( this);    
     selectionModelFeature = new SelectionModelFeature( this);
     selectionWidgetFeature = new JComboBoxSelectionWidgetFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -69,12 +70,12 @@ public class JComboBoxXidget extends Xidget
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
-    if ( clss == ISourceFeature.class) return (T)sourceFeature;
-    if ( clss == ITextWidgetFeature.class) return (T)textWidgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IChoiceListFeature.class) return (T)choiceListFeature;
     if ( clss == ILabelFeature.class) return (T)creationFeature;
-    if ( clss == IValueFeature.class) return (T)textWidgetFeature;
+    if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;
+    if ( clss == ISingleValueUpdateFeature.class) return (T)singleValueUpdateFeature;
+    if ( clss == ISingleValueWidgetFeature.class) return (T)singleValueWidgetFeature;
     if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
     if ( clss == ISelectionWidgetFeature.class) return (T)selectionWidgetFeature;
     
@@ -90,8 +91,9 @@ public class JComboBoxXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private ISourceFeature sourceFeature;
-  private JComboBoxTextWidgetFeature textWidgetFeature;
+  private SingleValueModelFeature singleValueModelFeature;
+  private SingleValueUpdateFeature singleValueUpdateFeature;
+  private JComboBoxSingleValueWidgetFeature singleValueWidgetFeature;
   private JComboBoxChoiceListFeature choiceListFeature;
   private JComboBoxWidgetCreationFeature creationFeature;
   private ISelectionModelFeature selectionModelFeature;

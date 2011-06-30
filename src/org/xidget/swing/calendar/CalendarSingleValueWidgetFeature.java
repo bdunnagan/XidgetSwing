@@ -5,23 +5,20 @@
 package org.xidget.swing.calendar;
 
 import org.xidget.IXidget;
-import org.xidget.feature.AbstractValueFeature;
+import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 
-/**
- * An implementation of IValueFeature for the CalendarPanel widget.
- */
-public class CalendarValueFeature extends AbstractValueFeature
+public class CalendarSingleValueWidgetFeature implements ISingleValueWidgetFeature
 {
-  public CalendarValueFeature( IXidget xidget)
+  public CalendarSingleValueWidgetFeature( IXidget xidget)
   {
-    super( xidget);
+    this.xidget = xidget;
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.feature.AbstractValueFeature#setValue(java.lang.Object)
+   * @see org.xidget.ifeature.model.ISingleValueWidgetFeature#setValue(java.lang.Object)
    */
   @Override
-  protected void setValue( Object value)
+  public void setValue( Object value)
   {
     CalendarPanel widget = xidget.getFeature( CalendarPanel.class);
     if ( value instanceof Number)
@@ -44,7 +41,7 @@ public class CalendarValueFeature extends AbstractValueFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IValueFeature#getValue()
+   * @see org.xidget.ifeature.model.ISingleValueWidgetFeature#getValue()
    */
   @Override
   public Object getValue()
@@ -52,4 +49,6 @@ public class CalendarValueFeature extends AbstractValueFeature
     CalendarPanel widget = xidget.getFeature( CalendarPanel.class);
     return widget.getTime();
   }
+  
+  private IXidget xidget;
 }

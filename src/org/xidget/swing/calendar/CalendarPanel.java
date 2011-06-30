@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.IValueFeature;
+import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 
 /**
  * A canvas which displays a calendar month.
@@ -195,8 +195,8 @@ public class CalendarPanel extends JPanel
   private final Runnable updateRunnable = new Runnable() {
     public void run()
     {
-      IValueFeature feature = xidget.getFeature( IValueFeature.class);
-      feature.commit();
+      ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
+      feature.updateModel();
     }
   };
   
