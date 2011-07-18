@@ -34,8 +34,8 @@ import javax.swing.text.JTextComponent;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IValueFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
@@ -124,8 +124,7 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    */
   public Object getCellEditorValue()
   {
-    IValueFeature feature = editor.getFeature( IValueFeature.class);
-    feature.commit();
+    ISingleValueWidgetFeature feature = editor.getFeature( ISingleValueWidgetFeature.class);
     return feature.getValue();
   }
   

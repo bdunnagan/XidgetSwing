@@ -42,15 +42,11 @@ import javax.swing.tree.TreePath;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.IDragAndDropFeature;
-import org.xidget.ifeature.ISelectionModelFeature;
-import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.model.ISelectionUpdateFeature;
 import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
-import org.xmodel.IModelObject;
-import org.xmodel.util.HashMultiMap;
-import org.xmodel.util.MultiMap;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -86,9 +82,7 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     jtree.setRootVisible( false);
     jtree.putClientProperty( "JTree.lineStyle", "Angled");
     jtree.addTreeExpansionListener( expandListener);
-    
-    if ( xidget.getFeature( ISelectionModelFeature.class) != null)
-      jtree.addTreeSelectionListener( selectionListener);
+    jtree.addTreeSelectionListener( selectionListener);
     
     jscrollPane = new JScrollPane( jtree);
     jscrollPane.setBorder( BorderFactory.createEmptyBorder());
@@ -142,43 +136,30 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
   };
   
   /**
-   * Update the selection in the selection model.
+   * Returns the next consecutive selection paths belonging to the same tree xidget. 
+   * @param event The selection event.
+   * @param paths The selected paths.
+   * @param start The starting index.
+   * @return Returns the list of selected objects.
    */
-  private void updateSelection()
+  private List<Object> getNextSelectionGroup( TreeSelectionEvent event, TreePath[] paths, int start)
   {
-    IWidgetContextFeature widgetContextFeature = xidget.getFeature( IWidgetContextFeature.class);
-    StatefulContext context = widgetContextFeature.getContext( jtree);
-
-    // TODO: tree selection is not ordered and causes unnecessary change records
-    TreePath[] paths = jtree.getSelectionPaths();
-    if ( paths == null) paths = new TreePath[ 0];
+    List<Object> list = new ArrayList<Object>();
     
-    Row[] rows = new Row[ paths.length];
-    for( int i=0; i<paths.length; i++)
-      rows[ i] = (Row)paths[ i].getLastPathComponent();
+    Row row = (Row)paths[ start].getLastPathComponent();
+    list.add( row.getContext().getObject());
     
-    // global selection
-    List<IModelObject> allElements = new ArrayList<IModelObject>();
-    if ( paths != null)
-      for( int i=0; i<paths.length; i++)
-        allElements.add( rows[ i].getContext().getObject());
+    IXidget tree = row.getTable().getParent();
+    boolean isAdded = event.isAddedPath( start);
     
-    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-    selectionModelFeature.setSelection( context, allElements);
-    
-    // group rows by table
-    MultiMap<IXidget, IModelObject> map = new HashMultiMap<IXidget, IModelObject>();
-    for( Row row: rows) map.put( row.getTable(), row.getContext().getObject());
-    
-    // update selection for each table
-    for( IXidget table: map.keySet())
+    for( int i=start; i<paths.length; i++)
     {
-      selectionModelFeature = table.getFeature( ISelectionModelFeature.class);
-      if ( selectionModelFeature != null)
-      {
-        selectionModelFeature.setSelection( context, map.get( table));
-      }
+      row = (Row)paths[ i].getLastPathComponent();
+      if ( tree != row.getTable().getParent()) break;
+      if ( isAdded ^ event.isAddedPath( i)) break;
+      list.add( row.getContext().getObject());
     }
+    return list;
   }
   
   private TreeSelectionListener selectionListener = new TreeSelectionListener() {
@@ -186,7 +167,43 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     {
       if ( updating) return;
       updating = true;
-      try { updateSelection();} finally { updating = false;}
+      
+      try 
+      { 
+        ISelectionUpdateFeature feature = xidget.getFeature( ISelectionUpdateFeature.class);
+        TreePath[] paths = event.getPaths();
+        for( int index = 0; index < paths.length; )
+        {
+          Row first = (Row)paths[ index].getLastPathComponent();
+          IXidget tree = first.getTable().getParent();
+          
+          List<Object> list = getNextSelectionGroup( event, paths, index);
+          if ( event.isAddedPath( index))
+          {
+            // notify global selection
+            feature.modelSelect( list);
+            
+            // notify local selection
+            ISelectionUpdateFeature nestedFeature = tree.getFeature( ISelectionUpdateFeature.class);
+            nestedFeature.modelSelect( list);
+          }
+          else
+          {
+            // notify global selection
+            feature.modelDeselect( list);
+            
+            // notify local selection
+            ISelectionUpdateFeature nestedFeature = tree.getFeature( ISelectionUpdateFeature.class);
+            nestedFeature.modelDeselect( list);
+          }
+          
+          index += list.size();
+        }
+      } 
+      finally 
+      { 
+        updating = false;
+      }
     }
     
     private boolean updating;

@@ -25,7 +25,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collections;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -36,16 +35,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.ISelectionModelFeature;
+import org.xidget.ifeature.model.ISelectionUpdateFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
-import org.xidget.swing.combo.CustomComboModel.Item;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
-import org.xmodel.IModelObject;
-import org.xmodel.Xlate;
-import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a JTextField or JTextArea.
@@ -68,9 +61,6 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     jCombo.setModel( new CustomComboModel( xidget));
     jCombo.setBorder( new EmptyBorder( 1, 1, 1, 1));
 
-    // add statically defined choices if present
-    addStaticChoices( xidget);
-    
     // create extra container to hold label and widget
     if ( xidget.getConfig().getFirstChild( "label") != null)
     {
@@ -102,22 +92,6 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     return component;
   }
 
-  /**
-   * Add the static choices defined in choices/choice.
-   * @param xidget The combo xidget.
-   */
-  private static void addStaticChoices( IXidget xidget)
-  {
-    IModelObject config = xidget.getConfig();
-    IModelObject choices = config.getFirstChild( "choices");
-    if ( choices != null)
-    {
-      IChoiceListFeature feature = xidget.getFeature( IChoiceListFeature.class);
-      for( IModelObject choice: choices.getChildren( "choice"))
-        feature.addChoice( Xlate.get( choice, ""));
-    }
-  }
-  
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetCreationFeature#getLastWidgets()
    */
@@ -178,6 +152,7 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
     {
       if ( updating) return;
       updating = true;
+      
       SwingUtilities.invokeLater( updateRunnable);
     }
   };
@@ -188,22 +163,12 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
       try
       {
         // update value
-        ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
-        feature.updateModel();
+        ISingleValueUpdateFeature valueUpdateFeature = xidget.getFeature( ISingleValueUpdateFeature.class);
+        valueUpdateFeature.updateModel();
         
         // update selection model
-//        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-//        StatefulContext context = bindFeature.getBoundContext();
-//        Object selected = jCombo.getSelectedItem();
-//        if ( selected != null)
-//        {
-//          Item item = (Item)selected;
-//          if ( item.node != null)
-//          {
-//            ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-//            selectionModelFeature.setSelection( context, Collections.singletonList( item.node));
-//          }
-//        }
+        ISelectionUpdateFeature selectionUpdateFeature = xidget.getFeature( ISelectionUpdateFeature.class);
+        selectionUpdateFeature.updateModel();
       }
       finally
       {

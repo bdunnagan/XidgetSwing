@@ -27,8 +27,8 @@ import javax.swing.JTabbedPane;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.ifeature.model.ISelectionWidgetFeature;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -42,38 +42,43 @@ public class JTabbedPaneSelectionWidgetFeature implements ISelectionWidgetFeatur
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#getSelection()
-   */
-  public List<? extends Object> getSelection()
-  {
-    return Collections.singletonList( selection);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, java.lang.Object)
+   * @see org.xidget.ifeature.model.ISelectionWidgetFeature#select(java.lang.Object)
    */
   @Override
-  public void insertSelected( int index, Object object)
+  public void select( Object object)
   {
+    for( IXidget child: xidget.getChildren())
+    {
+      IBindFeature bindFeature = child.getFeature( IBindFeature.class);
+      StatefulContext context = bindFeature.getBoundContext();
+      if ( context.getObject().equals( object))
+      {
+        IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
+        Object[] widgets = creationFeature.getLastWidgets();
+        
+        JTabbedPane jTabbedPane = xidget.getFeature( JTabbedPane.class);
+        jTabbedPane.setSelectedComponent( (Component)widgets[ 0]);
+      }
+    }
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, java.lang.Object)
+   * @see org.xidget.ifeature.model.ISelectionWidgetFeature#deselect(java.lang.Object)
    */
   @Override
-  public void removeSelected( Object object)
+  public void deselect( Object object)
   {
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#setSelection(java.util.List)
+   * @see org.xidget.ifeature.model.ISelectionWidgetFeature#setSelection(java.util.List)
    */
+  @Override
   public void setSelection( List<? extends Object> objects)
   {
-    if ( objects == null || objects.size() == 0) return;
+    if ( objects.size() == 0) return;
     
-    selection = objects.get( 0);
-    
+    Object selection = objects.get( 0);
     for( IXidget child: xidget.getChildren())
     {
       IBindFeature bindFeature = child.getFeature( IBindFeature.class);
@@ -89,6 +94,26 @@ public class JTabbedPaneSelectionWidgetFeature implements ISelectionWidgetFeatur
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#getSelection()
+   */
+  public List<? extends Object> getSelection()
+  {
+    JTabbedPane jTabbedPane = xidget.getFeature( JTabbedPane.class);
+    Component selected = jTabbedPane.getSelectedComponent();
+    for( IXidget child: xidget.getChildren())
+    {
+      IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
+      Object[] widgets = creationFeature.getLastWidgets();
+      if ( widgets[ 0] == selected)
+      {
+        IBindFeature bindFeature = child.getFeature( IBindFeature.class);
+        StatefulContext context = bindFeature.getBoundContext();
+        return Collections.singletonList( context.getObject());
+      }
+    }    
+    return Collections.emptyList();
+  }
+
   private IXidget xidget;
-  private Object selection;
 }

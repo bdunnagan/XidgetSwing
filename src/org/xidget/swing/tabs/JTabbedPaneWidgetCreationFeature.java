@@ -38,10 +38,9 @@ import javax.swing.event.ChangeListener;
 import org.xidget.IXidget;
 import org.xidget.binding.IXidgetBinding;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.ISelectionModelFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
-import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.ifeature.model.ISelectionUpdateFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
@@ -154,9 +153,6 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   private ChangeListener selectionListener = new ChangeListener() {
     public void stateChanged( ChangeEvent e)
     {
-      IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
-      StatefulContext context = contextFeature.getContext( jtabbedPane);
-
       List<IXidget> children = xidget.getChildren();
       int index = jtabbedPane.getSelectedIndex();
       if ( index >= 0 && index < children.size())
@@ -169,8 +165,8 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
           jtabbedPane.removeChangeListener( this);
           try
           {
-            ISelectionModelFeature selectionFeature = xidget.getFeature( ISelectionModelFeature.class);
-            selectionFeature.setSelection( context, Collections.singletonList( childContext.getObject()));
+            ISelectionUpdateFeature selectionFeature = xidget.getFeature( ISelectionUpdateFeature.class);
+            selectionFeature.modelSelect( Collections.singletonList( childContext.getObject()));
           }
           finally
           {
@@ -209,8 +205,8 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
       jtabbedPane.removeChangeListener( selectionListener);
       try
       {
-        ISelectionModelFeature selectionFeature = xidget.getParent().getFeature( ISelectionModelFeature.class);
-        selectionFeature.setSelection( context, Collections.singletonList( childContext.getObject()));
+        ISelectionUpdateFeature selectionFeature = xidget.getFeature( ISelectionUpdateFeature.class);
+        selectionFeature.modelSelect( Collections.singletonList( childContext.getObject()));
       }
       finally
       {

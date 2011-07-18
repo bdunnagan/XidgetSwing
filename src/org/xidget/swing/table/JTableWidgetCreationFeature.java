@@ -31,8 +31,6 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -50,8 +48,7 @@ import javax.swing.table.TableColumnModel;
 import org.xidget.IXidget;
 import org.xidget.feature.tree.ColumnWidthFeature;
 import org.xidget.ifeature.IDragAndDropFeature;
-import org.xidget.ifeature.ISelectionModelFeature;
-import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.model.ISelectionUpdateFeature;
 import org.xidget.ifeature.tree.IColumnWidthFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xidget.tree.Cell;
@@ -143,56 +140,17 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   public void updateSelection()
   {
-    IWidgetContextFeature widgetContextFeature = xidget.getFeature( IWidgetContextFeature.class);
-    StatefulContext context = widgetContextFeature.getContext( jtable);
-
-    int[] selected = jtable.getSelectedRows();
-    Arrays.sort( selected);
-    
-    CustomTableModel model = (CustomTableModel)jtable.getModel();
-    List<Row> rows = model.getRows();
-    
-    // global table selection
-    List<IModelObject> tableElements = new ArrayList<IModelObject>();
-    for( int i=0; i<selected.length; i++)
-    {
-      Row row = rows.get( selected[ i]);
-      tableElements.add( row.getContext().getObject());
-    }
-    
-    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-    selectionModelFeature.setSelection( context, tableElements);
+    ISelectionUpdateFeature selectionUpdateFeature = xidget.getFeature( ISelectionUpdateFeature.class);
+    selectionUpdateFeature.updateModel();
     
     // table group selections
-    List<IModelObject> groupElements = new ArrayList<IModelObject>();
     for( IXidget group: xidget.getChildren())
     {
-      selectionModelFeature = group.getFeature( ISelectionModelFeature.class);
-      if ( selectionModelFeature != null)
-      {
-        extractGroupSelection( rows, group, selected, groupElements);
-        selectionModelFeature.setSelection( context, groupElements);
-      }
+      selectionUpdateFeature = group.getFeature( ISelectionUpdateFeature.class);
+      if ( selectionUpdateFeature != null) selectionUpdateFeature.updateModel();
     }
   }
 
-  /**
-   * Returns the row objects that are selected within the specified table group.
-   * @param group The table group.
-   * @param selected The current selection indices.
-   * @param result Returns the row objects that are selected within the specified table group.
-   */
-  private void extractGroupSelection( List<Row> rows, IXidget group, int[] selected, List<IModelObject> result)
-  {
-    result.clear();
-    for( int i=0; i<selected.length; i++)
-    {
-      Row row = rows.get( selected[ i]);
-      if ( row.getTable() == group)
-        result.add( row.getContext().getObject());
-    }
-  }
-  
   private ListSelectionListener selectionListener = new ListSelectionListener() {
     public void valueChanged( ListSelectionEvent event)
     {

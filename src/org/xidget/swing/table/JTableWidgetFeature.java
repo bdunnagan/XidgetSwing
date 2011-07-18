@@ -29,8 +29,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.ISelectionModelFeature;
-import org.xidget.ifeature.ISelectionWidgetFeature;
+import org.xidget.ifeature.model.IPartialSelectionWidgetFeature;
+import org.xidget.ifeature.model.ISelectionWidgetFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
 import org.xidget.ifeature.tree.IColumnWidthFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
@@ -43,7 +43,7 @@ import org.xmodel.xpath.expression.StatefulContext;
 /**
  * An implementation of ITableWidgetFeature for use with a Swing JTable.
  */
-public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeature, ISelectionWidgetFeature
+public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeature, ISelectionWidgetFeature, IPartialSelectionWidgetFeature
 {
   public JTableWidgetFeature( IXidget xidget)
   {
@@ -205,14 +205,40 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#setSelection(java.util.List)
+   * @see org.xidget.ifeature.model.ISelectionWidgetFeature#select(java.lang.Object)
    */
-  public void setSelection( List<? extends Object> objects)
+  @Override
+  public void select( Object object)
   {
     JTable jtable = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
     List<Row> rows = tableModel.getRows();
-    for( Object object: objects)
+    int index = findNode( rows, object);
+    if ( index >= 0) jtable.addRowSelectionInterval( index, index);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.model.ISelectionWidgetFeature#deselect(java.lang.Object)
+   */
+  @Override
+  public void deselect( Object object)
+  {
+    JTable jtable = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
+    List<Row> rows = tableModel.getRows();
+    int index = findNode( rows, object);
+    if ( index >= 0) jtable.removeRowSelectionInterval( index, index);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ISelectionWidgetFeature#setSelection(java.util.List)
+   */
+  public void setSelection( List<? extends Object> list)
+  {
+    JTable jtable = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
+    List<Row> rows = tableModel.getRows();
+    for( Object object: list)
     {
       int index = findNode( rows, object);
       if ( index >= 0) jtable.addRowSelectionInterval( index, index);
@@ -238,27 +264,68 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#insertSelected(int, java.lang.Object)
+   * @see org.xidget.ifeature.table.IParentSelectionWidgetFeature#select(org.xidget.IXidget, java.lang.Object)
    */
-  public void insertSelected( int at, Object object)
+  @Override
+  public void select( IXidget origin, Object object)
   {
     JTable jtable = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
     List<Row> rows = tableModel.getRows();
-    int index = findNode( rows, object);
+    int index = findNode( origin, rows, object);
     if ( index >= 0) jtable.addRowSelectionInterval( index, index);
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ISelectionWidgetFeature#removeSelected(int, java.lang.Object)
+   * @see org.xidget.ifeature.table.IParentSelectionWidgetFeature#deselect(org.xidget.IXidget, java.lang.Object)
    */
-  public void removeSelected( Object object)
+  @Override
+  public void deselect( IXidget origin, Object object)
   {
     JTable jtable = xidget.getFeature( JTable.class);
     CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
     List<Row> rows = tableModel.getRows();
-    int index = findNode( rows, object);
+    int index = findNode( origin, rows, object);
     if ( index >= 0) jtable.removeRowSelectionInterval( index, index);
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.table.IParentSelectionWidgetFeature#setSelection(org.xidget.IXidget, java.util.List)
+   */
+  @Override
+  public void setSelection( IXidget origin, List<? extends Object> list)
+  {
+    JTable jtable = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
+    List<Row> rows = tableModel.getRows();
+    for( Object object: list)
+    {
+      int index = findNode( origin, rows, object);
+      if ( index >= 0) jtable.addRowSelectionInterval( index, index);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.table.IParentSelectionWidgetFeature#getSelection(org.xidget.IXidget)
+   */
+  @Override
+  public List<? extends Object> getSelection( IXidget origin)
+  {
+    JTable jtable = xidget.getFeature( JTable.class);
+    CustomTableModel tableModel = (CustomTableModel)jtable.getModel();
+    List<Row> rows = tableModel.getRows();
+    
+    List<IModelObject> selection = new ArrayList<IModelObject>();
+    for( int index: jtable.getSelectedRows())
+    {
+      Row row = rows.get( index);
+      if ( row.getTable() == origin)
+      {
+        selection.add( row.getContext().getObject());
+      }
+    }
+    
+    return selection;
   }
 
   /**
@@ -269,11 +336,27 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
    */
   private int findNode( List<Row> rows, Object object)
   {
-    ISelectionModelFeature selectionModelFeature = xidget.getFeature( ISelectionModelFeature.class);
-    Object identity = selectionModelFeature.getIdentity( object);
     for( int i=0; i<rows.size(); i++)
     {
-      if ( selectionModelFeature.getIdentity( rows.get( i).getContext().getObject()).equals( identity))
+      if ( rows.get(  i).getContext().getObject().equals( object))
+        return i;
+    }
+    return -1;
+  }
+  
+  /**
+   * Returns the first index of the row, belonging to the specified sub-table, containing the specified object.
+   * @param origin The nested table xidget.
+   * @param rows The rows.
+   * @param object The object.
+   * @return Returns -1 or the first index.
+   */
+  private int findNode( IXidget origin, List<Row> rows, Object object)
+  {
+    for( int i=0; i<rows.size(); i++)
+    {
+      Row row = rows.get( i);
+      if ( row.getTable() == origin && row.getContext().getObject().equals( object))
         return i;
     }
     return -1;

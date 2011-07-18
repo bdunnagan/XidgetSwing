@@ -18,6 +18,15 @@ public class XmlTextPaneSingleValueWidgetFeature implements ISingleValueWidgetFe
     xmlIO = new XmlIO();
   }
   
+  /**
+   * Tell the feature to ignore updates.
+   * @param ignore True if updates should be ignored.
+   */
+  public void ignoreUpdate( boolean ignore)
+  {
+    updating = ignore;
+  }
+  
   /* (non-Javadoc)
    * @see org.xidget.ifeature.model.ISingleValueWidgetFeature#getValue()
    */
@@ -43,6 +52,7 @@ public class XmlTextPaneSingleValueWidgetFeature implements ISingleValueWidgetFe
   @Override
   public void setValue( Object value)
   {
+    if ( updating) return;
     if ( !(value instanceof IModelObject)) return;
     
     String text = xmlIO.write( (IModelObject)value);
@@ -56,4 +66,5 @@ public class XmlTextPaneSingleValueWidgetFeature implements ISingleValueWidgetFe
 
   private IXidget xidget;
   private XmlIO xmlIO;
+  private boolean updating;
 }

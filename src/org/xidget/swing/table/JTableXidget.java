@@ -27,15 +27,18 @@ import javax.swing.JTable;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
-import org.xidget.feature.SelectionModelFeature;
+import org.xidget.feature.model.SelectionModelFeature;
+import org.xidget.feature.model.SelectionUpdateFeature;
 import org.xidget.feature.tree.ColumnSetFeature;
 import org.xidget.feature.tree.RowSetFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.ISelectionModelFeature;
-import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.ifeature.model.IPartialSelectionWidgetFeature;
+import org.xidget.ifeature.model.ISelectionModelFeature;
+import org.xidget.ifeature.model.ISelectionUpdateFeature;
+import org.xidget.ifeature.model.ISelectionWidgetFeature;
 import org.xidget.ifeature.tree.IColumnSetFeature;
 import org.xidget.ifeature.tree.IColumnWidthFeature;
 import org.xidget.ifeature.tree.IRowSetFeature;
@@ -59,6 +62,7 @@ public class JTableXidget extends Xidget
     columnWidthFeature = new JTableColumnWidthFeature( this);
     creationFeature = new JTableWidgetCreationFeature( this);
     selectionModelFeature = new SelectionModelFeature( this);
+    selectionUpdateFeature = new SelectionUpdateFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -77,7 +81,9 @@ public class JTableXidget extends Xidget
     if ( clss == IColumnWidthFeature.class) return (T)columnWidthFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
+    if ( clss == ISelectionUpdateFeature.class) return (T)selectionUpdateFeature;
     if ( clss == ISelectionWidgetFeature.class) return (T)treeWidgetFeature;
+    if ( clss == IPartialSelectionWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getJScrollPane();
@@ -99,5 +105,6 @@ public class JTableXidget extends Xidget
   private IColumnWidthFeature columnWidthFeature;
   private JTableWidgetCreationFeature creationFeature;  
   private ISelectionModelFeature selectionModelFeature;
+  private ISelectionUpdateFeature selectionUpdateFeature;
   private IFeatured basicFeatureSet;
 }

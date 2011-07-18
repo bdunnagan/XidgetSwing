@@ -21,13 +21,19 @@ package org.xidget.swing.tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
+
 import org.xidget.IXidget;
+import org.xidget.ifeature.model.ISelectionModelFeature;
+import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.tree.Row;
 import org.xmodel.xpath.expression.StatefulContext;
 
@@ -39,8 +45,10 @@ public class CustomTreeModel implements TreeModel
 {
   public CustomTreeModel( IXidget xidget)
   {
+    this.xidget = xidget;
+    
     listeners = new ArrayList<TreeModelListener>( 3);
-    root = new Row( xidget);
+    root = new Row( null);
     root.setExpanded( true);
   }
   
@@ -80,6 +88,62 @@ public class CustomTreeModel implements TreeModel
   }
   
   /**
+   * Search the entire tree for the row containing the specified object. 
+   * @param object The object to find.
+   * @return Returns null or the first row containing the object.
+   */
+  public Row findObject( Object object)
+  {
+    return findObject( null, object);
+  }
+  
+  /**
+   * Search the entire tree for the row containing the specified object. 
+   * See the findObject( IXidget, Row, Object) method for details.
+   * @param xidget Null or the tree xidget to which the row must belong.
+   * @param object The object to find.
+   * @return Returns null or the first row containing the object.
+   */
+  public Row findObject( IXidget xidget, Object object)
+  {
+    return findObject( xidget, root, object);
+  }
+  
+  /**
+   * Find the first row that contains the specified object in the sub-tree with the specified root. If the
+   * xidget argument is non-null then it specifies the tree xidget to which the row must belong. Specifying
+   * this argument narrows the search to those rows that were created by the specified xidget, which is 
+   * necessary when the tree contains duplicate objects belonging to different xidgets.
+   * @param xidget Null or the tree xidget to which the row must belong.
+   * @param root The root of the tree to search.
+   * @param object The object to find.
+   * @return Returns null or the first Row containing the object.
+   */
+  public Row findObject( IXidget xidget, Row root, Object object)
+  {
+    ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
+    
+    Stack<Row> stack = new Stack<Row>();
+    stack.push( root);
+    while( !stack.empty())
+    {
+      Row row = stack.pop();
+      
+      if ( xidget == null || row.getTable().getParent() == xidget)
+      {
+        if ( row.getContext().getObject().equals( object))
+          return row;
+      }
+      
+      expandFeature.expand( row);
+      for( Row child: row.getChildren())
+        stack.push( child);
+    }
+    
+    return null;
+  }
+
+  /**
    * Insert rows into the tree.
    * @param parent The parent row.
    * @param rowIndex The index where the rows will be inserted.
@@ -99,7 +163,7 @@ public class CustomTreeModel implements TreeModel
   }
   
   /**
-   * Remove frows from the tree.
+   * Remove rows from the tree.
    * @param parent The parent row.
    * @param rowIndex The index where the rows will be removed.
    * @param rows The rows that were removed.
@@ -298,8 +362,10 @@ public class CustomTreeModel implements TreeModel
       jTree.expandPath( new TreePath( path));
     }
   }
-  
+ 
+  private IXidget xidget;
   private Row root;
+  private Map<Object, Object[]> paths;
   private List<TreeModelListener> listeners;
   private boolean swingWillHaveCollapsed;
   private boolean expandOnCommit;

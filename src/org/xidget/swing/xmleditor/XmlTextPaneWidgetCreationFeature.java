@@ -20,6 +20,7 @@ import javax.swing.event.DocumentListener;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
+import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -143,10 +144,6 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   private void updateEditor()
   {
-    ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
-    if ( feature.isUpdating()) return;
-    
-    // update
     xmlTextPane.getHighlighter().removeAllHighlights();
     if ( future != null) future.cancel( false);
     future = new FutureTask<IModelObject>( parseCallable);
@@ -187,8 +184,18 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     
     public void run()
     {
-      ISingleValueUpdateFeature feature = xidget.getFeature( ISingleValueUpdateFeature.class);
-      feature.commit( element);
+      XmlTextPaneSingleValueWidgetFeature widgetFeature = (XmlTextPaneSingleValueWidgetFeature)xidget.getFeature( ISingleValueWidgetFeature.class);
+      widgetFeature.ignoreUpdate( true);
+      
+      try
+      {
+        ISingleValueUpdateFeature updateFeature = xidget.getFeature( ISingleValueUpdateFeature.class);
+        updateFeature.commit( element);
+      }
+      finally
+      {
+        widgetFeature.ignoreUpdate( false);
+      }
     }
     
     private IModelObject element;

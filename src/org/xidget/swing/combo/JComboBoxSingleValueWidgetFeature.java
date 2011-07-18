@@ -23,7 +23,6 @@ import javax.swing.JComboBox;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
-import org.xidget.swing.combo.CustomComboModel.Item;
 
 /**
  * An implementation of ISingleValueWidgetFeature for JComboBox.
@@ -43,9 +42,7 @@ public class JComboBoxSingleValueWidgetFeature implements ISingleValueWidgetFeat
   {
     JComboBox jCombo = xidget.getFeature( JComboBox.class);
     CustomComboModel model = (CustomComboModel)jCombo.getModel();
-    Object selected = model.getSelectedItem();
-    if ( selected instanceof Item) return ((Item)selected).getValue();
-    return selected;
+    return model.getSelectedItem();
   }
 
   /* (non-Javadoc)

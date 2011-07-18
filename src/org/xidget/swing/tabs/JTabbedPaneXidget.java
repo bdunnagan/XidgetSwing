@@ -27,14 +27,16 @@ import javax.swing.JTabbedPane;
 
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
-import org.xidget.feature.SelectionModelFeature;
+import org.xidget.feature.model.SelectionModelFeature;
+import org.xidget.feature.model.SelectionUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.ISelectionModelFeature;
-import org.xidget.ifeature.ISelectionWidgetFeature;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.ifeature.model.ISelectionModelFeature;
+import org.xidget.ifeature.model.ISelectionUpdateFeature;
+import org.xidget.ifeature.model.ISelectionWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingContainerWidgetFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
@@ -52,6 +54,7 @@ public class JTabbedPaneXidget extends Xidget
     creationFeature = new JTabbedPaneWidgetCreationFeature( this);
     containerFeature = new JTabbedPaneContainerFeature( this);
     selectionModelFeature = new SelectionModelFeature( this);
+    selectionUpdateFeature = new SelectionUpdateFeature( this);
     selectionWidgetFeature = new JTabbedPaneSelectionWidgetFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -69,6 +72,7 @@ public class JTabbedPaneXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
+    if ( clss == ISelectionUpdateFeature.class) return (T)selectionUpdateFeature;
     if ( clss == ISelectionWidgetFeature.class) return (T)selectionWidgetFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getJTabbedPane();
@@ -88,6 +92,7 @@ public class JTabbedPaneXidget extends Xidget
   private JTabbedPaneWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;
   private ISelectionModelFeature selectionModelFeature;
+  private ISelectionUpdateFeature selectionUpdateFeature;
   private ISelectionWidgetFeature selectionWidgetFeature;
   private IFeatured basicFeatureSet;
 }
