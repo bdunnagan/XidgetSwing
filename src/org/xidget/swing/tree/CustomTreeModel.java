@@ -129,7 +129,8 @@ public class CustomTreeModel implements TreeModel
     {
       Row row = stack.pop();
       
-      if ( xidget == null || row.getTable().getParent() == xidget)
+      IXidget table = row.getTable();
+      if ( xidget == null || table == null || table.getParent() == xidget)
       {
         if ( row.getContext().getObject().equals( object))
           return row;
@@ -358,7 +359,7 @@ public class CustomTreeModel implements TreeModel
     public void run()
     {
       Object[] path = createPath( row);
-      JTree jTree = root.getTable().getFeature( JTree.class);
+      JTree jTree = xidget.getFeature( JTree.class);
       jTree.expandPath( new TreePath( path));
     }
   }

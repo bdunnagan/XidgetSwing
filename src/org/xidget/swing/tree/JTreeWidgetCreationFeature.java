@@ -142,21 +142,15 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
    * @param start The starting index.
    * @return Returns the list of selected objects.
    */
-  private List<Object> getNextSelectionGroup( TreeSelectionEvent event, TreePath[] paths, int start)
+  private List<Object> getNextSelectionGroup( TreeSelectionEvent event, List<TreePath> paths, int start)
   {
     List<Object> list = new ArrayList<Object>();
-    
-    Row row = (Row)paths[ start].getLastPathComponent();
-    list.add( row.getContext().getObject());
-    
+    Row row = (Row)paths.get( start).getLastPathComponent();
     IXidget tree = row.getTable().getParent();
-    boolean isAdded = event.isAddedPath( start);
-    
-    for( int i=start; i<paths.length; i++)
+    for( int i=start; i<paths.size(); i++)
     {
-      row = (Row)paths[ i].getLastPathComponent();
+      row = (Row)paths.get( i).getLastPathComponent();
       if ( tree != row.getTable().getParent()) break;
-      if ( isAdded ^ event.isAddedPath( i)) break;
       list.add( row.getContext().getObject());
     }
     return list;
@@ -171,30 +165,59 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
       try 
       { 
         ISelectionUpdateFeature feature = xidget.getFeature( ISelectionUpdateFeature.class);
+        
         TreePath[] paths = event.getPaths();
-        for( int index = 0; index < paths.length; )
+        List<TreePath> inserted = new ArrayList<TreePath>();
+        List<TreePath> deleted = new ArrayList<TreePath>();
+        for( int i=0; i<paths.length; i++)
         {
-          Row first = (Row)paths[ index].getLastPathComponent();
-          IXidget tree = first.getTable().getParent();
-          
-          List<Object> list = getNextSelectionGroup( event, paths, index);
-          if ( event.isAddedPath( index))
+          if ( event.isAddedPath( i))
           {
-            // notify global selection
-            feature.modelSelect( list);
-            
-            // notify local selection
-            ISelectionUpdateFeature nestedFeature = tree.getFeature( ISelectionUpdateFeature.class);
-            nestedFeature.modelSelect( list);
+            inserted.add( paths[ i]);
           }
           else
           {
-            // notify global selection
-            feature.modelDeselect( list);
-            
-            // notify local selection
+            deleted.add( paths[ i]);
+          }
+        }
+        
+        for( int index = 0; index < deleted.size(); )
+        {
+          Row first = (Row)deleted.get( index).getLastPathComponent();
+          IXidget tree = first.getTable().getParent();
+
+          // next block of paths belonging to the same tree
+          List<Object> list = getNextSelectionGroup( event, deleted, index);
+          
+          // notify global selection
+          feature.modelDeselect( list);
+          
+          // notify local selection
+          if ( tree != xidget)
+          {
             ISelectionUpdateFeature nestedFeature = tree.getFeature( ISelectionUpdateFeature.class);
             nestedFeature.modelDeselect( list);
+          }
+          
+          index += list.size();
+        }
+        
+        for( int index = 0; index < inserted.size(); )
+        {
+          Row first = (Row)inserted.get( index).getLastPathComponent();
+          IXidget tree = first.getTable().getParent();
+
+          // next block of paths belonging to the same tree
+          List<Object> list = getNextSelectionGroup( event, inserted, index);
+          
+          // notify global selection
+          feature.modelSelect( list);
+          
+          // notify local selection
+          if ( tree != xidget)
+          {
+            ISelectionUpdateFeature nestedFeature = tree.getFeature( ISelectionUpdateFeature.class);
+            nestedFeature.modelSelect( list);
           }
           
           index += list.size();

@@ -33,6 +33,7 @@ import org.xidget.feature.tree.TreeExpandFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.ifeature.model.IPartialSelectionWidgetFeature;
 import org.xidget.ifeature.model.ISelectionModelFeature;
 import org.xidget.ifeature.model.ISelectionUpdateFeature;
 import org.xidget.ifeature.model.ISelectionWidgetFeature;
@@ -79,6 +80,7 @@ public class JTreeXidget extends Xidget
     if ( clss == ISelectionModelFeature.class) return (T)selectionModelFeature;
     if ( clss == ISelectionUpdateFeature.class) return (T)selectionUpdateFeature;
     if ( clss == ISelectionWidgetFeature.class) return (T)selectionWidgetFeature;
+    if ( clss == IPartialSelectionWidgetFeature.class) return (T)selectionWidgetFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JComponent.class) return (T)creationFeature.getJScrollPane();
