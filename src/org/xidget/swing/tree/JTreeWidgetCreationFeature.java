@@ -146,13 +146,11 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
   {
     List<Object> list = new ArrayList<Object>();
     Row row = (Row)paths.get( start).getLastPathComponent();
-    IXidget tree = row.getTable().getParent();
+    IXidget tree = row.getTree( xidget);
     for( int i=start; i<paths.size(); i++)
     {
       row = (Row)paths.get( i).getLastPathComponent();
-      IXidget table = row.getTable();
-      if ( table == null) break;
-      if ( tree != row.getTable().getParent()) break;
+      if ( tree != row.getTree( xidget)) break;
       list.add( row.getContext().getObject());
     }
     return list;
@@ -186,7 +184,7 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
         for( int index = 0; index < deleted.size(); )
         {
           Row first = (Row)deleted.get( index).getLastPathComponent();
-          IXidget tree = first.getTable().getParent();
+          IXidget tree = first.getTree( xidget);
 
           // next block of paths belonging to the same tree
           List<Object> list = getNextSelectionGroup( event, deleted, index);
@@ -207,7 +205,7 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
         for( int index = 0; index < inserted.size(); )
         {
           Row first = (Row)inserted.get( index).getLastPathComponent();
-          IXidget tree = first.getTable().getParent();
+          IXidget tree = first.getTree( xidget);
 
           // next block of paths belonging to the same tree
           List<Object> list = getNextSelectionGroup( event, inserted, index);

@@ -22,7 +22,6 @@ package org.xidget.swing.tree;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
@@ -32,9 +31,9 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.xidget.IXidget;
-import org.xidget.ifeature.model.ISelectionModelFeature;
 import org.xidget.ifeature.tree.ITreeExpandFeature;
 import org.xidget.tree.Row;
+import org.xmodel.util.Fifo;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -121,24 +120,37 @@ public class CustomTreeModel implements TreeModel
    */
   public Row findObject( IXidget xidget, Row root, Object object)
   {
-    ITreeExpandFeature expandFeature = xidget.getFeature( ITreeExpandFeature.class);
-    
-    Stack<Row> stack = new Stack<Row>();
-    stack.push( root);
-    while( !stack.empty())
+    if ( root != this.root)
     {
-      Row row = stack.pop();
-      
-      IXidget table = row.getTable();
+      IXidget table = root.getTable();
       if ( xidget == null || table == null || table.getParent() == xidget)
       {
-        if ( row.getContext().getObject().equals( object))
-          return row;
+        if ( root.getContext().getObject().equals( object))
+          return root;
       }
+    }
+    
+    Fifo<Row> fifo = new Fifo<Row>();
+    fifo.push( root);
+    while( !fifo.empty())
+    {
+      Row row = fifo.pop();
       
+      IXidget tree = row.getTree( this.xidget);
+      ITreeExpandFeature expandFeature = tree.getFeature( ITreeExpandFeature.class);
       expandFeature.expand( row);
+        
       for( Row child: row.getChildren())
-        stack.push( child);
+      {
+        IXidget table = child.getTable();
+        if ( xidget == null || table == null || table.getParent() == xidget)
+        {
+          if ( child.getContext().getObject().equals( object))
+            return child;
+        }
+        
+        fifo.push( child);
+      }
     }
     
     return null;
