@@ -150,6 +150,8 @@ public class JTreeWidgetCreationFeature extends SwingWidgetCreationFeature
     for( int i=start; i<paths.size(); i++)
     {
       row = (Row)paths.get( i).getLastPathComponent();
+      IXidget table = row.getTable();
+      if ( table == null) break;
       if ( tree != row.getTable().getParent()) break;
       list.add( row.getContext().getObject());
     }
