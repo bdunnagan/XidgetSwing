@@ -11,7 +11,6 @@ import javax.swing.JComboBox;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.ISelectionWidgetFeature;
-import org.xidget.swing.combo.JComboBoxMultiValueWidgetFeature.Item;
 
 /**
  * An implementation of ISelectionWidgetFeature for use with JComboBox widgets.
@@ -29,9 +28,9 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public void select( Object object)
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    CustomComboModel model = (CustomComboModel)jCombo.getModel();
-    model.setSelectedItem( object);
+    Item item = new Item( object);
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    widget.setSelectedItem( item);
   }
 
   /* (non-Javadoc)
@@ -40,10 +39,9 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public void deselect( Object object)
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    CustomComboModel model = (CustomComboModel)jCombo.getModel();
-    Object selected = model.getSelectedItem();
-    if ( selected == object) model.setSelectedItem( "");
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    Item item = (Item)widget.getSelectedItem();
+    if ( item.equals( object)) widget.setSelectedItem( null);
   }
 
   /* (non-Javadoc)
@@ -52,8 +50,8 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public void setSelection( List<? extends Object> objects)
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    jCombo.setSelectedItem( (objects.size() > 0)? objects.get( 0): null);
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    widget.setSelectedItem( (objects.size() > 0)? new Item( objects.get( 0)): null);
   }
 
   /* (non-Javadoc)
@@ -62,25 +60,9 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public List<? extends Object> getSelection()
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    Object selected = jCombo.getSelectedItem();
-    if ( selected != null)
-    {
-      if ( selected instanceof Item)
-      {
-        Item item = (Item)selected;
-        return Collections.singletonList( item.value);
-      }
-      else
-      {
-        for( int i=0; i<jCombo.getItemCount(); i++)
-        {
-          Item item = (Item)jCombo.getItemAt( i);
-          if ( item.equals( selected)) return Collections.singletonList( item.value);
-        }
-      }
-    }
-    return Collections.emptyList();
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    Item selected = (Item)widget.getSelectedItem();
+    return (selected != null)? Collections.singletonList( selected.value): Collections.emptyList();
   }
 
   private IXidget xidget;

@@ -11,8 +11,6 @@ import javax.swing.JComboBox;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.IMultiValueWidgetFeature;
-import org.xmodel.IModelObject;
-import org.xmodel.Xlate;
 
 /**
  * An implementation of IMultiValueWidgetFeature for JComboBox.
@@ -30,8 +28,9 @@ public class JComboBoxMultiValueWidgetFeature implements IMultiValueWidgetFeatur
   @Override
   public void insertValue( int index, Object value)
   {
+    Item item = new Item( value);
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    widget.insertItemAt( new Item( value), index);
+    widget.insertItemAt( item, index);
   }
 
   /* (non-Javadoc)
@@ -65,7 +64,8 @@ public class JComboBoxMultiValueWidgetFeature implements IMultiValueWidgetFeatur
     widget.removeAllItems();
     for( Object value: list)
     {
-      widget.addItem( new Item( value));
+      Item item = new Item( value);
+      widget.addItem( item);
     }
   }
 
@@ -76,56 +76,14 @@ public class JComboBoxMultiValueWidgetFeature implements IMultiValueWidgetFeatur
   public List<? extends Object> getValues()
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    int count = widget.getItemCount();
-    
-    List<Object> values = new ArrayList<Object>( count);
-    for( int i=0; i<count; i++)
+    List<Object> values = new ArrayList<Object>( widget.getItemCount());
+    for( int i=0; i<widget.getItemCount(); i++)
     {
       Item item = (Item)widget.getItemAt( i);
       values.add( item.value);
     }
-    
     return values;
   }
 
-  static class Item
-  {
-    public Item( Object value)
-    {
-      this.value = value;
-    }
-    
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals( Object object)
-    {
-      if ( object == null) return false;
-      
-      if ( object instanceof IModelObject)
-      {
-        String other = Xlate.get( (IModelObject)value, "");
-        return other.equals( toString());
-      }
-      else
-      {
-        return object.toString().equals( toString());
-      }
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString()
-    {
-      if ( value instanceof IModelObject) return Xlate.get( (IModelObject)value, "");
-      return value.toString();
-    }
-    
-    public Object value;
-  }
-  
   protected IXidget xidget;
 }

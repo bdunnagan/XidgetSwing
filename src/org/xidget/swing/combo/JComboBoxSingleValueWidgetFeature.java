@@ -40,9 +40,12 @@ public class JComboBoxSingleValueWidgetFeature implements ISingleValueWidgetFeat
   @Override
   public Object getValue()
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    CustomComboModel model = (CustomComboModel)jCombo.getModel();
-    return model.getSelectedItem();
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    Item item = (Item)widget.getSelectedItem();
+    if ( item != null) return item.toString();
+    
+    CustomComboModel model = (CustomComboModel)widget.getModel();
+    return model.getEditorValue();
   }
 
   /* (non-Javadoc)
@@ -51,9 +54,16 @@ public class JComboBoxSingleValueWidgetFeature implements ISingleValueWidgetFeat
   @Override
   public void setValue( Object value)
   {
-    JComboBox jCombo = xidget.getFeature( JComboBox.class);
-    CustomComboModel model = (CustomComboModel)jCombo.getModel();
-    model.setSelectedItem( value);
+    JComboBox widget = xidget.getFeature( JComboBox.class);
+    for( int i=0; i<widget.getItemCount(); i++)
+    {
+      Item item = (Item)widget.getItemAt( i);
+      if ( item.toString().equals( value))
+      {
+        widget.setSelectedItem( item);
+        break;
+      }
+    }
   }
 
   private IXidget xidget;

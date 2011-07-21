@@ -11,18 +11,16 @@ import javax.swing.AbstractListModel;
 import javax.swing.JComboBox;
 import javax.swing.MutableComboBoxModel;
 
-import org.xidget.IXidget;
-
 /**
  * An implementation of MutableComboBoxModel backed by IModelObject elements. 
  */
 @SuppressWarnings("serial")
 public class CustomComboModel extends AbstractListModel implements MutableComboBoxModel
 {
-  public CustomComboModel( IXidget xidget)
+  public CustomComboModel( JComboBox widget)
   {
-    this.xidget = xidget;
-    this.items = new ArrayList<Object>();
+    this.widget = widget;
+    this.items = new ArrayList<Item>();
   }
     
   /* (non-Javadoc)
@@ -31,9 +29,7 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   @Override
   public void addElement( Object object)
   {
-    items.add( object);
-
-    JComboBox widget = xidget.getFeature( JComboBox.class);
+    items.add( (Item)object);
     int index = items.size() - 1;
     fireIntervalAdded( widget, index, index);
   }
@@ -44,9 +40,7 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   @Override
   public void insertElementAt( Object object, int index)
   {
-    items.add( index, object);
-    
-    JComboBox widget = xidget.getFeature( JComboBox.class);
+    items.add( index, (Item)object);
     fireIntervalAdded( widget, index, index);
   }
 
@@ -56,7 +50,6 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
    */
   public void updateElementAt( int index)
   {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
     fireContentsChanged( widget, index, index);
   }
   
@@ -66,7 +59,7 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   @Override
   public void removeElement( Object object)
   {
-    int index = items.indexOf( object);
+    int index = items.indexOf( (Item)object);
     if ( index >= 0) removeElement( index);
   }
 
@@ -77,8 +70,6 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   public void removeElementAt( int index)
   {
     items.remove( index);
-    
-    JComboBox widget = xidget.getFeature( JComboBox.class);
     fireIntervalRemoved( widget, index, index);
   }
 
@@ -97,19 +88,51 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
   @Override
   public void setSelectedItem( Object object)
   {
-    int index = items.indexOf( object);
-    if ( index >= 0)
+    edit = null;
+    
+    //
+    // When the widget is editable, this method can be called with the string entered in the editor.
+    //
+    if ( object instanceof Item)
     {
-      selected = items.get( index);
-      JComboBox widget = xidget.getFeature( JComboBox.class);
-      fireContentsChanged( widget, index, index);
+      Item item = (Item)object;
+      int index = items.indexOf( item);
+      if ( index >= 0)
+      {
+        selected = items.get( index);
+        fireContentsChanged( widget, index, index);
+      }
+      else
+      {
+        selected = item;
+      }
     }
     else
     {
-      selected = object;
+      for( int i=0; i<items.size(); i++)
+      {
+        Item item = items.get( i);
+        if ( item.toString().equals( object))
+        {
+          selected = item;
+          fireContentsChanged( widget, i, i);
+          break;
+        }
+      }
+
+      edit = object;
+      selected = null;
     }
   }
 
+  /**
+   * @return Returns the value of the last edit.
+   */
+  public Object getEditorValue()
+  {
+    return edit;
+  }
+  
   /* (non-Javadoc)
    * @see javax.swing.ListModel#getElementAt(int)
    */
@@ -128,7 +151,8 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
     return items.size();
   }
   
-  private IXidget xidget;
-  private List<Object> items;
-  private Object selected;
+  private JComboBox widget;
+  private List<Item> items;
+  private Item selected;
+  private Object edit;
 }

@@ -58,7 +58,7 @@ public class JComboBoxWidgetCreationFeature extends SwingWidgetCreationFeature i
   {    
     // create text widget
     component = jCombo = new JComboBox();
-    jCombo.setModel( new CustomComboModel( xidget));
+    jCombo.setModel( new CustomComboModel( jCombo));
     jCombo.setBorder( new EmptyBorder( 1, 1, 1, 1));
 
     // create extra container to hold label and widget

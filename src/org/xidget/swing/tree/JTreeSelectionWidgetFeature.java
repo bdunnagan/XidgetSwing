@@ -189,7 +189,7 @@ public class JTreeSelectionWidgetFeature implements ISelectionWidgetFeature, IPa
    * @param xidget Null or the tree xidget to which the selection is localized.
    * @param model The model.
    * @param object The object.
-   * @return Returns the TreePath.
+   * @return Returns null or the TreePath.
    */
   private TreePath getPath( IXidget xidget, CustomTreeModel model, Object object)
   {
@@ -201,6 +201,7 @@ public class JTreeSelectionWidgetFeature implements ISelectionWidgetFeature, IPa
     if ( row == null || (xidget != null && row.getTable().getParent() != xidget))
     {
       row = model.findObject( xidget, object);
+      if ( row == null) return null;
       rowCache.put( object, row);
     }
 
