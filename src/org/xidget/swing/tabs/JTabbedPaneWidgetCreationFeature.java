@@ -179,8 +179,8 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
           // The initial selection notification happens before the child xidget has been bound. So we need
           // to add an IXidgetBinding temporarily which will update the selection after the xidget is bound. 
           //
-          IXidgetBinding binding = new InitialNotificationBinding( child);
-          bindFeature.addBindingAfterChildren( binding);
+          //IXidgetBinding binding = new InitialNotificationBinding( child);
+          //bindFeature.addBindingAfterChildren( binding);
         }
       }
     }

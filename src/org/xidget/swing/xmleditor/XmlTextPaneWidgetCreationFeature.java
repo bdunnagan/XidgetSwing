@@ -63,6 +63,8 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   public void destroyWidgets()
   {
+    executor.shutdownNow();
+    
     jScrollPane.setEnabled( false);
     
     Container container = jScrollPane.getParent();
