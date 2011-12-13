@@ -76,8 +76,11 @@ public abstract class SwingWidgetCreationFeature extends ComponentAdapter implem
   public void destroyWidgets()
   {
     JComponent widget = xidget.getFeature( JComponent.class);
-    Container container = widget.getParent();
-    container.remove( widget);
+    if ( widget != null)
+    {
+      Container container = widget.getParent();
+      if ( container != null) container.remove( widget);
+    }
   }
 
   /**

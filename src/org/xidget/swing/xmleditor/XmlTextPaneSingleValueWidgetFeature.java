@@ -59,8 +59,15 @@ public class XmlTextPaneSingleValueWidgetFeature implements ISingleValueWidgetFe
     if ( text != null)
     {
       XmlTextPane textPane = xidget.getFeature( XmlTextPane.class);
-      textPane.setText( text);
-      textPane.setCaretPosition( 0);
+      try
+      {
+        textPane.setText( text);
+        textPane.setCaretPosition( 0);
+      }
+      catch( Exception e)
+      {
+        System.err.println( e.getMessage());
+      }
     }
   }
 

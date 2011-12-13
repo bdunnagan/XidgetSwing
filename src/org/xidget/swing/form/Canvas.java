@@ -47,7 +47,8 @@ public class Canvas extends JPanel
   @Override
   public void doLayout()
   {
-    if ( xidget.getParent().getConfig().isType( "tabs"))
+    IXidget parent = xidget.getParent();
+    if ( parent != null && parent.getConfig().isType( "tabs"))
     {
       Rectangle bounds = getBounds();
       IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
