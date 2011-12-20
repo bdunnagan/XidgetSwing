@@ -150,7 +150,7 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
    * @param columnIndex The column index of the cell to be edited.
    * @return Returns null or the editor.
    */
-  private IXidget findEditor( Row row, int columnIndex)
+  public static IXidget findEditor( Row row, int columnIndex)
   {
     IXidget table = row.getTable();
     IModelObject tableConfig = table.getConfig();
@@ -175,7 +175,7 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     }
     public void editingStopped( ChangeEvent e)
     {
-      // unbind
+      editorSource.setValue( editorContext.getObject().getValue());
       cleanupEditor();
     }
   };

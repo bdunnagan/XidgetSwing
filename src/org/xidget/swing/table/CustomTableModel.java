@@ -182,7 +182,8 @@ public class CustomTableModel extends AbstractTableModel
   public boolean isCellEditable( int rowIndex, int columnIndex)
   {
     Row row = root.getChildren().get( rowIndex);
-    return row.getCell( columnIndex).source != null;
+    IXidget xidget = CustomCellEditor.findEditor( row, columnIndex);
+    return xidget != null;
   }
   
   /* (non-Javadoc)

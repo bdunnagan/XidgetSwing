@@ -25,6 +25,8 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.xidget.Creator;
 import org.xidget.caching.FileSystemCachingPolicy;
@@ -61,7 +63,19 @@ public class Main
   {    
     final String path = (args.length > 0)? args[ 0]: "main.xml";
     
-    UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName());
+    try
+    {
+      for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+      {
+        if ( "Nimbus".equals( info.getName()))
+        {
+          UIManager.setLookAndFeel( info.getClassName());
+          break;
+        }
+      }
+    } catch ( Exception e)
+    {
+    }
     
     // handle uncaught exceptions
     Thread.setDefaultUncaughtExceptionHandler( new UncaughtExceptionHandler() {

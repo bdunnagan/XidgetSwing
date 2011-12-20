@@ -1,0 +1,23 @@
+<project name="XidgetSwing" default="jar" basedir=".">
+  
+  <!-- set global properties for this build -->
+  <property name="jardir" location="jars"/>
+  <property name="jar" location="${jardir}/xidget.swing.jar"/>
+
+  <target name="init">
+    <tstamp/>
+    <delete file="${jar}"/>
+  </target>
+
+  <target name="jar" depends="init" description="build jar file">
+    <mkdir dir="${jardir}"/>
+    <jar destfile="${jar}">
+      <fileset dir="../Xidget/bin"/>
+      <fileset dir="bin"/>
+    </jar> 
+  </target>
+	
+  <target name="clean" description="clean up">
+    <delete file="${jar}"/>
+  </target>
+</project>

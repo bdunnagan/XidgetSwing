@@ -64,9 +64,8 @@ public class XmlTextPaneSingleValueWidgetFeature implements ISingleValueWidgetFe
         textPane.setText( text);
         textPane.setCaretPosition( 0);
       }
-      catch( Exception e)
+      catch( NullPointerException e)
       {
-        System.err.println( e.getMessage());
       }
     }
   }

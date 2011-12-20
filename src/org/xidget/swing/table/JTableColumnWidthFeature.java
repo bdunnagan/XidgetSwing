@@ -4,12 +4,12 @@
  */
 package org.xidget.swing.table;
 
-import java.awt.Font;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.geom.Rectangle2D;
 
 import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
 
 import org.xidget.IXidget;
 import org.xidget.feature.tree.ColumnWidthFeature;
@@ -50,12 +50,11 @@ public class JTableColumnWidthFeature extends ColumnWidthFeature
     JTable jTable = xidget.getFeature( JTable.class);
     if ( jTable != null)
     {
-      Font font = header? jTable.getTableHeader().getFont(): jTable.getFont();
-      Graphics graphics = jTable.getGraphics();
-      FontMetrics metrics = jTable.getFontMetrics( font);
-      Rectangle2D bounds = metrics.getStringBounds( text, graphics);
-      return (int)Math.ceil( bounds.getWidth() + 6);
+      TableCellRenderer renderer = header? jTable.getTableHeader().getDefaultRenderer(): jTable.getDefaultRenderer( String.class);
+      Component component = renderer.getTableCellRendererComponent( jTable, text, true, true, 0, 0);
+      Dimension size = component.getPreferredSize();
+      return size.width;
     }
-    return 1;
+    return 10;
   }
 }
