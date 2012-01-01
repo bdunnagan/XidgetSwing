@@ -11,6 +11,8 @@ import javax.swing.AbstractListModel;
 import javax.swing.JComboBox;
 import javax.swing.MutableComboBoxModel;
 
+import org.xmodel.IModelObject;
+
 /**
  * An implementation of MutableComboBoxModel backed by IModelObject elements. 
  */
@@ -109,19 +111,22 @@ public class CustomComboModel extends AbstractListModel implements MutableComboB
     }
     else
     {
-      for( int i=0; i<items.size(); i++)
-      {
-        Item item = items.get( i);
-        if ( item.toString().equals( object))
-        {
-          selected = item;
-          fireContentsChanged( widget, i, i);
-          break;
-        }
-      }
-
-      edit = object;
-      selected = null;
+//      for( int i=0; i<items.size(); i++)
+//      {
+//        Item item = items.get( i);
+//        if ( item.toString().equals( object))
+//        {
+//          selected = item;
+//          fireContentsChanged( widget, i, i);
+//          break;
+//        }
+//      }
+//
+//      edit = object;
+//      selected = null;
+      
+      if ( selected != null && selected.value != null)
+        ((IModelObject)selected.value).setValue( object);
     }
   }
 
