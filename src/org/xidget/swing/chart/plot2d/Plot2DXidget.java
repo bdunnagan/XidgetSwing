@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.graph;
+package org.xidget.swing.chart.plot2d;
 
 import java.awt.Component;
 
@@ -34,15 +34,15 @@ import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
- * A graph xidget implemented with the custom Graph2D widget.
+ * An implementation of the <i>plot2d</i> xidget using the custom Plot2D widget.
  */
-public class GraphXidget extends Xidget
+public class Plot2DXidget extends Xidget
 {
   public void createFeatures()
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    creationFeature = new GraphWidgetCreationFeature( this);
+    creationFeature = new Plot2DWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -53,14 +53,14 @@ public class GraphXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IPointsFeature.class) return (T)creationFeature.getGraph();
+    if ( clss == IPointsFeature.class) return (T)creationFeature.getPlot2D();
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getComponent();
     if ( clss == JComponent.class) return (T)creationFeature.getComponent();
-    if ( clss == Graph2D.class) return (T)creationFeature.getGraph();
+    if ( clss == Plot2D.class) return (T)creationFeature.getPlot2D();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
@@ -70,6 +70,6 @@ public class GraphXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private GraphWidgetCreationFeature creationFeature;
+  private Plot2DWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }

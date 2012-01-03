@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.graph;
+package org.xidget.swing.chart.plot2d;
 
 import javax.swing.JComponent;
 
@@ -27,11 +27,11 @@ import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
 /**
- * An implementation of IWidgetCreationFeature which creates a Graph2D widget.
+ * An implementation of IWidgetCreationFeature which creates a Plot2D widget.
  */
-public class GraphWidgetCreationFeature extends SwingWidgetCreationFeature
+public class Plot2DWidgetCreationFeature extends SwingWidgetCreationFeature
 {
-  public GraphWidgetCreationFeature( IXidget xidget)
+  public Plot2DWidgetCreationFeature( IXidget xidget)
   {
     super( xidget);
   }
@@ -42,16 +42,16 @@ public class GraphWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget()
   {
-    graph = new Graph2D();
-    findGraphAxes( graph);
-    return graph;
+    plot = new Plot2D();
+    findGraphAxes( plot);
+    return plot;
   }
 
   /**
    * Find the graph axes and associate to the graph.
    * @param graph The graph.
    */
-  private void findGraphAxes( Graph2D graph)
+  private void findGraphAxes( Plot2D graph)
   {
     IModelObject parent = xidget.getConfig().getParent();
     
@@ -83,7 +83,7 @@ public class GraphWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   public Object[] getLastWidgets()
   {
-    return new Object[] { graph};
+    return new Object[] { plot};
   }
 
   /**
@@ -91,19 +91,19 @@ public class GraphWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   public JComponent getComponent()
   {
-    return graph;
+    return plot;
   }
     
   /**
-   * Returns the text widget which may be different from the widget returned
+   * Returns the Plot2D widget which may be different from the widget returned
    * by the <code>getWidget</code> method which will return a container if
    * a label is defined.
    * @return Returns the text widget.
    */
-  public Graph2D getGraph()
+  public Plot2D getPlot2D()
   {
-    return graph;
+    return plot;
   }
 
-  private Graph2D graph;
+  private Plot2D plot;
 }

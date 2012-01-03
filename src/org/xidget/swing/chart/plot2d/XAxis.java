@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.graph;
+package org.xidget.swing.chart.plot2d;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,9 +14,9 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import org.xidget.graph.Scale;
-import org.xidget.graph.Scale.Format;
-import org.xidget.graph.Scale.Tick;
+import org.xidget.chart.Scale;
+import org.xidget.chart.Scale.Format;
+import org.xidget.chart.Scale.Tick;
 
 /**
  * A custom widget that paints a horizontal scale.  The ticks of the scale may be oriented

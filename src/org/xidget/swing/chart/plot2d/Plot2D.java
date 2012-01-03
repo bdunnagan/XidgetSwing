@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.graph;
+package org.xidget.swing.chart.plot2d;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -15,18 +15,19 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import org.xidget.graph.Point;
-import org.xidget.graph.Scale;
-import org.xidget.graph.Scale.Tick;
+import org.xidget.chart.Point;
+import org.xidget.chart.Scale;
+import org.xidget.chart.Scale.Tick;
 import org.xidget.ifeature.IPointsFeature;
+import org.xidget.swing.chart.PointShapes;
 
 /**
  * A custom widget that plots points on a two dimensional graph.  
  */
 @SuppressWarnings("serial")
-public class Graph2D extends JPanel implements IPointsFeature
+public class Plot2D extends JPanel implements IPointsFeature
 {
-  public Graph2D()
+  public Plot2D()
   {
     axes = new HashMap<String, Axis>();
     points = new ArrayList<Point>();

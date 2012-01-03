@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.graph;
+package org.xidget.swing.chart.plot2d;
 
 import javax.swing.JComponent;
 

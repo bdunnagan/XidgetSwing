@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.graph;
+package org.xidget.swing.chart.plot2d;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -18,9 +18,9 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JPanel;
 
 import org.xidget.IXidget;
-import org.xidget.graph.Scale;
-import org.xidget.graph.Scale.Format;
-import org.xidget.ifeature.graph.IAxisFeature;
+import org.xidget.chart.Scale;
+import org.xidget.chart.Scale.Format;
+import org.xidget.ifeature.chart.IAxisFeature;
 
 /**
  * The common base class for horizontal and vertical axes widgets.
@@ -50,7 +50,7 @@ public abstract class Axis extends JPanel implements IAxisFeature
   public void setGraph( String axis, IXidget xidget)
   {
     this.axis = axis; 
-    this.graph = xidget.getFeature( Graph2D.class);
+    this.graph = xidget.getFeature( Plot2D.class);
   }
 
   /* (non-Javadoc)
@@ -131,7 +131,7 @@ public abstract class Axis extends JPanel implements IAxisFeature
     }
   };
   
-  protected Graph2D graph;
+  protected Plot2D graph;
   protected String axis;
   protected Format format;
   protected Scale scale;
