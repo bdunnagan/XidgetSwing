@@ -4,18 +4,16 @@
  */
 package org.xidget.swing.chart.pie;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
-import java.awt.geom.AffineTransform;
+import java.awt.font.GlyphVector;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,17 +31,8 @@ public class PieChart extends JPanel implements IPointsFeature
   public PieChart()
   {
     points = new ArrayList<Point>();
-    
-    stroke = new BasicStroke( (int)sliceBorder, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
-    inside = new Arc2D.Double();
-    outside = new Arc2D.Double();
-    p1 = new Point2D.Double();
-    p2 = new Point2D.Double();
-    p3 = new Point2D.Double();
-    p4 = new Point2D.Double();
-    slice = new Path2D.Double();
-    
-    textGraphics = new ArrayList<TextLayout>();
+    arc = new Arc2D.Double();
+    path = new Path2D.Double();
     setFont( getFont().deriveFont( 10f));
   }
   
@@ -75,8 +64,8 @@ public class PieChart extends JPanel implements IPointsFeature
     
     total += point.coords[ 0];
     points.add( index, point);
-    textGraphics.add( index, null);
-    
+
+    q1 = null;
     repaint();
   }
 
@@ -87,6 +76,9 @@ public class PieChart extends JPanel implements IPointsFeature
   public void remove( int index)
   {
     total -= points.remove( index).coords[ 0];
+    
+    q1 = null;
+    repaint();
   }
   
   /* (non-Javadoc)
@@ -99,6 +91,7 @@ public class PieChart extends JPanel implements IPointsFeature
     point.coords[ coordinate] = value;
     total += value;
     
+    q1 = null;
     repaint();
   }
 
@@ -109,7 +102,6 @@ public class PieChart extends JPanel implements IPointsFeature
   public void update( Point point, String label)
   {
     point.label = label;
-    textGraphics.set( points.indexOf( point), null);
     repaint();
   }
 
@@ -118,35 +110,54 @@ public class PieChart extends JPanel implements IPointsFeature
    */
   private void computeColors()
   {
-    drawColor = new ArrayList<Color>( points.size());
-    fillColor = new ArrayList<Color>( points.size());
+    colors = new ArrayList<Color>( points.size());
     for( int i=0; i<points.size(); i++)
     {
       float hue = (float)i / points.size();
-      fillColor.add( Color.getHSBColor( hue, 0.9f, 1f));
-      drawColor.add( Color.getHSBColor( hue, 0.7f, 0.6f));
+      colors.add( Color.getHSBColor( hue, 0.9f, 1f));
     }   
   }
   
   /**
-   * Compute the text graphics for each point.
+   * Compute the slices.
    * @param g The graphics context.
    */
-  private void computeText( Graphics2D g)
+  private void computeSlices( Graphics2D g)
   {
+    Font font = g.getFont();
     FontRenderContext fontRenderContext = g.getFontRenderContext();
+
+    q1 = new ArrayList<Slice>();
+    q2 = new ArrayList<Slice>();
+    q3 = new ArrayList<Slice>();
+    q4 = new ArrayList<Slice>();
+    slices = new ArrayList<Slice>();
+    
+    double startAngle = 0;
     for( int i=0; i<points.size(); i++)
     {
       Point point = points.get( i);
       
-      if ( textGraphics.size() < i) textGraphics.add( null);
+      Slice slice = new Slice();
+      slice.label = font.createGlyphVector( fontRenderContext, point.label);
+      slice.startAngle = startAngle;
+      slice.angleExtent = point.coords[ 0] / total;
       
-      TextLayout textGraphic = textGraphics.get( i);
-      if ( textGraphic == null)
+      double w = (slice.startAngle + (slice.angleExtent / 2)) * PI2;
+      slice.midUX = Math.cos( w);
+      slice.midUY = Math.sin( w);
+      
+      if ( slice.midUX < 0)
       {
-        textGraphic = new TextLayout( point.label, getFont(), fontRenderContext);
-        textGraphics.set( i, textGraphic);
+        if ( slice.midUY < 0) q3.add( slice); else q2.add( 0, slice);
       }
+      else
+      {
+        if ( slice.midUY < 0) q4.add( 0, slice); else q1.add( slice);
+      }
+      
+      slices.add( slice);
+      startAngle += slice.angleExtent;
     }
   }
   
@@ -158,16 +169,11 @@ public class PieChart extends JPanel implements IPointsFeature
   {
     super.paintComponent( g);
     
-    if ( fillColor == null || fillColor.size() != points.size()) computeColors();
-    
     Graphics2D g2d = (Graphics2D)g.create();
     g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
-    g2d.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
     
-    computeText( g2d);
-    
-    g2d.setStroke( stroke);
+    if ( q1 == null) computeSlices( g2d);
+    if ( colors == null || colors.size() != points.size()) computeColors();
     
     int width = getWidth();
     int height = getHeight();
@@ -175,111 +181,156 @@ public class PieChart extends JPanel implements IPointsFeature
 
     double cx = getWidth() / 2d;
     double cy = getHeight() / 2d;
+    double r = size / 2d - 100;
 
-    Point2D.Double[] labelPoints = new Point2D.Double[ points.size()];
-
-    double r1 = innerRadius;
-    double r2 = size / 2d - sliceBorder;
-
-    double a1 = 2 * Math.asin( sliceMargin / 2 / r1);
-    double a2 = 2 * Math.asin( sliceMargin / 2 / r2);
-    double b1 = a1 * 2;
-    double b2 = a2 * 2;
-    double w = 0;
-
-    AffineTransform ident = new AffineTransform();
-    for( int i=0; i<points.size(); i++)
+    int color = 0;
+    for( Slice slice: slices)
     {
-      Point point = points.get( i);
+      arc.setArcByCenter( cx, cy, r, -slice.startAngle * 360, -slice.angleExtent * 360 - 1, Arc2D.PIE);
+      g2d.setColor( colors.get( color++));
+      g2d.fill( arc);
+    }
+    
+    double rTick = r + tickLength;
 
-      double t = 2 * Math.PI * point.coords[ 0] / total;
+    FontMetrics metrics = g2d.getFontMetrics();
+    double labelAdvanceY = labelGapY + metrics.getHeight();
+    
+    double labelX = r + labelMargin;
+    double labelY0 = -labelAdvanceY / 2;
+    for( Slice slice: q1)
+    {
+      double labelY1 = rTick * slice.midUY;
+      if ( (labelY1 - labelY0) < labelAdvanceY) labelY1 = labelY0 + labelAdvanceY;
       
-      slice.reset();
+      double pieX = r * slice.midUX;
+      double pieY = r * slice.midUY;
+      double tickX = labelY1 * slice.midUX / slice.midUY;
       
-      if ( t <= b1)
-      {
-        if ( t >= b2)
-        {
-          double rp = sliceMargin / 2 / Math.sin( t / 4);
-          
-          p1.x = cx + rp * Math.cos( w + (t / 2));
-          p1.y = cy + rp * Math.sin( w + (t / 2));
-          
-          outside.setArcByCenter( p1.x, p1.y, r2 - rp, -(w + a2) * 180 / Math.PI, -(t - b2) * 180 / Math.PI, Arc2D.PIE);
-          
-          g2d.setColor( fillColor.get( i));
-          g2d.fill( outside);
-          
-          g2d.setColor( drawColor.get( i));
-          g2d.draw( outside);
-        }
-      }
-      else
-      {
-        p1.x = cx + r1 * Math.cos( w + a1);
-        p1.y = cy + r1 * Math.sin( w + a1);
-        
-        p2.x = cx + r2 * Math.cos( w + a2);
-        p2.y = cy + r2 * Math.sin( w + a2);
-        
-        p3.x = cx + r2 * Math.cos( w + t - a2);
-        p3.y = cy + r2 * Math.sin( w + t - a2);
-        
-        p4.x = cx + r1 * Math.cos( w + t - a1);
-        p4.y = cy + r1 * Math.sin( w + t - a1);
-
-        inside.setArcByCenter( cx, cy, r1, -(w + t - a1) * 180 / Math.PI, (t - b1) * 180 / Math.PI, Arc2D.OPEN);
-        outside.setArcByCenter( cx, cy, r2, -(w + a2) * 180 / Math.PI, -(t - b2) * 180 / Math.PI, Arc2D.OPEN);
-        
-        slice.moveTo( p1.x, p1.y);
-        slice.lineTo( p2.x, p2.y);
-        slice.append( outside.getPathIterator( ident), true);
-        slice.lineTo( p4.x, p4.y);
-        slice.append( inside.getPathIterator( ident), true);
-        
-        g2d.setColor( fillColor.get( i));
-        g2d.fill( slice);
-        
-        g2d.setColor( drawColor.get( i));
-        g2d.draw( slice);
-      }
-        
-      w += t;
+      double labelOffsetX = labelGapX;
+      double labelOffsetY = slice.label.getVisualBounds().getHeight() / 2;
+      
+      path.reset();
+      path.moveTo( cx + pieX, cy + pieY);
+      if ( tickX < labelX) path.lineTo( cx + tickX, cy + labelY1);
+      path.lineTo( cx + labelX, cy + labelY1);
+      
+      g2d.setColor( Color.gray);
+      g2d.draw( path);
+      
+      g2d.setColor( Color.black);
+      g2d.drawGlyphVector( slice.label, (float)(cx + labelX + labelOffsetX), (float)(cy + labelY1 + labelOffsetY));
+      
+      labelY0 = labelY1;
     }
 
-//    g2d.setColor( getForeground());
-//    for( int i=0; i<points.size(); i++)
-//    {
-//      TextLayout textGraphic = textGraphics.get( i);
-//      
-//      Point2D.Double labelPoint = labelPoints[ i];
-//      if ( labelPoint == null) continue;
-//
-//      Rectangle2D bounds = textGraphic.getBounds();
-//      
-//      double lx = labelPoint.x - bounds.getWidth() / 2;
-//      double ly = labelPoint.y + textGraphic.getDescent();
-//      
-//      textGraphic.draw( g2d, (float)lx, (float)ly);
-//    }
+    labelY0 = labelAdvanceY / 2;
+    for( Slice slice: q4)
+    {
+      double labelY1 = rTick * slice.midUY;
+      if ( (labelY0 - labelY1) < labelAdvanceY) labelY1 = labelY0 - labelAdvanceY;
+      
+      double pieX = r * slice.midUX;
+      double pieY = r * slice.midUY;
+      double tickX = labelY1 * slice.midUX / slice.midUY;
+      
+      double labelOffsetX = labelGapX;
+      double labelOffsetY = slice.label.getVisualBounds().getHeight() / 2;
+      
+      path.reset();
+      path.moveTo( cx + pieX, cy + pieY);
+      if ( tickX < labelX) path.lineTo( cx + tickX, cy + labelY1);
+      path.lineTo( cx + labelX, cy + labelY1);
+      
+      g2d.setColor( Color.gray);
+      g2d.draw( path);
+      
+      g2d.setColor( Color.black);
+      g2d.drawGlyphVector( slice.label, (float)(cx + labelX + labelOffsetX), (float)(cy + labelY1 + labelOffsetY));
+      
+      labelY0 = labelY1;
+    }
+    
+    labelX = -(r + labelMargin);
+    labelY0 = -labelAdvanceY / 2;
+    for( Slice slice: q2)
+    {
+      double labelY1 = rTick * slice.midUY;
+      if ( (labelY1 - labelY0) < labelAdvanceY) labelY1 = labelY0 + labelAdvanceY;
+      
+      double pieX = r * slice.midUX;
+      double pieY = r * slice.midUY;
+      double tickX = labelY1 * slice.midUX / slice.midUY;
+      
+      double labelOffsetX = -slice.label.getVisualBounds().getWidth() - labelGapX;
+      double labelOffsetY = slice.label.getVisualBounds().getHeight() / 2;
+      
+      path.reset();
+      path.moveTo( cx + pieX, cy + pieY);
+      if ( tickX > labelX) path.lineTo( cx + tickX, cy + labelY1);
+      path.lineTo( cx + labelX, cy + labelY1);
+      
+      g2d.setColor( Color.gray);
+      g2d.draw( path);
+      
+      g2d.setColor( Color.black);
+      g2d.drawGlyphVector( slice.label, (float)(cx + labelX + labelOffsetX), (float)(cy + labelY1 + labelOffsetY));
+      
+      labelY0 = labelY1;
+    }
+    
+    labelY0 = labelAdvanceY / 2;    
+    for( Slice slice: q3)
+    {
+      double labelY1 = rTick * slice.midUY;
+      if ( (labelY0 - labelY1) < labelAdvanceY) labelY1 = labelY0 - labelAdvanceY;
+      
+      double pieX = r * slice.midUX;
+      double pieY = r * slice.midUY;
+      double tickX = labelY1 * slice.midUX / slice.midUY;
+      
+      double labelOffsetX = -slice.label.getVisualBounds().getWidth() - labelGapX;
+      double labelOffsetY = slice.label.getVisualBounds().getHeight() / 2;
+      
+      path.reset();
+      path.moveTo( cx + pieX, cy + pieY);
+      if ( tickX > labelX) path.lineTo( cx + tickX, cy + labelY1);
+      path.lineTo( cx + labelX, cy + labelY1);
+      
+      g2d.setColor( Color.gray);
+      g2d.draw( path);
+      
+      g2d.setColor( Color.black);
+      g2d.drawGlyphVector( slice.label, (float)(cx + labelX + labelOffsetX), (float)(cy + labelY1 + labelOffsetY));
+      
+      labelY0 = labelY1;
+    }
   }
-
-  private double sliceBorder = 2;
-  private double innerRadius = 3;
-  private double sliceMargin = 2;
+  
+  private final static class Slice
+  {
+    public GlyphVector label;
+    public double startAngle;
+    public double angleExtent;
+    public double midUX;
+    public double midUY;
+  }
+  
+  private final static double PI2 = Math.PI * 2;
+  private final static int labelMargin = 10;
+  private final static int labelGapX = 10;
+  private final static int labelGapY = 3;
+  private final static int tickLength = 10;
   
   private List<Point> points;
   private double total;
 
-  private Stroke stroke;
-  private Arc2D.Double outside;
-  private Arc2D.Double inside;
-  private Point2D.Double p1;
-  private Point2D.Double p2;
-  private Point2D.Double p3;
-  private Point2D.Double p4;
-  private Path2D.Double slice;
-  private List<Color> fillColor;
-  private List<Color> drawColor;
-  private List<TextLayout> textGraphics;
+  private Arc2D.Double arc;
+  private Path2D.Double path;
+  private List<Color> colors;
+  private List<Slice> q1;
+  private List<Slice> q2;
+  private List<Slice> q3;
+  private List<Slice> q4;
+  private List<Slice> slices;
 }
