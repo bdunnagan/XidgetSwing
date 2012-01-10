@@ -198,7 +198,10 @@ public class PieChart extends JPanel implements IPointsFeature
 
     FontMetrics metrics = g2d.getFontMetrics();
     double labelAdvanceY = labelGapY + metrics.getHeight();
-    
+
+    //
+    // Quadrant 1
+    //
     double labelX = r + labelMargin;
     double labelY0 = -labelAdvanceY / 2;
     for( Slice slice: q1)
@@ -227,6 +230,9 @@ public class PieChart extends JPanel implements IPointsFeature
       labelY0 = labelY1;
     }
 
+    //
+    // Quadrant 4
+    //
     labelY0 = labelAdvanceY / 2;
     for( Slice slice: q4)
     {
@@ -254,6 +260,9 @@ public class PieChart extends JPanel implements IPointsFeature
       labelY0 = labelY1;
     }
     
+    //
+    // Quadrant 2
+    //
     labelX = -(r + labelMargin);
     labelY0 = -labelAdvanceY / 2;
     for( Slice slice: q2)
@@ -282,6 +291,9 @@ public class PieChart extends JPanel implements IPointsFeature
       labelY0 = labelY1;
     }
     
+    //
+    // Quadrant 3
+    //    
     labelY0 = labelAdvanceY / 2;    
     for( Slice slice: q3)
     {
