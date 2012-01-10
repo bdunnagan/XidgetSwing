@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -37,12 +38,15 @@ import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
 import org.xidget.swing.layout.WidgetBoundsListener;
 import org.xmodel.IModelObject;
+import org.xmodel.log.Log;
 
 /**
  * An adapter for Swing/AWT widgets.
  */
 public class SwingWidgetFeature implements IWidgetFeature
 {
+  public final static Log log = Log.getLog( SwingWidgetFeature.class.getCanonicalName());
+  
   public SwingWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
@@ -221,51 +225,29 @@ public class SwingWidgetFeature implements IWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setFont(java.lang.String)
+   * @see org.xidget.ifeature.IWidgetFeature#setFontFamily(java.lang.String)
    */
-  public void setFont( String name)
+  @Override
+  public void setFontFamily( String family)
   {
     JComponent widget = getPrimaryWidget( xidget);
-    Font oldFont = widget.getFont();
-    
-    String family = oldFont.getFamily();
-    int size = oldFont.getSize();
-    int style = oldFont.getStyle();
-    
-    String[] split = name.split( "\\s*[,\\- /]\\s*");
-    if ( split.length > 0)
-    {
-      String newFamily = matchFamily( split[ 0]);
-      if ( newFamily != null) family = newFamily;
-    }
-    
-    if ( split.length > 1)
-    {
-      try { size = Integer.parseInt( split[ 1]);} catch( Exception e) {}
-    }
-    
-    if ( split.length > 2)
-    {
-      style = parseFontStyle( split[ 2]);
-    }
-    
-    widget.setFont( new Font( family, style, size));
+    Font font = widget.getFont();
+    widget.setFont( new Font( matchFamily( family), font.getStyle(), font.getSize()));
   }
 
-  /**
-   * Finds the first family containig the complete family string.
-   * @param families The complete list of families.
-   * @return Returns the first match.
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setFontStyles( EnumSet<FontStyle>)
    */
-  public String matchFamily( String family)
+  @Override
+  public void setFontStyles( EnumSet<FontStyle> styles)
   {
-    List<String> names = Creator.getInstance().getToolkit().getFonts();
-    for( String name: names)
-    {
-      if ( name.contains( family))
-        return name;
-    }
-    return null;
+    int awtFontStyles = Font.PLAIN;
+    if ( styles.contains( FontStyle.italic)) awtFontStyles |= Font.ITALIC;
+    if ( styles.contains( FontStyle.bold)) awtFontStyles |= Font.BOLD;
+    
+    JComponent widget = getPrimaryWidget( xidget);
+    Font font = widget.getFont();
+    widget.setFont( font.deriveFont( awtFontStyles));
   }
 
   /* (non-Javadoc)
@@ -278,32 +260,27 @@ public class SwingWidgetFeature implements IWidgetFeature
     widget.setFont( font.deriveFont( (float)size));
   }
 
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setFontStyle(java.lang.String)
-   */
-  public void setFontStyle( String styles)
-  {
-    JComponent widget = getPrimaryWidget( xidget);
-    Font font = widget.getFont();
-    int constant = parseFontStyle( styles);
-    widget.setFont( font.deriveFont( constant));
-  }
-  
   /**
-   * Parse the font style from the specified styles string.
-   * @param styles The styles string.
-   * @return Returns the font style.
+   * Finds the first family containig the complete family string.
+   * @param families The complete list of families.
+   * @return Returns the first match.
    */
-  private int parseFontStyle( String styles)
+  public String matchFamily( String family)
   {
-    int constant = Font.PLAIN;
-    String[] split = styles.split( "[,\\- /]");
-    for( String style: split)
+    family = family.toLowerCase();
+    
+    List<String> names = Creator.getInstance().getToolkit().getFonts();
+    for( String name: names)
     {
-      if ( style.equalsIgnoreCase( "italic") || style.equalsIgnoreCase( "italics")) constant |= Font.ITALIC;
-      if ( style.equalsIgnoreCase( "bold")) constant |= Font.BOLD;
+      if ( name.toLowerCase().contains( family))
+        return name;
     }
-    return constant;
+
+    log.errorf( "Unknown font family, '%s'.", family);
+    log.verbose( "Available Font Families: ");
+    for( String name: names) log.verbose( name);
+    
+    return null;
   }
 
   /**
@@ -326,7 +303,7 @@ public class SwingWidgetFeature implements IWidgetFeature
   {
     return xidget.toString();
   }
-  
+
   protected IXidget xidget;
   protected IModelObject boundsNode;
   protected Bounds defaultBounds = new Bounds();

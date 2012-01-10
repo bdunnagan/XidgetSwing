@@ -43,8 +43,8 @@ public class AnchorLayoutManager implements LayoutManager2
    */
   public void addLayoutComponent( Component comp, Object constraints)
   {
-    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
-    if ( feature != null) feature.invalidate(); 
+//    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+//    if ( feature != null) feature.invalidate(); 
   }
 
   /* (non-Javadoc)
@@ -83,8 +83,8 @@ public class AnchorLayoutManager implements LayoutManager2
    */
   public void addLayoutComponent( String name, Component component)
   {
-    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
-    if ( feature != null) feature.invalidate(); 
+//    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+//    if ( feature != null) feature.invalidate(); 
   }
 
   /* (non-Javadoc)
@@ -92,8 +92,8 @@ public class AnchorLayoutManager implements LayoutManager2
    */
   public void removeLayoutComponent( Component component)
   {
-    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
-    if ( feature != null) feature.invalidate(); 
+//    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+//    if ( feature != null) feature.invalidate(); 
   }
 
   /* (non-Javadoc)

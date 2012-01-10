@@ -88,6 +88,17 @@ public class Plot2D extends JPanel implements IPointsFeature
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void update( Point point, String label)
+  {
+    repaint( point);
+    point.label = label;
+    repaint( point);
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.graph.Point, int, double)
    */
   @Override

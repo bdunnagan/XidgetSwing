@@ -113,8 +113,11 @@ public class PieChart extends JPanel implements IPointsFeature
     colors = new ArrayList<Color>( points.size());
     for( int i=0; i<points.size(); i++)
     {
-      float hue = (float)i / points.size();
-      colors.add( Color.getHSBColor( hue, 0.9f, 1f));
+      float hue = (float)i / points.size() * 4;
+      for( int j=0; j<4; j++)
+      {
+        colors.add( Color.getHSBColor( hue, 0.2f + 0.2f * j, 1f));
+      }
     }   
   }
   

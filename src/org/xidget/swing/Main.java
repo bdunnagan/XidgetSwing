@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.xidget.Creator;
 import org.xidget.caching.FileSystemCachingPolicy;
@@ -35,6 +34,7 @@ import org.xmodel.IModelObject;
 import org.xmodel.external.ExternalReference;
 import org.xmodel.external.ICachingPolicy;
 import org.xmodel.external.IExternalReference;
+import org.xmodel.log.Log;
 import org.xmodel.xaction.ScriptAction;
 import org.xmodel.xaction.XActionDocument;
 import org.xmodel.xpath.XPath;
@@ -67,6 +67,7 @@ public class Main
     {
       for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
       {
+        log.info( info.getName());
         if ( "Nimbus".equals( info.getName()))
         {
           UIManager.setLookAndFeel( info.getClassName());
@@ -128,4 +129,6 @@ public class Main
       }
     });
   }
+  
+  private static Log log = Log.getLog( "org.xidget.swing");
 }
