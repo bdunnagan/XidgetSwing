@@ -39,17 +39,17 @@ import org.xidget.binding.tree.TreeTagHandler;
 import org.xidget.config.TagProcessor;
 import org.xidget.ifeature.IAsyncFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.swing.application.JFrameXidget;
 import org.xidget.swing.button.AbstractButtonXidget;
 import org.xidget.swing.calendar.CalendarXidget;
+import org.xidget.swing.chart.line.LineChartXidget;
+import org.xidget.swing.chart.line.XAxisXidget;
+import org.xidget.swing.chart.line.YAxisXidget;
 import org.xidget.swing.chart.pie.PieChartXidget;
-import org.xidget.swing.chart.plot2d.Plot2DXidget;
-import org.xidget.swing.chart.plot2d.XAxisXidget;
-import org.xidget.swing.chart.plot2d.YAxisXidget;
 import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.dialog.JDialogXidget;
 import org.xidget.swing.feature.AsyncFeature;
 import org.xidget.swing.form.JPanelXidget;
+import org.xidget.swing.frame.JFrameXidget;
 import org.xidget.swing.image.ImageFileAssociation;
 import org.xidget.swing.label.JLabelTagHandler;
 import org.xidget.swing.label.JLabelXidget;
@@ -107,15 +107,13 @@ public class Toolkit implements IToolkit
    */
   public void configure( TagProcessor processor)
   {
-    processor.addHandler( "app", new XidgetTagHandler( JFrameXidget.class));
-    processor.addHandler( "application", new XidgetTagHandler( JFrameXidget.class));
-    processor.addHandler( "calendar", new XidgetTagHandler( CalendarXidget.class));
     processor.addHandler( "window", new XidgetTagHandler( JFrameXidget.class));
+    processor.addHandler( "calendar", new XidgetTagHandler( CalendarXidget.class));
     processor.addHandler( "dialog", new XidgetTagHandler( JDialogXidget.class));
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));
     processor.addHandler( "password", new XidgetTagHandler( JTextXidget.class));
-    processor.addHandler( "pie", new XidgetTagHandler( PieChartXidget.class));
-    processor.addHandler( "plot2d", new XidgetTagHandler( Plot2DXidget.class));
+    processor.addHandler( "chart", new XidgetTagHandler( PieChartXidget.class, "style", "pie"));
+    processor.addHandler( "chart", new XidgetTagHandler( LineChartXidget.class, "style", "line"));
     processor.addHandler( "tabs", new XidgetTagHandler( JTabbedPaneXidget.class));
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "combo", new XidgetTagHandler( JComboBoxXidget.class));
@@ -131,8 +129,8 @@ public class Toolkit implements IToolkit
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
     processor.addHandler( "xml", new XidgetTagHandler( XmlTextPaneXidget.class));
-    processor.addHandler( "xaxis", new XidgetTagHandler( XAxisXidget.class));
-    processor.addHandler( "yaxis", new XidgetTagHandler( YAxisXidget.class));
+    processor.addHandler( "axis", new XidgetTagHandler( XAxisXidget.class, "style", "horizontal"));
+    processor.addHandler( "axis", new XidgetTagHandler( YAxisXidget.class, "style", "vertical"));
   }
 
   /* (non-Javadoc)

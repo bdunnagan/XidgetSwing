@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.chart.plot2d;
+package org.xidget.swing.chart.line;
 
 import java.awt.Component;
 
@@ -20,7 +20,7 @@ import org.xidget.swing.feature.SwingWidgetFeature;
 /**
  * A horizontal or vertical axis xidget.
  */
-public class YAxisXidget extends Xidget
+public class XAxisXidget extends Xidget
 {
   /* (non-Javadoc)
    * @see org.xidget.Xidget#createFeatures()
@@ -30,7 +30,7 @@ public class YAxisXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    creationFeature = new YAxisWidgetCreationFeature( this);
+    creationFeature = new XAxisWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -57,6 +57,6 @@ public class YAxisXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private YAxisWidgetCreationFeature creationFeature;
+  private XAxisWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }

@@ -2,7 +2,7 @@
  * Xidget - UI Toolkit based on XModel
  * Copyright 2009 Bob Dunnagan. All rights reserved.
  */
-package org.xidget.swing.chart.plot2d;
+package org.xidget.swing.chart.line;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -50,7 +50,7 @@ public abstract class Axis extends JPanel implements IAxisFeature
   public void setGraph( String axis, IXidget xidget)
   {
     this.axis = axis; 
-    this.graph = xidget.getFeature( Plot2D.class);
+    this.graph = xidget.getFeature( LineChart.class);
   }
 
   /* (non-Javadoc)
@@ -131,7 +131,7 @@ public abstract class Axis extends JPanel implements IAxisFeature
     }
   };
   
-  protected Plot2D graph;
+  protected LineChart graph;
   protected String axis;
   protected Format format;
   protected Scale scale;

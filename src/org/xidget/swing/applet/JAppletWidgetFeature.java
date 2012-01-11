@@ -1,7 +1,7 @@
 /*
  * XidgetSwing - A Java Swing implementation of Xidgets
  * 
- * JFrameWidgetFeature.java
+ * JAppletWidgetFeature.java
  * 
  * Copyright 2009 Robert Arvin Dunnagan
  * 
@@ -17,25 +17,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.application;
+package org.xidget.swing.applet;
 
 import java.awt.Color;
 import java.awt.Font;
 
-import javax.swing.JFrame;
+import javax.swing.JApplet;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITitleFeature;
-import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
 import org.xidget.swing.feature.SwingContainerWidgetFeature;
 
 /**
- * An implementation of IWidgetFeature for JFrame.
+ * An implementation of IWidgetFeature for JApplet.
  */
-public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements ITitleFeature
+public class JAppletWidgetFeature extends SwingContainerWidgetFeature implements ITitleFeature
 {
-  public JFrameWidgetFeature( IXidget xidget)
+  public JAppletWidgetFeature( IXidget xidget)
   {
     super( xidget);
   }
@@ -49,11 +48,11 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
     super.setDefaultBounds( x, y, width, height, clamp);
     
     //
-    // Set the bounds of the frame.  Since the JFrame uses the AdapterLayoutManager which
+    // Set the bounds of the frame.  Since the JApplet uses the AdapterLayoutManager which
     // inherits from BorderLayout, the content pane will be resized and the computed size
     // of the root form will be set (see AdapterLayoutManager.layoutContainer).
     //
-    JFrame frame = xidget.getFeature( JFrame.class);
+    JApplet frame = xidget.getFeature( JApplet.class);
     frame.setLocation( (int)Math.round( x), (int)Math.round( y));
     frame.setSize( (int)Math.round( width), (int)Math.round( height));
   }
@@ -63,8 +62,8 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
    */
   public void setTitle( String title)
   {
-    JFrame widget = xidget.getFeature( JFrame.class);
-    widget.setTitle( title);
+    JApplet widget = xidget.getFeature( JApplet.class);
+    widget.setName( title);
   }
 
   /* (non-Javadoc)
@@ -80,17 +79,6 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
    */
   public void setVisible( boolean visible)
   {
-    JFrame widget = xidget.getFeature( JFrame.class);
-    
-    //
-    // Pack frame to preferred size of root form if default bounds are not specified.
-    // This is the only case in which the Swing LayoutManager.preferredSize() method
-    // will be called (see AdapterLayoutManager.preferredSize).
-    //
-    Bounds bounds = getDefaultBounds();
-    if ( bounds.width < 0 && bounds.height < 0) widget.pack();
-    
-    widget.setVisible( visible);
   }
   
   /* (non-Javadoc)
@@ -98,7 +86,7 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
    */
   public boolean getVisible()
   {
-    JFrame widget = xidget.getFeature( JFrame.class);
+    JApplet widget = xidget.getFeature( JApplet.class);
     return widget.isVisible(); 
   }
 
@@ -107,7 +95,7 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
    */
   public void setEnabled( boolean enabled)
   {
-    JFrame widget = xidget.getFeature( JFrame.class);
+    JApplet widget = xidget.getFeature( JApplet.class);
     widget.setEnabled( enabled);
   }
 
@@ -123,7 +111,7 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
    */
   public void setBackground( int color)
   {
-    JFrame widget = xidget.getFeature( JFrame.class);
+    JApplet widget = xidget.getFeature( JApplet.class);
     widget.setBackground( new Color( color));
   }
 
@@ -132,7 +120,7 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
    */
   public void setForeground( int color)
   {
-    JFrame widget = xidget.getFeature( JFrame.class);
+    JApplet widget = xidget.getFeature( JApplet.class);
     widget.setForeground( new Color( color));
   }
 
@@ -153,7 +141,7 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
       name = sb.toString();
     }
     
-    JFrame widget = xidget.getFeature( JFrame.class);
+    JApplet widget = xidget.getFeature( JApplet.class);
     Font oldFont = widget.getFont();
     Font font = new Font( name, oldFont.getStyle(), oldFont.getSize());
     widget.setFont( font);
@@ -164,7 +152,7 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
    */
   public void setFontSize( double size)
   {
-    JFrame widget = xidget.getFeature( JFrame.class);
+    JApplet widget = xidget.getFeature( JApplet.class);
     Font font = widget.getFont();
     widget.setFont( font.deriveFont( (float)size));
   }
@@ -174,7 +162,7 @@ public class JFrameWidgetFeature extends SwingContainerWidgetFeature implements 
    */
   public void setFontStyle( String style)
   {
-    JFrame widget = xidget.getFeature( JFrame.class);
+    JApplet widget = xidget.getFeature( JApplet.class);
     Font font = widget.getFont();
     int constant = Font.PLAIN;
     if ( style.equals( "italic") || style.equals( "italics")) constant = Font.ITALIC;

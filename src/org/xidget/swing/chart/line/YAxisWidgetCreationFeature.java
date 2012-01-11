@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.chart.plot2d;
+package org.xidget.swing.chart.line;
 
 import javax.swing.JComponent;
 
@@ -28,9 +28,9 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IWidgetCreationFeature which creates an Axis widget.
  */
-public class XAxisWidgetCreationFeature extends SwingWidgetCreationFeature
+public class YAxisWidgetCreationFeature extends SwingWidgetCreationFeature
 {
-  public XAxisWidgetCreationFeature( IXidget xidget)
+  public YAxisWidgetCreationFeature( IXidget xidget)
   {
     super( xidget);
   }
@@ -41,8 +41,8 @@ public class XAxisWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget()
   {
-    boolean top = Xlate.get( xidget.getConfig(), "top", false);
-    axis = new XAxis( top);
+    boolean left = Xlate.get( xidget.getConfig(), "left", true);
+    axis = new YAxis( left);
     return axis;
   }
 

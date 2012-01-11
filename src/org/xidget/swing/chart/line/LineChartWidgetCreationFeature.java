@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.chart.plot2d;
+package org.xidget.swing.chart.line;
 
 import javax.swing.JComponent;
 
@@ -29,9 +29,9 @@ import org.xmodel.Xlate;
 /**
  * An implementation of IWidgetCreationFeature which creates a Plot2D widget.
  */
-public class Plot2DWidgetCreationFeature extends SwingWidgetCreationFeature
+public class LineChartWidgetCreationFeature extends SwingWidgetCreationFeature
 {
-  public Plot2DWidgetCreationFeature( IXidget xidget)
+  public LineChartWidgetCreationFeature( IXidget xidget)
   {
     super( xidget);
   }
@@ -42,16 +42,16 @@ public class Plot2DWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget()
   {
-    plot = new Plot2D();
-    findGraphAxes( plot);
-    return plot;
+    chart = new LineChart();
+    findGraphAxes( chart);
+    return chart;
   }
 
   /**
    * Find the graph axes and associate to the graph.
    * @param graph The graph.
    */
-  private void findGraphAxes( Plot2D graph)
+  private void findGraphAxes( LineChart graph)
   {
     IModelObject parent = xidget.getConfig().getParent();
     
@@ -83,7 +83,7 @@ public class Plot2DWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   public Object[] getLastWidgets()
   {
-    return new Object[] { plot};
+    return new Object[] { chart};
   }
 
   /**
@@ -91,19 +91,19 @@ public class Plot2DWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   public JComponent getComponent()
   {
-    return plot;
+    return chart;
   }
     
   /**
-   * Returns the Plot2D widget which may be different from the widget returned
+   * Returns the LineChart widget which may be different from the widget returned
    * by the <code>getWidget</code> method which will return a container if
    * a label is defined.
    * @return Returns the text widget.
    */
-  public Plot2D getPlot2D()
+  public LineChart getLineChart()
   {
-    return plot;
+    return chart;
   }
 
-  private Plot2D plot;
+  private LineChart chart;
 }

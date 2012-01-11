@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.application;
+package org.xidget.swing.frame;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
@@ -28,6 +28,7 @@ import javax.swing.JFrame;
 import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.swing.form.JPanelXidget;
 import org.xidget.swing.layout.AdapterLayoutManager;
 
 /**
@@ -46,9 +47,18 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jframe = new JFrame();
-    jframe.getContentPane().setLayout( new AdapterLayoutManager( xidget, new BorderLayout()));
     jframe.setLocationByPlatform(true);    
     jframe.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE);
+
+    for( IXidget child: xidget.getChildren())
+    {
+      if ( child instanceof JPanelXidget)
+      {
+        AdapterLayoutManager layoutManager = new AdapterLayoutManager( child, new BorderLayout());
+        jframe.getContentPane().setLayout( layoutManager);
+      }
+    }
+    
     jframe.addWindowListener( new WindowAdapter() {
       public void windowClosed( WindowEvent e)
       {

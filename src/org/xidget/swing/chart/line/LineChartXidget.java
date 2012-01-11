@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.chart.pie;
+package org.xidget.swing.chart.line;
 
 import java.awt.Component;
 
@@ -34,15 +34,15 @@ import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
- * An implementation of IXidget for the custom PieChart widget.
+ * An implementation of IXidget for the custom LineChart widget.
  */
-public class PieChartXidget extends Xidget
+public class LineChartXidget extends Xidget
 {
   public void createFeatures()
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    creationFeature = new PieChartWidgetCreationFeature( this);
+    creationFeature = new LineChartWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   
@@ -53,14 +53,14 @@ public class PieChartXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IPointsFeature.class) return (T)creationFeature.getPieChart();
+    if ( clss == IPointsFeature.class) return (T)creationFeature.getLineChart();
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
     if ( clss == Component.class) return (T)creationFeature.getComponent();
     if ( clss == JComponent.class) return (T)creationFeature.getComponent();
-    if ( clss == PieChart.class) return (T)creationFeature.getPieChart();
+    if ( clss == LineChart.class) return (T)creationFeature.getLineChart();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;
@@ -70,6 +70,6 @@ public class PieChartXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
-  private PieChartWidgetCreationFeature creationFeature;
+  private LineChartWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }

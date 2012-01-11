@@ -21,6 +21,7 @@ package org.xidget.swing;
 
 import java.io.File;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.Collections;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -63,21 +64,6 @@ public class Main
   {    
     final String path = (args.length > 0)? args[ 0]: "main.xml";
     
-    try
-    {
-      for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
-      {
-        log.info( info.getName());
-        if ( "Nimbus".equals( info.getName()))
-        {
-          UIManager.setLookAndFeel( info.getClassName());
-          break;
-        }
-      }
-    } catch ( Exception e)
-    {
-    }
-    
     // handle uncaught exceptions
     Thread.setDefaultUncaughtExceptionHandler( new UncaughtExceptionHandler() {
       public void uncaughtException( Thread t, Throwable e)
@@ -92,6 +78,21 @@ public class Main
     SwingUtilities.invokeLater( new Runnable() {
       public void run()
       {
+        try
+        {
+          for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+          {
+            log.info( info.getName());
+            if ( "Nimbus".equals( info.getName()))
+            {
+              UIManager.setLookAndFeel( info.getClassName());
+              break;
+            }
+          }
+        } catch ( Exception e)
+        {
+        }
+        
         // register toolkit
         Creator.getInstance().setToolkit( new Toolkit());
 
@@ -119,6 +120,8 @@ public class Main
           document.setRoot( main);
           
           StatefulContext context = new StatefulContext( resources);
+          context.set( "applet", Collections.<IModelObject>emptyList());
+          
           ScriptAction script = document.createScript();
           script.run( context);
         }

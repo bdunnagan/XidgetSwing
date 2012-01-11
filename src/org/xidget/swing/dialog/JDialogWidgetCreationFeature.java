@@ -50,10 +50,16 @@ public class JDialogWidgetCreationFeature implements IWidgetCreationFeature
     IModelObject config = xidget.getConfig();
     
     jDialog = new JDialog();
-    jDialog.getContentPane().setLayout( new AdapterLayoutManager( xidget, new BorderLayout()));
     jDialog.setLocationByPlatform( true);
     jDialog.setModal( Xlate.get( config, "modal", true));
     jDialog.addComponentListener( moveListener);
+    
+    if ( xidget.getChildren().size() > 0)
+    {
+      IXidget form = xidget.getChildren().get( 0);
+      AdapterLayoutManager layoutManager = new AdapterLayoutManager( form, new BorderLayout());
+      jDialog.getContentPane().setLayout( layoutManager);
+    }
   }
 
   /* (non-Javadoc)

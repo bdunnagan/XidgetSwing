@@ -108,17 +108,14 @@ public class AdapterLayoutManager implements LayoutManager2
     delegate.layoutContainer( target);
     
     //
-    // Update computed bounds for all children. This must be done here to insure
+    // Update computed bounds of the xidget in the content pane. This must be done here to insure
     // that the bounds are up-to-date during the layout flow.
     //
-    for( IXidget child: xidget.getChildren())
+    IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+    if ( widgetFeature != null)
     {
-      IWidgetFeature widgetFeature = child.getFeature( IWidgetFeature.class);
-      if ( widgetFeature != null)
-      {
-        Component widget = child.getFeature( Component.class);
-        widgetFeature.setComputedBounds( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight());
-      }
+      Component widget = xidget.getFeature( Component.class);
+      widgetFeature.setComputedBounds( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight());
     }
   }
 
@@ -131,19 +128,16 @@ public class AdapterLayoutManager implements LayoutManager2
     // This method will be called if the top-level xidget does not have a default bounds.
     // See JFrameWidgetFeature.setVisible method as an example.
     //
-    for( IXidget child: xidget.getChildren())
+    ILayoutFeature layoutFeature = xidget.getFeature( ILayoutFeature.class);
+    if ( layoutFeature != null) 
     {
-      ILayoutFeature layoutFeature = child.getFeature( ILayoutFeature.class);
-      if ( layoutFeature != null) 
-      {
-        Component widget = child.getFeature( Component.class);
-        IWidgetContextFeature contextFeature = child.getFeature( IWidgetContextFeature.class);
-        layoutFeature.layout( contextFeature.getContext( widget));
-        
-        IWidgetFeature widgetFeature = child.getFeature( IWidgetFeature.class);
-        Bounds bounds = widgetFeature.getComputedBounds();
-        return new Dimension( (int)Math.round( bounds.width), (int)Math.round( bounds.height));
-      }
+      Component widget = xidget.getFeature( Component.class);
+      IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
+      layoutFeature.layout( contextFeature.getContext( widget));
+      
+      IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+      Bounds bounds = widgetFeature.getComputedBounds();
+      return new Dimension( (int)Math.round( bounds.width), (int)Math.round( bounds.height));
     }
     
     return new Dimension( 0, 0);
