@@ -39,15 +39,6 @@ public class AnchorLayoutManager implements LayoutManager2
   }
   
   /* (non-Javadoc)
-   * @see java.awt.LayoutManager2#addLayoutComponent(java.awt.Component, java.lang.Object)
-   */
-  public void addLayoutComponent( Component comp, Object constraints)
-  {
-//    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
-//    if ( feature != null) feature.invalidate(); 
-  }
-
-  /* (non-Javadoc)
    * @see java.awt.LayoutManager2#getLayoutAlignmentX(java.awt.Container)
    */
   public float getLayoutAlignmentX( Container target)
@@ -68,6 +59,11 @@ public class AnchorLayoutManager implements LayoutManager2
    */
   public void invalidateLayout( Container target)
   {
+    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
+    if ( feature != null) 
+    {
+      feature.invalidate();
+    }
   }
 
   /* (non-Javadoc)
@@ -79,12 +75,19 @@ public class AnchorLayoutManager implements LayoutManager2
   }
 
   /* (non-Javadoc)
+   * @see java.awt.LayoutManager2#addLayoutComponent(java.awt.Component, java.lang.Object)
+   */
+  public void addLayoutComponent( Component comp, Object constraints)
+  {
+    // not using contraints
+  }
+
+  /* (non-Javadoc)
    * @see java.awt.LayoutManager#addLayoutComponent(java.lang.String, java.awt.Component)
    */
   public void addLayoutComponent( String name, Component component)
   {
-//    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
-//    if ( feature != null) feature.invalidate(); 
+    // not using contraints
   }
 
   /* (non-Javadoc)
@@ -92,8 +95,7 @@ public class AnchorLayoutManager implements LayoutManager2
    */
   public void removeLayoutComponent( Component component)
   {
-//    ILayoutFeature feature = xidget.getFeature( ILayoutFeature.class);
-//    if ( feature != null) feature.invalidate(); 
+    // not using contraints
   }
 
   /* (non-Javadoc)

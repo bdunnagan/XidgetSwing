@@ -37,11 +37,8 @@ import javax.swing.event.ChangeListener;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IChoiceListFeature;
 import org.xidget.ifeature.ILabelFeature;
-import org.xidget.ifeature.ISelectionModelFeature;
-import org.xidget.ifeature.IValueFeature;
-import org.xidget.swing.combo.CustomComboModel.Item;
+import org.xidget.ifeature.model.ISelectionModelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
@@ -63,6 +60,8 @@ public class JSpinnerWidgetCreationFeature extends SwingWidgetCreationFeature im
   @Override
   protected JComponent createSwingWidget()
   {    
+    IModelObject config = xidget.getConfig();
+    
     // create text widget
     component = jSpinner = new JSpinner();
     jSpinner.setBorder( new EmptyBorder( 1, 1, 1, 1));
@@ -71,7 +70,7 @@ public class JSpinnerWidgetCreationFeature extends SwingWidgetCreationFeature im
     addStaticChoices( xidget);
     
     // create extra container to hold label and widget
-    if ( xidget.getConfig().getFirstChild( "label") != null)
+    if ( Xlate.get( config, "label", Xlate.childGet( config, "label", (String)null)) != null)
     {
       jLabel = new JLabel( "");
       jLabel.setHorizontalAlignment( SwingConstants.RIGHT);

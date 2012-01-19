@@ -28,7 +28,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -66,40 +65,34 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
   @Override
   protected JComponent createSwingWidget()
   {    
-    IModelObject element = xidget.getConfig();
+    IModelObject config = xidget.getConfig();
     
     // create text widget
-    Size size = new Size( Xlate.get( element, "size", (String)null));
-    if ( element.isType( "password"))
+    Size size = new Size( Xlate.get( config, "size", (String)null));
+    if ( config.isType( "password"))
     {
       jText = new JPasswordField( size.width);
-      jText.setBorder( BorderFactory.createEmptyBorder( 1, 1, 1, 1));
     }
     else if ( size.height > 1)
     {
       jText = new JTextArea( size.height, size.width);
-      jText.setBorder( BorderFactory.createEmptyBorder( 1, 1, 1, 1));
       component = new JScrollPane( jText);
-      component.setBorder( BorderFactory.createEmptyBorder());
     }
-    else if ( Xlate.get( element, "multiline", false))
+    else if ( Xlate.get( config, "multiline", false))
     {
       jText = new JTextArea();
-      jText.setBorder( BorderFactory.createEmptyBorder( 1, 1, 1, 1));
       component = new JScrollPane( jText);
-      component.setBorder( BorderFactory.createEmptyBorder());
     }
     else
     {
       jText = new JTextField( size.width);
-      jText.setBorder( BorderFactory.createEmptyBorder( 1, 1, 1, 1));
       
       // add action listener so that enter key will be processed
       ((JTextField)jText).addActionListener( actionListener);
     }
     
     // create extra container to hold label and widget
-    if ( xidget.getConfig().getFirstChild( "label") != null)
+    if ( Xlate.get( config, "label", Xlate.childGet( config, "label", (String)null)) != null)
     {
       jLabel = new JLabel( "");
       jLabel.setHorizontalAlignment( SwingConstants.RIGHT);

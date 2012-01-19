@@ -21,7 +21,6 @@ package org.xidget.swing.tabs;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Insets;
 
 import javax.swing.JTabbedPane;
 
@@ -29,7 +28,6 @@ import org.xidget.IXidget;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.layout.Margins;
 import org.xmodel.Xlate;
 
 /**
@@ -119,33 +117,6 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetContainerFeature#setInsideMargins(org.xidget.layout.Margins)
-   */
-  @Override
-  public void setInsideMargins( Margins margins)
-  {
-    this.margins = margins;
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetContainerFeature#getInsideMargins()
-   */
-  public Margins getInsideMargins()
-  {
-    if ( margins == null)
-    {
-      Container container = xidget.getFeature( Container.class);
-      Insets insets = container.getInsets();
-      margins = new Margins();
-      margins.x0 = insets.left;
-      margins.y0 = insets.top;
-      margins.x1 = insets.right;
-      margins.y1 = insets.bottom;
-    }
-    return margins;
-  }
-
-  /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetContainerFeature#setSpacing(int)
    */
   @Override
@@ -180,6 +151,5 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
   }
   
   private IXidget xidget;
-  private Margins margins;
   private int spacing;
 }

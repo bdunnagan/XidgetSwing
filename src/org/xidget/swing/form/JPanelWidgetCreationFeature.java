@@ -22,9 +22,6 @@ package org.xidget.swing.form;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Rectangle;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
@@ -61,7 +58,6 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   public void createWidgets()
   {
     jPanel = new Canvas( xidget, new AnchorLayoutManager( xidget));
-    jPanel.addComponentListener( componentListener);
     jPanel.addMouseListener( mouseListener);
     jPanel.addMouseMotionListener( mouseListener);
 
@@ -111,7 +107,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   {
     Container container = jPanel.getParent();
     container.remove( jPanel);
-    container.invalidate();
+    container.validate();
     jPanel = null;
   }
 
@@ -195,15 +191,6 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
       }
     }
   }
-  
-  private ComponentListener componentListener = new ComponentAdapter() {
-    public void componentMoved( ComponentEvent e)
-    {
-    }
-    public void componentResized( ComponentEvent e)
-    {
-    }
-  };
   
   private MouseInputListener mouseListener = new MouseInputAdapter() {
     public void mousePressed( MouseEvent e)

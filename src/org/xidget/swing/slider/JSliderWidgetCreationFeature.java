@@ -36,6 +36,7 @@ import org.xidget.IXidget;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
+import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 
 /**
@@ -54,6 +55,8 @@ public class JSliderWidgetCreationFeature extends SwingWidgetCreationFeature imp
   @Override
   protected JComponent createSwingWidget()
   {
+    IModelObject config = xidget.getConfig();
+    
     jSlider = new JSlider();
     jSlider.addChangeListener( changeListener);
     
@@ -61,7 +64,7 @@ public class JSliderWidgetCreationFeature extends SwingWidgetCreationFeature imp
     jSlider.setOrientation( vertical? SwingConstants.VERTICAL: SwingConstants.HORIZONTAL);
     
     // create extra container to hold label and widget
-    if ( xidget.getConfig().getFirstChild( "label") != null)
+    if ( Xlate.get( config, "label", Xlate.childGet( config, "label", (String)null)) != null)
     {
       jLabel = new JLabel( "");
       jLabel.setHorizontalAlignment( vertical? SwingConstants.CENTER: SwingConstants.RIGHT);

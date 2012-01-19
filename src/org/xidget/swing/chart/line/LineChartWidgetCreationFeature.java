@@ -21,6 +21,7 @@ package org.xidget.swing.chart.line;
 
 import javax.swing.JComponent;
 
+import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xmodel.IModelObject;
@@ -53,11 +54,12 @@ public class LineChartWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   private void findGraphAxes( LineChart graph)
   {
+    Creator creator = Creator.getInstance();
     IModelObject parent = xidget.getConfig().getParent();
     
     for( IModelObject node: parent.getChildren( "xaxis"))
     {
-      IXidget xidget = (IXidget)node.getAttribute( "instance");
+      IXidget xidget = creator.findXidget( node);
       if ( xidget != null)
       {
         Axis axis = xidget.getFeature( Axis.class);
@@ -68,7 +70,7 @@ public class LineChartWidgetCreationFeature extends SwingWidgetCreationFeature
     
     for( IModelObject node: parent.getChildren( "yaxis"))
     {
-      IXidget xidget = (IXidget)node.getAttribute( "instance");
+      IXidget xidget = creator.findXidget( node);
       if ( xidget != null)
       {
         Axis axis = xidget.getFeature( Axis.class);

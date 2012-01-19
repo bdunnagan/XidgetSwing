@@ -23,12 +23,14 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Insets;
 import java.util.EnumSet;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 
 import org.xidget.Creator;
 import org.xidget.IXidget;
@@ -147,18 +149,99 @@ public class SwingWidgetFeature implements IWidgetFeature
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setInsideMargins(org.xidget.layout.Margins)
+   */
+  @Override
+  public void setInsideMargins( Margins margins)
+  {
+    insideMargins = margins;
+    
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    JComponent widget = (JComponent)widgets[ widgets.length - 1];
+    if ( widget != null)
+    {
+      Border border = widget.getBorder();
+      if ( border != null && border == insideBorder)
+      {
+        border = (border instanceof CompoundBorder)? ((CompoundBorder)border).getOutsideBorder(): null;
+      }
+      
+      if ( border == null)
+      {
+        insideBorder = BorderFactory.createEmptyBorder( margins.y0, margins.x0, margins.y1, margins.x1);
+        widget.setBorder( insideBorder);
+      }
+      else
+      {
+        insideBorder = BorderFactory.createEmptyBorder( margins.y0, margins.x0, margins.y1, margins.x1);
+        widget.setBorder( BorderFactory.createCompoundBorder( border, insideBorder));
+      }
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getInsideMargins()
+   */
+  @Override
+  public Margins getInsideMargins()
+  {
+    if ( insideMargins == null)
+    {
+      insideMargins = new Margins();
+      JComponent component = xidget.getFeature( JComponent.class);
+      if ( component != null)
+      {
+        Insets insets = component.getInsets();
+        insideMargins.x0 = insets.left;
+        insideMargins.y0 = insets.top;
+        insideMargins.x1 = insets.right;
+        insideMargins.y1 = insets.bottom;
+      }
+    }
+    return insideMargins;
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetFeature#setOutsideMargins(org.xidget.layout.Margins)
    */
   @Override
   public void setOutsideMargins( Margins margins)
   {
-    JComponent widget = xidget.getFeature( JComponent.class);
-    if ( widget != null) 
+    outsideMargins = margins;
+    
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    JComponent widget = (JComponent)widgets[ 0];
+    if ( widget != null)
     {
       Border border = widget.getBorder();
-      Border outside = BorderFactory.createEmptyBorder( margins.y0, margins.x0, margins.y1, margins.x1);
-      widget.setBorder( (border == null)? outside: BorderFactory.createCompoundBorder( outside, border));
+      if ( border != null && border == outsideBorder)
+      {
+        border = (border instanceof CompoundBorder)? ((CompoundBorder)border).getInsideBorder(): null;
+      }
+      
+      if ( border == null)
+      {
+        outsideBorder = BorderFactory.createEmptyBorder( margins.y0, margins.x0, margins.y1, margins.x1);
+        widget.setBorder( outsideBorder);
+      }
+      else
+      {
+        outsideBorder = BorderFactory.createEmptyBorder( margins.y0, margins.x0, margins.y1, margins.x1);
+        widget.setBorder( BorderFactory.createCompoundBorder( outsideBorder, border));
+      }
     }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getOutsideMargins()
+   */
+  @Override
+  public Margins getOutsideMargins()
+  {
+    if ( outsideMargins == null) outsideMargins = new Margins();
+    return outsideMargins;
   }
 
   /* (non-Javadoc)
@@ -184,7 +267,7 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void setEnabled( boolean enabled)
   {
-    Component widget = xidget.getFeature( Component.class);
+    JComponent widget = getPrimaryWidget( xidget); 
     widget.setEnabled( enabled);
   }
 
@@ -202,7 +285,7 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void setTooltip( String tooltip)
   {
-    JComponent widget = xidget.getFeature( JComponent.class);
+    JComponent widget = getPrimaryWidget( xidget); 
     if ( widget != null) widget.setToolTipText( tooltip);
   }
 
@@ -259,7 +342,7 @@ public class SwingWidgetFeature implements IWidgetFeature
     Font font = widget.getFont();
     widget.setFont( font.deriveFont( (float)size));
   }
-
+  
   /**
    * Finds the first family containig the complete family string.
    * @param families The complete list of families.
@@ -269,7 +352,7 @@ public class SwingWidgetFeature implements IWidgetFeature
   {
     family = family.toLowerCase();
     
-    List<String> names = Creator.getInstance().getToolkit().getFonts();
+    List<String> names = Creator.getToolkit().getFonts();
     for( String name: names)
     {
       if ( name.toLowerCase().contains( family))
@@ -294,7 +377,7 @@ public class SwingWidgetFeature implements IWidgetFeature
     Object[] widgets = creationFeature.getLastWidgets();
     return (JComponent)widgets[ widgets.length - 1];
   }
-  
+
   /* (non-Javadoc)
    * @see java.lang.Object#toString()
    */
@@ -309,4 +392,8 @@ public class SwingWidgetFeature implements IWidgetFeature
   protected Bounds defaultBounds = new Bounds();
   protected Bounds computedBounds = new Bounds();
   protected boolean clampBounds;
+  protected Margins insideMargins;
+  protected Margins outsideMargins;
+  protected Border insideBorder;
+  protected Border outsideBorder;
 }

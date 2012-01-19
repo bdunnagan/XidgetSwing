@@ -30,13 +30,11 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.xidget.IXidget;
-import org.xidget.binding.IXidgetBinding;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -97,6 +95,7 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   public void destroyWidgets()
   {
     jtabbedPane.getParent().remove( jtabbedPane);
+    jtabbedPane.getParent().validate();
     jtabbedPane = null;
   }
 
@@ -186,54 +185,54 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     }
   };
 
-  private class InitialNotificationBinding implements IXidgetBinding
-  {
-    public InitialNotificationBinding( IXidget xidget)
-    {
-      this.xidget = xidget;
-    }
-    
-    /* (non-Javadoc)
-     * @see org.xidget.binding.IXidgetBinding#bind(org.xmodel.xpath.expression.StatefulContext)
-     */
-    public void bind( StatefulContext context)
-    {
-      IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-    
-      // update selection
-      StatefulContext childContext = bindFeature.getBoundContext();
-      jtabbedPane.removeChangeListener( selectionListener);
-      try
-      {
-        ISelectionUpdateFeature selectionFeature = xidget.getFeature( ISelectionUpdateFeature.class);
-        selectionFeature.modelSelect( Collections.singletonList( childContext.getObject()));
-      }
-      finally
-      {
-        jtabbedPane.addChangeListener( selectionListener);
-      }
-      
-      // remove binding later
-      SwingUtilities.invokeLater( removeInitialNotificationBindingRunnable);
-    }
-    
-    /* (non-Javadoc)
-     * @see org.xidget.binding.IXidgetBinding#unbind(org.xmodel.xpath.expression.StatefulContext)
-     */
-    public void unbind( StatefulContext context)
-    {
-    }
-    
-    private Runnable removeInitialNotificationBindingRunnable = new Runnable() {
-      public void run()
-      {
-        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
-        bindFeature.remove( InitialNotificationBinding.this);
-      }
-    };
-    
-    private IXidget xidget;
-  };
+//  private class InitialNotificationBinding implements IXidgetBinding
+//  {
+//    public InitialNotificationBinding( IXidget xidget)
+//    {
+//      this.xidget = xidget;
+//    }
+//    
+//    /* (non-Javadoc)
+//     * @see org.xidget.binding.IXidgetBinding#bind(org.xmodel.xpath.expression.StatefulContext)
+//     */
+//    public void bind( StatefulContext context)
+//    {
+//      IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+//    
+//      // update selection
+//      StatefulContext childContext = bindFeature.getBoundContext();
+//      jtabbedPane.removeChangeListener( selectionListener);
+//      try
+//      {
+//        ISelectionUpdateFeature selectionFeature = xidget.getFeature( ISelectionUpdateFeature.class);
+//        selectionFeature.modelSelect( Collections.singletonList( childContext.getObject()));
+//      }
+//      finally
+//      {
+//        jtabbedPane.addChangeListener( selectionListener);
+//      }
+//      
+//      // remove binding later
+//      SwingUtilities.invokeLater( removeInitialNotificationBindingRunnable);
+//    }
+//    
+//    /* (non-Javadoc)
+//     * @see org.xidget.binding.IXidgetBinding#unbind(org.xmodel.xpath.expression.StatefulContext)
+//     */
+//    public void unbind( StatefulContext context)
+//    {
+//    }
+//    
+//    private Runnable removeInitialNotificationBindingRunnable = new Runnable() {
+//      public void run()
+//      {
+//        IBindFeature bindFeature = xidget.getFeature( IBindFeature.class);
+//        bindFeature.remove( InitialNotificationBinding.this);
+//      }
+//    };
+//    
+//    private IXidget xidget;
+//  };
   
   private IXidget xidget;
   private JTabbedPane jtabbedPane;

@@ -5,11 +5,13 @@
 package org.xidget.swing.applet;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.JApplet;
 import javax.swing.JMenuBar;
 
 import org.xidget.IXidget;
+import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.layout.AdapterLayoutManager;
 
@@ -30,6 +32,7 @@ public class JAppletContainerFeature extends GenericContainerFeature
   public void addWidget( int index, IXidget child)
   {
     JApplet applet = xidget.getFeature( JApplet.class);
+    
     JMenuBar menuBar = child.getFeature( JMenuBar.class);
     if ( menuBar != null)
     {
@@ -39,7 +42,10 @@ public class JAppletContainerFeature extends GenericContainerFeature
     {
       AdapterLayoutManager layoutManager = new AdapterLayoutManager( child, new BorderLayout());
       applet.getContentPane().setLayout( layoutManager);
-      super.addWidget( index, child);
+      
+      IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
+      Object[] widgets = creationFeature.getLastWidgets();
+      if ( widgets.length > 0) applet.getContentPane().add( (Component)widgets[ 0], index);
     }
   }
 }

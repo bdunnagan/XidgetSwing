@@ -19,7 +19,13 @@
  */
 package org.xidget.swing.feature;
 
+import java.awt.Font;
+import java.util.EnumSet;
+
+import javax.swing.JComponent;
+
 import org.xidget.IXidget;
+import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.layout.Bounds;
 
 /**
@@ -41,5 +47,56 @@ public class SwingContainerWidgetFeature extends SwingWidgetFeature
   public Bounds getDefaultBounds()
   {
     return defaultBounds;
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.swing.feature.SwingWidgetFeature#setFontFamily(java.lang.String)
+   */
+  @Override
+  public void setFontFamily( String family)
+  {
+    super.setFontFamily( family);
+    
+    JComponent component = xidget.getFeature( JComponent.class);
+    setChildrenFonts( component.getFont());
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.swing.feature.SwingWidgetFeature#setFontStyles(java.util.EnumSet)
+   */
+  @Override
+  public void setFontStyles( EnumSet<FontStyle> styles)
+  {
+    super.setFontStyles( styles);
+    
+    JComponent component = xidget.getFeature( JComponent.class);
+    setChildrenFonts( component.getFont());
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.swing.feature.SwingWidgetFeature#setFontSize(double)
+   */
+  @Override
+  public void setFontSize( double size)
+  {
+    super.setFontSize( size);
+    
+    JComponent component = xidget.getFeature( JComponent.class);
+    setChildrenFonts( component.getFont());
+  }  
+
+  /**
+   * Set the font of each child.
+   * @param font The new font.
+   */
+  private void setChildrenFonts( Font font)
+  {
+    for( IXidget child: xidget.getChildren())
+    {
+      IWidgetCreationFeature widgetFeature = child.getFeature( IWidgetCreationFeature.class);
+      Object[] widgets = widgetFeature.getLastWidgets();
+      JComponent component = (JComponent)widgets[ widgets.length - 1];
+      component.setFont( font);
+    }
   }
 }

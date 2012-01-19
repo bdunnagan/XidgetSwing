@@ -36,7 +36,6 @@ import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.dialog.IDialogFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
-import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.ToplevelWidgetFeature;
 
 /**
@@ -51,7 +50,7 @@ public class JDialogXidget extends Xidget
     widgetFeature = new ToplevelWidgetFeature( this);
     titleFeature = new JDialogTitleFeature( this);
     creationFeature = new JDialogWidgetCreationFeature( this);
-    containerFeature = new GenericContainerFeature( this);
+    containerFeature = new JDialogContainerFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
   

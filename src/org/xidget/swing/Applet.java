@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.URL;
-import java.util.Collections;
 
 import javax.swing.JApplet;
 import javax.swing.JTextArea;
@@ -16,10 +15,9 @@ import org.xidget.IXidget;
 import org.xidget.swing.applet.JAppletXidget;
 import org.xidget.swing.feature.SwingWidgetFeature;
 import org.xmodel.IModelObject;
-import org.xmodel.ModelObject;
+import org.xmodel.caching.URLCachingPolicy;
 import org.xmodel.external.ExternalReference;
 import org.xmodel.external.UnboundedCache;
-import org.xmodel.external.caching.URLCachingPolicy;
 import org.xmodel.log.Log;
 import org.xmodel.xaction.ScriptAction;
 import org.xmodel.xaction.XActionDocument;
@@ -92,32 +90,28 @@ public class Applet extends JApplet
     {
     }    
     
-    // register toolkit
+    // Register toolkit
     Creator.getInstance().setToolkit( new Toolkit());
 
-    //
-    // Create a xidget for the applet instance and a instance node, so that the applet 
-    // can be used as the parent of the root xidget form.
-    // 
+    // Register applet widget with a JAppletXidget instance
     JAppletXidget appletXidget = new JAppletXidget( this);
-    IModelObject appletNode = new ModelObject( "xidget");
-    appletNode.setAttribute( "instance", appletXidget);
+    Creator.getInstance().register( this, appletXidget);
     
     try
     {
       URL url = getClass().getResource( "/xac.xip");
       
-      // create caching policy for app.xip
+      // Create caching policy for app.xip
       ExternalReference root = new ExternalReference( "root");
       root.setAttribute( "url", url);
       root.setCachingPolicy( new URLCachingPolicy( new UnboundedCache()));
       root.setDirty( true);
             
-      // context
+      // Context
       StatefulContext context = new StatefulContext( root);
-      context.set( "applet", Collections.singletonList( appletNode));
+      context.set( "applet", appletXidget.getConfig());
       
-      // run configuration
+      // Run configuration
       IModelObject xac = root.getFirstChild( "xac");
       IModelObject main = xac.getFirstChild( "main.xml");
       if ( main == null) throw new RuntimeException( "Unable to locate startup script: main.xml.");
@@ -125,6 +119,7 @@ public class Applet extends JApplet
       XActionDocument document = new XActionDocument( Applet.class.getClassLoader());
       document.setRoot( main);
       
+      document.addPackage( "org.xidget.xaction");
       ScriptAction script = document.createScript();
       script.run( context);
     }
@@ -140,7 +135,7 @@ public class Applet extends JApplet
     }
   }
   
-  private static final long serialVersionUID = -2029004309923553111L;
+  private static final long serialVersionUID = 1L;
   
   private IXidget xidget;
 }

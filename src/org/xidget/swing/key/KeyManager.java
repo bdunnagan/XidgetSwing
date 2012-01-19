@@ -6,15 +6,14 @@ package org.xidget.swing.key;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
+import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IKeyFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
@@ -30,9 +29,7 @@ public class KeyManager
 {
   protected KeyManager()
   {
-    tree = new KeyTree<IXAction>();
-    map = new HashMap<Component, IXidget>();
-    
+    tree = new KeyTree<KeyBinding>();
     Toolkit.getDefaultToolkit().addAWTEventListener( listener, AWTEvent.KEY_EVENT_MASK | AWTEvent.FOCUS_EVENT_MASK);
   }
   
@@ -40,12 +37,12 @@ public class KeyManager
    * Bind the specified key sequence to the specified script for the specified xidget.
    * @param xidget The xidget.
    * @param keys The key sequence.
+   * @param override True if normal key processing should be skipped.
    * @param script The script.
    */
-  public void bind( IXidget xidget, String keys, IXAction script)
+  public void bind( IXidget xidget, String keys, boolean override, IXAction script)
   {
-    register( xidget);
-    tree.bind( keys, script);
+    tree.bind( keys, new KeyBinding( xidget, override, script));
   }
   
   /**
@@ -56,58 +53,23 @@ public class KeyManager
    */
   public void unbind( IXidget xidget, String keys, IXAction script)
   {
-    unregister( xidget);
     tree.unbind( keys);
   }
   
   /**
-   * Register the widgets belonging to the specified xidget.
-   * @param xidget The xidget.
+   * Find the xidget that created the specified component or one of its ancestors.
+   * @param component The component.
+   * @return Returns null or the xidget.
    */
-  private void register( IXidget xidget)
+  private IXidget findXidget( Component component)
   {
-    Stack<Component> stack = new Stack<Component>();
-    IWidgetCreationFeature feature = xidget.getFeature( IWidgetCreationFeature.class);
-    for( Object object: feature.getLastWidgets())
+    while( component != null)
     {
-      Component widget = (Component)object;
-      stack.push( widget);
-      while( !stack.empty())
-      {
-        widget = stack.pop();
-        map.put( widget, xidget);
-        if ( widget instanceof Container)
-        {
-          for( Component child: ((Container)widget).getComponents())
-            stack.push( child);
-        }
-      }
+      IXidget xidget = Creator.getInstance().getXidget( component);
+      if ( xidget != null) return xidget;
+      component = component.getParent();
     }
-  }
-  
-  /**
-   * Unregister the widgets belonging to the specified xidget.
-   * @param xidget The xidget.
-   */
-  private void unregister( IXidget xidget)
-  {
-    Stack<Component> stack = new Stack<Component>();
-    IWidgetCreationFeature feature = xidget.getFeature( IWidgetCreationFeature.class);
-    for( Object object: feature.getLastWidgets())
-    {
-      Component widget = (Component)object;
-      stack.push( widget);
-      while( !stack.empty())
-      {
-        widget = stack.pop();
-        map.remove( widget);
-        if ( widget instanceof Container)
-        {
-          for( Component child: ((Container)widget).getComponents())
-            stack.push( child);
-        }
-      }
-    }
+    return null;
   }
   
   /**
@@ -119,20 +81,21 @@ public class KeyManager
     String key = lookup.get( e.getKeyCode());
     if ( key != null)
     {
-      IXAction script = tree.keyDown( key);
-      if ( script != null)
+      KeyBinding binding = tree.keyDown( key);
+      if ( binding != null)
       {
-        IXidget xidget = map.get( e.getComponent());
+        IXidget xidget = findXidget( e.getComponent());
         if ( xidget != null)
         {
-          e.consume();
+          if ( binding.override) e.consume();
           
           IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
           Object[] widgets = creationFeature.getLastWidgets();
           
           IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
           StatefulContext context = contextFeature.getContext( widgets[ 0]);
-          script.run( context);
+          context.set( "here", binding.xidget.getConfig());
+          binding.script.run( context);
         }
       }
     }
@@ -180,8 +143,21 @@ public class KeyManager
     return instance;
   }
   
-  private KeyTree<IXAction> tree;
-  private Map<Component, IXidget> map;
+  private static class KeyBinding
+  {
+    public KeyBinding( IXidget xidget, boolean override, IXAction script)
+    {
+      this.xidget = xidget;
+      this.override = override;
+      this.script = script;
+    }
+    
+    public IXidget xidget;
+    public boolean override;
+    public IXAction script;
+  }
+  
+  private KeyTree<KeyBinding> tree;
 
   private static KeyManager instance;
   private static final Map<Integer, String> lookup = new HashMap<Integer, String>();

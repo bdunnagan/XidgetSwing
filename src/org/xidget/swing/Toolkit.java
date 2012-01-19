@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
+import org.xidget.Creator;
 import org.xidget.IToolkit;
 import org.xidget.IXidget;
 import org.xidget.binding.XidgetTagHandler;
@@ -38,7 +39,9 @@ import org.xidget.binding.table.TableTagHandler;
 import org.xidget.binding.tree.TreeTagHandler;
 import org.xidget.config.TagProcessor;
 import org.xidget.ifeature.IAsyncFeature;
+import org.xidget.ifeature.IFocusFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.swing.applet.JAppletXidget;
 import org.xidget.swing.button.AbstractButtonXidget;
 import org.xidget.swing.calendar.CalendarXidget;
 import org.xidget.swing.chart.line.LineChartXidget;
@@ -48,6 +51,7 @@ import org.xidget.swing.chart.pie.PieChartXidget;
 import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.dialog.JDialogXidget;
 import org.xidget.swing.feature.AsyncFeature;
+import org.xidget.swing.feature.SwingFocusFeature;
 import org.xidget.swing.form.JPanelXidget;
 import org.xidget.swing.frame.JFrameXidget;
 import org.xidget.swing.image.ImageFileAssociation;
@@ -67,7 +71,7 @@ import org.xidget.swing.xmleditor.XmlTextPaneXidget;
 import org.xmodel.IDispatcher;
 import org.xmodel.IModelObject;
 import org.xmodel.ModelRegistry;
-import org.xmodel.external.caching.IFileAssociation;
+import org.xmodel.caching.IFileAssociation;
 import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.IExpression.ResultType;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -79,8 +83,8 @@ public class Toolkit implements IToolkit
 {
   public Toolkit()
   {
-    // define global async feature
     asyncFeature = new AsyncFeature();
+    focusFeature = new SwingFocusFeature();
     
     // define the dispatcher in the xmodel
     ModelRegistry.getInstance().getModel().setDispatcher( new IDispatcher() {
@@ -99,6 +103,7 @@ public class Toolkit implements IToolkit
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IAsyncFeature.class) return (T)asyncFeature;
+    if ( clss == IFocusFeature.class) return (T)focusFeature;
     return null;
   }
 
@@ -107,6 +112,7 @@ public class Toolkit implements IToolkit
    */
   public void configure( TagProcessor processor)
   {
+    processor.addHandler( "applet", new XidgetTagHandler( JAppletXidget.class));
     processor.addHandler( "window", new XidgetTagHandler( JFrameXidget.class));
     processor.addHandler( "calendar", new XidgetTagHandler( CalendarXidget.class));
     processor.addHandler( "dialog", new XidgetTagHandler( JDialogXidget.class));
@@ -153,10 +159,13 @@ public class Toolkit implements IToolkit
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.IToolkit#openConfirmDialog(org.xidget.IXidget, org.xmodel.xpath.expression.StatefulContext, java.lang.String, java.lang.Object, java.lang.String, boolean)
+   * @see org.xidget.IToolkit#openConfirmDialog(org.xmodel.xpath.expression.StatefulContext, java.lang.String, java.lang.Object, java.lang.String, boolean)
    */
-  public Confirmation openConfirmDialog( IXidget xidget, StatefulContext context, String title, Object image, String message, boolean allowCancel)
+  public Confirmation openConfirmDialog(StatefulContext context, String title, Object image, String message, boolean allowCancel)
   {
+    IFocusFeature focusFeature = Creator.getToolkit().getFeature( IFocusFeature.class);
+    IXidget xidget = focusFeature.getFocus();
+    
     IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
     if ( creationFeature == null) throw new IllegalArgumentException( "Window xidget does not have an IWidgetCreationFeature instance: "+xidget);
     
@@ -174,10 +183,13 @@ public class Toolkit implements IToolkit
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.IToolkit#openMessageDialog(org.xidget.IXidget, org.xmodel.xpath.expression.StatefulContext, java.lang.String, java.lang.Object, java.lang.String, org.xidget.IToolkit.MessageType)
+   * @see org.xidget.IToolkit#openMessageDialogorg.xmodel.xpath.expression.StatefulContext, java.lang.String, java.lang.Object, java.lang.String, org.xidget.IToolkit.MessageType)
    */
-  public void openMessageDialog( IXidget xidget, StatefulContext context, String title, Object image, String message, MessageType type)
+  public void openMessageDialog( StatefulContext context, String title, Object image, String message, MessageType type)
   {
+    IFocusFeature focusFeature = Creator.getToolkit().getFeature( IFocusFeature.class);
+    IXidget xidget = focusFeature.getFocus();
+    
     IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
     if ( creationFeature == null) throw new IllegalArgumentException( "Window xidget does not have an IWidgetCreationFeature instance: "+xidget);
     
@@ -197,11 +209,13 @@ public class Toolkit implements IToolkit
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.IToolkit#openFileDialog(org.xidget.IXidget, org.xmodel.xpath.expression.StatefulContext, 
-   * org.xmodel.xpath.expression.IExpression, java.lang.String, org.xidget.IToolkit.FileDialogType)
+   * @see org.xidget.IToolkit#openFileDialog(org.xmodel.xpath.expression.StatefulContext, org.xmodel.xpath.expression.IExpression, java.lang.String, org.xidget.IToolkit.FileDialogType)
    */
-  public String[] openFileDialog( IXidget xidget, StatefulContext context, IExpression dir, IExpression filter, String desc, FileDialogType type)
+  public String[] openFileDialog( StatefulContext context, IExpression dir, IExpression filter, String desc, FileDialogType type)
   {
+    IFocusFeature focusFeature = Creator.getToolkit().getFeature( IFocusFeature.class);
+    IXidget xidget = focusFeature.getFocus();
+    
     String folder = (dir != null)? dir.evaluateString( context): ".";
     
     JFileChooser fileChooser = new JFileChooser( folder);
@@ -288,4 +302,5 @@ public class Toolkit implements IToolkit
   }
   
   private IAsyncFeature asyncFeature;
+  private IFocusFeature focusFeature;
 }

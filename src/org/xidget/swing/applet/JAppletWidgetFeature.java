@@ -67,6 +67,15 @@ public class JAppletWidgetFeature extends SwingContainerWidgetFeature implements
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.swing.feature.SwingWidgetFeature#setOutsideMargins(org.xidget.layout.Margins)
+   */
+  @Override
+  public void setOutsideMargins( Margins margins)
+  {
+    throw new UnsupportedOperationException();
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetFeature#getOutsideMargins()
    */
   public Margins getOutsideMargins()

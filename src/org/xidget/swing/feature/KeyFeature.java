@@ -22,16 +22,18 @@ public class KeyFeature extends KeyAdapter implements IKeyFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IKeyboardFeature#bind(java.lang.String, org.xmodel.xaction.IXAction)
+   * @see org.xidget.ifeature.IKeyFeature#bind(java.lang.String, boolean, org.xmodel.xaction.IXAction)
    */
-  public void bind( String keys, IXAction script)
+  @Override
+  public void bind( String keys, boolean override, IXAction script)
   {
-    KeyManager.getInstance().bind( xidget, keys, script);
+    KeyManager.getInstance().bind( xidget, keys, override, script);
   }
 
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IKeyboardFeature#unbind(java.lang.String, org.xmodel.xaction.IXAction)
    */
+  @Override
   public void unbind( String keys, IXAction script)
   {
     KeyManager.getInstance().unbind( xidget, keys, script);

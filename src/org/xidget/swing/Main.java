@@ -122,12 +122,13 @@ public class Main
           StatefulContext context = new StatefulContext( resources);
           context.set( "applet", Collections.<IModelObject>emptyList());
           
+          document.addPackage( "org.xidget.xaction");
           ScriptAction script = document.createScript();
           script.run( context);
         }
         catch( Exception e)
         {
-          e.printStackTrace( System.err);
+          log.exception( e);
         }
       }
     });

@@ -79,7 +79,12 @@ public abstract class SwingWidgetCreationFeature extends ComponentAdapter implem
     if ( widget != null)
     {
       Container container = widget.getParent();
-      if ( container != null) container.remove( widget);
+      if ( container != null) 
+      {
+        container.remove( widget);
+        container.validate();
+        container.repaint();
+      }
     }
   }
 
