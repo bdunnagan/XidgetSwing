@@ -91,7 +91,7 @@ public class Applet extends JApplet
     }    
     
     // Register toolkit
-    Creator.getInstance().setToolkit( new Toolkit());
+    Creator.setToolkit( new Toolkit());
 
     // Register applet widget with a JAppletXidget instance
     JAppletXidget appletXidget = new JAppletXidget( this);

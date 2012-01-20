@@ -27,6 +27,7 @@ import java.awt.LayoutManager2;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
+import org.xmodel.xpath.expression.StatefulContext;
 
 /**
  * An implementation of LayoutManager that uses the AnchorLayoutFeature.
@@ -109,7 +110,8 @@ public class AnchorLayoutManager implements LayoutManager2
       if ( feature != null) 
       {
         IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
-        feature.layout( contextFeature.getContext( parent));
+        StatefulContext context = contextFeature.getContext( parent);
+        if ( context != null) feature.layout( context);
       }
     }
   }

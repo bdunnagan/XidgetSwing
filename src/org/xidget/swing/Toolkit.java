@@ -61,6 +61,7 @@ import org.xidget.swing.menu.JMenuBarXidget;
 import org.xidget.swing.menu.JMenuItemXidget;
 import org.xidget.swing.menu.MenuTagHandler;
 import org.xidget.swing.menu.SubMenuTagHandler;
+import org.xidget.swing.progress.JProgressBarXidget;
 import org.xidget.swing.slider.JSliderXidget;
 import org.xidget.swing.spinner.JSpinnerXidget;
 import org.xidget.swing.table.JTableXidget;
@@ -117,7 +118,6 @@ public class Toolkit implements IToolkit
     processor.addHandler( "calendar", new XidgetTagHandler( CalendarXidget.class));
     processor.addHandler( "dialog", new XidgetTagHandler( JDialogXidget.class));
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));
-    processor.addHandler( "password", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "chart", new XidgetTagHandler( PieChartXidget.class, "style", "pie"));
     processor.addHandler( "chart", new XidgetTagHandler( LineChartXidget.class, "style", "line"));
     processor.addHandler( "tabs", new XidgetTagHandler( JTabbedPaneXidget.class));
@@ -129,6 +129,8 @@ public class Toolkit implements IToolkit
     processor.addHandler( "menu", new MenuTagHandler());
     processor.addHandler( "menu", new SubMenuTagHandler());
     processor.addHandler( "menuItem", new XidgetTagHandler( JMenuItemXidget.class));
+    processor.addHandler( "password", new XidgetTagHandler( JTextXidget.class));
+    processor.addHandler( "progress", new XidgetTagHandler( JProgressBarXidget.class));
     processor.addHandler( "separator", new XidgetTagHandler( JMenuItemXidget.class));
     processor.addHandler( "slider", new XidgetTagHandler( JSliderXidget.class));
     processor.addHandler( "spinner", new XidgetTagHandler( JSpinnerXidget.class));

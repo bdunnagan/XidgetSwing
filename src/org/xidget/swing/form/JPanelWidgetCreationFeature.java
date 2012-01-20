@@ -25,6 +25,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputAdapter;
@@ -105,9 +106,18 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void destroyWidgets()
   {
-    Container container = jPanel.getParent();
-    container.remove( jPanel);
-    container.validate();
+    JComponent widget = xidget.getFeature( JComponent.class);
+    if ( widget != null)
+    {
+      Container container = widget.getParent();
+      if ( container != null) 
+      {
+        container.remove( widget);
+        container.validate();
+        container.repaint();
+      }
+    }
+    
     jPanel = null;
   }
 

@@ -115,7 +115,10 @@ public class AdapterLayoutManager implements LayoutManager2
     if ( widgetFeature != null)
     {
       Component widget = xidget.getFeature( Component.class);
-      widgetFeature.setComputedBounds( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight());
+      if ( widget != null)
+      {
+        widgetFeature.setComputedBounds( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight());
+      }
     }
   }
 
