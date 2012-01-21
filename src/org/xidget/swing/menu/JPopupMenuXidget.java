@@ -29,11 +29,13 @@ import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
+import org.xidget.swing.feature.SwingContainerTextWidgetFeature;
 import org.xidget.swing.feature.SwingContainerWidgetFeature;
 
 /**
@@ -49,6 +51,7 @@ public class JPopupMenuXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingContainerWidgetFeature( this);
+    textFeature = new SwingContainerTextWidgetFeature( this);
     containerFeature = new GenericContainerFeature( this);
     creationFeature = new JPopupMenuWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -62,6 +65,7 @@ public class JPopupMenuXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
@@ -79,6 +83,7 @@ public class JPopupMenuXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private IWidgetContainerFeature containerFeature;
   private JPopupMenuWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;

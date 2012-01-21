@@ -22,17 +22,13 @@ package org.xidget.swing.feature;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Insets;
-import java.util.EnumSet;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 
-import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -47,7 +43,7 @@ import org.xmodel.log.Log;
  */
 public class SwingWidgetFeature implements IWidgetFeature
 {
-  public final static Log log = Log.getLog( SwingWidgetFeature.class.getCanonicalName());
+  public final static Log log = Log.getLog( SwingWidgetFeature.class);
   
   public SwingWidgetFeature( IXidget xidget)
   {
@@ -272,15 +268,6 @@ public class SwingWidgetFeature implements IWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setEditable(boolean)
-   */
-  @Override
-  public void setEditable( boolean editable)
-  {
-    throw new UnsupportedOperationException();
-  }
-
-  /* (non-Javadoc)
    * @see org.xidget.IWidgetAdapter#setTooltip(java.lang.String)
    */
   public void setTooltip( String tooltip)
@@ -305,65 +292,6 @@ public class SwingWidgetFeature implements IWidgetFeature
   {
     JComponent widget = getPrimaryWidget( xidget);
     widget.setForeground( new Color( color));
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setFontFamily(java.lang.String)
-   */
-  @Override
-  public void setFontFamily( String family)
-  {
-    JComponent widget = getPrimaryWidget( xidget);
-    Font font = widget.getFont();
-    widget.setFont( new Font( matchFamily( family), font.getStyle(), font.getSize()));
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setFontStyles( EnumSet<FontStyle>)
-   */
-  @Override
-  public void setFontStyles( EnumSet<FontStyle> styles)
-  {
-    int awtFontStyles = Font.PLAIN;
-    if ( styles.contains( FontStyle.italic)) awtFontStyles |= Font.ITALIC;
-    if ( styles.contains( FontStyle.bold)) awtFontStyles |= Font.BOLD;
-    
-    JComponent widget = getPrimaryWidget( xidget);
-    Font font = widget.getFont();
-    widget.setFont( font.deriveFont( awtFontStyles));
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setFontSize(int)
-   */
-  public void setFontSize( double size)
-  {
-    JComponent widget = getPrimaryWidget( xidget);
-    Font font = widget.getFont();
-    widget.setFont( font.deriveFont( (float)size));
-  }
-  
-  /**
-   * Finds the first family containig the complete family string.
-   * @param families The complete list of families.
-   * @return Returns the first match.
-   */
-  public String matchFamily( String family)
-  {
-    family = family.toLowerCase();
-    
-    List<String> names = Creator.getToolkit().getFonts();
-    for( String name: names)
-    {
-      if ( name.toLowerCase().contains( family))
-        return name;
-    }
-
-    log.errorf( "Unknown font family, '%s'.", family);
-    log.verbose( "Available Font Families: ");
-    for( String name: names) log.verbose( name);
-    
-    return null;
   }
 
   /**

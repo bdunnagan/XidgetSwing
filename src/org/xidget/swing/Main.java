@@ -94,7 +94,7 @@ public class Main
         }
         
         // register toolkit
-        Creator.setToolkit( new Toolkit());
+        Creator.setToolkitClass( Toolkit.class);
 
         // create caching policy depending on whether we are running in a jar
         ICachingPolicy cachingPolicy = null;

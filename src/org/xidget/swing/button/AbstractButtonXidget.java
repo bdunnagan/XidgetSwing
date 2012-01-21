@@ -33,12 +33,14 @@ import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IIconFeature;
 import org.xidget.ifeature.ILabelFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.model.ISingleValueModelFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.swing.feature.AbstractButtonIconFeature;
+import org.xidget.swing.feature.AbstractButtonTextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
@@ -55,6 +57,7 @@ public class AbstractButtonXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    textFeature = new AbstractButtonTextWidgetFeature( this);
     singleValueModelFeature = new SingleValueModelFeature( this);    
     singleValueUpdateFeature = new SingleValueUpdateFeature( this);    
     singleValueWidgetFeature = new AbstractButtonSingleValueWidgetFeature( this);
@@ -74,6 +77,7 @@ public class AbstractButtonXidget extends Xidget
     if ( clss == IIconFeature.class) return (T)iconFeature;
     if ( clss == ILabelFeature.class) return (T)labelFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;
     if ( clss == ISingleValueUpdateFeature.class) return (T)singleValueUpdateFeature;
     if ( clss == ISingleValueWidgetFeature.class) return (T)singleValueWidgetFeature;
@@ -93,6 +97,7 @@ public class AbstractButtonXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private ISingleValueModelFeature singleValueModelFeature;
   private ISingleValueUpdateFeature singleValueUpdateFeature;
   private ISingleValueWidgetFeature singleValueWidgetFeature;

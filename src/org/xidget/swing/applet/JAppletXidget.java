@@ -30,11 +30,13 @@ import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.SwingContainerTextWidgetFeature;
 import org.xmodel.ModelObject;
 
 /**
@@ -52,6 +54,7 @@ public class JAppletXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new JAppletWidgetFeature( this);
+    textFeature = new SwingContainerTextWidgetFeature( this);
     containerFeature = new JAppletContainerFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -65,6 +68,7 @@ public class JAppletXidget extends Xidget
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == ITitleFeature.class) return (T)widgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
@@ -83,6 +87,7 @@ public class JAppletXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private JAppletWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;
   private IFeatured basicFeatureSet;

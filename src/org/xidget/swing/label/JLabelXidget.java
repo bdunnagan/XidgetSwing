@@ -31,6 +31,7 @@ import org.xidget.feature.model.SingleValueModelFeature;
 import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.model.ISingleValueModelFeature;
@@ -52,6 +53,7 @@ public class JLabelXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    textFeature = new JLabelTextWidgetFeature( this);
     singleValueModelFeature = new SingleValueModelFeature( this);
     singleValueUpdateFeature = new SingleValueUpdateFeature( this);
     singleValueWidgetFeature = new JLabelSingleValueWidgetFeature( this);
@@ -68,6 +70,7 @@ public class JLabelXidget extends Xidget
   {
     if ( clss == IIconFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;
     if ( clss == ISingleValueUpdateFeature.class) return (T)singleValueUpdateFeature;
     if ( clss == ISingleValueWidgetFeature.class) return (T)singleValueWidgetFeature;
@@ -86,6 +89,7 @@ public class JLabelXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private ISingleValueModelFeature singleValueModelFeature;
   private ISingleValueUpdateFeature singleValueUpdateFeature;
   private ISingleValueWidgetFeature singleValueWidgetFeature;

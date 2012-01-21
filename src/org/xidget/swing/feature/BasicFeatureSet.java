@@ -24,7 +24,6 @@ import org.xidget.IXidget;
 import org.xidget.feature.DragAndDropFeature;
 import org.xidget.feature.ScriptFeature;
 import org.xidget.feature.WidgetContextFeature;
-import org.xidget.ifeature.IAsyncFeature;
 import org.xidget.ifeature.IDragAndDropFeature;
 import org.xidget.ifeature.IKeyFeature;
 import org.xidget.ifeature.IScriptFeature;
@@ -42,7 +41,6 @@ public class BasicFeatureSet implements IFeatured
    */
   public BasicFeatureSet( IXidget xidget)
   {
-    asyncFeature = new AsyncFeature();
     scriptFeature = new ScriptFeature( xidget);
     contextFeature = new WidgetContextFeature();
     dndFeature = new DragAndDropFeature( xidget);
@@ -55,7 +53,6 @@ public class BasicFeatureSet implements IFeatured
   @SuppressWarnings("unchecked")
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IAsyncFeature.class) return (T)asyncFeature;
     if ( clss == IScriptFeature.class) return (T)scriptFeature;
     if ( clss == IWidgetContextFeature.class) return (T)contextFeature;
     if ( clss == IDragAndDropFeature.class) return (T)dndFeature;
@@ -63,7 +60,6 @@ public class BasicFeatureSet implements IFeatured
     return null;
   }
   
-  private IAsyncFeature asyncFeature;
   private IScriptFeature scriptFeature;
   private IWidgetContextFeature contextFeature;
   private IDragAndDropFeature dndFeature;

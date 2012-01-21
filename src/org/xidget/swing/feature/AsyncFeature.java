@@ -21,6 +21,7 @@ package org.xidget.swing.feature;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -42,6 +43,15 @@ public class AsyncFeature implements IAsyncFeature
   public void run( Runnable runnable)
   {
     SwingUtilities.invokeLater( runnable);
+  }
+  
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IAsyncFeature#runWait(java.lang.Runnable)
+   */
+  @Override
+  public void runWait( Runnable runnable) throws InvocationTargetException, InterruptedException
+  {
+    SwingUtilities.invokeAndWait( runnable);
   }
 
   /* (non-Javadoc)
