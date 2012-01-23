@@ -35,6 +35,7 @@ import org.xidget.feature.model.SingleValueModelFeature;
 import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ILabelFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.model.IMultiValueModelFeature;
@@ -47,6 +48,7 @@ import org.xidget.ifeature.model.ISingleValueModelFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
  * A combo xidget implemented with the Swing JComboBox widget.
@@ -56,7 +58,8 @@ public class JComboBoxXidget extends Xidget
   public void createFeatures()
   {
     bindFeature = new BindFeature( this);
-    widgetFeature = new JComboBoxWidgetFeature( this);
+    widgetFeature = new SwingWidgetFeature( this);
+    textFeature = new JComboBoxTextWidgetFeature( this);
     creationFeature = new JComboBoxWidgetCreationFeature( this);
     multiValueModelFeature = new MultiValueModelFeature( this);    
     multiValueUpdateFeature = new MultiValueUpdateFeature( this);
@@ -79,6 +82,7 @@ public class JComboBoxXidget extends Xidget
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IMultiValueModelFeature.class) return (T)multiValueModelFeature;
@@ -103,6 +107,7 @@ public class JComboBoxXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private SingleValueModelFeature singleValueModelFeature;
   private SingleValueUpdateFeature singleValueUpdateFeature;
   private MultiValueModelFeature multiValueModelFeature;

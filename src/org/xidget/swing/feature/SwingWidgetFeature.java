@@ -282,6 +282,7 @@ public class SwingWidgetFeature implements IWidgetFeature
   public void setBackground( int color)
   {
     JComponent widget = getPrimaryWidget( xidget);
+    widget.setOpaque( true);
     widget.setBackground( new Color( color));
   }
 

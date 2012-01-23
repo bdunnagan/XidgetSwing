@@ -28,13 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
 import org.xmodel.IModelObject;
-import org.xmodel.caching.IFileAssociation;
+import org.xmodel.caching.AbstractFileAssociation;
 import org.xmodel.external.CachingException;
 
 /**
  * An implementation of IFileAssociation that loads Swing images into instances of ImageIcon.
  */
-public class ImageFileAssociation implements IFileAssociation
+public class ImageFileAssociation extends AbstractFileAssociation
 {
   /* (non-Javadoc)
    * @see org.xmodel.external.caching.IFileAssociation#apply(org.xmodel.IModelObject, java.lang.String, java.io.InputStream)

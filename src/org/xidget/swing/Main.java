@@ -48,23 +48,9 @@ import org.xmodel.xpath.expression.StatefulContext;
  */
 public class Main
 {
-  public static void main( String[] args)
+  public static void main( final String[] args)
   {  
-    try
-    {
-      run( args);
-    }
-    catch( Exception e)
-    {
-      e.printStackTrace();
-    }
-  }  
-
-  public static void run( String[] args) throws Exception
-  {    
-    final String path = (args.length > 0)? args[ 0]: "main.xml";
-    
-    // handle uncaught exceptions
+    // Handle uncaught exceptions
     Thread.setDefaultUncaughtExceptionHandler( new UncaughtExceptionHandler() {
       public void uncaughtException( Thread t, Throwable e)
       {
@@ -74,64 +60,80 @@ public class Main
       }
     });
 
-    // get into the ui thread
-    SwingUtilities.invokeLater( new Runnable() {
-      public void run()
-      {
-        try
+    try
+    {
+      SwingUtilities.invokeLater( new Runnable() {
+        public void run()
         {
-          for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
-          {
-            log.info( info.getName());
-            if ( "Nimbus".equals( info.getName()))
-            {
-              UIManager.setLookAndFeel( info.getClassName());
-              break;
-            }
-          }
-        } catch ( Exception e)
-        {
+          start( args);
         }
-        
-        // register toolkit
-        Creator.setToolkitClass( Toolkit.class);
+      });
+    }
+    catch( Exception e)
+    {
+      e.printStackTrace();
+    }
+  }  
 
-        // create caching policy depending on whether we are running in a jar
-        ICachingPolicy cachingPolicy = null;
-        String classpath = System.getProperty( "java.class.path");
-        boolean runningFromJar = classpath.indexOf( File.pathSeparator) < 0 && classpath.endsWith( ".jar");
-        cachingPolicy = (runningFromJar)? new ZipCachingPolicy(): new FileSystemCachingPolicy();
-        
-        try
+  public static void start( String[] args)
+  {    
+    final String path = (args.length > 0)? args[ 0]: "xapp/main.xml";
+    
+    try
+    {
+      for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+      {
+        log.info( info.getName());
+        if ( "Nimbus".equals( info.getName()))
         {
-          String resourcePath = runningFromJar? System.getProperty( "java.class.path"): ".";
-          
-          IExternalReference resources = new ExternalReference( "resources");
-          resources.setCachingPolicy( cachingPolicy);
-          resources.setAttribute( "path", resourcePath);
-          resources.setDirty( true);
-          
-          // run configuration
-          IExpression xpath = XPath.createExpression( path);
-          IModelObject main = xpath.queryFirst( new Context( resources));
-          if ( main == null) throw new IllegalArgumentException( "Unable to locate startup script: "+path);
-          
-          XActionDocument document = new XActionDocument( Main.class.getClassLoader());
-          document.setRoot( main);
-          
-          StatefulContext context = new StatefulContext( resources);
-          context.set( "applet", Collections.<IModelObject>emptyList());
-          
-          document.addPackage( "org.xidget.xaction");
-          ScriptAction script = document.createScript();
-          script.run( context);
-        }
-        catch( Exception e)
-        {
-          log.exception( e);
+          UIManager.setLookAndFeel( info.getClassName());
+          break;
         }
       }
-    });
+    } catch ( Exception e)
+    {
+    }
+    
+    // Register toolkit
+    Creator.setToolkitClass( Toolkit.class);
+
+    // Create caching policy depending on whether we are running in a jar
+    ICachingPolicy cachingPolicy = null;
+    String classpath = System.getProperty( "java.class.path");
+    boolean runningFromJar = classpath.indexOf( File.pathSeparator) < 0 && classpath.endsWith( ".jar");
+    cachingPolicy = (runningFromJar)? new ZipCachingPolicy(): new FileSystemCachingPolicy();
+    
+    try
+    {
+      String resourcePath = runningFromJar? System.getProperty( "java.class.path"): ".";
+      
+      IExternalReference resources = new ExternalReference( "resources");
+      resources.setCachingPolicy( cachingPolicy);
+      resources.setAttribute( "path", resourcePath);
+      resources.setDirty( true);
+      
+      // Run configuration
+      IExpression xpath = XPath.createExpression( path);
+      IModelObject main = xpath.queryFirst( new Context( resources));
+      if ( main == null) throw new IllegalArgumentException( "Unable to locate startup script: "+path);
+
+      // Document
+      XActionDocument document = new XActionDocument( Main.class.getClassLoader());
+      document.setRoot( main);
+      document.addPackage( "org.xidget.xaction");
+      
+      // Context
+      StatefulContext context = new StatefulContext( resources);
+      context.set( "applet", Collections.<IModelObject>emptyList());
+      
+      // Script
+      ScriptAction script = document.createScript();
+      script.run( context);
+    }
+    catch( Exception e)
+    {
+      log.exception( e);
+    }
   }
   
   private static Log log = Log.getLog( "org.xidget.swing");

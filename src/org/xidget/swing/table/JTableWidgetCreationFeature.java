@@ -20,6 +20,7 @@
 package org.xidget.swing.table;
 
 import java.awt.Color;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.dnd.DnDConstants;
@@ -33,7 +34,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -76,6 +76,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     
     jtable = new JTable( tableModel);
     jtable.setDragEnabled( true);
+    jtable.setRowHeight( 24);
     
     DropTarget dropTarget = new DropTarget( jtable, dndListener);
     jtable.setDropTarget( dropTarget);
@@ -93,8 +94,6 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable.getSelectionModel().addListSelectionListener( selectionListener);
     
     jscrollPane = new JScrollPane( jtable);
-    jscrollPane.setBorder( BorderFactory.createEmptyBorder());
-    jscrollPane.getViewport().setBackground( Color.WHITE);
     
     // configure column size feature
     ColumnWidthFeature widthFeature = (ColumnWidthFeature)xidget.getFeature( IColumnWidthFeature.class);
@@ -289,7 +288,8 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     public void componentResized( ComponentEvent e)
     {
       IColumnWidthFeature feature = xidget.getFeature( IColumnWidthFeature.class);
-      feature.setTotalWidth( jscrollPane.getWidth());
+      Insets insets = jscrollPane.getInsets();
+      feature.setTotalWidth( jscrollPane.getWidth() - insets.left - insets.right);
     }
   };
   
@@ -309,7 +309,8 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
         feature.setFreeWidth( index, width, width, 0);
       }
       
-      feature.setTotalWidth( jscrollPane.getWidth());
+      Insets insets = jscrollPane.getInsets();
+      feature.setTotalWidth( jscrollPane.getWidth() - insets.left - insets.right);
     }
     public void columnAdded( TableColumnModelEvent e)
     {

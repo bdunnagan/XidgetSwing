@@ -15,6 +15,7 @@ import org.xidget.feature.BindFeature;
 import org.xidget.feature.model.SelfSingleValueModelFeature;
 import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.model.ISingleValueModelFeature;
@@ -32,6 +33,7 @@ public class XmlTextPaneXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    textFeature = new XmlTextPaneTextWidgetFeature( this);
     singleValueModelFeature = new SelfSingleValueModelFeature( this);    
     singleValueUpdateFeature = new SingleValueUpdateFeature( this);    
     singleValueWidgetFeature = new XmlTextPaneSingleValueWidgetFeature( this);
@@ -47,6 +49,7 @@ public class XmlTextPaneXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;
     if ( clss == ISingleValueUpdateFeature.class) return (T)singleValueUpdateFeature;
     if ( clss == ISingleValueWidgetFeature.class) return (T)singleValueWidgetFeature;
@@ -65,6 +68,7 @@ public class XmlTextPaneXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private ISingleValueModelFeature singleValueModelFeature;
   private ISingleValueUpdateFeature singleValueUpdateFeature;
   private ISingleValueWidgetFeature singleValueWidgetFeature;

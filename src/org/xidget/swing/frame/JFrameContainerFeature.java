@@ -31,16 +31,15 @@ public class JFrameContainerFeature extends GenericContainerFeature
   @Override
   public void addWidget( int index, IXidget child)
   {
+    JFrame frame = xidget.getFeature( JFrame.class);
+
     JMenuBar menuBar = child.getFeature( JMenuBar.class);
     if ( menuBar != null)
     {
-      JFrame frame = xidget.getFeature( JFrame.class);
       frame.setJMenuBar( menuBar);
     }
     else
     {
-      JFrame frame = xidget.getFeature( JFrame.class);
-
       AdapterLayoutManager layoutManager = new AdapterLayoutManager( child, new BorderLayout());
       frame.getContentPane().setLayout( layoutManager);
       

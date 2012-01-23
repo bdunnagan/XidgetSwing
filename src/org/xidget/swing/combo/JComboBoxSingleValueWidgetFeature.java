@@ -41,11 +41,15 @@ public class JComboBoxSingleValueWidgetFeature implements ISingleValueWidgetFeat
   public Object getValue()
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
+    
+    CustomComboModel model = (CustomComboModel)widget.getModel();
+    Object edited = model.getEditorValue();
+    if ( edited != null) return edited;
+    
     Item item = (Item)widget.getSelectedItem();
     if ( item != null) return item.toString();
     
-    CustomComboModel model = (CustomComboModel)widget.getModel();
-    return model.getEditorValue();
+    return null;
   }
 
   /* (non-Javadoc)

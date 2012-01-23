@@ -7,6 +7,7 @@ import java.net.URL;
 
 import javax.swing.JApplet;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -36,7 +37,24 @@ public class Applet extends JApplet
   @Override
   public void init()
   {
-    createContent();
+    try
+    {
+      //
+      // Even though it is technically legal to run create content from the init() method,
+      // we must dispatch here so that the Applet instance is registered with the Creator
+      // for the event dispatching thread.  See * in createContent.
+      //
+      SwingUtilities.invokeAndWait( new Runnable() {
+        public void run()
+        {
+          createContent();
+        }
+      });
+    }
+    catch( Exception e)
+    {
+      throw new RuntimeException( e);
+    }
   }
   
   /* (non-Javadoc)
@@ -95,31 +113,38 @@ public class Applet extends JApplet
 
     // Register applet widget with a JAppletXidget instance
     JAppletXidget appletXidget = new JAppletXidget( this);
+    
+    //
+    // * This call is one reason why this method must be invoked in the event dispatching thread.
+    //
     Creator.getInstance().register( this, appletXidget);
     
     try
     {
-      URL url = getClass().getResource( "/xac.xip");
+      URL url = getClass().getResource( "/xapp.xip");
+      URLCachingPolicy cachingPolicy = new URLCachingPolicy( new UnboundedCache());
+      cachingPolicy.addAssociation( new SwingXipAssociation());
       
-      // Create caching policy for app.xip
       ExternalReference root = new ExternalReference( "root");
       root.setAttribute( "url", url);
-      root.setCachingPolicy( new URLCachingPolicy( new UnboundedCache()));
+      root.setCachingPolicy( cachingPolicy);
       root.setDirty( true);
             
+      // Run configuration
+      IModelObject xapp = root.getFirstChild( "xapp");
+      IModelObject main = xapp.getFirstChild( "main.xml");
+      if ( main == null) throw new RuntimeException( "Unable to locate startup script: main.xml.");
+      
       // Context
       StatefulContext context = new StatefulContext( root);
       context.set( "applet", appletXidget.getConfig());
-      
-      // Run configuration
-      IModelObject xac = root.getFirstChild( "xac");
-      IModelObject main = xac.getFirstChild( "main.xml");
-      if ( main == null) throw new RuntimeException( "Unable to locate startup script: main.xml.");
-      
+
+      // Document
       XActionDocument document = new XActionDocument( Applet.class.getClassLoader());
       document.setRoot( main);
-      
       document.addPackage( "org.xidget.xaction");
+      
+      // Script
       ScriptAction script = document.createScript();
       script.run( context);
     }
