@@ -4,13 +4,11 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.URL;
-
 import javax.swing.JApplet;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-
 import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.swing.applet.JAppletXidget;

@@ -6,9 +6,7 @@ package org.xidget.swing.combo;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JComboBox;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.IMultiValueWidgetFeature;
 
@@ -28,9 +26,8 @@ public class JComboBoxMultiValueWidgetFeature implements IMultiValueWidgetFeatur
   @Override
   public void insertValue( int index, Object value)
   {
-    Item item = new Item( value);
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    widget.insertItemAt( item, index);
+    widget.insertItemAt( value, index);
   }
 
   /* (non-Javadoc)
@@ -40,8 +37,8 @@ public class JComboBoxMultiValueWidgetFeature implements IMultiValueWidgetFeatur
   public void updateValue( int index, Object value)
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    CustomComboModel model = (CustomComboModel)widget.getModel();
-    model.updateElementAt( index);
+    widget.removeItemAt( index);
+    widget.insertItemAt( value, index);
   }
 
   /* (non-Javadoc)
@@ -62,11 +59,7 @@ public class JComboBoxMultiValueWidgetFeature implements IMultiValueWidgetFeatur
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.removeAllItems();
-    for( Object value: list)
-    {
-      Item item = new Item( value);
-      widget.addItem( item);
-    }
+    for( Object value: list) widget.addItem( value);
   }
 
   /* (non-Javadoc)
@@ -76,14 +69,14 @@ public class JComboBoxMultiValueWidgetFeature implements IMultiValueWidgetFeatur
   public List<? extends Object> getValues()
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    List<Object> values = new ArrayList<Object>( widget.getItemCount());
-    for( int i=0; i<widget.getItemCount(); i++)
+    int count = widget.getItemCount();
+    List<Object> values = new ArrayList<Object>( count);
+    for( int i=0; i<count; i++)
     {
-      Item item = (Item)widget.getItemAt( i);
-      values.add( item.value);
+      values.add( widget.getItemAt( i));
     }
     return values;
   }
-
+  
   protected IXidget xidget;
 }

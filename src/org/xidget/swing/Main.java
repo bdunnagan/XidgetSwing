@@ -22,12 +22,10 @@ package org.xidget.swing;
 import java.io.File;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Collections;
-
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-
 import org.xidget.Creator;
 import org.xidget.caching.FileSystemCachingPolicy;
 import org.xidget.caching.ZipCachingPolicy;
@@ -81,6 +79,9 @@ public class Main
     
     try
     {
+//      UIManager.put( "nimbusBase", new Color( Color.HSBtoRGB( 0.7f, 0.1f, 0.9f)));
+//      UIManager.put( "nimbusBlueGrey", new Color( Color.HSBtoRGB( 0.7f, 0.1f, 0.5f)));
+//      UIManager.put( "control", new Color( Color.HSBtoRGB( 0.5f, 0.05f, 0.95f)));
       for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
       {
         log.info( info.getName());

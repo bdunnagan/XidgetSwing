@@ -20,9 +20,9 @@
 package org.xidget.swing.combo;
 
 import javax.swing.JComboBox;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
+import org.xidget.swing.combo.CustomComboModel.Item;
 
 /**
  * An implementation of ISingleValueWidgetFeature for JComboBox.
@@ -41,15 +41,13 @@ public class JComboBoxSingleValueWidgetFeature implements ISingleValueWidgetFeat
   public Object getValue()
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    
-    CustomComboModel model = (CustomComboModel)widget.getModel();
-    Object edited = model.getEditorValue();
-    if ( edited != null) return edited;
-    
-    Item item = (Item)widget.getSelectedItem();
-    if ( item != null) return item.toString();
-    
-    return null;
+    Object selected = widget.getSelectedItem();
+    if ( selected instanceof Item)
+    {
+      Item item = (Item)selected;
+      return (item != null)? item.getContent(): null;
+    }
+    return selected;
   }
 
   /* (non-Javadoc)
@@ -59,15 +57,7 @@ public class JComboBoxSingleValueWidgetFeature implements ISingleValueWidgetFeat
   public void setValue( Object value)
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    for( int i=0; i<widget.getItemCount(); i++)
-    {
-      Item item = (Item)widget.getItemAt( i);
-      if ( item.toString().equals( value))
-      {
-        widget.setSelectedItem( item);
-        break;
-      }
-    }
+    widget.setSelectedItem( value);
   }
 
   private IXidget xidget;

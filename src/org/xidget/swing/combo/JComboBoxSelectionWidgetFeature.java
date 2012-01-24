@@ -6,11 +6,10 @@ package org.xidget.swing.combo;
 
 import java.util.Collections;
 import java.util.List;
-
 import javax.swing.JComboBox;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.ISelectionWidgetFeature;
+import org.xidget.swing.combo.CustomComboModel.Item;
 
 /**
  * An implementation of ISelectionWidgetFeature for use with JComboBox widgets.
@@ -28,9 +27,8 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public void select( Object object)
   {
-    Item item = new Item( object);
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    widget.setSelectedItem( item);
+    widget.setSelectedItem( object);
   }
 
   /* (non-Javadoc)
@@ -39,9 +37,6 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   @Override
   public void deselect( Object object)
   {
-    JComboBox widget = xidget.getFeature( JComboBox.class);
-    Item item = (Item)widget.getSelectedItem();
-    if ( item.equals( object)) widget.setSelectedItem( null);
   }
 
   /* (non-Javadoc)
@@ -51,7 +46,7 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   public void setSelection( List<? extends Object> objects)
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    widget.setSelectedItem( (objects.size() > 0)? new Item( objects.get( 0)): null);
+    widget.setSelectedItem( (objects.size() > 0)? objects.get( 0): null);
   }
 
   /* (non-Javadoc)
@@ -61,8 +56,13 @@ public class JComboBoxSelectionWidgetFeature implements ISelectionWidgetFeature
   public List<? extends Object> getSelection()
   {
     JComboBox widget = xidget.getFeature( JComboBox.class);
-    Item selected = (Item)widget.getSelectedItem();
-    return (selected != null)? Collections.singletonList( selected.value): Collections.emptyList();
+    Object selected = widget.getSelectedItem();
+    if ( selected instanceof Item)
+    {
+      Item item = (Item)selected;
+      return (selected != null)? Collections.singletonList( item.getContent()): Collections.emptyList();
+    }
+    return Collections.singletonList( selected);
   }
 
   private IXidget xidget;
