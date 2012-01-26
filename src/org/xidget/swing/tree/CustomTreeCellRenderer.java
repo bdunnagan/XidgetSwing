@@ -61,14 +61,15 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer
     for( Cell cell: cells)
     {
       if ( cell != firstCell) sb.append( ", ");
-      sb.append( (cell.text != null)? cell.text: "");
+      sb.append( (cell.value != null)? cell.value: "");
     }
     
     // remove trailing commas
     for( int i = cells.size() - 1; i > 0; i--)
     {
       Cell cell = cells.get( i);
-      if ( cell.text != null && cell.text.length() > 0) break;
+      String text = (cell.value != null)? cell.value.toString(): "";
+      if ( text.length() > 0) break;
       sb.setLength( sb.length() - 2);
     }
     

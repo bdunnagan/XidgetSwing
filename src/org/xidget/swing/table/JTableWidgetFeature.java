@@ -182,8 +182,10 @@ public class JTableWidgetFeature implements ITableWidgetFeature, ITreeWidgetFeat
     int rowIndex = findRowIndex( tableModel, row);
     tableModel.fireTableCellUpdated( rowIndex, columnIndex);
     
+    Object value = row.getCell( columnIndex).value;
+    
     IColumnWidthFeature widthFeature = xidget.getFeature( IColumnWidthFeature.class);
-    widthFeature.setColumnText( rowIndex, columnIndex, row.getCell( columnIndex).text);
+    widthFeature.setColumnText( rowIndex, columnIndex, (value != null)? value.toString(): "");
   }
   
   /**

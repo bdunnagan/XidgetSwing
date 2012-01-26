@@ -20,15 +20,15 @@
 package org.xidget.swing.calendar;
 
 import java.awt.Component;
-
 import javax.swing.JComponent;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.feature.model.SingleValueModelFeature;
 import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.IPointsFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.model.ISingleValueModelFeature;
@@ -46,6 +46,7 @@ public class CalendarXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    textFeature = new CalendarTextWidgetFeature( this);
     singleValueModelFeature = new SingleValueModelFeature( this);    
     singleValueUpdateFeature = new SingleValueUpdateFeature( this);    
     singleValueWidgetFeature = new CalendarSingleValueWidgetFeature( this);
@@ -61,9 +62,11 @@ public class CalendarXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;
     if ( clss == ISingleValueUpdateFeature.class) return (T)singleValueUpdateFeature;
     if ( clss == ISingleValueWidgetFeature.class) return (T)singleValueWidgetFeature;
+    if ( clss == IPointsFeature.class) return (T)creationFeature.getCalendarPanel();
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -79,6 +82,7 @@ public class CalendarXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private ISingleValueModelFeature singleValueModelFeature;
   private ISingleValueUpdateFeature singleValueUpdateFeature;
   private ISingleValueWidgetFeature singleValueWidgetFeature;

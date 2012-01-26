@@ -157,11 +157,8 @@ public class CustomTableModel extends AbstractTableModel
    */
   public Object getValueAt( int rowIndex, int columnIndex)
   {
-    String text = root.getChildren().get( rowIndex).getCell( columnIndex).text;
-    if ( text == null) return "";
-    if ( text.equalsIgnoreCase( "true")) return Boolean.TRUE;
-    if ( text.equalsIgnoreCase( "false")) return Boolean.FALSE;
-    return text;
+    Object value = root.getChildren().get( rowIndex).getCell( columnIndex).value;
+    return (value != null)? value: "";
   }
 
   /* (non-Javadoc)
@@ -171,7 +168,7 @@ public class CustomTableModel extends AbstractTableModel
   public void setValueAt( Object value, int rowIndex, int columnIndex)
   {
     Row row = root.getChildren().get( rowIndex);
-    row.getCell( columnIndex).text = (value != null)? value.toString(): "";
+    row.getCell( columnIndex).value = (value != null)? value.toString(): "";
     fireTableCellUpdated( rowIndex, columnIndex);
   }
   
