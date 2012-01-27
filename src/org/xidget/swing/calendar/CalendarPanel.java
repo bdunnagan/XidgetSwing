@@ -401,7 +401,7 @@ public class CalendarPanel extends JPanel implements IPointsFeature, ITableWidge
           g.fillRect( rx1 + 2, ry1 + 2, (rx2 - rx1 - 3), (ry2 - ry1 - 3));
           
           color = colors.get( pointList.get( 0).fgColor);
-          g.setColor( color);
+          g.setColor( (color != null)? color: getBackground());
         }
         else
         {
