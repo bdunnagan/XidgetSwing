@@ -27,14 +27,15 @@ import org.xidget.feature.BindFeature;
 import org.xidget.feature.model.SingleValueModelFeature;
 import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IPointsFeature;
 import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.ifeature.chart.IPointsFeature;
 import org.xidget.ifeature.model.ISingleValueModelFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.SwingTextWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
@@ -46,7 +47,7 @@ public class CalendarXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
-    textFeature = new CalendarTextWidgetFeature( this);
+    textFeature = new SwingTextWidgetFeature( this);
     singleValueModelFeature = new SingleValueModelFeature( this);    
     singleValueUpdateFeature = new SingleValueUpdateFeature( this);    
     singleValueWidgetFeature = new CalendarSingleValueWidgetFeature( this);

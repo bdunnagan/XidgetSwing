@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +17,7 @@ import javax.swing.JPanel;
 import org.xidget.chart.Point;
 import org.xidget.chart.Scale;
 import org.xidget.chart.Scale.Tick;
-import org.xidget.ifeature.IPointsFeature;
-import org.xidget.swing.chart.PointShapes;
+import org.xidget.ifeature.chart.IPointsFeature;
 
 /**
  * A custom widget that plots points on a two dimensional graph.  
@@ -30,6 +30,13 @@ public class LineChart extends JPanel implements IPointsFeature
     axes = new HashMap<String, Axis>();
     points = new ArrayList<Point>();
     setBackground( Color.white);
+    
+    gridColor = new Color( 0, 0, 0, 16);
+    
+    plotForeground = Color.red;
+    plotBackground = new Color( 128, 128, 255, 128);
+    plotArea = new Path2D.Double();    
+    plotLine = new Path2D.Double();    
   }
   
   /* (non-Javadoc)
@@ -228,86 +235,80 @@ public class LineChart extends JPanel implements IPointsFeature
     Axis yaxis = axes.get( "y");
     if ( xaxis == null || yaxis == null) return;
     
+    int width = getWidth() - 1;
+    int height = getHeight() - 1;
+    
+    // draw gradient background
+//    GradientPaint paint = new GradientPaint( 0, 0, Color.white, 0, height, Color.lightGray);
+//    g2d.setPaint( paint);
+//    g2d.fillRect( 0, 0, width, height);
+    
+    // set grid color
+    g2d.setColor( gridColor);
+    
     // draw vertical grid-lines
     Scale xscale = xaxis.getScale();
-    int graphHeight = getHeight();
-    if ( xGrid != null)
+    if ( xscale != null)
     {
-      g2d.setColor( Color.lightGray);
-      for( Tick tick: xGrid)
+      for( Tick tick: xscale.getTicks())
       {
-        int x = (int)Math.round( xscale.plot( tick.value));
-        g2d.drawLine( x, 0, x, graphHeight);
+        int x = (int)Math.round( xscale.plot( tick.value) * width);
+        g2d.drawLine( x, 0, x, height);
       }
     }
     
     // draw horizontal grid-lines
     Scale yscale = yaxis.getScale();
-    int graphWidth = getWidth();
-    if ( yGrid != null)
+    if ( yscale != null)
     {
-      g2d.setColor( Color.lightGray);
-      for( Tick tick: yGrid)
+      for( Tick tick: yscale.getTicks())
       {
-        int y = (int)Math.round( yscale.plot( tick.value));
-        g2d.drawLine( 0, y, graphWidth, y);
+        int y = (int)Math.round( yscale.plot( tick.value) * height);
+        g2d.drawLine( 0, y, width, y);
       }
     }
     
-    // draw graph
-    int prevX = 0;
-    int prevY = 0;
-    int width = getWidth() - 1;
-    int height = getHeight() - 1;
+    // compute graph shape
+    plotLine.reset();
+    plotArea.reset();
+    double x = 0;
+    double y = 0;
     for( int i=0; i<points.size(); i++)
     {
       Point point = points.get( i);
-      double x = xscale.plot( point.coords[ 0]) * width;
-      double y = height - yscale.plot( point.coords[ 1]) * height;
-      
-      g2d.setColor( Color.black);
-      if ( lines && i > 0)
+      x = (double)( xscale.plot( point.coords[ 0]) * width);
+      y = (double)( height - yscale.plot( point.coords[ 1]) * height);
+    
+      if ( i == 0)
       {
-        g2d.drawLine( prevX, prevY, (int)x, (int)y);
-        prevX = (int)x;
-        prevY = (int)y;
+        plotLine.moveTo( x, y);
+        plotArea.moveTo( x, height);
+        plotArea.lineTo( x, y);
       }
-      
-      PointShapes.drawShape( g2d, point.shape, x, y);
-      
-//      if ( point.color != null) g2d.setColor( point.color);
-//      
-//      int textX = 0;
-//      if ( point.image != null)
-//      {
-//        int width = point.image.getWidth( this);
-//        int height = point.image.getHeight( this);
-//        int imageX = (int)Math.round( x - (width / 2.0)); 
-//        int imageY = (int)Math.round( y - (height / 2.0));
-//        g2d.drawImage( point.image, imageX, imageY, this);
-//        textX = imageX + width + 2;
-//      }
-//      else
-//      {
-//        int ix = (int)x;
-//        int iy = (int)y;
-//        g2d.drawRect( ix, iy, 1, 1);
-//        textX = ix + 1;
-//      }
-//      
-//      if ( point.label != null)
-//      {
-//        int labelY = (int)(point.y + metrics.getAscent() + 1);
-//        g2d.drawImage( point.image, textX, labelY, this);
-//      }
+      else
+      {
+        plotLine.lineTo( x, y);
+        plotArea.lineTo( x, y);
+      }
     }
+    
+    plotArea.lineTo( x, height);
+    plotArea.closePath();
+    g2d.setColor( plotBackground);
+    g2d.fill( plotArea);
+    
+    g2d.setColor( plotForeground);
+    g2d.draw( plotLine);
   }
 
-  private List<Tick> xGrid;
-  private List<Tick> yGrid;
   private List<Point> points;
-  private boolean lines;
   private double minX, minY;
   private double maxX, maxY;
   private Map<String, Axis> axes;
+  private Color gridColor;
+  
+  private Color plotForeground;
+  private Color plotBackground;
+  private Path2D.Double plotLine;
+  private Path2D.Double plotArea;
 }

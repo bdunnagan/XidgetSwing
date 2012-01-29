@@ -5,16 +5,16 @@
 package org.xidget.swing.chart.line;
 
 import java.awt.Component;
-
 import javax.swing.JComponent;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.SwingTextWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
@@ -30,6 +30,7 @@ public class XAxisXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    textFeature = new SwingTextWidgetFeature( this);
     creationFeature = new XAxisWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -42,6 +43,7 @@ public class XAxisXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -57,6 +59,7 @@ public class XAxisXidget extends Xidget
 
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private XAxisWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }

@@ -22,9 +22,7 @@ package org.xidget.swing.feature;
 import java.awt.Font;
 import java.util.EnumSet;
 import java.util.List;
-
 import javax.swing.JComponent;
-
 import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITextWidgetFeature;
@@ -34,15 +32,39 @@ import org.xmodel.log.Log;
 /**
  * An implementation of ITextWidgetFeature used by select Swing components.
  */
-public abstract class SwingTextWidgetFeature implements ITextWidgetFeature
+public class SwingTextWidgetFeature implements ITextWidgetFeature
 {
   public final static Log log = Log.getLog( SwingTextWidgetFeature.class);
   
-  protected SwingTextWidgetFeature( IXidget xidget)
+  public SwingTextWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ITextWidgetFeature#setHAlign(org.xidget.ifeature.ITextWidgetFeature.HAlign)
+   */
+  @Override
+  public void setHAlign( HAlign alignment)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ITextWidgetFeature#setVAlign(org.xidget.ifeature.ITextWidgetFeature.VAlign)
+   */
+  @Override
+  public void setVAlign( VAlign alignment)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.ITextWidgetFeature#setEditable(boolean)
+   */
+  @Override
+  public void setEditable( boolean editable)
+  {
+  }
+
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetFeature#setFontFamily(java.lang.String)
    */

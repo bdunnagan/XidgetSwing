@@ -5,7 +5,6 @@
 package org.xidget.swing.chart.line;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -31,7 +30,6 @@ public class YAxis extends Axis
   {
     super( xidget);
     this.left = left;
-    setPreferredSize( new Dimension( 30, -1));
   }
   
   /* (non-Javadoc)
@@ -71,11 +69,6 @@ public class YAxis extends Axis
     int width = getWidth();
     int height = getHeight() - 1;
     
-    // draw cursor
-    int cursorY = (int)Math.round( scale.plot( cursor) * height);
-    g2d.setColor( Color.lightGray);
-    g2d.drawLine( 0, cursorY, width, cursorY);
-
     // get label fonts
     Font[] fonts = getLabelFonts( g2d);
     
@@ -85,9 +78,10 @@ public class YAxis extends Axis
     {
       // find maximum depth at which labels do not overlap
       labelDepth = findTextDepth( g2d);
+      if ( labelDepth == -1) labelDepth = 0;
       
       // find maximum width of text at each tick depth
-      findMaxWidths( g2d);
+      findMaxWidths( g2d, labelDepth);
     }
     
     // draw ticks and labels
@@ -98,8 +92,7 @@ public class YAxis extends Axis
     {
       Tick tick = ticks.get( i);
       
-      double depth = (divisions - tick.depth) / divisions;
-      int length = (int)(depth * (width - maxWidths[ tick.depth] - 2));
+      int length = (int)(divisions * tickLength / (tick.depth + 1));
       int y = (int)Math.round( (1.0 - tick.scale) * height);
       if ( left)
       {
@@ -138,29 +131,11 @@ public class YAxis extends Axis
   }
   
   /**
-   * Create the tick label fonts.
-   * @param g The graphics context.
-   * @return Returns the label fonts for each tick depth.
-   */
-  private Font[] getLabelFonts( Graphics2D g)
-  {
-    if ( fonts == null || g.getFont() != fonts[ 0])
-    {
-      fonts = new Font[ 4];
-      fonts[ 0] = getFont();
-      for( int i=1; i<fonts.length; i++)
-      {
-        fonts[ i] = fonts[ i-1].deriveFont( fonts[ i-1].getSize() * 0.85f);
-      }
-    }
-    return fonts;
-  }
-  
-  /**
    * Find the max width of the labels at each tick depth.
    * @param g The graphics context.
+   * @param labelDepth The maximum depth at which labels do not overlap.
    */
-  private void findMaxWidths( Graphics2D g)
+  private void findMaxWidths( Graphics2D g, int labelDepth)
   {
     List<Tick> ticks = scale.getTicks();
     maxWidths = new int[ ticks.get( 1).depth + 1];
@@ -197,36 +172,8 @@ public class YAxis extends Axis
     return 0;
   }
   
-  /* (non-Javadoc)
-   * @see org.xidget.swing.graph.Axis#mouseMoved(int, int)
-   */
-  @Override
-  protected void mouseMoved( int x, int y)
-  {
-    // redraw old cursor region
-    int y0 = (int)Math.round( scale.plot( cursor));
-    repaint( 0, y0-1, getWidth(), 3);
-
-    // set cursor
-    cursor = scale.value( y, getHeight());
-    //graph.setAxisCursor( axis, cursor);
-    
-    // redraw new cursor region
-    int y1 = (int)Math.round( scale.plot( cursor));
-    repaint( 0, y1-1, getWidth(), 3);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.swing.graph.Axis#mouseWheelMoved(int)
-   */
-  @Override
-  protected void mouseWheelMoved( int clicks)
-  {
-  }
-
   private boolean left;
   private int[] maxWidths;
-  private Font[] fonts;
   
   public static void main( String[] args) throws Exception
   {

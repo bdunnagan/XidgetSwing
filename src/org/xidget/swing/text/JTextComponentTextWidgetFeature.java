@@ -48,12 +48,4 @@ public class JTextComponentTextWidgetFeature extends SwingTextWidgetFeature
       ((JTextField)widget).setHorizontalAlignment( value);
     }
   }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.ITextWidgetFeature#setVAlign(org.xidget.ifeature.ITextWidgetFeature.VAlign)
-   */
-  @Override
-  public void setVAlign( VAlign alignment)
-  {
-  }
 }

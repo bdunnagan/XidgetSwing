@@ -20,7 +20,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.xidget.chart.Point;
-import org.xidget.ifeature.IPointsFeature;
+import org.xidget.ifeature.chart.IPointsFeature;
 
 /**
  * A custom widget that shows a two-dimensional pie-chart with optional labels.

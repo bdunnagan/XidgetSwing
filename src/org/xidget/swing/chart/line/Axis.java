@@ -6,14 +6,10 @@ package org.xidget.swing.chart.line;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import javax.swing.JPanel;
 import org.xidget.IXidget;
 import org.xidget.chart.Scale;
@@ -34,14 +30,13 @@ public abstract class Axis extends JPanel implements IAxisFeature
     this.max = 1;
     this.log = 0;
     this.labelDepth = -1;
-    this.tickSpacing = 20;
+    this.tickSpacing = 15;
+    this.tickLength = 4;
     
     setFont( Font.decode( "times-10"));
     
     setBackground( Color.white);
     addComponentListener( resizeListener);
-    addMouseMotionListener( mouseListener);
-    addMouseWheelListener( wheelListener);
   }
   
   /* (non-Javadoc)
@@ -116,41 +111,29 @@ public abstract class Axis extends JPanel implements IAxisFeature
   public abstract Scale getScale();
   
   /**
-   * Called when the mouse is moved.
-   * @param x The new x-coordinate.
-   * @param y The new y-coordinate.
+   * Create the tick label fonts.
+   * @param g The graphics context.
+   * @return Returns the label fonts for each tick depth.
    */
-  protected abstract void mouseMoved( int x, int y);
-  
-  /**
-   * Called when the mouse wheel is moved.
-   * @param clicks The number of clicks.
-   */
-  protected abstract void mouseWheelMoved( int clicks);
+  protected Font[] getLabelFonts( Graphics2D g)
+  {
+    if ( fonts == null || g.getFont() != fonts[ 0])
+    {
+      fonts = new Font[ 4];
+      fonts[ 0] = getFont();
+      for( int i=1; i<fonts.length; i++)
+      {
+        fonts[ i] = fonts[ i-1].deriveFont( fonts[ i-1].getSize() * 0.85f);
+      }
+    }
+    return fonts;
+  }
   
   private ComponentListener resizeListener = new ComponentAdapter() {
     public void componentResized( ComponentEvent event)
     {
       scale = null;
       if ( graph != null) graph.axisResized( axis);
-    }
-  };
-  
-  private MouseMotionListener mouseListener = new MouseAdapter() {
-    public void mouseMoved( MouseEvent event) 
-    {
-      if ( scale != null) Axis.this.mouseMoved( event.getX(), event.getY());
-    }
-  };
-  
-  private MouseWheelListener wheelListener = new MouseWheelListener() {
-    public void mouseWheelMoved( MouseWheelEvent e)
-    {
-      if ( scale != null)
-      {
-        int delta = e.getWheelRotation();
-        Axis.this.mouseWheelMoved( delta);
-      }
     }
   };
   
@@ -161,8 +144,9 @@ public abstract class Axis extends JPanel implements IAxisFeature
   protected Scale scale;
   protected int labelDepth;
   protected int tickSpacing;
+  protected int tickLength;
   protected double min;
   protected double max;
   protected double log;
-  protected double cursor;
+  protected Font[] fonts;
 }

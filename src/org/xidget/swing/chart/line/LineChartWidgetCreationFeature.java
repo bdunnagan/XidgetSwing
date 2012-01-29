@@ -57,7 +57,7 @@ public class LineChartWidgetCreationFeature extends SwingWidgetCreationFeature
     Creator creator = Creator.getInstance();
     IModelObject parent = xidget.getConfig().getParent();
     
-    for( IModelObject node: parent.getChildren( "xaxis"))
+    for( IModelObject node: parent.getChildren( "haxis"))
     {
       IXidget xidget = creator.findXidget( node);
       if ( xidget != null)
@@ -68,7 +68,7 @@ public class LineChartWidgetCreationFeature extends SwingWidgetCreationFeature
       }
     }
     
-    for( IModelObject node: parent.getChildren( "yaxis"))
+    for( IModelObject node: parent.getChildren( "vaxis"))
     {
       IXidget xidget = creator.findXidget( node);
       if ( xidget != null)

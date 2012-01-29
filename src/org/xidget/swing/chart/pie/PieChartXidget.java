@@ -27,9 +27,9 @@ import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IPointsFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.ifeature.chart.IPointsFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 

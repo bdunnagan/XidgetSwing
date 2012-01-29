@@ -20,15 +20,6 @@ public class AbstractButtonTextWidgetFeature extends SwingTextWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.ITextWidgetFeature#setEditable(boolean)
-   */
-  @Override
-  public void setEditable( boolean editable)
-  {
-    throw new UnsupportedOperationException();
-  }
-  
-  /* (non-Javadoc)
    * @see org.xidget.ifeature.ITextWidgetFeature#setHAlign(org.xidget.ifeature.ITextWidgetFeature.HAlign)
    */
   @Override

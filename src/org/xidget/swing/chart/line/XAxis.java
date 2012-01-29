@@ -5,7 +5,7 @@
 package org.xidget.swing.chart.line;
 
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -30,7 +30,6 @@ public class XAxis extends Axis
   {
     super( xidget);
     this.top = top;
-    setPreferredSize( new Dimension( -1, 30));
   }
   
   /* (non-Javadoc)
@@ -64,33 +63,30 @@ public class XAxis extends Axis
     
     Scale scale = getScale();
     
-    FontMetrics metrics = g.getFontMetrics();
     Graphics2D g2d = (Graphics2D)g;
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
     int width = getWidth() - 1;
     int height = getHeight();
 
-    // draw cursor
-    int cursorX = (int)Math.round( scale.plot( cursor) * width);
-    g2d.setColor( Color.lightGray);
-    g2d.drawLine( cursorX, 0, cursorX, height);
+    // get label fonts
+    Font[] fonts = getLabelFonts( g2d);
     
     // find tick depth at which labels do not overlap
     List<Tick> ticks = scale.getTicks();
     int labelDepth = this.labelDepth;
-    if ( labelDepth == -1) labelDepth = findTextDepth( metrics);
+    if ( labelDepth == -1) labelDepth = findTextDepth( g2d);
+    if ( labelDepth == -1) labelDepth = 0;
     
     // draw ticks and labels
     g2d.setColor( Color.black);
-    int adjHeight = height - metrics.getHeight();
     int divisions = ticks.get( 1).depth + 1;
     for( int i=0; i<ticks.size(); i++)
     {
       Tick tick = ticks.get( i);
       
       int x = (int)Math.round( tick.scale * width);
-      int y = adjHeight * (divisions - tick.depth) / divisions;
+      int y = divisions * tickLength / (tick.depth + 1);
       if ( top)
       {
         g2d.drawLine( x, height, x, height - y + 1);
@@ -102,79 +98,38 @@ public class XAxis extends Axis
       
       if ( tick.depth <= labelDepth)
       {
+        Font font = fonts[ tick.depth];
+        FontMetrics metrics = g.getFontMetrics( font);
         int textWidth = metrics.stringWidth( tick.label);
         int tx = x;
         if ( i > 0) tx -= (textWidth / 2);
         if ( i == ticks.size() - 1) tx -= (textWidth / 2);
 
+        g2d.setFont( font);
         if ( top)
         {
           g2d.drawString( tick.label, tx, height - y);
         }
         else
         {
-          g2d.drawString( tick.label, tx, y + metrics.getAscent());
+          g2d.drawString( tick.label, tx, y + metrics.getHeight());
         }
       }
     }
   }
   
-  /* (non-Javadoc)
-   * @see org.xidget.swing.graph.Axis#mouseMoved(int, int)
-   */
-  @Override
-  protected void mouseMoved( int x, int y)
-  {
-    Scale scale = getScale();
-    
-    // redraw old cursor region
-    int x0 = (int)Math.round( scale.plot( cursor));
-    repaint( x0-1, 0, 3, getHeight());
-
-    // set cursor
-    cursor = scale.value( x, getWidth());
-    //graph.setAxisCursor( axis, cursor);
-    
-    // redraw new cursor region
-    int x1 = (int)Math.round( scale.plot( cursor));
-    repaint( x1-1, 0, 3, getHeight());
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.swing.graph.Axis#mouseWheelMoved(int)
-   */
-  @Override
-  protected void mouseWheelMoved( int delta)
-  {
-    List<Tick> ticks = scale.getTicks();
-    double d = ticks.get( 1).value - ticks.get( 0).value;
-    if ( delta < 0)
-    {
-      min -= d;
-      max += d;
-    }
-    else
-    {
-      min += d;
-      max -= d;
-    }
-    
-    scale = null;
-    repaint();
-  }
-
   /**
    * Find the tick depth at which ticks are spaced far enough apart for the specified width.
    * @param metric The FontMetrics instance.
    * @return Returns the maximum tick depth for labeling.
    */
-  private int findTextDepth( FontMetrics metrics)
+  private int findTextDepth( Graphics2D g)
   {
     if ( scale == null) return 0;
     
     int width = getWidth();
     List<Tick> ticks = scale.getTicks();
-    for( int i=0; i<=ticks.get( 1).depth; i++)
+    for( int i=0; i <= ticks.get( 1).depth && i < fonts.length; i++)
     {
       int max = 0;
       int count = 0;
@@ -192,6 +147,7 @@ public class XAxis extends Axis
         }
       }
       
+      FontMetrics metrics = g.getFontMetrics( fonts[ i]);
       int textWidth = metrics.stringWidth( maxLabel) + 10; 
       if ( textWidth > (width / count)) return i-1;
     }

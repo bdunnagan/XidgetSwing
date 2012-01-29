@@ -42,20 +42,4 @@ public class JComboBoxTextWidgetFeature extends SwingTextWidgetFeature
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.setEditable( editable);
   }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.ITextWidgetFeature#setHAlign(org.xidget.ifeature.ITextWidgetFeature.HAlign)
-   */
-  @Override
-  public void setHAlign( HAlign alignment)
-  {
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.ITextWidgetFeature#setVAlign(org.xidget.ifeature.ITextWidgetFeature.VAlign)
-   */
-  @Override
-  public void setVAlign( VAlign alignment)
-  {
-  }
 }

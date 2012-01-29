@@ -10,14 +10,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
-
+import java.util.concurrent.ThreadFactory;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
@@ -41,7 +40,14 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     xmlIO.setErrorHandler( errorHandler);
     errorHighlighter = new ErrorHighlightPainter();
 
-    executor = Executors.newCachedThreadPool();
+    executor = Executors.newCachedThreadPool( new ThreadFactory() {
+      public Thread newThread( Runnable runnable)
+      {
+        Thread thread = new Thread( runnable);
+        thread.setDaemon( true);
+        return thread;
+      }
+    });
   }
 
   /* (non-Javadoc)
