@@ -137,8 +137,8 @@ public class Toolkit implements IToolkit
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
     processor.addHandler( "xml", new XidgetTagHandler( XmlTextPaneXidget.class));
-    processor.addHandler( "axis", new XidgetTagHandler( XAxisXidget.class, "style", "horizontal"));
-    processor.addHandler( "axis", new XidgetTagHandler( YAxisXidget.class, "style", "vertical"));
+    processor.addHandler( "haxis", new XidgetTagHandler( XAxisXidget.class));
+    processor.addHandler( "vaxis", new XidgetTagHandler( YAxisXidget.class));
   }
 
   /* (non-Javadoc)
@@ -294,7 +294,7 @@ public class Toolkit implements IToolkit
      */
     public boolean accept( File pathname)
     {
-      parent.set( "v", pathname.getPath());
+      parent.set( "value", pathname.getPath());
       return filter.evaluateBoolean( parent);
     }
     

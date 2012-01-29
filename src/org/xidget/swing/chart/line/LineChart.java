@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JPanel;
-
 import org.xidget.chart.Point;
 import org.xidget.chart.Scale;
 import org.xidget.chart.Scale.Tick;
@@ -88,31 +86,13 @@ public class LineChart extends JPanel implements IPointsFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.chart.Point, java.lang.String)
+   * @see org.xidget.ifeature.IPointsFeature#updatePoint(org.xidget.chart.Point)
    */
   @Override
-  public void update( Point point, String label)
+  public void updatePoint( Point point)
   {
-    repaint( point);
-    point.label = label;
-    repaint( point);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.graph.Point, int, double)
-   */
-  @Override
-  public void update( Point point, int coordinate, double value)
-  {
-    repaint( point);
-
-    point.coords[ coordinate] = value;
-    if ( minX > point.coords[ 0] || minY > point.coords[ 1] || maxX < point.coords[ 0] || maxY < point.coords[ 1])
-    {
-      findExtrema();
-    }
-    
-    repaint( point);
+    if ( minX > point.coords[ 0] || minY > point.coords[ 1] || maxX < point.coords[ 0] || maxY < point.coords[ 1]) findExtrema();
+    repaint();
   }
 
   /* (non-Javadoc)

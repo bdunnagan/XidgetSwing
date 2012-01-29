@@ -42,7 +42,7 @@ public class XAxisWidgetCreationFeature extends SwingWidgetCreationFeature
   protected JComponent createSwingWidget()
   {
     boolean top = Xlate.get( xidget.getConfig(), "top", false);
-    axis = new XAxis( top);
+    axis = new XAxis( xidget, top);
     return axis;
   }
 

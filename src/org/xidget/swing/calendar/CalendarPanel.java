@@ -102,21 +102,21 @@ public class CalendarPanel extends JPanel implements IPointsFeature, ITableWidge
   {
     if ( index < 0 || index > pointList.size()) return;
 
-    if ( point.fgColor != null && point.fgColor.length() > 0)
+    if ( point.foreground != null && point.foreground.length() > 0)
     {
-      Color color = colors.get( point.fgColor);
+      Color color = colors.get( point.foreground);
       if ( color == null)
       {
-        colors.put( point.fgColor, new Color( Integer.parseInt( point.fgColor, 16)));
+        colors.put( point.foreground, new Color( Integer.parseInt( point.foreground, 16)));
       }
     }
     
-    if ( point.bgColor != null && point.bgColor.length() > 0)
+    if ( point.background != null && point.background.length() > 0)
     {
-      Color color = colors.get( point.bgColor);
+      Color color = colors.get( point.background);
       if ( color == null)
       {
-        colors.put( point.bgColor, new Color( Integer.parseInt( point.bgColor, 16)));
+        colors.put( point.background, new Color( Integer.parseInt( point.background, 16)));
       }
     }
     
@@ -136,25 +136,11 @@ public class CalendarPanel extends JPanel implements IPointsFeature, ITableWidge
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.chart.Point, java.lang.String)
+   * @see org.xidget.ifeature.IPointsFeature#updatePoint(org.xidget.chart.Point)
    */
   @Override
-  public void update( Point point, String label)
+  public void updatePoint( Point point)
   {
-    point.label = label;
-    
-    initPoints = true;
-    repaint();
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.graph.Point, int, double)
-   */
-  @Override
-  public void update( Point point, int coordinate, double value)
-  {
-    point.coords[ coordinate] = value;
-    
     initPoints = true;
     repaint();
   }
@@ -396,11 +382,11 @@ public class CalendarPanel extends JPanel implements IPointsFeature, ITableWidge
         }
         else if ( pointList != null)
         {
-          Color color = colors.get( pointList.get( 0).bgColor);
+          Color color = colors.get( pointList.get( 0).background);
           g.setColor( (color != null)? color: getForeground());
           g.fillRect( rx1 + 2, ry1 + 2, (rx2 - rx1 - 3), (ry2 - ry1 - 3));
           
-          color = colors.get( pointList.get( 0).fgColor);
+          color = colors.get( pointList.get( 0).foreground);
           g.setColor( (color != null)? color: getBackground());
         }
         else

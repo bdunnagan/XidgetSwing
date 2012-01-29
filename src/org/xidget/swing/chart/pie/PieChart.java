@@ -82,26 +82,12 @@ public class PieChart extends JPanel implements IPointsFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.graph.Point, int, double)
+   * @see org.xidget.ifeature.IPointsFeature#updatePoint(org.xidget.chart.Point)
    */
   @Override
-  public void update( Point point, int coordinate, double value)
+  public void updatePoint( Point point)
   {
-    total -= point.coords[ coordinate];
-    point.coords[ coordinate] = value;
-    total += value;
-    
     q1 = null;
-    repaint();
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#update(org.xidget.chart.Point, java.lang.String)
-   */
-  @Override
-  public void update( Point point, String label)
-  {
-    point.label = label;
     repaint();
   }
 

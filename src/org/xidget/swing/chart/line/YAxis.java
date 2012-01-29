@@ -12,12 +12,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.List;
-
 import javax.swing.JFrame;
-
+import org.xidget.IXidget;
 import org.xidget.chart.Scale;
-import org.xidget.chart.Scale.Format;
 import org.xidget.chart.Scale.Tick;
+import org.xidget.ifeature.IWidgetContextFeature;
+import org.xmodel.xpath.expression.IContext;
 
 /**
  * A custom widget that paints a vertical scale.  The ticks of the scale may be oriented
@@ -27,8 +27,9 @@ import org.xidget.chart.Scale.Tick;
 @SuppressWarnings("serial")
 public class YAxis extends Axis
 {
-  public YAxis( boolean left)
+  public YAxis( IXidget xidget, boolean left)
   {
+    super( xidget);
     this.left = left;
     setPreferredSize( new Dimension( 30, -1));
   }
@@ -38,11 +39,18 @@ public class YAxis extends Axis
    */
   public Scale getScale()
   {
-    int height = getHeight();
-    if ( scale == null && min != max && height > 4) 
+    IContext context = null;
+    
+    if ( xidget != null)
     {
-      scale = new Scale( min, max, height / 4, log, format);
-      textDepth = -1;
+      IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
+      context = contextFeature.getContext( this);
+    }
+    
+    int height = getHeight();
+    if ( scale == null && min != max && height > tickSpacing) 
+    {
+      scale = new Scale( min, max, height / tickSpacing, log, context);
     }
     return scale;
   }
@@ -72,10 +80,11 @@ public class YAxis extends Axis
     Font[] fonts = getLabelFonts( g2d);
     
     // find tick depth at which labels do not overlap, and max label width
-    if ( textDepth == -1) 
+    int labelDepth = this.labelDepth;
+    if ( labelDepth == -1) 
     {
       // find maximum depth at which labels do not overlap
-      textDepth = findTextDepth( g2d);
+      labelDepth = findTextDepth( g2d);
       
       // find maximum width of text at each tick depth
       findMaxWidths( g2d);
@@ -101,7 +110,7 @@ public class YAxis extends Axis
         g2d.drawLine( 0, y, length, y);
       }
      
-      if ( tick.depth <= textDepth)
+      if ( tick.depth <= labelDepth)
       {
         int fontDepth = (tick.depth < fonts.length)? tick.depth: (fonts.length - 1);
         g2d.setFont( fonts[ fontDepth]);
@@ -157,7 +166,7 @@ public class YAxis extends Axis
     maxWidths = new int[ ticks.get( 1).depth + 1];
     for( Tick tick: ticks)
     {
-      if ( tick.depth <= textDepth)
+      if ( tick.depth <= labelDepth)
       {
         FontMetrics metrics = g.getFontMetrics( fonts[ tick.depth]);
         int labelWidth = metrics.stringWidth( tick.label);
@@ -223,9 +232,8 @@ public class YAxis extends Axis
   {
     JFrame frame = new JFrame();
     
-    YAxis axis = new YAxis( true);
+    YAxis axis = new YAxis( null, true);
     axis.setExtrema( 30, 40000);
-    axis.setFormat( Format.scientific);
     frame.getContentPane().add( axis);
     
     frame.setSize( 10, 500);

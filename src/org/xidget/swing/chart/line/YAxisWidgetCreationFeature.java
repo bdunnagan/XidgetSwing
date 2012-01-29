@@ -42,7 +42,7 @@ public class YAxisWidgetCreationFeature extends SwingWidgetCreationFeature
   protected JComponent createSwingWidget()
   {
     boolean left = Xlate.get( xidget.getConfig(), "left", true);
-    axis = new YAxis( left);
+    axis = new YAxis( xidget, left);
     return axis;
   }
 

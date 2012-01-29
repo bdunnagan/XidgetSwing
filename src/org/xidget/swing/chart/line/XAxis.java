@@ -11,12 +11,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.List;
-
 import javax.swing.JFrame;
-
+import org.xidget.IXidget;
 import org.xidget.chart.Scale;
-import org.xidget.chart.Scale.Format;
 import org.xidget.chart.Scale.Tick;
+import org.xidget.ifeature.IWidgetContextFeature;
+import org.xmodel.xpath.expression.IContext;
 
 /**
  * A custom widget that paints a horizontal scale.  The ticks of the scale may be oriented
@@ -26,8 +26,9 @@ import org.xidget.chart.Scale.Tick;
 @SuppressWarnings("serial")
 public class XAxis extends Axis
 {
-  public XAxis( boolean top)
+  public XAxis( IXidget xidget, boolean top)
   {
+    super( xidget);
     this.top = top;
     setPreferredSize( new Dimension( -1, 30));
   }
@@ -37,11 +38,18 @@ public class XAxis extends Axis
    */
   public Scale getScale()
   {
-    int width = getWidth();
-    if ( scale == null && min != max && width > 4) 
+    IContext context = null;
+    
+    if ( xidget != null)
     {
-      scale = new Scale( min, max, width / 4, log, format);
-      textDepth = -1;
+      IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
+      context = contextFeature.getContext( this);
+    }
+    
+    int width = getWidth();
+    if ( scale == null && min != max && width > tickSpacing) 
+    {
+      scale = new Scale( min, max, width / tickSpacing, log, context);
     }
     return scale;
   }
@@ -70,7 +78,8 @@ public class XAxis extends Axis
     
     // find tick depth at which labels do not overlap
     List<Tick> ticks = scale.getTicks();
-    if ( textDepth == -1) textDepth = findTextDepth( metrics);
+    int labelDepth = this.labelDepth;
+    if ( labelDepth == -1) labelDepth = findTextDepth( metrics);
     
     // draw ticks and labels
     g2d.setColor( Color.black);
@@ -91,7 +100,7 @@ public class XAxis extends Axis
         g2d.drawLine( x, 0, x, y);
       }
       
-      if ( tick.depth <= textDepth)
+      if ( tick.depth <= labelDepth)
       {
         int textWidth = metrics.stringWidth( tick.label);
         int tx = x;
@@ -223,9 +232,8 @@ public class XAxis extends Axis
 //    
     JFrame frame = new JFrame();
     
-    XAxis axis = new XAxis( false);
+    XAxis axis = new XAxis( null, false);
     axis.setExtrema( 3, 5);
-    axis.setFormat( Format.engineering);
     frame.getContentPane().add( axis);
     
     frame.setSize( 500, 50);

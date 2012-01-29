@@ -14,13 +14,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-
 import javax.swing.JPanel;
-
 import org.xidget.IXidget;
 import org.xidget.chart.Scale;
-import org.xidget.chart.Scale.Format;
 import org.xidget.ifeature.chart.IAxisFeature;
+import org.xmodel.xpath.expression.IExpression;
 
 /**
  * The common base class for horizontal and vertical axes widgets.
@@ -28,12 +26,15 @@ import org.xidget.ifeature.chart.IAxisFeature;
 @SuppressWarnings("serial")
 public abstract class Axis extends JPanel implements IAxisFeature
 {
-  public Axis()
+  public Axis( IXidget xidget)
   {
-    this.format = Format.decimal;
+    this.xidget = xidget;
+    
     this.min = 0;
     this.max = 1;
     this.log = 0;
+    this.labelDepth = -1;
+    this.tickSpacing = 20;
     
     setFont( Font.decode( "times-10"));
     
@@ -77,12 +78,34 @@ public abstract class Axis extends JPanel implements IAxisFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.graph.IAxisFeature#setFormat(org.xidget.graph.Scale.Format)
+   * @see org.xidget.ifeature.chart.IAxisFeature#setLabelDepth(int)
    */
   @Override
-  public void setFormat( Format format)
+  public void setLabelDepth( int depth)
   {
-    this.format = format;
+    this.labelDepth = depth;
+    scale = null;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IAxisFeature#setTickSpacing(int)
+   */
+  @Override
+  public void setTickSpacing( int spacing)
+  {
+    this.tickSpacing = spacing;
+    scale = null;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IAxisFeature#setLabelExpression(org.xmodel.xpath.expression.IExpression)
+   */
+  @Override
+  public void setLabelExpression( IExpression labelExpr)
+  {
+    this.labelExpr = labelExpr;
     scale = null;
     repaint();
   }
@@ -131,13 +154,15 @@ public abstract class Axis extends JPanel implements IAxisFeature
     }
   };
   
+  protected IXidget xidget;
   protected LineChart graph;
   protected String axis;
-  protected Format format;
+  protected IExpression labelExpr;
   protected Scale scale;
+  protected int labelDepth;
+  protected int tickSpacing;
   protected double min;
   protected double max;
   protected double log;
   protected double cursor;
-  protected int textDepth;
 }
