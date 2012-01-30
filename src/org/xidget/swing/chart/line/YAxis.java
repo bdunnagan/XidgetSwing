@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.chart.line;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -85,7 +84,6 @@ public class YAxis extends Axis
     }
     
     // draw ticks and labels
-    g2d.setColor( Color.black);
     List<Tick> ticks = scale.getTicks();
     double divisions = ticks.get( 1).depth + 1;
     for( int i=0; i<ticks.size(); i++)

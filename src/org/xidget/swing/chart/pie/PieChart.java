@@ -20,13 +20,13 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import org.xidget.chart.Point;
-import org.xidget.ifeature.chart.IPointsFeature;
+import org.xidget.ifeature.chart.IPlotFeature;
 
 /**
  * A custom widget that shows a two-dimensional pie-chart with optional labels.
  */
 @SuppressWarnings("serial")
-public class PieChart extends JPanel implements IPointsFeature
+public class PieChart extends JPanel implements IPlotFeature
 {
   public PieChart()
   {

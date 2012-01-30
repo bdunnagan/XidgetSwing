@@ -17,13 +17,13 @@ import javax.swing.JPanel;
 import org.xidget.chart.Point;
 import org.xidget.chart.Scale;
 import org.xidget.chart.Scale.Tick;
-import org.xidget.ifeature.chart.IPointsFeature;
+import org.xidget.ifeature.chart.IPlotFeature;
 
 /**
  * A custom widget that plots points on a two dimensional graph.  
  */
 @SuppressWarnings("serial")
-public class LineChart extends JPanel implements IPointsFeature
+public class LineChart extends JPanel implements IPlotFeature
 {
   public LineChart()
   {
@@ -209,15 +209,6 @@ public class LineChart extends JPanel implements IPointsFeature
     axes.put( name, axis);
   }
   
-  /**
-   * Called when a scale widget is resized.
-   * @param axis The axis that was resized.
-   */
-  public void axisResized( String axis)
-  {
-    repaint();
-  }
-      
   /* (non-Javadoc)
    * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
    */
@@ -304,7 +295,6 @@ public class LineChart extends JPanel implements IPointsFeature
   private List<Point> points;
   private double minX, minY;
   private double maxX, maxY;
-  private Map<String, Axis> axes;
   private Color gridColor;
   
   private Color plotForeground;

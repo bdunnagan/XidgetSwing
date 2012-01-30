@@ -29,7 +29,7 @@ import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.chart.IPointsFeature;
+import org.xidget.ifeature.chart.IPlotFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
@@ -53,7 +53,7 @@ public class LineChartXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IPointsFeature.class) return (T)creationFeature.getLineChart();
+    if ( clss == IPlotFeature.class) return (T)creationFeature.getLineChart();
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;

@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.chart.line;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -79,7 +78,6 @@ public class XAxis extends Axis
     if ( labelDepth == -1) labelDepth = 0;
     
     // draw ticks and labels
-    g2d.setColor( Color.black);
     int divisions = ticks.get( 1).depth + 1;
     for( int i=0; i<ticks.size(); i++)
     {
@@ -155,45 +153,4 @@ public class XAxis extends Axis
   }
   
   private boolean top;
-  
-  public static void main( String[] args) throws Exception
-  {
-//    IModelObject points = new ModelObject( "points");
-//    for( int i=0; i<10000; i++)
-//    {
-//      ModelObject point = new ModelObject( "point");
-//      point.setAttribute( "x", i);
-//      point.setAttribute( "y", Math.sin( i * Math.PI / 100));
-//      points.addChild( point);
-//    }
-//    
-//    for( int i=0; i<10; i++)
-//    {
-//      long t0 = System.nanoTime();
-//      
-//      double x = 0;
-//      double y = 0;
-//      double z = 0;
-//      for( IModelObject node: points.getChildren())
-//      {
-//        x = Xlate.get( node, "x", 0.0);
-//        y = Xlate.get( node, "y", 0.0);
-//        z = x;
-//      }
-//      
-//      long t1 = System.nanoTime();
-//      long el = (t1 - t0);
-//      System.out.printf( "%3.1fms, %f\n", el / 1e6, z);
-//    }    
-//    
-    JFrame frame = new JFrame();
-    
-    XAxis axis = new XAxis( null, false);
-    axis.setExtrema( 3, 5);
-    frame.getContentPane().add( axis);
-    
-    frame.setSize( 500, 50);
-    frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
-    frame.setVisible( true);
-  }
 }

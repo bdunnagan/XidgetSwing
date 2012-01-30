@@ -30,7 +30,7 @@ import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
-import org.xidget.ifeature.chart.IPointsFeature;
+import org.xidget.ifeature.chart.IPlotFeature;
 import org.xidget.ifeature.model.ISingleValueModelFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
@@ -67,7 +67,7 @@ public class CalendarXidget extends Xidget
     if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;
     if ( clss == ISingleValueUpdateFeature.class) return (T)singleValueUpdateFeature;
     if ( clss == ISingleValueWidgetFeature.class) return (T)singleValueWidgetFeature;
-    if ( clss == IPointsFeature.class) return (T)creationFeature.getCalendarPanel();
+    if ( clss == IPlotFeature.class) return (T)creationFeature.getCalendarPanel();
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     

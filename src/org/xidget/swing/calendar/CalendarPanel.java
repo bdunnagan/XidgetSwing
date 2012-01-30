@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import org.xidget.IXidget;
 import org.xidget.chart.Point;
-import org.xidget.ifeature.chart.IPointsFeature;
+import org.xidget.ifeature.chart.IPlotFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.ifeature.table.ITableWidgetFeature;
 
@@ -31,7 +31,7 @@ import org.xidget.ifeature.table.ITableWidgetFeature;
  * A canvas which displays a calendar month.
  */
 @SuppressWarnings({"serial", "unchecked"})
-public class CalendarPanel extends JPanel implements IPointsFeature, ITableWidgetFeature
+public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetFeature
 {
   public CalendarPanel( IXidget xidget)
   {

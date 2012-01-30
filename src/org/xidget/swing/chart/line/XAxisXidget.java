@@ -13,6 +13,7 @@ import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.ifeature.chart.IAxisFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingTextWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
@@ -29,6 +30,7 @@ public class XAxisXidget extends Xidget
   protected void createFeatures()
   {
     bindFeature = new BindFeature( this);
+    axisFeature = new AxisFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     textFeature = new SwingTextWidgetFeature( this);
     creationFeature = new XAxisWidgetCreationFeature( this);
@@ -44,6 +46,7 @@ public class XAxisXidget extends Xidget
   {
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
+    if ( clss == IAxisFeature.class) return (T)axisFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -58,6 +61,7 @@ public class XAxisXidget extends Xidget
   }
 
   private IBindFeature bindFeature;
+  private IAxisFeature axisFeature;
   private IWidgetFeature widgetFeature;
   private ITextWidgetFeature textFeature;
   private XAxisWidgetCreationFeature creationFeature;
