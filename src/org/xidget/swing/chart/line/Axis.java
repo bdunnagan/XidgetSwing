@@ -10,23 +10,27 @@ import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JPanel;
 import org.xidget.IXidget;
+import org.xidget.chart.Plot;
+import org.xidget.chart.Point;
 import org.xidget.chart.Scale;
+import org.xidget.ifeature.chart.IPlotFeature;
 import org.xmodel.xpath.expression.IExpression;
 
 /**
  * The common base class for horizontal and vertical axes widgets.
  */
 @SuppressWarnings("serial")
-public abstract class Axis extends JPanel
+public abstract class Axis extends JPanel implements IPlotFeature
 {
   public Axis( IXidget xidget)
   {
     this.xidget = xidget;
-    
-    this.min = 0;
-    this.max = 1;
+   
+    this.plots = new ArrayList<Plot>( 1);
     this.log = 0;
     this.labelDepth = -1;
     this.tickSpacing = 15;
@@ -38,6 +42,165 @@ public abstract class Axis extends JPanel
     addComponentListener( resizeListener);
   }
   
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#addPlot(org.xidget.chart.Plot)
+   */
+  @Override
+  public void addPlot( Plot plot)
+  {
+    plots.add( plot);
+
+    for( Point point: plot.getPoints())
+    {
+      if ( point.coords != null || point.coords.length > 0) 
+      {
+        if ( point.coords[ 0] < min) min = point.coords[ 0];
+        if ( point.coords[ 0] > max) max = point.coords[ 0];
+      }
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#removePlot(org.xidget.chart.Plot)
+   */
+  @Override
+  public void removePlot( Plot removed)
+  {
+    plots.remove( removed);
+    findExtrema();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateForeground(org.xidget.chart.Plot, java.lang.String)
+   */
+  @Override
+  public void updateForeground( Plot plot, String color)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateBackground(org.xidget.chart.Plot, java.lang.String)
+   */
+  @Override
+  public void updateBackground( Plot plot, String color)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#addPoint(org.xidget.chart.Plot, int, org.xidget.chart.Point)
+   */
+  @Override
+  public void addPoint( Plot plot, int index, Point point)
+  {
+    if ( point.coords != null && point.coords.length > 0)
+    {
+      if ( point.coords[ 0] < min) setExtrema( point.coords[ 0], max);
+      if ( point.coords[ 0] > max) setExtrema( min, point.coords[ 0]);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#removePoint(org.xidget.chart.Plot, int)
+   */
+  @Override
+  public void removePoint( Plot plot, int index)
+  {
+    Point point = plot.getPoints().get( index);
+    if ( point.coords != null && point.coords.length > 0)
+    {
+      if ( point.coords[ 0] == min) { findExtrema(); return;}
+      if ( point.coords[ 0] == max) { findExtrema(); return;}
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateCoords(org.xidget.chart.Point, double[])
+   */
+  @Override
+  public void updateCoords( Point point, double[] coords)
+  {
+    if ( point.coords != null && point.coords.length > 0)
+    {
+      if ( point.coords[ 0] == min) { findExtrema(); return;}
+      if ( point.coords[ 0] == max) { findExtrema(); return;}
+      
+      if ( coords[ 0] < min) setExtrema( coords[ 0], max);
+      if ( coords[ 0] > max) setExtrema( min, coords[ 0]);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateCoord(org.xidget.chart.Point, int, double)
+   */
+  @Override
+  public void updateCoord( Point point, int coordinate, double value)
+  {
+    if ( coordinate == 0)
+    {
+      if ( point.coords[ 0] == min) { findExtrema(); return;}
+      if ( point.coords[ 0] == max) { findExtrema(); return;}
+      
+      if ( value < min) setExtrema( value, max);
+      if ( value > max) setExtrema( min, value);
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateLabel(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void updateLabel( Point point, String label)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateForeground(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void updateForeground( Point point, String fcolor)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateBackground(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void updateBackground( Point point, String bcolor)
+  {
+  }
+  
+  /**
+   * Set the extrema.
+   * @param min The minimum value.
+   * @param max The maximum value.
+   */
+  private void setExtrema( double min, double max)
+  {
+    this.min = min;
+    this.max = max;
+    reset();
+  }
+  
+  /**
+   * Recompute the extrema based on the complete set of points.
+   */
+  protected void findExtrema()
+  {
+    for( Plot plot: plots)
+    {
+      for( Point point: plot.getPoints())
+      {
+        if ( point.coords != null || point.coords.length > 0) 
+        {
+          if ( point.coords[ 0] < min) min = point.coords[ 0];
+          if ( point.coords[ 0] > max) max = point.coords[ 0];
+        }
+      }
+    }
+    
+    reset();
+  }
+
   /**
    * Reset the scale on this axis.
    */
@@ -78,15 +241,14 @@ public abstract class Axis extends JPanel
   };
   
   protected IXidget xidget;
-  protected LineChart graph;
-  protected String axis;
   protected IExpression labelExpr;
+  protected List<Plot> plots;
   protected Scale scale;
+  protected double min;
+  protected double max;
   protected int labelDepth;
   protected int tickSpacing;
   protected int tickLength;
-  protected double min;
-  protected double max;
   protected double log;
   protected Font[] fonts;
 }

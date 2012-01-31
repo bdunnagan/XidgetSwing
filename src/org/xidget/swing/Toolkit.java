@@ -19,18 +19,17 @@
  */
 package org.xidget.swing;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
-
 import org.xidget.Creator;
 import org.xidget.IToolkit;
 import org.xidget.IXidget;
@@ -39,6 +38,7 @@ import org.xidget.binding.table.TableTagHandler;
 import org.xidget.binding.tree.TreeTagHandler;
 import org.xidget.config.TagProcessor;
 import org.xidget.ifeature.IAsyncFeature;
+import org.xidget.ifeature.IColorFeature;
 import org.xidget.ifeature.IFocusFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.applet.JAppletXidget;
@@ -51,6 +51,7 @@ import org.xidget.swing.chart.pie.PieChartXidget;
 import org.xidget.swing.combo.JComboBoxXidget;
 import org.xidget.swing.dialog.JDialogXidget;
 import org.xidget.swing.feature.AsyncFeature;
+import org.xidget.swing.feature.SwingColorFeature;
 import org.xidget.swing.feature.SwingFocusFeature;
 import org.xidget.swing.form.JPanelXidget;
 import org.xidget.swing.frame.JFrameXidget;
@@ -85,6 +86,7 @@ public class Toolkit implements IToolkit
   {
     asyncFeature = new AsyncFeature();
     focusFeature = new SwingFocusFeature();
+    colorFeature = new SwingColorFeature();
     
     // define the dispatcher in the xmodel
     ModelRegistry.getInstance().getModel().setDispatcher( new IDispatcher() {
@@ -104,6 +106,7 @@ public class Toolkit implements IToolkit
   {
     if ( clss == IAsyncFeature.class) return (T)asyncFeature;
     if ( clss == IFocusFeature.class) return (T)focusFeature;
+    if ( clss == IColorFeature.class) return (T)colorFeature;
     return null;
   }
 
@@ -136,8 +139,8 @@ public class Toolkit implements IToolkit
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
     processor.addHandler( "xml", new XidgetTagHandler( XmlTextPaneXidget.class));
-    processor.addHandler( "haxis", new XidgetTagHandler( XAxisXidget.class));
-    processor.addHandler( "vaxis", new XidgetTagHandler( YAxisXidget.class));
+    processor.addHandler( "ruler", new XidgetTagHandler( XAxisXidget.class, "style", "horizontal"));
+    processor.addHandler( "ruler", new XidgetTagHandler( YAxisXidget.class, "style", "vertical"));
   }
 
   /* (non-Javadoc)
@@ -304,4 +307,5 @@ public class Toolkit implements IToolkit
   
   private IAsyncFeature asyncFeature;
   private IFocusFeature focusFeature;
+  private IColorFeature<Color> colorFeature;
 }

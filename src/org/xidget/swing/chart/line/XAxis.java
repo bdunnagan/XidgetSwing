@@ -10,7 +10,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.List;
-import javax.swing.JFrame;
 import org.xidget.IXidget;
 import org.xidget.chart.Scale;
 import org.xidget.chart.Scale.Tick;
@@ -61,7 +60,8 @@ public class XAxis extends Axis
     super.paintComponent( g);
     
     Scale scale = getScale();
-    
+    if ( scale == null) return;
+
     Graphics2D g2d = (Graphics2D)g;
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 

@@ -16,29 +16,6 @@ public class AxisFeature implements IAxisFeature
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.graph.IAxisFeature#setGraph(java.lang.String, org.xidget.IXidget)
-   */
-  @Override
-  public void setGraph( String axis, IXidget xidget)
-  {
-    Axis widget = xidget.getFeature( Axis.class);
-    widget.setGraph( axis, xidget);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.graph.IAxisFeature#setExtrema(double, double)
-   */
-  @Override
-  public void setExtrema( double min, double max)
-  {
-    Axis axis = xidget.getFeature( Axis.class);
-    axis.min = min;
-    axis.max = max;
-    axis.scale = null;
-    axis.repaint();
-  }
-
-  /* (non-Javadoc)
    * @see org.xidget.ifeature.graph.IAxisFeature#setLogBase(int)
    */
   @Override

@@ -10,7 +10,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.List;
-import javax.swing.JFrame;
 import org.xidget.IXidget;
 import org.xidget.chart.Scale;
 import org.xidget.chart.Scale.Tick;
@@ -61,6 +60,7 @@ public class YAxis extends Axis
     super.paintComponent( g);
     
     Scale scale = getScale();
+    if ( scale == null) return;
     
     Graphics2D g2d = (Graphics2D)g;
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
@@ -172,17 +172,4 @@ public class YAxis extends Axis
   
   private boolean left;
   private int[] maxWidths;
-  
-  public static void main( String[] args) throws Exception
-  {
-    JFrame frame = new JFrame();
-    
-    YAxis axis = new YAxis( null, true);
-    axis.setExtrema( 30, 40000);
-    frame.getContentPane().add( axis);
-    
-    frame.setSize( 10, 500);
-    frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE);
-    frame.setVisible( true);
-  }
 }

@@ -16,11 +16,13 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
-
+import org.xidget.Creator;
+import org.xidget.chart.Plot;
 import org.xidget.chart.Point;
+import org.xidget.ifeature.IColorFeature;
 import org.xidget.ifeature.chart.IPlotFeature;
+import org.xidget.swing.Toolkit;
 
 /**
  * A custom widget that shows a two-dimensional pie-chart with optional labels.
@@ -30,86 +32,161 @@ public class PieChart extends JPanel implements IPlotFeature
 {
   public PieChart()
   {
-    points = new ArrayList<Point>();
+    plots = new ArrayList<Plot>();
     arc = new Arc2D.Double();
     path = new Path2D.Double();
     setFont( getFont().deriveFont( 10f));
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#add(org.xidget.graph.Point)
+   * @see org.xidget.ifeature.chart.IPlotFeature#addPlot(org.xidget.chart.Plot)
    */
   @Override
-  public void add( Point point)
+  public void addPlot( Plot plot)
   {
-    add( points.size(), point);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#add(int, org.xidget.graph.Point)
-   */
-  @Override
-  public void add( int index, Point point)
-  {
-    if ( index < 0 || index > points.size()) return;
+    plots.add( plot);
     
-    if ( index > 0)
+    for( Point point: plot.getPoints())
     {
-      Point prev = points.get( index - 1);
-      if ( prev.next != null) prev.next.prev = point;
-      prev.next = point;
-      point.prev = prev;
-      point.next = prev.next;
+      if ( point.coords != null && point.coords.length > 0)
+        total += point.coords[ 0];
     }
-    
-    total += point.coords[ 0];
-    points.add( index, point);
 
     q1 = null;
     repaint();
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#remove(int)
+   * @see org.xidget.ifeature.chart.IPlotFeature#removePlot(org.xidget.chart.Plot)
    */
   @Override
-  public void remove( int index)
+  public void removePlot( Plot plot)
   {
-    total -= points.remove( index).coords[ 0];
+    plots.remove( plot);
+    
+    for( Point point: plot.getPoints())
+      if ( point.coords != null && point.coords.length > 0)
+        total -= point.coords[ 0];
     
     q1 = null;
     repaint();
   }
-  
+
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#updatePoint(org.xidget.chart.Point)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateForeground(org.xidget.chart.Plot, java.lang.String)
    */
   @Override
-  public void updatePoint( Point point)
+  public void updateForeground( Plot plot, String color)
   {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateBackground(org.xidget.chart.Plot, java.lang.String)
+   */
+  @Override
+  public void updateBackground( Plot plot, String color)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#addPoint(org.xidget.chart.Plot, int, org.xidget.chart.Point)
+   */
+  @Override
+  public void addPoint( Plot plot, int index, Point point)
+  {
+    if ( point.coords != null && point.coords.length > 0)
+      total += point.coords[ 0];
+    
     q1 = null;
     repaint();
   }
 
-  /**
-   * Compute the fill and outline colors of the pie slices.
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#removePoint(org.xidget.chart.Plot, int)
    */
-  private void computeColors()
+  @Override
+  public void removePoint( Plot plot, int index)
   {
-    colors = new ArrayList<Color>( points.size());
-    for( int i=0; i<points.size(); i++)
+    Point point = plot.getPoints().get( index);
+    if ( point.coords != null && point.coords.length > 0)
+      total -= point.coords[ 0];
+    
+    q1 = null;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateCoords(org.xidget.chart.Point, double[])
+   */
+  @Override
+  public void updateCoords( Point point, double[] coords)
+  {
+    if ( point.coords != null && point.coords.length > 0)
+      total -= point.coords[ 0];
+
+    if ( coords != null && coords.length > 0)
+      total += coords[ 0];
+    
+    q1 = null;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateCoord(org.xidget.chart.Point, int, double)
+   */
+  @Override
+  public void updateCoord( Point point, int coordinate, double value)
+  {
+    if ( coordinate == 0)
     {
-      float hue = (float)(i + 0.8f) / points.size();
-      colors.add( Color.getHSBColor( hue, 0.5f, 0.9f));
-    }   
+      total -= point.coords[ 0];
+      total += value;
+      
+      q1 = null;
+      repaint();
+    }
   }
-  
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateLabel(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void updateLabel( Point point, String label)
+  {
+    q1 = null;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateForeground(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void updateForeground( Point point, String fcolor)
+  {
+    q1 = null;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateBackground(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void updateBackground( Point point, String bcolor)
+  {
+    q1 = null;
+    repaint();
+  }
+
   /**
    * Compute the slices.
    * @param g The graphics context.
    */
+  @SuppressWarnings("unchecked")
   private void computeSlices( Graphics2D g)
   {
+    Toolkit toolkit = (Toolkit)Creator.getToolkit();
+    IColorFeature<Color> feature = toolkit.getFeature( IColorFeature.class);
+    
     Font font = g.getFont();
     FontRenderContext fontRenderContext = g.getFontRenderContext();
 
@@ -120,30 +197,36 @@ public class PieChart extends JPanel implements IPlotFeature
     slices = new ArrayList<Slice>();
     
     double startAngle = 0;
-    for( int i=0; i<points.size(); i++)
+    for( Plot plot: plots)
     {
-      Point point = points.get( i);
-      
-      Slice slice = new Slice();
-      slice.label = font.createGlyphVector( fontRenderContext, point.label);
-      slice.startAngle = startAngle;
-      slice.angleExtent = point.coords[ 0] / total;
-      
-      double w = (slice.startAngle + (slice.angleExtent / 2)) * PI2;
-      slice.midUX = Math.cos( w);
-      slice.midUY = Math.sin( w);
-      
-      if ( slice.midUX < 0)
+      List<Point> points = plot.getPoints();
+      for( int i=0; i<points.size(); i++)
       {
-        if ( slice.midUY < 0) q3.add( slice); else q2.add( 0, slice);
+        Point point = points.get( i);
+        
+        Slice slice = new Slice();
+        if ( point.label != null) slice.label = font.createGlyphVector( fontRenderContext, point.label);
+        slice.startAngle = startAngle;
+        slice.angleExtent = point.coords[ 0] / total;
+        slice.fcolor = feature.getColor( point.fcolor);
+        slice.bcolor = feature.getColor( point.bcolor);
+        
+        double w = (slice.startAngle + (slice.angleExtent / 2)) * PI2;
+        slice.midUX = Math.cos( w);
+        slice.midUY = Math.sin( w);
+        
+        if ( slice.midUX < 0)
+        {
+          if ( slice.midUY < 0) q3.add( slice); else q2.add( 0, slice);
+        }
+        else
+        {
+          if ( slice.midUY < 0) q4.add( 0, slice); else q1.add( slice);
+        }
+        
+        slices.add( slice);
+        startAngle += slice.angleExtent;
       }
-      else
-      {
-        if ( slice.midUY < 0) q4.add( 0, slice); else q1.add( slice);
-      }
-      
-      slices.add( slice);
-      startAngle += slice.angleExtent;
     }
   }
   
@@ -159,7 +242,6 @@ public class PieChart extends JPanel implements IPlotFeature
     g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     
     if ( q1 == null) computeSlices( g2d);
-    if ( colors == null || colors.size() != points.size()) computeColors();
     
     int width = getWidth();
     int height = getHeight();
@@ -169,11 +251,11 @@ public class PieChart extends JPanel implements IPlotFeature
     double cy = getHeight() / 2d;
     double r = size / 2d - 25;
 
-    int color = 0;
-    for( Slice slice: slices)
+    for( int i=0; i<slices.size(); i++)
     {
+      Slice slice = slices.get( i);
       arc.setArcByCenter( cx, cy, r, -slice.startAngle * 360, -slice.angleExtent * 360 - 1, Arc2D.PIE);
-      g2d.setColor( colors.get( color++));
+      g2d.setColor( slice.bcolor);
       g2d.fill( arc);
     }
     
@@ -189,6 +271,8 @@ public class PieChart extends JPanel implements IPlotFeature
     double labelY0 = -labelAdvanceY / 2;
     for( Slice slice: q1)
     {
+      if ( slice.label == null) continue;
+      
       double labelY1 = rTick * slice.midUY;
       if ( (labelY1 - labelY0) < labelAdvanceY) labelY1 = labelY0 + labelAdvanceY;
       
@@ -219,6 +303,8 @@ public class PieChart extends JPanel implements IPlotFeature
     labelY0 = labelAdvanceY / 2;
     for( Slice slice: q4)
     {
+      if ( slice.label == null) continue;
+      
       double labelY1 = rTick * slice.midUY;
       if ( (labelY0 - labelY1) < labelAdvanceY) labelY1 = labelY0 - labelAdvanceY;
       
@@ -250,6 +336,8 @@ public class PieChart extends JPanel implements IPlotFeature
     labelY0 = -labelAdvanceY / 2;
     for( Slice slice: q2)
     {
+      if ( slice.label == null) continue;
+      
       double labelY1 = rTick * slice.midUY;
       if ( (labelY1 - labelY0) < labelAdvanceY) labelY1 = labelY0 + labelAdvanceY;
       
@@ -280,6 +368,8 @@ public class PieChart extends JPanel implements IPlotFeature
     labelY0 = labelAdvanceY / 2;    
     for( Slice slice: q3)
     {
+      if ( slice.label == null) continue;
+      
       double labelY1 = rTick * slice.midUY;
       if ( (labelY0 - labelY1) < labelAdvanceY) labelY1 = labelY0 - labelAdvanceY;
       
@@ -312,6 +402,8 @@ public class PieChart extends JPanel implements IPlotFeature
     public double angleExtent;
     public double midUX;
     public double midUY;
+    public Color fcolor;
+    public Color bcolor;
   }
   
   private final static double PI2 = Math.PI * 2;
@@ -320,12 +412,11 @@ public class PieChart extends JPanel implements IPlotFeature
   private final static int labelGapY = 3;
   private final static int tickLength = 10;
   
-  private List<Point> points;
+  private List<Plot> plots;
   private double total;
 
   private Arc2D.Double arc;
   private Path2D.Double path;
-  private List<Color> colors;
   private List<Slice> q1;
   private List<Slice> q2;
   private List<Slice> q3;

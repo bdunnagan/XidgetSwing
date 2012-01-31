@@ -49,33 +49,22 @@ public class LineChartWidgetCreationFeature extends SwingWidgetCreationFeature
   }
 
   /**
-   * Find the graph axes and associate to the graph.
-   * @param graph The graph.
+   * Find the rulers and associate to the line chart.
+   * @param chart The line chart.
    */
-  private void findGraphAxes( LineChart graph)
+  private void findGraphAxes( LineChart chart)
   {
     Creator creator = Creator.getInstance();
     IModelObject parent = xidget.getConfig().getParent();
     
-    for( IModelObject node: parent.getChildren( "haxis"))
+    for( IModelObject node: parent.getChildren( "ruler"))
     {
       IXidget xidget = creator.findXidget( node);
       if ( xidget != null)
       {
         Axis axis = xidget.getFeature( Axis.class);
-        String name = Xlate.get( node, "name", "x");
-        graph.addAxis( name, axis);
-      }
-    }
-    
-    for( IModelObject node: parent.getChildren( "vaxis"))
-    {
-      IXidget xidget = creator.findXidget( node);
-      if ( xidget != null)
-      {
-        Axis axis = xidget.getFeature( Axis.class);
-        String name = Xlate.get( node, "name", "y");
-        graph.addAxis( name, axis);
+        String style = Xlate.get( node, "style", "");
+        chart.addAxis( style, axis);
       }
     }
   }

@@ -23,17 +23,18 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
-
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
-
+import org.xidget.Creator;
 import org.xidget.IXidget;
+import org.xidget.ifeature.IColorFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
+import org.xidget.swing.Toolkit;
 import org.xidget.swing.layout.WidgetBoundsListener;
 import org.xmodel.IModelObject;
 import org.xmodel.log.Log;
@@ -277,22 +278,28 @@ public class SwingWidgetFeature implements IWidgetFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setBackground(int)
+   * @see org.xidget.ifeature.IWidgetFeature#setBackground(java.lang.Object)
    */
-  public void setBackground( int color)
+  @SuppressWarnings("unchecked")
+  public void setBackground( Object color)
   {
+    Toolkit toolkit = (Toolkit)Creator.getToolkit();
+    IColorFeature<Color> colorFeature = toolkit.getFeature( IColorFeature.class);
     JComponent widget = getPrimaryWidget( xidget);
     widget.setOpaque( true);
-    widget.setBackground( new Color( color));
+    widget.setBackground( colorFeature.getColor( color));
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetFeature#setForeground(int)
+   * @see org.xidget.ifeature.IWidgetFeature#setForeground(java.lang.Object)
    */
-  public void setForeground( int color)
+  @SuppressWarnings("unchecked")
+  public void setForeground( Object color)
   {
+    Toolkit toolkit = (Toolkit)Creator.getToolkit();
+    IColorFeature<Color> colorFeature = toolkit.getFeature( IColorFeature.class);
     JComponent widget = getPrimaryWidget( xidget);
-    widget.setForeground( new Color( color));
+    widget.setForeground( colorFeature.getColor( color));
   }
 
   /**

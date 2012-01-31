@@ -138,7 +138,6 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
   @Override
   public void addPoint( Plot plot, int index, Point point)
   {
-    plot.add( index, point);
     initPoints = true;
     repaint();
   }
@@ -149,7 +148,6 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
   @Override
   public void removePoint( Plot plot, int index)
   {
-    plot.remove( index);
     initPoints = true;
     repaint();
   }
@@ -160,7 +158,6 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
   @Override
   public void updateCoords( Point point, double[] coords)
   {
-    point.coords = coords;
     initPoints = true;
     repaint();
   }
@@ -181,7 +178,6 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
   @Override
   public void updateLabel( Point point, String label)
   {
-    point.label = label;
     repaint();
   }
 
@@ -191,7 +187,6 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
   @Override
   public void updateForeground( Point point, String fcolor)
   {
-    point.fcolor = fcolor;
     repaint();
   }
 
@@ -201,7 +196,6 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
   @Override
   public void updateBackground( Point point, String bcolor)
   {
-    point.bcolor = bcolor;
     repaint();
   }
 
@@ -290,7 +284,7 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
           Point point = plot.getPoints().get( m);
           if ( taken.contains( point)) continue;
           
-          if ( point.coords.length > 0)
+          if ( point.coords != null && point.coords.length > 0)
           {
             double coord = point.coords[ 0];
             if ( coord >= prevDay && coord < currDay)
@@ -358,7 +352,7 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
           Point point = plot.getPoints().get( m);
           if ( taken.contains( point)) continue;
           
-          if ( point.coords.length > 0)
+          if ( point.coords != null && point.coords.length > 0)
           {
             double coord = point.coords[ 0];
             if ( coord >= prevDay && coord < currDay)

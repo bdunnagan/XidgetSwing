@@ -16,6 +16,7 @@ import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.chart.IAxisFeature;
+import org.xidget.ifeature.chart.IPlotFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingTextWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
@@ -49,6 +50,7 @@ public class YAxisXidget extends Xidget
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == IAxisFeature.class) return (T)axisFeature;
+    if ( clss == IPlotFeature.class) return (T)creationFeature.getComponent();
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
