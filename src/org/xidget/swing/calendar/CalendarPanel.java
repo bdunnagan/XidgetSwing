@@ -17,11 +17,16 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
 import org.xidget.IXidget;
+import org.xidget.chart.Plot;
 import org.xidget.chart.Point;
 import org.xidget.ifeature.chart.IPlotFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
@@ -44,7 +49,7 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
     this.initCells = true;
     this.initPoints = true;
     this.dayNames = new String[] { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};    
-    this.pointList = new ArrayList<Point>();
+    this.plots = new ArrayList<Plot>();
     this.colors = new HashMap<String, Color>();
     this.showGrid = true;
     
@@ -86,81 +91,120 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#add(org.xidget.graph.Point)
+   * @see org.xidget.ifeature.chart.IPlotFeature#addPlot(org.xidget.chart.Plot)
    */
   @Override
-  public void add( Point point)
+  public void addPlot( Plot plot)
   {
-    add( pointList.size(), point);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#add(int, org.xidget.graph.Point)
-   */
-  @Override
-  public void add( int index, Point point)
-  {
-    if ( index < 0 || index > pointList.size()) return;
-
-    if ( point.foreground != null && point.foreground.length() > 0)
-    {
-      Color color = colors.get( point.foreground);
-      if ( color == null)
-      {
-        colors.put( point.foreground, new Color( Integer.parseInt( point.foreground, 16)));
-      }
-    }
-    
-    if ( point.background != null && point.background.length() > 0)
-    {
-      Color color = colors.get( point.background);
-      if ( color == null)
-      {
-        colors.put( point.background, new Color( Integer.parseInt( point.background, 16)));
-      }
-    }
-    
-    if ( index > 0)
-    {
-      Point prev = pointList.get( index - 1);
-      if ( prev.next != null) prev.next.prev = point;
-      prev.next = point;
-      point.prev = prev;
-      point.next = prev.next;
-    }
-    
-    pointList.add( index, point);
-    
+    plots.add( plot);
     initPoints = true;
     repaint();
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#updatePoint(org.xidget.chart.Point)
+   * @see org.xidget.ifeature.chart.IPlotFeature#removePlot(org.xidget.chart.Plot)
    */
   @Override
-  public void updatePoint( Point point)
+  public void removePlot( Plot plot)
+  {
+    plots.remove( plot);
+    initPoints = true;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateForeground(org.xidget.chart.Plot, java.lang.String)
+   */
+  @Override
+  public void updateForeground( Plot plot, String color)
   {
     initPoints = true;
     repaint();
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IPointsFeature#remove(int)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateBackground(org.xidget.chart.Plot, java.lang.String)
    */
   @Override
-  public void remove( int index)
+  public void updateBackground( Plot plot, String color)
   {
-    if ( index < 0 || index >= pointList.size()) return;
-    
-    Point point = pointList.remove( index);
-    if ( point.prev != null) point.prev.next = point.next;
-    if ( point.next != null) point.next.prev = point.prev;
-    
     initPoints = true;
     repaint();
   }
-  
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#addPoint(org.xidget.chart.Plot, int, org.xidget.chart.Point)
+   */
+  @Override
+  public void addPoint( Plot plot, int index, Point point)
+  {
+    plot.add( index, point);
+    initPoints = true;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#removePoint(org.xidget.chart.Plot, int)
+   */
+  @Override
+  public void removePoint( Plot plot, int index)
+  {
+    plot.remove( index);
+    initPoints = true;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateCoords(org.xidget.chart.Point, double[])
+   */
+  @Override
+  public void updateCoords( Point point, double[] coords)
+  {
+    point.coords = coords;
+    initPoints = true;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateCoord(org.xidget.chart.Point, int, double)
+   */
+  @Override
+  public void updateCoord( Point point, int coordinate, double value)
+  {
+    initPoints = true;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateLabel(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void updateLabel( Point point, String label)
+  {
+    point.label = label;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateForeground(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void updateForeground( Point point, String fcolor)
+  {
+    point.fcolor = fcolor;
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateBackground(org.xidget.chart.Point, java.lang.String)
+   */
+  @Override
+  public void updateBackground( Point point, String bcolor)
+  {
+    point.bcolor = bcolor;
+    repaint();
+  }
+
   /**
    * Initialize the header text graphics by creating the appropriate GlyphVectors.
    * @param g The graphics context.
@@ -220,9 +264,9 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
     // prepare calendar for iteration through days
     calendar.setTimeInMillis( time);
     calendar.set( Calendar.DAY_OF_MONTH, 1);
-    
-    List<Point> pointListCopy = new ArrayList<Point>( pointList);
-    
+
+    // create day labels and sort points into days
+    Set<Point> taken = new HashSet<Point>();
     int i = dayOfWeek;
     int j = 1;
     long prevDay = 0;
@@ -239,17 +283,22 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
       calendar.set( Calendar.DAY_OF_MONTH, k);
       long currDay = calendar.getTimeInMillis();
 
-      for( int m=0; m<pointListCopy.size(); m++)
+      for( Plot plot: plots)
       {
-        Point point = pointListCopy.get( m);
-        if ( point.coords.length > 0)
+        for( int m=0; m<plot.getPoints().size(); m++)
         {
-          long coord = (long)point.coords[ 0];
-          if ( coord >= prevDay && coord < currDay)
+          Point point = plot.getPoints().get( m);
+          if ( taken.contains( point)) continue;
+          
+          if ( point.coords.length > 0)
           {
-            pointListCopy.remove( m--);
-            if ( points[ i][ j] == null) points[ i][ j] = new ArrayList<Point>( 1);
-            points[ i][ j].add( point);
+            double coord = point.coords[ 0];
+            if ( coord >= prevDay && coord < currDay)
+            {
+              taken.add( point);
+              if ( points[ i][ j] == null) points[ i][ j] = new ArrayList<Point>( 1);
+              points[ i][ j].add( point);
+            }
           }
         }
       }
@@ -288,9 +337,9 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
 
     // prepare calendar for iteration through days
     calendar.add( Calendar.MONTH, -1);
-    
-    List<Point> pointListCopy = new ArrayList<Point>( pointList);
-    
+
+    // sort points into days
+    Set<Point> taken = new HashSet<Point>();
     int i = dayOfWeek;
     int j = 1;
     long prevDay = 0;
@@ -302,17 +351,22 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
       calendar.set( Calendar.DAY_OF_MONTH, k);
       long currDay = calendar.getTimeInMillis();
 
-      for( int m=0; m<pointListCopy.size(); m++)
+      for( Plot plot: plots)
       {
-        Point point = pointListCopy.get( m);
-        if ( point.coords.length > 0)
+        for( int m=0; m<plot.getPoints().size(); m++)
         {
-          double coord = point.coords[ 0];
-          if ( coord >= prevDay && coord < currDay)
+          Point point = plot.getPoints().get( m);
+          if ( taken.contains( point)) continue;
+          
+          if ( point.coords.length > 0)
           {
-            pointListCopy.remove( m--);
-            if ( points[ i][ j] == null) points[ i][ j] = new ArrayList<Point>( 1);
-            points[ i][ j].add( point);
+            double coord = point.coords[ 0];
+            if ( coord >= prevDay && coord < currDay)
+            {
+              taken.add( point);
+              if ( points[ i][ j] == null) points[ i][ j] = new ArrayList<Point>( 1);
+              points[ i][ j].add( point);
+            }
           }
         }
       }
@@ -382,11 +436,11 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
         }
         else if ( pointList != null)
         {
-          Color color = colors.get( pointList.get( 0).background);
+          Color color = colors.get( pointList.get( 0).bcolor);
           g.setColor( (color != null)? color: getForeground());
           g.fillRect( rx1 + 2, ry1 + 2, (rx2 - rx1 - 3), (ry2 - ry1 - 3));
           
-          color = colors.get( pointList.get( 0).foreground);
+          color = colors.get( pointList.get( 0).fcolor);
           g.setColor( (color != null)? color: getBackground());
         }
         else
@@ -513,6 +567,6 @@ public class CalendarPanel extends JPanel implements IPlotFeature, ITableWidgetF
   private int iDay;
   private int jDay;
   private boolean showGrid;
-  private List<Point> pointList;
+  private List<Plot> plots;
   private Map<String, Color> colors;
 }
