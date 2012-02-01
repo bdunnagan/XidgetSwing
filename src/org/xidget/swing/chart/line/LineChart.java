@@ -4,14 +4,20 @@
  */
 package org.xidget.swing.chart.line;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.swing.JPanel;
+
 import org.xidget.Creator;
 import org.xidget.chart.Plot;
 import org.xidget.chart.Point;
@@ -32,6 +38,7 @@ public class LineChart extends JPanel implements IPlotFeature
     plots = new ArrayList<Plot>();
     plotArea = new Path2D.Double();    
     plotLine = new Path2D.Double();    
+    strokes = new HashMap<Plot, Stroke>();
   }
   
   /* (non-Javadoc)
@@ -69,6 +76,17 @@ public class LineChart extends JPanel implements IPlotFeature
   @Override
   public void updateBackground( Plot plot, String color)
   {
+    repaint();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateStrokeWidth(org.xidget.chart.Plot, double)
+   */
+  @Override
+  public void updateStrokeWidth( Plot plot, double value)
+  {
+    BasicStroke stroke = new BasicStroke( (float)value, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
+    strokes.put( plot, stroke);
     repaint();
   }
 
@@ -238,19 +256,21 @@ public class LineChart extends JPanel implements IPlotFeature
     }
     
     // compute graph shape
-    plotLine.reset();
-    plotArea.reset();
     double x = 0;
     double y = 0;
     for( Plot plot: plots)
     {
+      plotLine.reset();
+      plotArea.reset();
+      
       List<Point> points = plot.getPoints();
       for( int i=0; i<points.size(); i++)
       {
         Point point = points.get( i);
-        x = (double)( xscale.plot( point.coords[ 0]) * width);
-        y = (double)( height - yscale.plot( point.coords[ 1]) * height);
-      
+        
+        x = xscale.plot( point.coords[ 0]) * width;
+        y = height - yscale.plot( point.coords[ 1]) * height;
+
         if ( i == 0)
         {
           plotLine.moveTo( x, y);
@@ -269,7 +289,9 @@ public class LineChart extends JPanel implements IPlotFeature
       
       g2d.setColor( colorFeature.getColor( plot.getBackground()));
       g2d.fill( plotArea);
-      
+
+      Stroke stroke = strokes.get( plot);
+      if ( stroke != null) g2d.setStroke( stroke);
       g2d.setColor( colorFeature.getColor( plot.getForeground()));
       g2d.draw( plotLine);
     }
@@ -279,6 +301,7 @@ public class LineChart extends JPanel implements IPlotFeature
   private Axis yAxis;
   
   private List<Plot> plots;
+  private Map<Plot, Stroke> strokes;
   
   private Path2D.Double plotLine;
   private Path2D.Double plotArea;

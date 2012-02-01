@@ -89,6 +89,14 @@ public class PieChart extends JPanel implements IPlotFeature
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.chart.IPlotFeature#updateStrokeWidth(org.xidget.chart.Plot, double)
+   */
+  @Override
+  public void updateStrokeWidth( Plot plot, double value)
+  {
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.chart.IPlotFeature#addPoint(org.xidget.chart.Plot, int, org.xidget.chart.Point)
    */
   @Override
