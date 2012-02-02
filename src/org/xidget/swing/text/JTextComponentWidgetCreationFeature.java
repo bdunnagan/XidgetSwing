@@ -95,7 +95,7 @@ public class JTextComponentWidgetCreationFeature extends SwingWidgetCreationFeat
     if ( Xlate.get( config, "label", Xlate.childGet( config, "label", (String)null)) != null)
     {
       jLabel = new JLabel( "");
-      jLabel.setHorizontalAlignment( SwingConstants.RIGHT);
+      jLabel.setHorizontalAlignment( SwingConstants.LEFT);
       
       GridBagLayout layout = new GridBagLayout();
       

@@ -24,6 +24,8 @@ public class JTextComponentTextWidgetFeature extends SwingTextWidgetFeature
   @Override
   public void setEditable( boolean editable)
   {
+    super.setEditable( editable);
+    
     JTextComponent widget = xidget.getFeature( JTextComponent.class);
     widget.setEditable( editable);
   }

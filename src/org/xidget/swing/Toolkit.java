@@ -25,9 +25,12 @@ import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import org.xidget.Creator;
@@ -224,6 +227,24 @@ public class Toolkit implements IToolkit
     
     JFileChooser fileChooser = new JFileChooser( folder);
     fileChooser.setMultiSelectionEnabled( type == FileDialogType.openMany);
+    
+    // programmatically select details view
+    Stack<JComponent> stack = new Stack<JComponent>();
+    stack.push( fileChooser);
+    while( !stack.empty())
+    {
+      JComponent component = stack.pop();
+      
+      if( component instanceof JToggleButton) 
+      {  
+        JToggleButton button = (JToggleButton)component;
+        if ( button.getToolTipText().equals( "Details")) { button.doClick(); break;}
+      }  
+      
+      for( Component child: component.getComponents())
+        if ( child instanceof JComponent)
+          stack.push( (JComponent)child);
+    }
     
     // allow selecting directories unless the dialog is intended for picking a non-existing file 
     if ( type != FileDialogType.save) 

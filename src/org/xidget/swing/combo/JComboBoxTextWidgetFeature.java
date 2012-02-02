@@ -39,6 +39,8 @@ public class JComboBoxTextWidgetFeature extends SwingTextWidgetFeature
    */
   public void setEditable( boolean editable)
   {
+    super.setEditable( editable);
+    
     JComboBox widget = xidget.getFeature( JComboBox.class);
     widget.setEditable( editable);
   }

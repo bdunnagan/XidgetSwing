@@ -8,7 +8,7 @@ import java.awt.Component;
 import java.awt.KeyboardFocusManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
+import java.util.List;
 import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IFocusFeature;
@@ -50,6 +50,10 @@ public class SwingFocusFeature implements IFocusFeature
       if ( xidget != null) return xidget;
       component = component.getParent();
     }
+    
+    List<IXidget> active = Creator.getInstance().getActiveHierarchies();
+    if ( active.size() > 0) return active.get( 0);
+    
     return null;
   }
 

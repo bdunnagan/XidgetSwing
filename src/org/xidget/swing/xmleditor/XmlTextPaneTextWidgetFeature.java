@@ -20,6 +20,8 @@ public class XmlTextPaneTextWidgetFeature extends SwingTextWidgetFeature
   @Override
   public void setEditable( boolean editable)
   {
+    super.setEditable( editable);
+    
     XmlTextPane widget = xidget.getFeature( XmlTextPane.class);
     widget.setEditable( editable);
   }

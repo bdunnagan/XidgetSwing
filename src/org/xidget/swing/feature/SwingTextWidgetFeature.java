@@ -63,6 +63,8 @@ public class SwingTextWidgetFeature implements ITextWidgetFeature
   @Override
   public void setEditable( boolean editable)
   {
+    JComponent widget = getPrimaryWidget( xidget);
+    widget.setFocusable( editable);    
   }
 
   /* (non-Javadoc)

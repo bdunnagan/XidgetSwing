@@ -13,7 +13,6 @@ import org.xmodel.IModelObject;
 @SuppressWarnings("serial")
 public class CustomComboModel extends DefaultComboBoxModel
 {
-
   /* (non-Javadoc)
    * @see javax.swing.DefaultComboBoxModel#addElement(java.lang.Object)
    */
@@ -53,6 +52,13 @@ public class CustomComboModel extends DefaultComboBoxModel
     @Override
     public boolean equals( Object object)
     {
+      if ( object == null) return false;
+      
+      if ( object instanceof Item)
+      {
+        return ((Item)object).content.equals( content);
+      }
+      
       return content.equals( object);
     }
 

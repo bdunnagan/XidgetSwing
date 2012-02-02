@@ -67,7 +67,7 @@ public class JProgressBarWidgetCreationFeature extends SwingWidgetCreationFeatur
     if ( Xlate.get( config, "label", Xlate.childGet( config, "label", (String)null)) != null)
     {
       jLabel = new JLabel( "");
-      jLabel.setHorizontalAlignment( vertical? SwingConstants.CENTER: SwingConstants.RIGHT);
+      jLabel.setHorizontalAlignment( vertical? SwingConstants.CENTER: SwingConstants.LEFT);
       
       GridBagLayout layout = new GridBagLayout();
       GridBagConstraints constraints = new GridBagConstraints();
