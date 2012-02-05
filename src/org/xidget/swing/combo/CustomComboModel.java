@@ -31,7 +31,7 @@ public class CustomComboModel extends DefaultComboBoxModel
     super.insertElementAt( new Item( value), index);
   }
 
-  protected final static class Item
+  protected final class Item
   {
     public Item( Object content)
     {
@@ -46,6 +46,18 @@ public class CustomComboModel extends DefaultComboBoxModel
       return content;
     }
     
+    /**
+     * @return Returns the value of the content.
+     */
+    public Object getValue()
+    {
+      if ( content instanceof IModelObject)
+      {
+        return ((IModelObject)content).getValue();
+      }
+      return content;
+    }
+    
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -56,10 +68,14 @@ public class CustomComboModel extends DefaultComboBoxModel
       
       if ( object instanceof Item)
       {
-        return ((Item)object).content.equals( content);
+        Item item = (Item)object;
+        return item.getValue().equals( getValue());
       }
       
-      return content.equals( object);
+      Object value = getValue();
+      if ( value != null && object != null) return value.equals( object);
+      
+      return value == object;
     }
 
     /* (non-Javadoc)
@@ -68,7 +84,9 @@ public class CustomComboModel extends DefaultComboBoxModel
     @Override
     public int hashCode()
     {
-      return super.hashCode();
+      Object value = getValue();
+      if ( value == null) return 0;
+      return value.hashCode();
     }
 
     /* (non-Javadoc)

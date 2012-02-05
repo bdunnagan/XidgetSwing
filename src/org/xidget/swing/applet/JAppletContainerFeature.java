@@ -45,7 +45,12 @@ public class JAppletContainerFeature extends GenericContainerFeature
       
       IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
       Object[] widgets = creationFeature.getLastWidgets();
-      if ( widgets.length > 0) applet.getContentPane().add( (Component)widgets[ 0], index);
+      if ( widgets.length > 0) 
+      {
+        // menubar skews the insertion index
+        if ( applet.getJMenuBar() != null) index--;
+        applet.getContentPane().add( (Component)widgets[ 0], index);
+      }
     }
   }
 }

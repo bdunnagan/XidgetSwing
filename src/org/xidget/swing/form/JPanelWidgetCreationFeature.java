@@ -71,10 +71,15 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
 
     // add panel to parent container
-    if ( xidget.getParent() != null)
+    IXidget xidgetParent = xidget.getParent();
+    if ( xidgetParent != null)
     {
       IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
-      if ( containerFeature != null) containerFeature.addWidget( xidget);
+      if ( containerFeature != null) 
+      {
+        int index = xidgetParent.getChildren().indexOf( xidget); 
+        containerFeature.addWidget( index, xidget);
+      }
     }
   }
   

@@ -45,8 +45,12 @@ public class JFrameContainerFeature extends GenericContainerFeature
       
       IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
       Object[] widgets = creationFeature.getLastWidgets();
-      if ( widgets.length > 0) frame.getContentPane().add( (Component)widgets[ 0], index);
+      if ( widgets.length > 0) 
+      {
+        // menubar skews the insertion index
+        if ( frame.getJMenuBar() != null) index--;
+        frame.getContentPane().add( (Component)widgets[ 0], index);
+      }
     }
   }
-  
 }

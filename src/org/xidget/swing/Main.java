@@ -19,6 +19,7 @@
  */
 package org.xidget.swing;
 
+import java.awt.Color;
 import java.io.File;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Collections;
@@ -79,9 +80,9 @@ public class Main
     
     try
     {
-//      UIManager.put( "nimbusBase", new Color( Color.HSBtoRGB( 0.7f, 0.1f, 0.9f)));
+//      UIManager.put( "nimbusBase", new Color( Color.HSBtoRGB( 1f, 0.43f, 0.63f)));
 //      UIManager.put( "nimbusBlueGrey", new Color( Color.HSBtoRGB( 0.7f, 0.1f, 0.5f)));
-//      UIManager.put( "control", new Color( Color.HSBtoRGB( 0.5f, 0.05f, 0.95f)));
+      UIManager.put( "control", new Color( Color.HSBtoRGB( 0f, 0f, 1f)));
       for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
       {
         log.info( info.getName());
@@ -94,6 +95,10 @@ public class Main
     } catch ( Exception e)
     {
     }
+    
+    System.out.println( UIManager.get( "nimbusBase"));
+    System.out.println( UIManager.get( "nimbusBlueGrey"));
+    System.out.println( UIManager.get( "control"));
     
     // Register toolkit
     Creator.setToolkitClass( Toolkit.class);
