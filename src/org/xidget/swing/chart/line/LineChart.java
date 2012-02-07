@@ -10,7 +10,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -296,13 +299,88 @@ public class LineChart extends JPanel implements IPlotFeature
       g2d.draw( plotLine);
     }
   }
+  
+  /**
+   * Paint the point box for selected point.
+   * @param g2d The graphics context.
+   */
+  @SuppressWarnings("unchecked")
+  private void paintPointBox( Graphics2D g2d)
+  {
+    if ( selectedPoint == null || selectedPoint.label == null) return;
+    
+    if ( pointBoxText == null)
+    {
+      FontRenderContext renderContext = g2d.getFontRenderContext();
+      pointBoxText = new TextLayout( selectedPoint.label, getFont(), renderContext);
+    }
+    
+    double tw = pointBoxTabWidth;
+    double th = pointBoxTabHeight;
+    
+    Rectangle2D bounds = pointBoxText.getBounds();
+    double lw = bounds.getWidth() + (pointBoxInset * 2);
+    double lh = bounds.getHeight() + (pointBoxInset * 2);
+    
+    double x = selectedPoint.coords[ 0];
+    double y = selectedPoint.coords[ 1];
+    
+    pointBox.reset();
+    pointBox.moveTo( x, y);
+    x += tw / 2; y -= th;  pointBox.lineTo( x, y);
+    x += lw - tw; pointBox.lineTo( x, y);
+    y -= lh; pointBox.lineTo( x, y);
+    x -= lw; pointBox.lineTo( x, y);
+    y += lh; pointBox.lineTo( x, y);
+    pointBox.closePath();
+    
+    // make (x, y) point to the center of the box
+    x += (lw / 2);
+    y -= (lh / 2);
 
+    // calculate text position
+    x -= bounds.getWidth() / 2 + pointBoxInset;
+    y -= bounds.getHeight() / 2 + pointBoxInset;
+
+    Toolkit toolkit = (Toolkit)Creator.getToolkit();
+    IColorFeature<Color> colorFeature = toolkit.getFeature( IColorFeature.class);
+    
+    Color fillColor = pointBoxFillColor;
+    Color drawColor = pointBoxDrawColor;
+    
+    if ( selectedPlot.getBackground() != null) fillColor = colorFeature.getColor( selectedPlot.getBackground());
+    if ( selectedPlot.getForeground() != null) drawColor = colorFeature.getColor( selectedPlot.getForeground());
+      
+    if ( selectedPoint.bcolor != null) fillColor = colorFeature.getColor( selectedPoint.bcolor);
+    if ( selectedPoint.fcolor != null) drawColor = colorFeature.getColor( selectedPoint.fcolor);
+      
+    g2d.setColor( fillColor);
+    g2d.fill( pointBox);
+    
+    g2d.setColor( drawColor);
+    g2d.draw( pointBox);
+    
+    g2d.setColor( getForeground());
+    pointBoxText.draw( g2d, (float)x, (float)y);
+  }
+
+  private final static double pointBoxTabWidth = 5;
+  private final static double pointBoxTabHeight = 5;
+  private final static double pointBoxInset = 2;
+  
   private Axis xAxis;
   private Axis yAxis;
   
   private List<Plot> plots;
   private Map<Plot, Stroke> strokes;
+  private Plot selectedPlot;
+  private Point selectedPoint;
   
   private Path2D.Double plotLine;
   private Path2D.Double plotArea;
+  private Path2D.Double pointBox;
+  private TextLayout pointBoxText;
+  
+  private Color pointBoxDrawColor;
+  private Color pointBoxFillColor;
 }
