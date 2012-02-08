@@ -257,7 +257,7 @@ public class PieChart extends JPanel implements IPlotFeature
 
     double cx = getWidth() / 2d;
     double cy = getHeight() / 2d;
-    double r = size / 2d - 25;
+    double r = size / 2d;
 
     for( int i=0; i<slices.size(); i++)
     {
