@@ -10,6 +10,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.Path2D;
@@ -18,9 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JPanel;
-
 import org.xidget.Creator;
 import org.xidget.chart.Plot;
 import org.xidget.chart.Point;
@@ -40,8 +41,15 @@ public class LineChart extends JPanel implements IPlotFeature
   {
     plots = new ArrayList<Plot>();
     plotArea = new Path2D.Double();    
-    plotLine = new Path2D.Double();    
+    plotLine = new Path2D.Double();
+    pointBox = new Path2D.Double();
     strokes = new HashMap<Plot, Stroke>();
+    
+    pointBoxStroke = new BasicStroke( 2);
+    pointBoxFillColor = Color.white;
+    pointBoxDrawColor = Color.gray;
+    
+    addMouseListener( mouseListener);
   }
   
   /* (non-Javadoc)
@@ -298,6 +306,8 @@ public class LineChart extends JPanel implements IPlotFeature
       g2d.setColor( colorFeature.getColor( plot.getForeground()));
       g2d.draw( plotLine);
     }
+    
+    if ( selectedPoint != null) paintPointBox( g2d);
   }
   
   /**
@@ -309,21 +319,30 @@ public class LineChart extends JPanel implements IPlotFeature
   {
     if ( selectedPoint == null || selectedPoint.label == null) return;
     
+    if ( xAxis == null || yAxis == null) return;
+    
+    Scale xscale = xAxis.getScale();
+    Scale yscale = yAxis.getScale();
+    if ( xscale == null || yscale == null) return;
+    
     if ( pointBoxText == null)
     {
       FontRenderContext renderContext = g2d.getFontRenderContext();
       pointBoxText = new TextLayout( selectedPoint.label, getFont(), renderContext);
     }
     
+    int width = getWidth() - 1;
+    int height = getHeight() - 1;
+    
     double tw = pointBoxTabWidth;
     double th = pointBoxTabHeight;
     
     Rectangle2D bounds = pointBoxText.getBounds();
-    double lw = bounds.getWidth() + (pointBoxInset * 2);
-    double lh = bounds.getHeight() + (pointBoxInset * 2);
+    double lw = Math.ceil( bounds.getWidth() + (pointBoxInset * 2));
+    double lh = Math.ceil( bounds.getHeight() + (pointBoxInset * 2));
     
-    double x = selectedPoint.coords[ 0];
-    double y = selectedPoint.coords[ 1];
+    double x = xscale.plot( selectedPoint.coords[ 0]) * width - selectedPlot.getStrokeWidth() - 1;
+    double y = height - yscale.plot( selectedPoint.coords[ 1]) * height;
     
     pointBox.reset();
     pointBox.moveTo( x, y);
@@ -335,12 +354,11 @@ public class LineChart extends JPanel implements IPlotFeature
     pointBox.closePath();
     
     // make (x, y) point to the center of the box
-    x += (lw / 2);
-    y -= (lh / 2);
+    y -= lh;
 
     // calculate text position
-    x -= bounds.getWidth() / 2 + pointBoxInset;
-    y -= bounds.getHeight() / 2 + pointBoxInset;
+    x += pointBoxInset - bounds.getX();
+    y += pointBoxInset - bounds.getY();
 
     Toolkit toolkit = (Toolkit)Creator.getToolkit();
     IColorFeature<Color> colorFeature = toolkit.getFeature( IColorFeature.class);
@@ -348,8 +366,8 @@ public class LineChart extends JPanel implements IPlotFeature
     Color fillColor = pointBoxFillColor;
     Color drawColor = pointBoxDrawColor;
     
-    if ( selectedPlot.getBackground() != null) fillColor = colorFeature.getColor( selectedPlot.getBackground());
-    if ( selectedPlot.getForeground() != null) drawColor = colorFeature.getColor( selectedPlot.getForeground());
+    //if ( selectedPlot.getBackground() != null) fillColor = colorFeature.getColor( selectedPlot.getBackground());
+    //if ( selectedPlot.getForeground() != null) drawColor = colorFeature.getColor( selectedPlot.getForeground());
       
     if ( selectedPoint.bcolor != null) fillColor = colorFeature.getColor( selectedPoint.bcolor);
     if ( selectedPoint.fcolor != null) drawColor = colorFeature.getColor( selectedPoint.fcolor);
@@ -358,15 +376,63 @@ public class LineChart extends JPanel implements IPlotFeature
     g2d.fill( pointBox);
     
     g2d.setColor( drawColor);
+    g2d.setStroke( pointBoxStroke);
     g2d.draw( pointBox);
     
-    g2d.setColor( getForeground());
+    g2d.setColor( Color.black);
     pointBoxText.draw( g2d, (float)x, (float)y);
   }
+  
+  private MouseListener mouseListener = new MouseAdapter() {
+    @Override
+    public void mousePressed( MouseEvent event)
+    {
+      if ( xAxis == null || yAxis == null) return;
+      
+      Scale xscale = xAxis.getScale();
+      Scale yscale = yAxis.getScale();
+      if ( xscale == null || yscale == null) return;
+      
+      int x0 = event.getX();
+      int y0 = event.getY();
+      int width = getWidth() - 1;
+      int height = getHeight() - 1;
 
-  private final static double pointBoxTabWidth = 5;
-  private final static double pointBoxTabHeight = 5;
-  private final static double pointBoxInset = 2;
+      selectedPlot = null;
+      selectedPoint = null;
+      
+      for( Plot plot: plots)
+      {
+        for( Point point: plot.getPoints())
+        {
+          double x1 = xscale.plot( point.coords[ 0]) * width;
+          double y1 = height - yscale.plot( point.coords[ 1]) * height;
+          
+          double dx = Math.abs( x1 - x0);
+          double dy = Math.abs( y1 - y0);
+          if ( dx < hitTest || dy < hitTest)
+          {
+            double d = dx * dx + dy * dy;
+            if ( d < hitTestSq)
+            {
+              selectedPlot = plot;
+              selectedPoint = point;
+              plots.remove( plot);
+              plots.add( plot);
+              repaint();
+              return;
+            }
+          }
+        }
+      }
+    }
+  };
+  
+  private final static double pointBoxTabWidth = 7;
+  private final static double pointBoxTabHeight = 7;
+  private final static double pointBoxInset = 5;
+  private final static double hitTest = 20;
+  private final static double hitTestSq = hitTest * hitTest;
   
   private Axis xAxis;
   private Axis yAxis;
@@ -380,6 +446,7 @@ public class LineChart extends JPanel implements IPlotFeature
   private Path2D.Double plotArea;
   private Path2D.Double pointBox;
   private TextLayout pointBoxText;
+  private Stroke pointBoxStroke;
   
   private Color pointBoxDrawColor;
   private Color pointBoxFillColor;
