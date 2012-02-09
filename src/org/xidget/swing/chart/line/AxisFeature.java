@@ -13,6 +13,10 @@ public class AxisFeature implements IAxisFeature
   public AxisFeature( IXidget xidget)
   {
     this.xidget = xidget;
+    this.log = 0;
+    this.labelDepth = -1;
+    this.tickSpacing = 15;
+    this.tickLength = 4;
   }
   
   /* (non-Javadoc)
@@ -21,10 +25,14 @@ public class AxisFeature implements IAxisFeature
   @Override
   public void setLogBase( int base)
   {
+    log = base;
+    
     Axis axis = xidget.getFeature( Axis.class);
-    axis.log = base;
-    axis.scale = null;
-    axis.repaint();
+    if ( axis != null)
+    {
+      axis.scale = null;
+      axis.repaint();
+    }
   }
 
   /* (non-Javadoc)
@@ -33,10 +41,14 @@ public class AxisFeature implements IAxisFeature
   @Override
   public void setLabelDepth( int depth)
   {
+    labelDepth = depth;
+    
     Axis axis = xidget.getFeature( Axis.class);
-    axis.labelDepth = depth;
-    axis.scale = null;
-    axis.repaint();
+    if ( axis != null)
+    {
+      axis.scale = null;
+      axis.repaint();
+    }
   }
 
   /* (non-Javadoc)
@@ -45,23 +57,36 @@ public class AxisFeature implements IAxisFeature
   @Override
   public void setTickSpacing( int spacing)
   {
+    tickSpacing = spacing;
+    
     Axis axis = xidget.getFeature( Axis.class);
-    axis.tickSpacing = spacing;
-    axis.scale = null;
-    axis.repaint();
+    if ( axis != null)
+    {
+      axis.scale = null;
+      axis.repaint();
+    }
   }
 
   /* (non-Javadoc)
    * @see org.xidget.ifeature.chart.IAxisFeature#setLabelExpression(org.xmodel.xpath.expression.IExpression)
    */
   @Override
-  public void setLabelExpression( IExpression labelExpr)
+  public void setLabelExpression( IExpression expression)
   {
+    this.labelExpr = expression;
+    
     Axis axis = xidget.getFeature( Axis.class);
-    axis.labelExpr = labelExpr;
-    axis.scale = null;
-    axis.repaint();
+    if ( axis != null)
+    {
+      axis.scale = null;
+      axis.repaint();
+    }
   }
 
   private IXidget xidget;
+  protected IExpression labelExpr;
+  protected int labelDepth;
+  protected int tickSpacing;
+  protected int tickLength;
+  protected double log;
 }

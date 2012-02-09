@@ -14,6 +14,7 @@ import org.xidget.IXidget;
 import org.xidget.chart.Scale;
 import org.xidget.chart.Scale.Tick;
 import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.chart.IAxisFeature;
 import org.xmodel.xpath.expression.IContext;
 
 /**
@@ -43,10 +44,12 @@ public class YAxis extends Axis
       context = contextFeature.getContext( this);
     }
     
+    AxisFeature axisFeature = (AxisFeature)xidget.getFeature( IAxisFeature.class);
+    
     int height = getHeight();
-    if ( scale == null && min != max && height > tickSpacing) 
+    if ( scale == null && min != max && height > axisFeature.tickSpacing) 
     {
-      scale = new Scale( min, max, height / tickSpacing, log, context);
+      scale = new Scale( min, max, height / axisFeature.tickSpacing, axisFeature.log, context, axisFeature.labelExpr);
     }
     return scale;
   }
@@ -72,7 +75,8 @@ public class YAxis extends Axis
     Font[] fonts = getLabelFonts( g2d);
     
     // find tick depth at which labels do not overlap, and max label width
-    int labelDepth = this.labelDepth;
+    AxisFeature axisFeature = (AxisFeature)xidget.getFeature( IAxisFeature.class);
+    int labelDepth = axisFeature.labelDepth;
     if ( labelDepth == -1) 
     {
       // find maximum depth at which labels do not overlap
@@ -90,7 +94,7 @@ public class YAxis extends Axis
     {
       Tick tick = ticks.get( i);
       
-      int length = (int)(divisions * tickLength / (tick.depth + 1));
+      int length = (int)(divisions * axisFeature.tickLength / (tick.depth + 1));
       int y = (int)Math.round( (1.0 - tick.scale) * height);
       if ( left)
       {

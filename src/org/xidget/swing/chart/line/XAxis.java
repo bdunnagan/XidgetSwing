@@ -14,6 +14,7 @@ import org.xidget.IXidget;
 import org.xidget.chart.Scale;
 import org.xidget.chart.Scale.Tick;
 import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.chart.IAxisFeature;
 import org.xmodel.xpath.expression.IContext;
 
 /**
@@ -43,10 +44,12 @@ public class XAxis extends Axis
       context = contextFeature.getContext( this);
     }
     
+    AxisFeature axisFeature = (AxisFeature)xidget.getFeature( IAxisFeature.class);
+    
     int width = getWidth();
-    if ( scale == null && min != max && width > tickSpacing) 
+    if ( scale == null && min != max && width > axisFeature.tickSpacing) 
     {
-      scale = new Scale( min, max, width / tickSpacing, log, context);
+      scale = new Scale( min, max, width / axisFeature.tickSpacing, axisFeature.log, context, axisFeature.labelExpr);
     }
     return scale;
   }
@@ -72,8 +75,9 @@ public class XAxis extends Axis
     Font[] fonts = getLabelFonts( g2d);
     
     // find tick depth at which labels do not overlap
+    AxisFeature axisFeature = (AxisFeature)xidget.getFeature( IAxisFeature.class);
     List<Tick> ticks = scale.getTicks();
-    int labelDepth = this.labelDepth;
+    int labelDepth = axisFeature.labelDepth;
     if ( labelDepth == -1) labelDepth = findTextDepth( g2d);
     if ( labelDepth == -1) labelDepth = 0;
     
@@ -84,7 +88,7 @@ public class XAxis extends Axis
       Tick tick = ticks.get( i);
       
       int x = (int)Math.round( tick.scale * width);
-      int y = divisions * tickLength / (tick.depth + 1);
+      int y = divisions * axisFeature.tickLength / (tick.depth + 1);
       if ( top)
       {
         g2d.drawLine( x, height, x, height - y + 1);

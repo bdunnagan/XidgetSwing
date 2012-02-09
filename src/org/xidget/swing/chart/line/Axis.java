@@ -18,7 +18,6 @@ import org.xidget.chart.Plot;
 import org.xidget.chart.Point;
 import org.xidget.chart.Scale;
 import org.xidget.ifeature.chart.IPlotFeature;
-import org.xmodel.xpath.expression.IExpression;
 
 /**
  * The common base class for horizontal and vertical axes widgets.
@@ -29,12 +28,7 @@ public abstract class Axis extends JPanel implements IPlotFeature
   public Axis( IXidget xidget)
   {
     this.xidget = xidget;
-   
     this.plots = new ArrayList<Plot>( 1);
-    this.log = 0;
-    this.labelDepth = -1;
-    this.tickSpacing = 15;
-    this.tickLength = 4;
     
     setFont( Font.decode( "times-10"));
     
@@ -50,12 +44,19 @@ public abstract class Axis extends JPanel implements IPlotFeature
   {
     plots.add( plot);
 
-    for( Point point: plot.getPoints())
+    if ( plots.size() == 1)
     {
-      if ( point.coords != null || point.coords.length > 0) 
+      findExtrema();
+    }
+    else
+    {
+      for( Point point: plot.getPoints())
       {
-        if ( point.coords[ 0] < min) min = point.coords[ 0];
-        if ( point.coords[ 0] > max) max = point.coords[ 0];
+        if ( point.coords != null || point.coords.length > 0) 
+        {
+          if ( point.coords[ 0] < min) min = point.coords[ 0];
+          if ( point.coords[ 0] > max) max = point.coords[ 0];
+        }
       }
     }
   }
@@ -194,14 +195,16 @@ public abstract class Axis extends JPanel implements IPlotFeature
    */
   protected void findExtrema()
   {
+    boolean first = true;
     for( Plot plot: plots)
     {
       for( Point point: plot.getPoints())
       {
         if ( point.coords != null || point.coords.length > 0) 
         {
-          if ( point.coords[ 0] < min) min = point.coords[ 0];
-          if ( point.coords[ 0] > max) max = point.coords[ 0];
+          if ( first || point.coords[ 0] < min) min = point.coords[ 0];
+          if ( first || point.coords[ 0] > max) max = point.coords[ 0];
+          first = false;
         }
       }
     }
@@ -249,14 +252,9 @@ public abstract class Axis extends JPanel implements IPlotFeature
   };
   
   protected IXidget xidget;
-  protected IExpression labelExpr;
   protected List<Plot> plots;
   protected Scale scale;
   protected double min;
   protected double max;
-  protected int labelDepth;
-  protected int tickSpacing;
-  protected int tickLength;
-  protected double log;
   protected Font[] fonts;
 }

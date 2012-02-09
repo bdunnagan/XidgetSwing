@@ -400,6 +400,7 @@ public class LineChart extends JPanel implements IPlotFeature
 
       selectedPlot = null;
       selectedPoint = null;
+      pointBoxText = null;
       
       for( Plot plot: plots)
       {

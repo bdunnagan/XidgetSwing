@@ -211,6 +211,7 @@ public class PieChart extends JPanel implements IPlotFeature
       for( int i=0; i<points.size(); i++)
       {
         Point point = points.get( i);
+        if ( point.coords[ 0] == 0) continue;
         
         Slice slice = new Slice();
         if ( point.label != null) slice.label = font.createGlyphVector( fontRenderContext, point.label);
@@ -257,14 +258,23 @@ public class PieChart extends JPanel implements IPlotFeature
 
     double cx = getWidth() / 2d;
     double cy = getHeight() / 2d;
-    double r = size / 2d;
+    double r = size / 2d - 3;
 
-    for( int i=0; i<slices.size(); i++)
+    if ( slices.size() == 0)
     {
-      Slice slice = slices.get( i);
-      arc.setArcByCenter( cx, cy, r, -slice.startAngle * 360, -slice.angleExtent * 360 - 1, Arc2D.PIE);
-      g2d.setColor( slice.bcolor);
-      g2d.fill( arc);
+      arc.setArcByCenter( cx, cy, r, 0, 360, Arc2D.OPEN);
+      g2d.setColor( Color.gray);
+      g2d.draw( arc);
+    }
+    else
+    {
+      for( int i=0; i<slices.size(); i++)
+      {
+        Slice slice = slices.get( i);
+        arc.setArcByCenter( cx, cy, r, -slice.startAngle * 360, -slice.angleExtent * 360 - 1, Arc2D.PIE);
+        g2d.setColor( slice.bcolor);
+        g2d.fill( arc);
+      }
     }
     
     double rTick = r + tickLength;
