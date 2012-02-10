@@ -83,6 +83,8 @@ public class Main
 //      UIManager.put( "nimbusBase", new Color( Color.HSBtoRGB( 1f, 0.43f, 0.63f)));
 //      UIManager.put( "nimbusBlueGrey", new Color( Color.HSBtoRGB( 0.7f, 0.1f, 0.5f)));
       UIManager.put( "control", new Color( Color.HSBtoRGB( 0f, 0f, 1f)));
+      UIManager.put("Table.alternateRowColor", Color.WHITE);
+      
       for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
       {
         log.info( info.getName());

@@ -95,6 +95,7 @@ public class Applet extends JApplet
     try
     {
       UIManager.put( "control", new Color( Color.HSBtoRGB( 0f, 0f, 1f)));
+      UIManager.put("Table.alternateRowColor", Color.WHITE);
       for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
       {
         if ( "Nimbus".equals( info.getName()))

@@ -76,7 +76,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     
     jtable = new JTable( tableModel);
     jtable.setDragEnabled( true);
-    jtable.setRowHeight( 24);
+    //jtable.setRowHeight( 24);
     
     DropTarget dropTarget = new DropTarget( jtable, dndListener);
     jtable.setDropTarget( dropTarget);

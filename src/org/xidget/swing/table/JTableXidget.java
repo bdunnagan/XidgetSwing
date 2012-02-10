@@ -32,6 +32,7 @@ import org.xidget.feature.model.SelectionUpdateFeature;
 import org.xidget.feature.tree.ColumnSetFeature;
 import org.xidget.feature.tree.RowSetFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -44,6 +45,7 @@ import org.xidget.ifeature.tree.IColumnWidthFeature;
 import org.xidget.ifeature.tree.IRowSetFeature;
 import org.xidget.ifeature.tree.ITreeWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.SwingTextWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
@@ -57,6 +59,7 @@ public class JTableXidget extends Xidget
     columnSetFeature = new ColumnSetFeature( this);
     bindFeature = new BindFeature( this, new String[] { "text", "combo", "button"});
     widgetFeature = new SwingWidgetFeature( this);
+    textFeature = new SwingTextWidgetFeature( this);
     containerFeature = new JTableContainerFeature( this);
     treeWidgetFeature = new JTableWidgetFeature( this);
     columnWidthFeature = new JTableColumnWidthFeature( this);
@@ -76,6 +79,7 @@ public class JTableXidget extends Xidget
     if ( clss == IRowSetFeature.class) return (T)rowSetFeature;
     if ( clss == IColumnSetFeature.class) return (T)columnSetFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == ITreeWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IColumnWidthFeature.class) return (T)columnWidthFeature;
@@ -100,6 +104,7 @@ public class JTableXidget extends Xidget
   private IColumnSetFeature columnSetFeature;
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private IWidgetContainerFeature containerFeature;
   private ITreeWidgetFeature treeWidgetFeature;
   private IColumnWidthFeature columnWidthFeature;
