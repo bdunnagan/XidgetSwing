@@ -22,9 +22,8 @@ package org.xidget.swing.frame;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import java.awt.event.WindowListener;
 import javax.swing.JFrame;
-
 import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -48,7 +47,8 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   {
     jframe = new JFrame();
     jframe.setLocationByPlatform(true);    
-    jframe.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE);
+    jframe.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE);
+    jframe.addWindowListener( windowListener);
 
     for( IXidget child: xidget.getChildren())
     {
@@ -92,6 +92,14 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   {
     return jframe;
   }
+
+  private WindowListener windowListener = new WindowAdapter() {
+    @Override
+    public void windowClosing( WindowEvent event)
+    {
+      Creator.getInstance().destroy( xidget);
+    }
+  };
   
   private IXidget xidget;
   private JFrame jframe;

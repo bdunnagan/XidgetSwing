@@ -46,12 +46,6 @@ public class PieChart extends JPanel implements IPlotFeature
   {
     plots.add( plot);
     
-    for( Point point: plot.getPoints())
-    {
-      if ( point.coords != null && point.coords.length > 0)
-        total += point.coords[ 0];
-    }
-
     q1 = null;
     repaint();
   }
@@ -63,10 +57,6 @@ public class PieChart extends JPanel implements IPlotFeature
   public void removePlot( Plot plot)
   {
     plots.remove( plot);
-    
-    for( Point point: plot.getPoints())
-      if ( point.coords != null && point.coords.length > 0)
-        total -= point.coords[ 0];
     
     q1 = null;
     repaint();
@@ -102,9 +92,6 @@ public class PieChart extends JPanel implements IPlotFeature
   @Override
   public void addPoint( Plot plot, int index, Point point)
   {
-    if ( point.coords != null && point.coords.length > 0)
-      total += point.coords[ 0];
-    
     q1 = null;
     repaint();
   }
@@ -115,10 +102,6 @@ public class PieChart extends JPanel implements IPlotFeature
   @Override
   public void removePoint( Plot plot, int index)
   {
-    Point point = plot.getPoints().get( index);
-    if ( point.coords != null && point.coords.length > 0)
-      total -= point.coords[ 0];
-    
     q1 = null;
     repaint();
   }
@@ -129,12 +112,6 @@ public class PieChart extends JPanel implements IPlotFeature
   @Override
   public void updateCoords( Point point, double[] coords)
   {
-    if ( point.coords != null && point.coords.length > 0)
-      total -= point.coords[ 0];
-
-    if ( coords != null && coords.length > 0)
-      total += coords[ 0];
-    
     q1 = null;
     repaint();
   }
@@ -147,9 +124,6 @@ public class PieChart extends JPanel implements IPlotFeature
   {
     if ( coordinate == 0)
     {
-      total -= point.coords[ 0];
-      total += value;
-      
       q1 = null;
       repaint();
     }
@@ -189,12 +163,8 @@ public class PieChart extends JPanel implements IPlotFeature
    * Compute the slices.
    * @param g The graphics context.
    */
-  @SuppressWarnings("unchecked")
   private void computeSlices( Graphics2D g)
   {
-    Toolkit toolkit = (Toolkit)Creator.getToolkit();
-    IColorFeature<Color> feature = toolkit.getFeature( IColorFeature.class);
-    
     Font font = g.getFont();
     FontRenderContext fontRenderContext = g.getFontRenderContext();
 
@@ -204,6 +174,18 @@ public class PieChart extends JPanel implements IPlotFeature
     q4 = new ArrayList<Slice>();
     slices = new ArrayList<Slice>();
     
+    double total = 0;
+    for( Plot plot: plots)
+    {
+      List<Point> points = plot.getPoints();
+      for( int i=0; i<points.size(); i++)
+      {
+        Point point = points.get( i);
+        if ( !Double.isNaN( point.coords[ 0]) && !Double.isInfinite( point.coords[ 0]))
+          total += point.coords[ 0];
+      }
+    }
+    
     double startAngle = 0;
     for( Plot plot: plots)
     {
@@ -211,14 +193,14 @@ public class PieChart extends JPanel implements IPlotFeature
       for( int i=0; i<points.size(); i++)
       {
         Point point = points.get( i);
-        if ( point.coords[ 0] == 0) continue;
+        if ( point.coords[ 0] == 0 || Double.isNaN( point.coords[ 0]) || Double.isInfinite( point.coords[ 0])) continue;
         
         Slice slice = new Slice();
         if ( point.label != null) slice.label = font.createGlyphVector( fontRenderContext, point.label);
         slice.startAngle = startAngle;
         slice.angleExtent = point.coords[ 0] / total;
-        slice.fcolor = feature.getColor( point.fcolor);
-        slice.bcolor = feature.getColor( point.bcolor);
+        slice.fcolor = getForeground( point, total);
+        slice.bcolor = getBackground( point, total);
         
         double w = (slice.startAngle + (slice.angleExtent / 2)) * PI2;
         slice.midUX = Math.cos( w);
@@ -237,6 +219,32 @@ public class PieChart extends JPanel implements IPlotFeature
         startAngle += slice.angleExtent;
       }
     }
+  }
+  
+  @SuppressWarnings("unchecked")
+  private Color getForeground( Point point, double total)
+  {
+    if ( point.fcolor != null)
+    {
+      Toolkit toolkit = (Toolkit)Creator.getToolkit();
+      IColorFeature<Color> feature = toolkit.getFeature( IColorFeature.class);
+      return feature.getColor( point.fcolor);
+    }
+    
+    return Color.getHSBColor( (float)(point.coords[ 0] / total), 0.9f, 1f);
+  }
+  
+  @SuppressWarnings("unchecked")
+  private Color getBackground( Point point, double total)
+  {
+    if ( point.bcolor != null)
+    {
+      Toolkit toolkit = (Toolkit)Creator.getToolkit();
+      IColorFeature<Color> feature = toolkit.getFeature( IColorFeature.class);
+      return feature.getColor( point.bcolor);
+    }
+    
+    return Color.getHSBColor( (float)(point.coords[ 0] / total), 0.7f, 0.95f);
   }
   
   /* (non-Javadoc)
@@ -260,6 +268,10 @@ public class PieChart extends JPanel implements IPlotFeature
     double cy = getHeight() / 2d;
     double r = size / 2d - 3;
 
+    // leave room for at least 1 label on top and bottom
+    FontMetrics metrics = g2d.getFontMetrics();
+    r -= metrics.getHeight();
+    
     if ( slices.size() == 0)
     {
       arc.setArcByCenter( cx, cy, r, 0, 360, Arc2D.OPEN);
@@ -278,15 +290,13 @@ public class PieChart extends JPanel implements IPlotFeature
     }
     
     double rTick = r + tickLength;
-
-    FontMetrics metrics = g2d.getFontMetrics();
     double labelAdvanceY = labelGapY + metrics.getHeight();
 
     //
     // Quadrant 1
     //
     double labelX = r + labelMargin;
-    double labelY0 = -labelAdvanceY / 2;
+    double labelY0 = -3 * labelAdvanceY / 2;
     for( Slice slice: q1)
     {
       if ( slice.label == null) continue;
@@ -318,7 +328,7 @@ public class PieChart extends JPanel implements IPlotFeature
     //
     // Quadrant 4
     //
-    labelY0 = labelAdvanceY / 2;
+    labelY0 = 3 * labelAdvanceY / 2;
     for( Slice slice: q4)
     {
       if ( slice.label == null) continue;
@@ -351,7 +361,7 @@ public class PieChart extends JPanel implements IPlotFeature
     // Quadrant 2
     //
     labelX = -(r + labelMargin);
-    labelY0 = -labelAdvanceY / 2;
+    labelY0 = -3 * labelAdvanceY / 2;
     for( Slice slice: q2)
     {
       if ( slice.label == null) continue;
@@ -383,7 +393,7 @@ public class PieChart extends JPanel implements IPlotFeature
     //
     // Quadrant 3
     //    
-    labelY0 = labelAdvanceY / 2;    
+    labelY0 = 3 * labelAdvanceY / 2;    
     for( Slice slice: q3)
     {
       if ( slice.label == null) continue;
@@ -413,6 +423,7 @@ public class PieChart extends JPanel implements IPlotFeature
     }
   }
   
+  @SuppressWarnings("unused")
   private final static class Slice
   {
     public GlyphVector label;
@@ -426,12 +437,11 @@ public class PieChart extends JPanel implements IPlotFeature
   
   private final static double PI2 = Math.PI * 2;
   private final static int labelMargin = 10;
-  private final static int labelGapX = 10;
+  private final static int labelGapX = 5;
   private final static int labelGapY = 3;
-  private final static int tickLength = 10;
+  private final static int tickLength = 3;
   
   private List<Plot> plots;
-  private double total;
 
   private Arc2D.Double arc;
   private Path2D.Double path;
