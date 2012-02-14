@@ -4,19 +4,24 @@
  */
 package org.xidget.swing.chart.pie;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JPanel;
+
 import org.xidget.Creator;
 import org.xidget.chart.Plot;
 import org.xidget.chart.Point;
@@ -35,6 +40,8 @@ public class PieChart extends JPanel implements IPlotFeature
     plots = new ArrayList<Plot>();
     arc = new Arc2D.Double();
     path = new Path2D.Double();
+    line = new Line2D.Double();
+    stroke = new BasicStroke( 3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     setFont( getFont().deriveFont( 10f));
   }
   
@@ -231,7 +238,7 @@ public class PieChart extends JPanel implements IPlotFeature
       return feature.getColor( point.fcolor);
     }
     
-    return Color.getHSBColor( (float)(point.coords[ 0] / total), 0.9f, 1f);
+    return Color.white;
   }
   
   @SuppressWarnings("unchecked")
@@ -259,6 +266,8 @@ public class PieChart extends JPanel implements IPlotFeature
     g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     
     if ( q1 == null) computeSlices( g2d);
+
+    Stroke oldStroke = g2d.getStroke();
     
     int width = getWidth();
     int height = getHeight();
@@ -283,9 +292,28 @@ public class PieChart extends JPanel implements IPlotFeature
       for( int i=0; i<slices.size(); i++)
       {
         Slice slice = slices.get( i);
-        arc.setArcByCenter( cx, cy, r, -slice.startAngle * 360, -slice.angleExtent * 360 - 1, Arc2D.PIE);
+        
+        arc.setArcByCenter( cx, cy, r, -slice.startAngle * 360, -slice.angleExtent * 360, Arc2D.PIE);
         g2d.setColor( slice.bcolor);
         g2d.fill( arc);
+      }
+      
+      if ( slices.size() > 1)
+      {
+        g2d.setStroke( stroke);
+        for( int i=0; i<slices.size(); i++)
+        {
+          Slice slice = slices.get( i);
+          
+          double th = slice.startAngle * Math.PI * 2;
+          double rx = Math.cos( th) * r;
+          double ry = Math.sin( th) * r;
+          
+          line.setLine( cx, cy, cx + rx, cy + ry);
+          
+          g2d.setColor( slice.fcolor);
+          g2d.draw( line);
+        }
       }
     }
     
@@ -295,6 +323,7 @@ public class PieChart extends JPanel implements IPlotFeature
     //
     // Quadrant 1
     //
+    g2d.setStroke( oldStroke);
     double labelX = r + labelMargin;
     double labelY0 = -3 * labelAdvanceY / 2;
     for( Slice slice: q1)
@@ -423,7 +452,6 @@ public class PieChart extends JPanel implements IPlotFeature
     }
   }
   
-  @SuppressWarnings("unused")
   private final static class Slice
   {
     public GlyphVector label;
@@ -445,6 +473,8 @@ public class PieChart extends JPanel implements IPlotFeature
 
   private Arc2D.Double arc;
   private Path2D.Double path;
+  private Line2D.Double line;
+  private Stroke stroke;
   private List<Slice> q1;
   private List<Slice> q2;
   private List<Slice> q3;
