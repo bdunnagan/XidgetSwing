@@ -59,7 +59,11 @@ public class AsyncFeature implements IAsyncFeature
    */
   public void schedule( Object key, int delay, boolean repeat, Runnable runnable)
   {
-    if ( delay == 0 && !repeat) run( runnable);
+    if ( delay == 0 && !repeat) 
+    {
+      run( runnable);
+      return;
+    }
     
     Timer timer = timers.remove( key);
     if ( timer != null) timer.stop();

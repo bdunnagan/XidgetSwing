@@ -9,6 +9,7 @@ import java.awt.KeyboardFocusManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import javax.swing.JTabbedPane;
 import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IFocusFeature;
@@ -32,8 +33,32 @@ public class SwingFocusFeature implements IFocusFeature
       if ( widgets.length > 0)
       {
         Component component = (Component)(widgets[ widgets.length - 1]);
+        
+        // switch active tab if one is present in ancestry
+        focusTab( component);
+        
+        // request focus
         component.requestFocus();
       }
+    }
+  }
+  
+  /**
+   * Focus the tab containing the specified component, if present.
+   * @param component The component.
+   */
+  private void focusTab( Component component)
+  {
+    Component parent = component.getParent();
+    while( parent != null)
+    {
+      if ( parent instanceof JTabbedPane)
+      {
+        ((JTabbedPane)parent).setSelectedComponent( component);
+        break;
+      }
+      component = parent;
+      parent = parent.getParent();
     }
   }
 

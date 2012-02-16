@@ -43,6 +43,7 @@ import org.xidget.config.TagProcessor;
 import org.xidget.ifeature.IAsyncFeature;
 import org.xidget.ifeature.IColorFeature;
 import org.xidget.ifeature.IFocusFeature;
+import org.xidget.ifeature.IPrintFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.applet.JAppletXidget;
 import org.xidget.swing.button.AbstractButtonXidget;
@@ -56,6 +57,7 @@ import org.xidget.swing.dialog.JDialogXidget;
 import org.xidget.swing.feature.AsyncFeature;
 import org.xidget.swing.feature.SwingColorFeature;
 import org.xidget.swing.feature.SwingFocusFeature;
+import org.xidget.swing.feature.SwingPrintFeature;
 import org.xidget.swing.form.JPanelXidget;
 import org.xidget.swing.frame.JFrameXidget;
 import org.xidget.swing.image.ImageFileAssociation;
@@ -90,6 +92,7 @@ public class Toolkit implements IToolkit
     asyncFeature = new AsyncFeature();
     focusFeature = new SwingFocusFeature();
     colorFeature = new SwingColorFeature();
+    printFeature = new SwingPrintFeature();
     
     // define the dispatcher in the xmodel
     ModelRegistry.getInstance().getModel().setDispatcher( new IDispatcher() {
@@ -110,6 +113,7 @@ public class Toolkit implements IToolkit
     if ( clss == IAsyncFeature.class) return (T)asyncFeature;
     if ( clss == IFocusFeature.class) return (T)focusFeature;
     if ( clss == IColorFeature.class) return (T)colorFeature;
+    if ( clss == IPrintFeature.class) return (T)printFeature;
     return null;
   }
 
@@ -329,4 +333,5 @@ public class Toolkit implements IToolkit
   private IAsyncFeature asyncFeature;
   private IFocusFeature focusFeature;
   private IColorFeature<Color> colorFeature;
+  private IPrintFeature printFeature;
 }
