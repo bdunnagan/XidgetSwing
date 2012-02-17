@@ -200,7 +200,7 @@ public class PieChart extends JPanel implements IPlotFeature
       for( int i=0; i<points.size(); i++)
       {
         Point point = points.get( i);
-        if ( point.coords[ 0] == 0 || Double.isNaN( point.coords[ 0]) || Double.isInfinite( point.coords[ 0])) continue;
+        if ( point.coords[ 0] <= 0 || Double.isNaN( point.coords[ 0]) || Double.isInfinite( point.coords[ 0])) continue;
         
         Slice slice = new Slice();
         if ( point.label != null) slice.label = font.createGlyphVector( fontRenderContext, point.label);
