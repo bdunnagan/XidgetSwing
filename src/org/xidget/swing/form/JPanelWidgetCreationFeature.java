@@ -44,7 +44,7 @@ import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
 
 /**
- * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
+ * An implementation of IWidgetCreationFeature which creates a Swing JPanel.
  */
 public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
 {

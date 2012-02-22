@@ -21,12 +21,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.JPanel;
+
 import org.xidget.Creator;
+import org.xidget.chart.IScale;
+import org.xidget.chart.IScale.Tick;
 import org.xidget.chart.Plot;
 import org.xidget.chart.Point;
-import org.xidget.chart.Scale;
-import org.xidget.chart.Scale.Tick;
 import org.xidget.ifeature.IColorFeature;
 import org.xidget.ifeature.chart.IPlotFeature;
 import org.xidget.swing.Toolkit;
@@ -247,7 +249,7 @@ public class LineChart extends JPanel implements IPlotFeature
     g2d.setColor( getForeground());
     
     // draw vertical grid-lines
-    Scale xscale = xAxis.getScale();
+    IScale xscale = xAxis.getScale();
     if ( xscale == null) return;
     
     for( Tick tick: xscale.getTicks())
@@ -257,7 +259,7 @@ public class LineChart extends JPanel implements IPlotFeature
     }
     
     // draw horizontal grid-lines
-    Scale yscale = yAxis.getScale();
+    IScale yscale = yAxis.getScale();
     if ( yscale == null) return;
     
     for( Tick tick: yscale.getTicks())
@@ -321,8 +323,8 @@ public class LineChart extends JPanel implements IPlotFeature
     
     if ( xAxis == null || yAxis == null) return;
     
-    Scale xscale = xAxis.getScale();
-    Scale yscale = yAxis.getScale();
+    IScale xscale = xAxis.getScale();
+    IScale yscale = yAxis.getScale();
     if ( xscale == null || yscale == null) return;
     
     if ( pointBoxText == null)
@@ -389,8 +391,8 @@ public class LineChart extends JPanel implements IPlotFeature
     {
       if ( xAxis == null || yAxis == null) return;
       
-      Scale xscale = xAxis.getScale();
-      Scale yscale = yAxis.getScale();
+      IScale xscale = xAxis.getScale();
+      IScale yscale = yAxis.getScale();
       if ( xscale == null || yscale == null) return;
       
       int x0 = event.getX();

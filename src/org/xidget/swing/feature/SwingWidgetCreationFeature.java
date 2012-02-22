@@ -52,19 +52,25 @@ public abstract class SwingWidgetCreationFeature extends ComponentAdapter implem
   {
     // create widget(s)
     createSwingWidget();
-    
+
     // attach to parent
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
     if ( containerFeature != null) containerFeature.addWidget( xidget);  
     
-    // add single click listener
-    IScriptFeature scriptFeature = xidget.getFeature( IScriptFeature.class);
-    if ( scriptFeature != null && (scriptFeature.hasScript( "onClick") || scriptFeature.hasScript( "onDoubleClick")))
+    // setup the widget
+    Object[] widgets = getLastWidgets();
+    if ( widgets.length > 0)
     {
-      Object[] widgets = getLastWidgets();
-      if ( widgets.length > 0)
+      JComponent component = (JComponent)widgets[ widgets.length - 1];
+    
+      // use nimbus small components
+//      component.putClientProperty("JComponent.sizeVariant", "small");
+//      component.updateUI();
+      
+      // add single click listener
+      IScriptFeature scriptFeature = xidget.getFeature( IScriptFeature.class);
+      if ( scriptFeature != null && (scriptFeature.hasScript( "onClick") || scriptFeature.hasScript( "onDoubleClick")))
       {
-        JComponent component = (JComponent)widgets[ widgets.length - 1];
         component.addMouseListener( mouseListener);
       }
     }
