@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import org.xidget.IXidget;
+import org.xidget.chart.IScale;
 import org.xidget.chart.Plot;
 import org.xidget.chart.Point;
-import org.xidget.chart.Scale;
 import org.xidget.ifeature.chart.IPlotFeature;
 
 /**
@@ -223,7 +223,7 @@ public abstract class Axis extends JPanel implements IPlotFeature
   /**
    * @return Returns the scale used by this widget.
    */
-  public abstract Scale getScale();
+  public abstract IScale getScale();
   
   /**
    * Create the tick label fonts.
@@ -253,7 +253,7 @@ public abstract class Axis extends JPanel implements IPlotFeature
   
   protected IXidget xidget;
   protected List<Plot> plots;
-  protected Scale scale;
+  protected IScale scale;
   protected double min;
   protected double max;
   protected Font[] fonts;

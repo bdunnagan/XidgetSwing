@@ -10,9 +10,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.List;
+
 import org.xidget.IXidget;
-import org.xidget.chart.Scale;
-import org.xidget.chart.Scale.Tick;
+import org.xidget.chart.IScale;
+import org.xidget.chart.IScale.Tick;
+import org.xidget.chart.NumericScale;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.chart.IAxisFeature;
 import org.xmodel.xpath.expression.IContext;
@@ -34,7 +36,7 @@ public class YAxis extends Axis
   /* (non-Javadoc)
    * @see org.xidget.swing.graph.Axis#getScale()
    */
-  public Scale getScale()
+  public IScale getScale()
   {
     IContext context = null;
     
@@ -49,7 +51,7 @@ public class YAxis extends Axis
     int height = getHeight();
     if ( scale == null && min != max && height > axisFeature.tickSpacing) 
     {
-      scale = new Scale( min, max, height / axisFeature.tickSpacing, axisFeature.log, context, axisFeature.labelExpr);
+      scale = new NumericScale( min, max, height / axisFeature.tickSpacing, axisFeature.log, context, axisFeature.labelExpr);
     }
     return scale;
   }
@@ -62,7 +64,7 @@ public class YAxis extends Axis
   {
     super.paintComponent( g);
     
-    Scale scale = getScale();
+    IScale scale = getScale();
     if ( scale == null) return;
     
     Graphics2D g2d = (Graphics2D)g;

@@ -62,8 +62,11 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     jtabbedPane = new JTabbedPane();
     jtabbedPane.addChangeListener( selectionListener);
     jtabbedPane.addComponentListener( componentListener);
-
     jtabbedPane.setTabPlacement( getTabPlacement( xidget));
+    
+    // use nimbus small components
+//    jtabbedPane.putClientProperty("JComponent.sizeVariant", "small");
+//    jtabbedPane.updateUI();
     
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();
