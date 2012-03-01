@@ -20,7 +20,7 @@
 package org.xidget.swing.applet;
 
 import javax.swing.JApplet;
-
+import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
 
 /**
@@ -28,7 +28,7 @@ import org.xidget.ifeature.IWidgetCreationFeature;
  */
 public class JAppletWidgetCreationFeature implements IWidgetCreationFeature
 {
-  public JAppletWidgetCreationFeature( JApplet applet)
+  public JAppletWidgetCreationFeature( IXidget xidget, JApplet applet)
   {
     this.applet = applet;
   }

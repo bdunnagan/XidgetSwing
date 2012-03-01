@@ -46,7 +46,7 @@ public class JAppletXidget extends Xidget
 {
   public JAppletXidget( JApplet applet)
   {
-    creationFeature = new JAppletWidgetCreationFeature( applet);
+    creationFeature = new JAppletWidgetCreationFeature( this, applet);
     try { startConfig( null, null, -1, new ModelObject( "dummy"));} catch( Exception e) {}
   }
   

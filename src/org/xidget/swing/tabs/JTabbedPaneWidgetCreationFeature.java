@@ -63,7 +63,7 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     jtabbedPane.addChangeListener( selectionListener);
     jtabbedPane.addComponentListener( componentListener);
     jtabbedPane.setTabPlacement( getTabPlacement());    
-
+    
     // use nimbus small components
 //    jtabbedPane.putClientProperty("JComponent.sizeVariant", "small");
 //    jtabbedPane.updateUI();
