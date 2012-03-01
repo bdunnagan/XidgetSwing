@@ -63,6 +63,8 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     jtabbedPane.addChangeListener( selectionListener);
     jtabbedPane.addComponentListener( componentListener);
 
+    jtabbedPane.setTabPlacement( getTabPlacement( xidget));
+    
     // create titled border if necessary (but not for tab entries)
     IXidget parent = xidget.getParent();
     String title = getTitle();
@@ -77,6 +79,21 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     if ( containerFeature != null) containerFeature.addWidget( xidget);
   }
 
+  /**
+   * Convert tab placement string into JTabbedPane constant.
+   * @param xidget The xidget.
+   * @return Returns the JTabbedPane constant.
+   */
+  private static int getTabPlacement( IXidget xidget)
+  {
+    String placement = Xlate.get( xidget.getConfig(), "placement", "top");
+    if ( placement.equals( "top")) return JTabbedPane.TOP;
+    if ( placement.equals( "bottom")) return JTabbedPane.BOTTOM;
+    if ( placement.equals( "left")) return JTabbedPane.LEFT;
+    if ( placement.equals( "right")) return JTabbedPane.RIGHT;
+    return JTabbedPane.TOP;
+  }
+  
   /**
    * Returns the title of the form.
    * @return Returns null or the title of the form.
