@@ -22,6 +22,7 @@ package org.xidget.swing.feature;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -284,7 +285,7 @@ public class SwingWidgetFeature implements IWidgetFeature
   public void setBackground( Object color)
   {
     Toolkit toolkit = (Toolkit)Creator.getToolkit();
-    IColorFeature<Color> colorFeature = toolkit.getFeature( IColorFeature.class);
+    IColorFeature<Color, Graphics2D> colorFeature = toolkit.getFeature( IColorFeature.class);
     JComponent widget = getPrimaryWidget( xidget);
     widget.setOpaque( true);
     widget.setBackground( colorFeature.getColor( color));
@@ -297,7 +298,7 @@ public class SwingWidgetFeature implements IWidgetFeature
   public void setForeground( Object color)
   {
     Toolkit toolkit = (Toolkit)Creator.getToolkit();
-    IColorFeature<Color> colorFeature = toolkit.getFeature( IColorFeature.class);
+    IColorFeature<Color, Graphics2D> colorFeature = toolkit.getFeature( IColorFeature.class);
     JComponent widget = getPrimaryWidget( xidget);
     widget.setForeground( colorFeature.getColor( color));
   }

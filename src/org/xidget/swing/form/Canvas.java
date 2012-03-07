@@ -19,13 +19,15 @@
  */
 package org.xidget.swing.form;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
-
 import javax.swing.JPanel;
-
+import org.xidget.Creator;
 import org.xidget.IXidget;
+import org.xidget.ifeature.IColorFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.canvas.IPaintFeature;
 
@@ -58,6 +60,15 @@ public class Canvas extends JPanel
     super.doLayout();
   }
 
+  /**
+   * Set the background color or gradient to the specified xidget color specification.
+   * @param color A xidget color/gradient specification.
+   */
+  public void setBackground( Object bcolor)
+  {
+    this.bcolor = bcolor;
+  }
+  
   /* (non-Javadoc)
    * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
    */
@@ -65,11 +76,22 @@ public class Canvas extends JPanel
   @Override
   protected void paintComponent( Graphics graphics)
   {
-    super.paintComponent( graphics);
+    if ( bcolor == null)
+    {
+      super.paintComponent( graphics);
+    }
+    else if ( isOpaque())
+    {
+      Graphics2D g2d = (Graphics2D)graphics.create();
+      IColorFeature<Color, Graphics2D> colorFeature = Creator.getToolkit().getFeature( IColorFeature.class);
+      colorFeature.applyColor( bcolor, g2d, getWidth(), getHeight());
+      g2d.fillRect( 0, 0, getWidth(), getHeight());
+    }
     
     IPaintFeature<Graphics> paintFeature = xidget.getFeature( IPaintFeature.class);
     if ( paintFeature != null) paintFeature.paint( graphics);
   }
   
   private IXidget xidget;
+  private Object bcolor;
 }

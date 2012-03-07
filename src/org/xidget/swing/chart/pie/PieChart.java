@@ -19,10 +19,9 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
-
 import org.xidget.Creator;
+import org.xidget.IXidget;
 import org.xidget.chart.Plot;
 import org.xidget.chart.Point;
 import org.xidget.ifeature.IColorFeature;
@@ -35,8 +34,9 @@ import org.xidget.swing.Toolkit;
 @SuppressWarnings("serial")
 public class PieChart extends JPanel implements IPlotFeature
 {
-  public PieChart()
+  public PieChart( IXidget xidget)
   {
+    this.xidget = xidget;
     plots = new ArrayList<Plot>();
     arc = new Arc2D.Double();
     path = new Path2D.Double();
@@ -234,7 +234,7 @@ public class PieChart extends JPanel implements IPlotFeature
     if ( point.fcolor != null)
     {
       Toolkit toolkit = (Toolkit)Creator.getToolkit();
-      IColorFeature<Color> feature = toolkit.getFeature( IColorFeature.class);
+      IColorFeature<Color, Graphics2D> feature = toolkit.getFeature( IColorFeature.class);
       return feature.getColor( point.fcolor);
     }
     
@@ -247,7 +247,7 @@ public class PieChart extends JPanel implements IPlotFeature
     if ( point.bcolor != null)
     {
       Toolkit toolkit = (Toolkit)Creator.getToolkit();
-      IColorFeature<Color> feature = toolkit.getFeature( IColorFeature.class);
+      IColorFeature<Color, Graphics2D> feature = toolkit.getFeature( IColorFeature.class);
       return feature.getColor( point.bcolor);
     }
     
@@ -468,7 +468,9 @@ public class PieChart extends JPanel implements IPlotFeature
   private final static int labelGapX = 5;
   private final static int labelGapY = 3;
   private final static int tickLength = 3;
-  
+
+  @SuppressWarnings("unused")
+  private IXidget xidget;
   private List<Plot> plots;
 
   private Arc2D.Double arc;

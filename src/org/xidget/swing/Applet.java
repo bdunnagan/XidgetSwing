@@ -139,7 +139,7 @@ public class Applet extends JApplet
       
       // Context
       StatefulContext context = new StatefulContext( root);
-      context.set( "applet", appletXidget.getConfig());
+      context.set( "window", appletXidget.getConfig());
 
       // Document
       XActionDocument document = new XActionDocument( Applet.class.getClassLoader());

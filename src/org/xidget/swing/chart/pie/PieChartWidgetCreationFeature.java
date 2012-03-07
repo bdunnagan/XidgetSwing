@@ -40,7 +40,7 @@ public class PieChartWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget()
   {
-    pie = new PieChart();
+    pie = new PieChart( xidget);
     return pie;
   }
 

@@ -21,6 +21,7 @@ package org.xidget.swing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.util.Arrays;
@@ -73,6 +74,7 @@ import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.tabs.JTabbedPaneXidget;
 import org.xidget.swing.text.JTextXidget;
 import org.xidget.swing.tree.JTreeXidget;
+import org.xidget.swing.util.BuildLabelHtml;
 import org.xidget.swing.xmleditor.XmlTextPaneXidget;
 import org.xmodel.IDispatcher;
 import org.xmodel.IModelObject;
@@ -183,6 +185,8 @@ public class Toolkit implements IToolkit
     Object[] widgets = creationFeature.getLastWidgets();
     if ( widgets.length == 0) throw new IllegalArgumentException( "Window does not have a widget: "+xidget);
     
+    message = BuildLabelHtml.buildHtml( message);
+    
     int choice = JOptionPane.showConfirmDialog( (Component)widgets[ 0], message, title, allowCancel? JOptionPane.YES_NO_CANCEL_OPTION: JOptionPane.YES_NO_OPTION);
     
     switch( choice)
@@ -214,6 +218,8 @@ public class Toolkit implements IToolkit
       case warning: swingMessageType = JOptionPane.WARNING_MESSAGE; break;
       case information: swingMessageType = JOptionPane.INFORMATION_MESSAGE; break;
     }
+    
+    message = BuildLabelHtml.buildHtml( message);
     
     if ( image == null) JOptionPane.showMessageDialog( (Component)widgets[ 0], message, title, swingMessageType);
     else JOptionPane.showMessageDialog( (Component)widgets[ 0], message, title, swingMessageType, (ImageIcon)image);
@@ -332,6 +338,6 @@ public class Toolkit implements IToolkit
   
   private IAsyncFeature asyncFeature;
   private IFocusFeature focusFeature;
-  private IColorFeature<Color> colorFeature;
+  private IColorFeature<Color, Graphics2D> colorFeature;
   private IPrintFeature printFeature;
 }

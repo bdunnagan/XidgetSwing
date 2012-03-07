@@ -8,6 +8,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.MouseAdapter;
@@ -21,9 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.JPanel;
-
 import org.xidget.Creator;
 import org.xidget.chart.IScale;
 import org.xidget.chart.IScale.Tick;
@@ -238,7 +237,7 @@ public class LineChart extends JPanel implements IPlotFeature
     int height = getHeight() - 1;
     
     Toolkit toolkit = (Toolkit)Creator.getToolkit();
-    IColorFeature<Color> colorFeature = toolkit.getFeature( IColorFeature.class);
+    IColorFeature<Color, Graphics2D> colorFeature = toolkit.getFeature( IColorFeature.class);
     
     // draw gradient background
 //    GradientPaint paint = new GradientPaint( 0, 0, Color.white, 0, height, Color.lightGray);
@@ -300,12 +299,12 @@ public class LineChart extends JPanel implements IPlotFeature
       plotArea.lineTo( x, height);
       plotArea.closePath();
       
-      g2d.setColor( colorFeature.getColor( plot.getBackground()));
+      colorFeature.applyColor( plot.getBackground(), g2d, width, height);
       g2d.fill( plotArea);
 
       Stroke stroke = strokes.get( plot);
       if ( stroke != null) g2d.setStroke( stroke);
-      g2d.setColor( colorFeature.getColor( plot.getForeground()));
+      colorFeature.applyColor( plot.getForeground(), g2d, width, height);
       g2d.draw( plotLine);
     }
     
@@ -363,21 +362,19 @@ public class LineChart extends JPanel implements IPlotFeature
     y += pointBoxInset - bounds.getY();
 
     Toolkit toolkit = (Toolkit)Creator.getToolkit();
-    IColorFeature<Color> colorFeature = toolkit.getFeature( IColorFeature.class);
+    IColorFeature<Color, Graphics2D> colorFeature = toolkit.getFeature( IColorFeature.class);
     
-    Color fillColor = pointBoxFillColor;
-    Color drawColor = pointBoxDrawColor;
     
-    //if ( selectedPlot.getBackground() != null) fillColor = colorFeature.getColor( selectedPlot.getBackground());
-    //if ( selectedPlot.getForeground() != null) drawColor = colorFeature.getColor( selectedPlot.getForeground());
-      
-    if ( selectedPoint.bcolor != null) fillColor = colorFeature.getColor( selectedPoint.bcolor);
-    if ( selectedPoint.fcolor != null) drawColor = colorFeature.getColor( selectedPoint.fcolor);
-      
-    g2d.setColor( fillColor);
+    Rectangle pointBoxBounds = pointBox.getBounds();
+    int pbw = (int)pointBoxBounds.getWidth();
+    int pbh = (int)pointBoxBounds.getHeight();
+    
+    g2d.setColor( pointBoxFillColor);
+    colorFeature.applyColor( selectedPoint.bcolor, g2d, pbw, pbh);
     g2d.fill( pointBox);
     
-    g2d.setColor( drawColor);
+    g2d.setColor( pointBoxDrawColor);
+    colorFeature.applyColor( selectedPoint.fcolor, g2d, pbw, pbh);
     g2d.setStroke( pointBoxStroke);
     g2d.draw( pointBox);
     

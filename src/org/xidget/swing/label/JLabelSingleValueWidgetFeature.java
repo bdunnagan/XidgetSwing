@@ -23,6 +23,7 @@ import javax.swing.JLabel;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
+import org.xidget.swing.util.BuildLabelHtml;
 
 public class JLabelSingleValueWidgetFeature implements ISingleValueWidgetFeature
 {
@@ -38,6 +39,13 @@ public class JLabelSingleValueWidgetFeature implements ISingleValueWidgetFeature
   public void setValue( Object value)
   {
     String text = (value != null)? value.toString(): "";
+    
+    // save original text
+    this.text = text;
+    
+    // convert new-lines as necessary
+    text = BuildLabelHtml.buildHtml( text);
+    
     JLabel widget = xidget.getFeature( JLabel.class);
     if ( !widget.getText().equals( text)) widget.setText( text);
   }
@@ -48,9 +56,9 @@ public class JLabelSingleValueWidgetFeature implements ISingleValueWidgetFeature
   @Override
   public Object getValue()
   {
-    JLabel widget = xidget.getFeature( JLabel.class);
-    return widget.getText();
+    return text;
   }
   
   private IXidget xidget;
+  private String text;
 }
