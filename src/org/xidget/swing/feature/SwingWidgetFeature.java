@@ -39,6 +39,7 @@ import org.xidget.swing.Toolkit;
 import org.xidget.swing.layout.WidgetBoundsListener;
 import org.xmodel.IModelObject;
 import org.xmodel.log.Log;
+import org.xmodel.log.SLog;
 
 /**
  * An adapter for Swing/AWT widgets.
@@ -102,6 +103,9 @@ public class SwingWidgetFeature implements IWidgetFeature
     {
       setDefaultBounds( x, y, width, height, false);
     }
+    
+    if ( computedBounds.width < 1 || computedBounds.height < 1)
+      SLog.warnf( this, "widget (%s) has zero dimension (%s)", xidget, computedBounds);
     
     Component widget = xidget.getFeature( Component.class);
     widget.setBounds( 

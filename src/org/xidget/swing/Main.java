@@ -30,11 +30,13 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import org.xidget.Creator;
 import org.xidget.caching.FileSystemCachingPolicy;
 import org.xidget.caching.ZipCachingPolicy;
+import org.xidget.swing.util.BuildLabelHtml;
 import org.xmodel.IModelObject;
 import org.xmodel.external.ExternalReference;
 import org.xmodel.external.ICachingPolicy;
 import org.xmodel.external.IExternalReference;
 import org.xmodel.log.Log;
+import org.xmodel.log.SLog;
 import org.xmodel.xaction.ScriptAction;
 import org.xmodel.xaction.XActionDocument;
 import org.xmodel.xpath.XPath;
@@ -53,9 +55,8 @@ public class Main
     Thread.setDefaultUncaughtExceptionHandler( new UncaughtExceptionHandler() {
       public void uncaughtException( Thread t, Throwable e)
       {
-        e.printStackTrace( System.err);
-        JOptionPane.showMessageDialog( null, String.format( "Thread: %s\n%s: %s",
-          t.getName(), e.getClass().getName(), e.getMessage()));
+        SLog.exception( this, e);
+        JOptionPane.showMessageDialog( null, BuildLabelHtml.buildHtml( "Error servicing request.\nPlease contact technical support."));
       }
     });
 

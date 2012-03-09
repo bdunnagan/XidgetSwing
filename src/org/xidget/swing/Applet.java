@@ -3,8 +3,10 @@ package org.xidget.swing;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.URL;
 import javax.swing.JApplet;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -13,11 +15,13 @@ import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.swing.applet.JAppletXidget;
 import org.xidget.swing.feature.SwingWidgetFeature;
+import org.xidget.swing.util.BuildLabelHtml;
 import org.xmodel.IModelObject;
 import org.xmodel.caching.URLCachingPolicy;
 import org.xmodel.external.ExternalReference;
 import org.xmodel.external.UnboundedCache;
 import org.xmodel.log.Log;
+import org.xmodel.log.SLog;
 import org.xmodel.xaction.ScriptAction;
 import org.xmodel.xaction.XActionDocument;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -89,6 +93,15 @@ public class Applet extends JApplet
    */
   private void createContent()
   {
+    // Handle uncaught exceptions
+    Thread.setDefaultUncaughtExceptionHandler( new UncaughtExceptionHandler() {
+      public void uncaughtException( Thread t, Throwable e)
+      {
+        SLog.exception( this, e);
+        JOptionPane.showMessageDialog( null, BuildLabelHtml.buildHtml( "Error servicing request.\nPlease contact technical support."));
+      }
+    });
+    
     setBackground( Color.white);
     getContentPane().setBackground( Color.white);
 
