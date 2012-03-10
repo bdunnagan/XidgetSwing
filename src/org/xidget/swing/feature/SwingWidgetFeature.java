@@ -105,7 +105,7 @@ public class SwingWidgetFeature implements IWidgetFeature
     }
     
     if ( computedBounds.width < 1 || computedBounds.height < 1)
-      SLog.warnf( this, "widget (%s) has zero dimension (%s)", xidget, computedBounds);
+      SLog.debugf( this, "widget (%s) has zero dimension (%s)", xidget, computedBounds);
     
     Component widget = xidget.getFeature( Component.class);
     widget.setBounds( 
