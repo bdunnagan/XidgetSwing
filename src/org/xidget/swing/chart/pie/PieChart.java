@@ -41,7 +41,7 @@ public class PieChart extends JPanel implements IPlotFeature
     arc = new Arc2D.Double();
     path = new Path2D.Double();
     line = new Line2D.Double();
-    stroke = new BasicStroke( 3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+    stroke = new BasicStroke( 1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     setFont( getFont().deriveFont( 10f));
   }
   

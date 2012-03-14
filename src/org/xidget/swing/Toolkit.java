@@ -242,9 +242,10 @@ public class Toolkit implements IToolkit
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.IToolkit#openFileDialog(org.xmodel.xpath.expression.StatefulContext, org.xmodel.xpath.expression.IExpression, java.lang.String, org.xidget.IToolkit.FileDialogType)
+   * @see org.xidget.IToolkit#openFileDialog(org.xmodel.xpath.expression.StatefulContext, org.xmodel.xpath.expression.IExpression, 
+   * org.xmodel.xpath.expression.IExpression, java.lang.String, java.lang.String, org.xidget.IToolkit.FileDialogType)
    */
-  public String[] openFileDialog( StatefulContext context, IExpression dir, IExpression filter, String desc, FileDialogType type)
+  public String[] openFileDialog( StatefulContext context, IExpression dir, IExpression filter, String dfault, String desc, FileDialogType type)
   {
     IFocusFeature focusFeature = Creator.getToolkit().getFeature( IFocusFeature.class);
     IXidget xidget = getWindow( focusFeature.getFocus());
@@ -252,7 +253,6 @@ public class Toolkit implements IToolkit
     String folder = (dir != null)? dir.evaluateString( context): ".";
     
     JFileChooser fileChooser = new JFileChooser( folder);
-    fileChooser.setMultiSelectionEnabled( type == FileDialogType.openMany);
     
     // programmatically select details view
     Stack<JComponent> stack = new Stack<JComponent>();
@@ -272,6 +272,8 @@ public class Toolkit implements IToolkit
           stack.push( (JComponent)child);
     }
     
+    fileChooser.setMultiSelectionEnabled( type == FileDialogType.openMany);
+    
     // allow selecting directories unless the dialog is intended for picking a non-existing file 
     if ( type != FileDialogType.save) 
       fileChooser.setFileSelectionMode( JFileChooser.FILES_AND_DIRECTORIES);
@@ -282,11 +284,13 @@ public class Toolkit implements IToolkit
       fileChooser.setFileFilter( fileFilter);
     }
     
+    if ( dfault != null) fileChooser.setSelectedFile( new File( dfault));
+
     IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
     if ( creationFeature == null) return new String[ 0];
     
     Object[] widgets = creationFeature.getLastWidgets();
-    if ( widgets.length == 0) return new String[ 0];
+    if ( widgets.length == 0) return new String[ 0];    
     
     int status = (type == FileDialogType.save)?
       fileChooser.showSaveDialog( (Component)widgets[ 0]):
@@ -344,7 +348,8 @@ public class Toolkit implements IToolkit
     public boolean accept( File pathname)
     {
       parent.set( "value", pathname.getPath());
-      return filter.evaluateBoolean( parent);
+      boolean result = filter.evaluateBoolean( parent);
+      return result;
     }
     
     private StatefulContext parent;
