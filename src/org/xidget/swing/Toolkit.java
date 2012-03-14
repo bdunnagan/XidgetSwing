@@ -171,13 +171,29 @@ public class Toolkit implements IToolkit
     return new ImageFileAssociation();
   }
 
+  /**
+   * Returns the root xidget.
+   * @param xidget A xidget.
+   * @return Returns the root xidget.
+   */
+  private static IXidget getWindow( IXidget xidget)
+  {
+    IXidget parent = xidget.getParent();
+    while( parent != null)
+    {
+      xidget = parent;
+      parent = parent.getParent();
+    }
+    return xidget;
+  }
+  
   /* (non-Javadoc)
    * @see org.xidget.IToolkit#openConfirmDialog(org.xmodel.xpath.expression.StatefulContext, java.lang.String, java.lang.Object, java.lang.String, boolean)
    */
   public Confirmation openConfirmDialog(StatefulContext context, String title, Object image, String message, boolean allowCancel)
   {
     IFocusFeature focusFeature = Creator.getToolkit().getFeature( IFocusFeature.class);
-    IXidget xidget = focusFeature.getFocus();
+    IXidget xidget = getWindow( focusFeature.getFocus());
     
     IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
     if ( creationFeature == null) throw new IllegalArgumentException( "Window xidget does not have an IWidgetCreationFeature instance: "+xidget);
@@ -203,7 +219,7 @@ public class Toolkit implements IToolkit
   public void openMessageDialog( StatefulContext context, String title, Object image, String message, MessageType type)
   {
     IFocusFeature focusFeature = Creator.getToolkit().getFeature( IFocusFeature.class);
-    IXidget xidget = focusFeature.getFocus();
+    IXidget xidget = getWindow( focusFeature.getFocus());
     
     IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
     if ( creationFeature == null) throw new IllegalArgumentException( "Window xidget does not have an IWidgetCreationFeature instance: "+xidget);
@@ -231,7 +247,7 @@ public class Toolkit implements IToolkit
   public String[] openFileDialog( StatefulContext context, IExpression dir, IExpression filter, String desc, FileDialogType type)
   {
     IFocusFeature focusFeature = Creator.getToolkit().getFeature( IFocusFeature.class);
-    IXidget xidget = focusFeature.getFocus();
+    IXidget xidget = getWindow( focusFeature.getFocus());
     
     String folder = (dir != null)? dir.evaluateString( context): ".";
     

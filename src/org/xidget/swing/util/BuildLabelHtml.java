@@ -21,6 +21,8 @@ public class BuildLabelHtml
     if ( !text.contains( "\n")) return text;
 
     text = text.replace( "\n", "<br/>");
+    text = text.replace( " ", "&nbsp;");
+    text = text.replace( "\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
     
     StringBuilder html = new StringBuilder();
     html.append( "<html>");
