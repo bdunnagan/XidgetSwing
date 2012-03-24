@@ -64,17 +64,18 @@ public class CustomComboModel extends DefaultComboBoxModel
     @Override
     public boolean equals( Object object)
     {
-      if ( object == null) return false;
-      
       if ( object instanceof Item)
       {
         Item item = (Item)object;
-        return item.getValue().equals( getValue());
+        Object itemValue = item.getValue();
+        Object thisValue = getValue();
+        if ( thisValue == null || itemValue == null) return thisValue == itemValue;
+        return itemValue.equals( thisValue);
       }
       
       Object value = getValue();
+      if ( (value == null || "".equals( value)) && (object == null || "".equals( object))) return true;
       if ( value != null && object != null) return value.equals( object);
-      
       return value == object;
     }
 
