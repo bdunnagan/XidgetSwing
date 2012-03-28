@@ -19,29 +19,16 @@
  */
 package org.xidget.swing;
 
-import java.awt.Color;
 import java.io.File;
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.Collections;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
-import org.xidget.Creator;
-import org.xidget.caching.FileSystemCachingPolicy;
 import org.xidget.caching.ZipCachingPolicy;
-import org.xidget.swing.util.BuildLabelHtml;
-import org.xmodel.IModelObject;
+import org.xidget.swing.image.ImageFileAssociation;
+import org.xmodel.caching.FileSystemCachingPolicy;
 import org.xmodel.external.ExternalReference;
 import org.xmodel.external.ICachingPolicy;
 import org.xmodel.external.IExternalReference;
 import org.xmodel.log.Log;
-import org.xmodel.log.SLog;
-import org.xmodel.xaction.ScriptAction;
-import org.xmodel.xaction.XActionDocument;
 import org.xmodel.xpath.XPath;
-import org.xmodel.xpath.expression.Context;
-import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -51,15 +38,6 @@ public class Main
 {
   public static void main( final String[] args)
   {  
-    // Handle uncaught exceptions
-    Thread.setDefaultUncaughtExceptionHandler( new UncaughtExceptionHandler() {
-      public void uncaughtException( Thread t, Throwable e)
-      {
-        SLog.exception( this, e);
-        JOptionPane.showMessageDialog( null, BuildLabelHtml.buildHtml( "Error servicing request.\nPlease contact technical support."));
-      }
-    });
-
     try
     {
       SwingUtilities.invokeLater( new Runnable() {
@@ -79,66 +57,35 @@ public class Main
   {    
     final String path = (args.length > 0)? args[ 0]: "xapp/main.xml";
     
-    try
-    {
-//      UIManager.put( "nimbusBase", new Color( Color.HSBtoRGB( 1f, 0.43f, 0.63f)));
-//      UIManager.put( "nimbusBlueGrey", new Color( Color.HSBtoRGB( 0.7f, 0.1f, 0.5f)));
-      UIManager.put( "control", new Color( Color.HSBtoRGB( 0f, 0f, 1f)));
-      UIManager.put( "Table.alternateRowColor", Color.WHITE);
-      UIManager.put( "nimbusOrange", new Color( Color.HSBtoRGB( 198 / 360f, 0.9f, 0.83f)));
-      
-      for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
-      {
-        log.info( info.getName());
-        if ( "Nimbus".equals( info.getName()))
-        {
-          UIManager.setLookAndFeel( info.getClassName());
-          break;
-        }
-      }
-    } catch ( Exception e)
-    {
-    }
-    
-    System.out.println( UIManager.get( "nimbusBase"));
-    System.out.println( UIManager.get( "nimbusBlueGrey"));
-    System.out.println( UIManager.get( "control"));
-    
-    // Register toolkit
-    Creator.setToolkitClass( Toolkit.class);
-
-    // Create caching policy depending on whether we are running in a jar
+    //
+    // Create caching policy depending on whether we are running in a jar.
+    //
     ICachingPolicy cachingPolicy = null;
     String classpath = System.getProperty( "java.class.path");
-    boolean runningFromJar = classpath.indexOf( File.pathSeparator) < 0 && classpath.endsWith( ".jar");
-    cachingPolicy = (runningFromJar)? new ZipCachingPolicy(): new FileSystemCachingPolicy();
+    String resourcePath;
+    if ( classpath.indexOf( File.pathSeparator) < 0 && classpath.endsWith( ".jar"))
+    {
+      cachingPolicy = new ZipCachingPolicy();
+      resourcePath = System.getProperty( "java.class.path");
+    }
+    else
+    {
+      FileSystemCachingPolicy fileSystemCachingPolicy = new FileSystemCachingPolicy();
+      fileSystemCachingPolicy.addAssociation( new ImageFileAssociation());
+      cachingPolicy = fileSystemCachingPolicy;
+      resourcePath = ".";
+    }
     
     try
     {
-      String resourcePath = runningFromJar? System.getProperty( "java.class.path"): ".";
-      
       IExternalReference resources = new ExternalReference( "resources");
       resources.setCachingPolicy( cachingPolicy);
       resources.setAttribute( "path", resourcePath);
       resources.setDirty( true);
       
       // Run configuration
-      IExpression xpath = XPath.createExpression( path);
-      IModelObject main = xpath.queryFirst( new Context( resources));
-      if ( main == null) throw new IllegalArgumentException( "Unable to locate startup script: "+path);
-
-      // Document
-      XActionDocument document = new XActionDocument( Main.class.getClassLoader());
-      document.setRoot( main);
-      document.addPackage( "org.xidget.xaction");
-      
-      // Context
-      StatefulContext context = new StatefulContext( resources);
-      context.set( "applet", Collections.<IModelObject>emptyList());
-      
-      // Script
-      ScriptAction script = document.createScript();
-      script.run( context);
+      Startup startup = new Startup( new StatefulContext( resources));
+      startup.start( XPath.createExpression( path));
     }
     catch( Exception e)
     {

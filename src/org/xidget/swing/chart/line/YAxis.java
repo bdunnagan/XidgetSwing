@@ -9,6 +9,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.util.List;
 
 import org.xidget.IXidget;
@@ -71,7 +72,12 @@ public class YAxis extends Axis
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
     int width = getWidth();
-    int height = getHeight() - 1;
+    int height = getHeight() - 1 - LineChart.padHeight;
+    
+    AffineTransform shift = AffineTransform.getTranslateInstance( 0, LineChart.padHeight / 2f);
+    AffineTransform transform = g2d.getTransform();
+    if ( transform != null) transform.concatenate( shift); else transform = shift;
+    g2d.setTransform( transform);
     
     // get label fonts
     Font[] fonts = getLabelFonts( g2d);

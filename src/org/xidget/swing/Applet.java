@@ -3,27 +3,19 @@ package org.xidget.swing;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.URL;
 import javax.swing.JApplet;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.swing.applet.JAppletXidget;
 import org.xidget.swing.feature.SwingWidgetFeature;
-import org.xidget.swing.util.BuildLabelHtml;
-import org.xmodel.IModelObject;
 import org.xmodel.caching.URLCachingPolicy;
 import org.xmodel.external.ExternalReference;
 import org.xmodel.external.UnboundedCache;
 import org.xmodel.log.Log;
-import org.xmodel.log.SLog;
-import org.xmodel.xaction.ScriptAction;
-import org.xmodel.xaction.XActionDocument;
+import org.xmodel.xpath.XPath;
 import org.xmodel.xpath.expression.StatefulContext;
 
 public class Applet extends JApplet
@@ -93,40 +85,12 @@ public class Applet extends JApplet
    */
   private void createContent()
   {
-    // Handle uncaught exceptions
-    Thread.setDefaultUncaughtExceptionHandler( new UncaughtExceptionHandler() {
-      public void uncaughtException( Thread t, Throwable e)
-      {
-        SLog.exception( this, e);
-        JOptionPane.showMessageDialog( null, BuildLabelHtml.buildHtml( "Error servicing request.\nPlease contact technical support."));
-      }
-    });
-    
     setBackground( Color.white);
     getContentPane().setBackground( Color.white);
-
-    try
-    {
-      UIManager.put( "control", new Color( Color.HSBtoRGB( 0f, 0f, 1f)));
-      UIManager.put("Table.alternateRowColor", Color.WHITE);
-      UIManager.put( "nimbusOrange", new Color( Color.HSBtoRGB( 198 / 360f, 0.9f, 0.83f)));
-      for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
-      {
-        if ( "Nimbus".equals( info.getName()))
-        {
-          UIManager.setLookAndFeel( info.getClassName());
-          break;
-        }
-      }
-    } 
-    catch ( Exception e)
-    {
-    }    
     
-    // Register toolkit
-    Creator.setToolkitClass( Toolkit.class);
-
-    // Register applet widget with a JAppletXidget instance
+    //
+    // Register applet widget with a JAppletXidget instance.
+    // 
     JAppletXidget appletXidget = new JAppletXidget( this);
     
     //
@@ -140,28 +104,16 @@ public class Applet extends JApplet
       URLCachingPolicy cachingPolicy = new URLCachingPolicy( new UnboundedCache());
       cachingPolicy.addAssociation( new SwingXipAssociation());
       
-      ExternalReference root = new ExternalReference( "root");
-      root.setAttribute( "url", url);
-      root.setCachingPolicy( cachingPolicy);
-      root.setDirty( true);
+      ExternalReference resources = new ExternalReference( "resources");
+      resources.setAttribute( "url", url);
+      resources.setCachingPolicy( cachingPolicy);
+      resources.setDirty( true);
             
       // Run configuration
-      IModelObject xapp = root.getFirstChild( "xapp");
-      IModelObject main = xapp.getFirstChild( "main.xml");
-      if ( main == null) throw new RuntimeException( "Unable to locate startup script: main.xml.");
-      
-      // Context
-      StatefulContext context = new StatefulContext( root);
+      StatefulContext context = new StatefulContext( resources);
       context.set( "window", appletXidget.getConfig());
-
-      // Document
-      XActionDocument document = new XActionDocument( Applet.class.getClassLoader());
-      document.setRoot( main);
-      document.addPackage( "org.xidget.xaction");
-      
-      // Script
-      ScriptAction script = document.createScript();
-      script.run( context);
+      Startup startup = new Startup( context);
+      startup.start( XPath.createExpression( "xapp/main.xml"));
     }
     catch( Throwable e)
     {

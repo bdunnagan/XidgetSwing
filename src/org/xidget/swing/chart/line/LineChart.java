@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -233,8 +234,13 @@ public class LineChart extends JPanel implements IPlotFeature
     g2d.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     g2d.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
 
-    int width = getWidth() - 1;
-    int height = getHeight() - 1;
+    int width = getWidth() - 1 - padWidth;
+    int height = getHeight() - 1 - padHeight;
+    
+    AffineTransform shift = AffineTransform.getTranslateInstance( padWidth / 2f, padHeight / 2f);
+    AffineTransform transform = g2d.getTransform();
+    if ( transform != null) transform.concatenate( shift); else transform = shift;
+    g2d.setTransform( transform);
     
     Toolkit toolkit = (Toolkit)Creator.getToolkit();
     IColorFeature<Color, Graphics2D> colorFeature = toolkit.getFeature( IColorFeature.class);
@@ -298,6 +304,8 @@ public class LineChart extends JPanel implements IPlotFeature
     
       plotArea.lineTo( x, height);
       plotArea.closePath();
+      
+      g2d.setColor( getBackground());
       
       colorFeature.applyColor( plot.getBackground(), g2d, width, height);
       g2d.fill( plotArea);
@@ -427,6 +435,9 @@ public class LineChart extends JPanel implements IPlotFeature
       }
     }
   };
+
+  final static int padWidth = 10;
+  final static int padHeight = 10;
   
   private final static double pointBoxTabWidth = 7;
   private final static double pointBoxTabHeight = 7;
