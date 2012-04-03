@@ -49,6 +49,7 @@ import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.applet.JAppletXidget;
 import org.xidget.swing.button.AbstractButtonXidget;
 import org.xidget.swing.calendar.CalendarXidget;
+import org.xidget.swing.chart.line.BarChartXidget;
 import org.xidget.swing.chart.line.LineChartXidget;
 import org.xidget.swing.chart.line.XAxisXidget;
 import org.xidget.swing.chart.line.YAxisXidget;
@@ -131,6 +132,7 @@ public class Toolkit implements IToolkit
     processor.addHandler( "form", new XidgetTagHandler( JPanelXidget.class));
     processor.addHandler( "chart", new XidgetTagHandler( PieChartXidget.class, "style", "pie"));
     processor.addHandler( "chart", new XidgetTagHandler( LineChartXidget.class, "style", "line"));
+    processor.addHandler( "chart", new XidgetTagHandler( BarChartXidget.class, "style", "bar"));
     processor.addHandler( "tabs", new XidgetTagHandler( JTabbedPaneXidget.class));
     processor.addHandler( "text", new XidgetTagHandler( JTextXidget.class));
     processor.addHandler( "combo", new XidgetTagHandler( JComboBoxXidget.class));
