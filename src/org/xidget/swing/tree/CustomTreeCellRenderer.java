@@ -54,7 +54,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer
     }
     
     Cell firstCell = row.getCell( 0);
-    setIcon( (Icon)firstCell.icon);
+    setIcon( (Icon)firstCell.image);
     
     sb.setLength( 0);
     List<Cell> cells = row.getCells();

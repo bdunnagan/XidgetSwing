@@ -59,6 +59,15 @@ public class CustomTab extends JPanel
   }
   
   /**
+   * Set the tab image.
+   * @param icon The image.
+   */
+  public void setIcon( ImageIcon icon)
+  {
+    label.setIcon( icon);
+  }
+  
+  /**
    * Set the title of the tab.
    * @param title The title.
    */

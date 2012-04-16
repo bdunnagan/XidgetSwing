@@ -120,8 +120,8 @@ public class YAxis extends Axis
         FontMetrics metrics = g2d.getFontMetrics();
         int halfHeight = metrics.getAscent() / 2;
         
-        if ( i == 0) y -= halfHeight;
-        if ( i == (ticks.size() - 1)) y += halfHeight;
+        //if ( i == 0) y -= halfHeight;
+        //if ( i == (ticks.size() - 1)) y += halfHeight;
         
         int textWidth = metrics.stringWidth( tick.label);
         if ( left)

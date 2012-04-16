@@ -19,18 +19,19 @@
  */
 package org.xidget.swing.menu;
 
-import javax.swing.Icon;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import org.xidget.IXidget;
-import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.IImageFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 
 /**
  * An implementation of IWidgetCreationFeature for the Swing JPopupMenu widget. 
  */
-public class JMenuWidgetCreationFeature extends SwingWidgetCreationFeature implements IIconFeature, ILabelFeature
+public class JMenuWidgetCreationFeature extends SwingWidgetCreationFeature implements IImageFeature, ILabelFeature
 {
   public JMenuWidgetCreationFeature( IXidget xidget)
   {
@@ -65,11 +66,11 @@ public class JMenuWidgetCreationFeature extends SwingWidgetCreationFeature imple
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IIconFeature#setIcon(java.lang.Object)
+   * @see org.xidget.text.feature.IImageFeature#setIcon(java.lang.Object)
    */
-  public void setIcon( Object icon)
+  public void setImage( Object image)
   {
-    jMenu.setIcon( (Icon)icon);
+    jMenu.setIcon( new ImageIcon( (Image)image));
   }
 
   /* (non-Javadoc)

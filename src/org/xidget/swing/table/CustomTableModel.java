@@ -193,13 +193,13 @@ public class CustomTableModel extends AbstractTableModel
   }
 
   /**
-   * Returns the icon at the specified cell.
+   * Returns the image at the specified cell.
    * @param rowIndex The row index.
    * @param columnIndex The column index.
    */
-  public Object getIconAt( int rowIndex, int columnIndex)
+  public Object getImageAt( int rowIndex, int columnIndex)
   {
-    return root.getChildren().get( rowIndex).getCell( columnIndex).icon;
+    return root.getChildren().get( rowIndex).getCell( columnIndex).image;
   }
 
   private class Column

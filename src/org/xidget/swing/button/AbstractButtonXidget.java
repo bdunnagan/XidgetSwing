@@ -31,7 +31,7 @@ import org.xidget.feature.BindFeature;
 import org.xidget.feature.model.SingleValueModelFeature;
 import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.IImageFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -39,7 +39,7 @@ import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.model.ISingleValueModelFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
-import org.xidget.swing.feature.AbstractButtonIconFeature;
+import org.xidget.swing.feature.AbstractButtonImageFeature;
 import org.xidget.swing.feature.AbstractButtonTextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.SwingWidgetFeature;
@@ -61,7 +61,7 @@ public class AbstractButtonXidget extends Xidget
     singleValueModelFeature = new SingleValueModelFeature( this);    
     singleValueUpdateFeature = new SingleValueUpdateFeature( this);    
     singleValueWidgetFeature = new AbstractButtonSingleValueWidgetFeature( this);
-    iconFeature = new AbstractButtonIconFeature( this);
+    iconFeature = new AbstractButtonImageFeature( this);
     labelFeature = new ButtonLabelFeature( this);
     creationFeature = new AbstractButtonWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
@@ -74,7 +74,7 @@ public class AbstractButtonXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IIconFeature.class) return (T)iconFeature;
+    if ( clss == IImageFeature.class) return (T)iconFeature;
     if ( clss == ILabelFeature.class) return (T)labelFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
@@ -101,7 +101,7 @@ public class AbstractButtonXidget extends Xidget
   private ISingleValueModelFeature singleValueModelFeature;
   private ISingleValueUpdateFeature singleValueUpdateFeature;
   private ISingleValueWidgetFeature singleValueWidgetFeature;
-  private IIconFeature iconFeature;
+  private IImageFeature iconFeature;
   private ILabelFeature labelFeature;
   private AbstractButtonWidgetCreationFeature creationFeature;  
   private IFeatured basicFeatureSet;

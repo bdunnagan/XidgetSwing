@@ -1,7 +1,7 @@
 /*
  * XidgetSwing - A Java Swing implementation of Xidgets
  * 
- * SwingIconFeature.java
+ * AbstractButtonIconFeature.java
  * 
  * Copyright 2009 Robert Arvin Dunnagan
  * 
@@ -17,36 +17,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.xidget.swing.form;
+package org.xidget.swing.feature;
 
-import javax.swing.Icon;
-import javax.swing.JTabbedPane;
+import java.awt.Image;
+import java.awt.Insets;
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
 import org.xidget.IXidget;
-import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.IImageFeature;
 
 /**
- * An implementation of ITitleFeature for suitable for all Swing containers.
+ * An implementation of IImageFeature which updates the image of an AbstractButton. 
  */
-public class TabIconFeature implements IIconFeature
+public class AbstractButtonImageFeature implements IImageFeature
 {
-  public TabIconFeature( IXidget xidget)
+  public AbstractButtonImageFeature( IXidget xidget)
   {
     this.xidget = xidget;
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IIconFeature#setIcon(java.lang.Object)
+   * @see org.xidget.text.feature.IImageFeature#setIcon(java.lang.Object)
    */
-  public void setIcon( Object icon)
+  public void setImage( Object image)
   {
-    IXidget parent = xidget.getParent();
-    if ( parent == null) return;
+    AbstractButton button = xidget.getFeature( AbstractButton.class);
+    if ( button != null) button.setIcon( new ImageIcon( (Image)image));
     
-    if ( parent.getConfig().isType( "tabs"))
+    String text = button.getText();
+    if ( text == null || text.length() == 0)
     {
-      JTabbedPane jtabbedPane = parent.getFeature( JTabbedPane.class);
-      int index = parent.getChildren().indexOf( xidget);
-      jtabbedPane.setIconAt( index, (Icon)icon);
+      button.setMargin( new Insets( 0, 0, 0, 0));
     }
   }
 

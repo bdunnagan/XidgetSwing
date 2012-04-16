@@ -30,7 +30,7 @@ import org.xidget.feature.BindFeature;
 import org.xidget.feature.model.SingleValueModelFeature;
 import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.IImageFeature;
 import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -68,7 +68,7 @@ public class JLabelXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IIconFeature.class) return (T)creationFeature;
+    if ( clss == IImageFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == ISingleValueModelFeature.class) return (T)singleValueModelFeature;

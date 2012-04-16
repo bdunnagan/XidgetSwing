@@ -63,6 +63,7 @@ import org.xidget.swing.feature.SwingPrintFeature;
 import org.xidget.swing.form.JPanelXidget;
 import org.xidget.swing.frame.JFrameXidget;
 import org.xidget.swing.image.ImageFileAssociation;
+import org.xidget.swing.image.ImageSerializer;
 import org.xidget.swing.label.JLabelTagHandler;
 import org.xidget.swing.label.JLabelXidget;
 import org.xidget.swing.menu.JMenuBarXidget;
@@ -70,6 +71,7 @@ import org.xidget.swing.menu.JMenuItemXidget;
 import org.xidget.swing.menu.MenuTagHandler;
 import org.xidget.swing.menu.SubMenuTagHandler;
 import org.xidget.swing.progress.JProgressBarXidget;
+import org.xidget.swing.shape.ShapeXidget;
 import org.xidget.swing.slider.JSliderXidget;
 import org.xidget.swing.table.JTableXidget;
 import org.xidget.swing.tabs.JTabbedPaneXidget;
@@ -81,6 +83,7 @@ import org.xmodel.IDispatcher;
 import org.xmodel.IModelObject;
 import org.xmodel.ModelRegistry;
 import org.xmodel.caching.IFileAssociation;
+import org.xmodel.compress.ISerializer;
 import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.IExpression.ResultType;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -146,6 +149,7 @@ public class Toolkit implements IToolkit
     processor.addHandler( "progress", new XidgetTagHandler( JProgressBarXidget.class));
     processor.addHandler( "separator", new XidgetTagHandler( JMenuItemXidget.class));
     processor.addHandler( "slider", new XidgetTagHandler( JSliderXidget.class));
+    processor.addHandler( "shape", new XidgetTagHandler( ShapeXidget.class));
     //processor.addHandler( "spinner", new XidgetTagHandler( JSpinnerXidget.class));
     processor.addHandler( "table", new TableTagHandler( JTableXidget.class));
     processor.addHandler( "tree", new TreeTagHandler( JTreeXidget.class));
@@ -171,6 +175,15 @@ public class Toolkit implements IToolkit
   public IFileAssociation getImageFileAssociation()
   {
     return new ImageFileAssociation();
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.IToolkit#getImageSerializer()
+   */
+  @Override
+  public ISerializer getImageSerializer()
+  {
+    return new ImageSerializer();
   }
 
   /**

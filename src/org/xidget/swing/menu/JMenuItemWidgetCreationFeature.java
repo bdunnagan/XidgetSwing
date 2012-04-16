@@ -19,15 +19,16 @@
  */
 package org.xidget.swing.menu;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.xidget.IXidget;
-import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.IImageFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.IScriptFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
@@ -39,7 +40,7 @@ import org.xmodel.xpath.expression.StatefulContext;
 /**
  * An implementation of IWidgetCreationFeature for the Swing JMenuItem widget.
  */
-public class JMenuItemWidgetCreationFeature extends SwingWidgetCreationFeature implements IIconFeature, ILabelFeature
+public class JMenuItemWidgetCreationFeature extends SwingWidgetCreationFeature implements IImageFeature, ILabelFeature
 {
   public JMenuItemWidgetCreationFeature( IXidget xidget)
   {
@@ -94,11 +95,11 @@ public class JMenuItemWidgetCreationFeature extends SwingWidgetCreationFeature i
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IIconFeature#setIcon(java.lang.Object)
+   * @see org.xidget.text.feature.IImageFeature#setIcon(java.lang.Object)
    */
-  public void setIcon( Object icon)
+  public void setImage( Object image)
   {
-    jMenuItem.setIcon( (Icon)icon);
+    jMenuItem.setIcon( new ImageIcon( (Image)image));
   }
 
   /* (non-Javadoc)

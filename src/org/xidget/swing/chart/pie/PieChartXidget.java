@@ -20,17 +20,17 @@
 package org.xidget.swing.chart.pie;
 
 import java.awt.Component;
-
 import javax.swing.JComponent;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.chart.IPlotFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.SwingTextWidgetFeature;
 import org.xidget.swing.feature.SwingWidgetFeature;
 
 /**
@@ -42,6 +42,7 @@ public class PieChartXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
+    textFeature = new SwingTextWidgetFeature( this);
     creationFeature = new PieChartWidgetCreationFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -55,6 +56,7 @@ public class PieChartXidget extends Xidget
   {
     if ( clss == IPlotFeature.class) return (T)creationFeature.getPieChart();
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
+    if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
@@ -70,6 +72,7 @@ public class PieChartXidget extends Xidget
   
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
+  private ITextWidgetFeature textFeature;
   private PieChartWidgetCreationFeature creationFeature;
   private IFeatured basicFeatureSet;
 }

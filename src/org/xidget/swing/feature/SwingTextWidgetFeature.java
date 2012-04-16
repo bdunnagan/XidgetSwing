@@ -108,7 +108,7 @@ public class SwingTextWidgetFeature implements ITextWidgetFeature
    * @param families The complete list of families.
    * @return Returns the first match.
    */
-  public String matchFamily( String family)
+  public static String matchFamily( String family)
   {
     family = family.toLowerCase();
     

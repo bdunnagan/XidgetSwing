@@ -20,9 +20,10 @@
 package org.xidget.swing.table;
 
 import java.awt.Component;
-
-import javax.swing.Icon;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -49,12 +50,24 @@ public class CustomCellRenderer extends DefaultTableCellRenderer
       
       // consult table model for header title and icon
       CustomTableModel model = (CustomTableModel)table.getModel();
-      setIcon( (Icon)model.getIconAt( rowIndex, columnIndex));
+      Image image = (Image)model.getImageAt( rowIndex, columnIndex);
+      setIcon( (image != null)? new ImageIcon( image): null);
       
       Object object = model.getValueAt( rowIndex, columnIndex);
       String text = (object != null)? object.toString(): "";
-      setName( text);
-      setText( text);
+      if ( text.trim().length() > 0)
+      {
+        setIconTextGap( 2);
+        setHorizontalAlignment( SwingConstants.LEFT);
+        
+        //setName( text);
+        setText( text);
+      }
+      else
+      {
+        setIconTextGap( 0);
+        setHorizontalAlignment( SwingConstants.CENTER);
+      }
     }
         
     return this;

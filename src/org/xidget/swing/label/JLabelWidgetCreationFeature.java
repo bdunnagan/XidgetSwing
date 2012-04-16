@@ -19,17 +19,18 @@
  */
 package org.xidget.swing.label;
 
-import javax.swing.Icon;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import org.xidget.IXidget;
-import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.IImageFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
 
 /**
  * An implementation of IWidgetCreationFeature for the Swing JLabel widget.
  */
-public class JLabelWidgetCreationFeature extends SwingWidgetCreationFeature implements IIconFeature
+public class JLabelWidgetCreationFeature extends SwingWidgetCreationFeature implements IImageFeature
 {
   public JLabelWidgetCreationFeature( IXidget xidget)
   {
@@ -37,11 +38,11 @@ public class JLabelWidgetCreationFeature extends SwingWidgetCreationFeature impl
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.IIconFeature#setIcon(java.lang.Object)
+   * @see org.xidget.text.feature.IImageFeature#setIcon(java.lang.Object)
    */
-  public void setIcon( Object icon)
+  public void setImage( Object image)
   {
-    jLabel.setIcon( (Icon)icon);
+    jLabel.setIcon( new ImageIcon( (Image)image));
   }
 
   /* (non-Javadoc)
@@ -51,6 +52,7 @@ public class JLabelWidgetCreationFeature extends SwingWidgetCreationFeature impl
   protected JComponent createSwingWidget()
   {
     jLabel = new JLabel();
+    jLabel.setOpaque( false);
     return jLabel;
   }
 

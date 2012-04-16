@@ -4,14 +4,13 @@
  */
 package org.xidget.swing.layout;
 
+import java.awt.Component;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.layout.Bounds;
 import org.xmodel.IModelObject;
-import org.xmodel.Xlate;
 
 /**
  * A ComponentListener that keeps synchronizes the computed bounds of a xidget
@@ -31,17 +30,29 @@ public class WidgetBoundsListener extends ComponentAdapter
   public void componentMoved( ComponentEvent e)
   {
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
-    Bounds bounds = widgetFeature.getComputedBounds();
-    
-    // update bounds node
-    IModelObject boundsNode = widgetFeature.getBoundsNode();
-    if ( boundsNode != null)
+    IModelObject node = widgetFeature.getBoundsNode();
+    if ( node != null)
     {
-      Xlate.set( boundsNode, bounds.toString());
+      Object value = node.getValue();
+      if ( value == null) value = new Bounds();
+
+      Bounds bounds = null;
+      if ( value instanceof Bounds)
+      {
+        bounds = (Bounds)value;
+      }
+      else
+      {
+        bounds = new Bounds();
+        bounds.parse( value.toString());
+      }
+      
+      Component component = e.getComponent();
+      if ( component.getX() != bounds.x || component.getY() != bounds.y)
+      {
+        node.setValue( new Bounds( component.getX(), component.getY(), bounds.width, bounds.height));
+      }
     }
-    
-    // update computed bounds
-    widgetFeature.setComputedBounds( e.getComponent().getX(), e.getComponent().getY(), bounds.width, bounds.height);
   }
 
   /* (non-Javadoc)
@@ -51,17 +62,29 @@ public class WidgetBoundsListener extends ComponentAdapter
   public void componentResized( ComponentEvent e)
   {
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
-    Bounds bounds = widgetFeature.getComputedBounds();
-    
-    // update bounds node
-    IModelObject boundsNode = widgetFeature.getBoundsNode();
-    if ( boundsNode != null)
+    IModelObject node = widgetFeature.getBoundsNode();
+    if ( node != null)
     {
-      Xlate.set( boundsNode, bounds.toString());
+      Object value = node.getValue();
+      if ( value == null) value = new Bounds();
+
+      Bounds bounds = null;
+      if ( value instanceof Bounds)
+      {
+        bounds = (Bounds)value;
+      }
+      else
+      {
+        bounds = new Bounds();
+        bounds.parse( value.toString());
+      }
+      
+      Component component = e.getComponent();
+      if ( component.getWidth() != bounds.width || component.getHeight() != bounds.height)
+      {
+        node.setValue( new Bounds( bounds.x, bounds.y, component.getWidth(), component.getHeight()));
+      }
     }
-    
-    // update computed bounds
-    widgetFeature.setComputedBounds( bounds.x, bounds.y, e.getComponent().getWidth(), e.getComponent().getHeight());
   }
   
   private IXidget xidget;

@@ -49,10 +49,6 @@ public final class Startup extends org.xidget.Startup
     //
     try
     {
-      UIManager.put( "control", new Color( Color.HSBtoRGB( 0f, 0f, 1f)));
-      UIManager.put( "Table.alternateRowColor", Color.WHITE);
-      UIManager.put( "nimbusOrange", new Color( Color.HSBtoRGB( 198 / 360f, 0.9f, 0.83f)));
-      
       for ( LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
       {
         if ( "Nimbus".equals( info.getName()))
@@ -65,6 +61,10 @@ public final class Startup extends org.xidget.Startup
     catch ( Exception e)
     {
     }
+    
+    //UIManager.put( "control", new Color( Color.HSBtoRGB( 0f, 0f, 1f)));
+    //UIManager.put( "Table.alternateRowColor", Color.WHITE);
+    UIManager.put( "nimbusOrange", new Color( Color.HSBtoRGB( 198 / 360f, 0.9f, 0.83f)));
     
     //
     // Start

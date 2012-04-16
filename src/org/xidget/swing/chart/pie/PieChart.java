@@ -172,7 +172,7 @@ public class PieChart extends JPanel implements IPlotFeature
    */
   private void computeSlices( Graphics2D g)
   {
-    Font font = g.getFont();
+    Font font = getFont();
     FontRenderContext fontRenderContext = g.getFontRenderContext();
 
     q1 = new ArrayList<Slice>();
@@ -348,7 +348,7 @@ public class PieChart extends JPanel implements IPlotFeature
       g2d.setColor( Color.gray);
       g2d.draw( path);
       
-      g2d.setColor( Color.black);
+      g2d.setColor( getForeground());
       g2d.drawGlyphVector( slice.label, (float)(cx + labelX + labelOffsetX), (float)(cy + labelY1 + labelOffsetY));
       
       labelY0 = labelY1;
@@ -380,7 +380,7 @@ public class PieChart extends JPanel implements IPlotFeature
       g2d.setColor( Color.gray);
       g2d.draw( path);
       
-      g2d.setColor( Color.black);
+      g2d.setColor( getForeground());
       g2d.drawGlyphVector( slice.label, (float)(cx + labelX + labelOffsetX), (float)(cy + labelY1 + labelOffsetY));
       
       labelY0 = labelY1;
@@ -413,7 +413,7 @@ public class PieChart extends JPanel implements IPlotFeature
       g2d.setColor( Color.gray);
       g2d.draw( path);
       
-      g2d.setColor( Color.black);
+      g2d.setColor( getForeground());
       g2d.drawGlyphVector( slice.label, (float)(cx + labelX + labelOffsetX), (float)(cy + labelY1 + labelOffsetY));
       
       labelY0 = labelY1;
@@ -445,7 +445,7 @@ public class PieChart extends JPanel implements IPlotFeature
       g2d.setColor( Color.gray);
       g2d.draw( path);
       
-      g2d.setColor( Color.black);
+      g2d.setColor( getForeground());
       g2d.drawGlyphVector( slice.label, (float)(cx + labelX + labelOffsetX), (float)(cy + labelY1 + labelOffsetY));
       
       labelY0 = labelY1;

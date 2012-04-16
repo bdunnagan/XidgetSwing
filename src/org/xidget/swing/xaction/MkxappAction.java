@@ -4,15 +4,15 @@
  */
 package org.xidget.swing.xaction;
 
+import java.awt.Image;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import javax.swing.ImageIcon;
+import org.xidget.swing.image.ImageSerializer;
 import org.xmodel.IModelObject;
 import org.xmodel.compress.DefaultSerializer;
 import org.xmodel.compress.ICompressor;
 import org.xmodel.compress.TabularCompressor;
-import org.xmodel.compress.serial.JavaSerializer;
 import org.xmodel.xaction.GuardedAction;
 import org.xmodel.xaction.XActionDocument;
 import org.xmodel.xaction.XActionException;
@@ -39,7 +39,7 @@ public class MkxappAction extends GuardedAction
     if ( fileExpr == null) fileExpr = document.getExpression();
     
     DefaultSerializer serializer = new DefaultSerializer();
-    serializer.register( ImageIcon.class, new JavaSerializer());
+    serializer.register( Image.class, new ImageSerializer());
     
     compressor = new TabularCompressor();
     compressor.setSerializer( serializer);

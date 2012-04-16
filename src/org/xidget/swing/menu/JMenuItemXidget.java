@@ -32,7 +32,7 @@ import org.xidget.feature.BindFeature;
 import org.xidget.feature.model.SingleValueModelFeature;
 import org.xidget.feature.model.SingleValueUpdateFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.IImageFeature;
 import org.xidget.ifeature.ILabelFeature;
 import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
@@ -41,7 +41,7 @@ import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.model.ISingleValueModelFeature;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
-import org.xidget.swing.feature.AbstractButtonIconFeature;
+import org.xidget.swing.feature.AbstractButtonImageFeature;
 import org.xidget.swing.feature.AbstractButtonTextWidgetFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
 import org.xidget.swing.feature.GenericContainerFeature;
@@ -59,7 +59,7 @@ public class JMenuItemXidget extends Xidget
   protected void createFeatures()
   {
     bindFeature = new BindFeature( this);
-    iconFeature = new AbstractButtonIconFeature( this);
+    iconFeature = new AbstractButtonImageFeature( this);
     widgetFeature = new SwingWidgetFeature( this);
     textFeature = new AbstractButtonTextWidgetFeature( this);
     containerFeature = new GenericContainerFeature( this);
@@ -77,7 +77,7 @@ public class JMenuItemXidget extends Xidget
   @Override
   public <T> T getFeature( Class<T> clss)
   {
-    if ( clss == IIconFeature.class) return (T)iconFeature;
+    if ( clss == IImageFeature.class) return (T)iconFeature;
     if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
@@ -101,7 +101,7 @@ public class JMenuItemXidget extends Xidget
   }
 
   private IBindFeature bindFeature;
-  private IIconFeature iconFeature;
+  private IImageFeature iconFeature;
   private IWidgetFeature widgetFeature;
   private ITextWidgetFeature textFeature;
   private IWidgetContainerFeature containerFeature;

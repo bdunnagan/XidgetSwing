@@ -28,7 +28,7 @@ import org.xidget.Xidget;
 import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
-import org.xidget.ifeature.IIconFeature;
+import org.xidget.ifeature.IImageFeature;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.ITitleFeature;
@@ -54,7 +54,7 @@ public class JPanelXidget extends Xidget
     widgetFeature = new CanvasWidgetFeature( this);
     textFeature = new SwingContainerTextWidgetFeature( this);
     titleFeature = new SwingTitleFeature( this);
-    iconFeature = new TabIconFeature( this);
+    iconFeature = new TabImageFeature( this);
     creationFeature = new JPanelWidgetCreationFeature( this);
     containerFeature = new GenericContainerFeature( this);
     canvasFeature = new CanvasFeature( this);
@@ -73,7 +73,7 @@ public class JPanelXidget extends Xidget
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == ITitleFeature.class) return (T)titleFeature;
-    if ( clss == IIconFeature.class) return (T)iconFeature;
+    if ( clss == IImageFeature.class) return (T)iconFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == ICanvasFeature.class) return (T)canvasFeature;
@@ -94,7 +94,7 @@ public class JPanelXidget extends Xidget
   private ITextWidgetFeature textFeature;
   private ILayoutFeature layoutFeature;
   private ITitleFeature titleFeature;
-  private IIconFeature iconFeature;
+  private IImageFeature iconFeature;
   private JPanelWidgetCreationFeature creationFeature;
   private IWidgetContainerFeature containerFeature;
   private ICanvasFeature canvasFeature;

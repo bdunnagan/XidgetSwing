@@ -21,17 +21,15 @@ package org.xidget.swing.table;
 
 import java.awt.Component;
 import java.util.List;
-
+import javax.swing.AbstractButton;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import javax.swing.text.JTextComponent;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -39,6 +37,7 @@ import org.xidget.ifeature.model.ISingleValueWidgetFeature;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 import org.xmodel.IModelObject;
+import org.xmodel.ModelObject;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -69,7 +68,7 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     
     Row row = rows.get( rowIndex);
     Cell cell = row.getCell( columnIndex);
-    if ( cell == null || cell.source == null) return null;
+    if ( cell == null) return null;
 
     editor = findEditor( row, columnIndex);
     if ( editor == null) return null;
@@ -85,8 +84,9 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     for( StatefulContext context: array) bindFeature.unbind( context);
     
     // bind editor
-    editorSource = cell.source;
+    editorSource = (cell.source != null)? cell.source: new ModelObject( "null"); 
     editorContext = new StatefulContext( row.getContext(), editorSource.cloneTree());
+    editorContext.set( "row", row.getContext().getObject());
     bindFeature.bind( editorContext);
     
     // return widget
@@ -108,8 +108,10 @@ public class CustomCellEditor extends AbstractCellEditor implements TableCellEdi
     {
       ((JTextComponent)component).selectAll();
     }
-    else if ( component instanceof JSlider)
+    else if ( component instanceof AbstractButton)
     {
+      AbstractButton button = ((AbstractButton)component);
+      button.setContentAreaFilled( false);
     }
     else
     {

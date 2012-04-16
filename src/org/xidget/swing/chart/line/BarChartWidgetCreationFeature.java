@@ -43,7 +43,7 @@ public class BarChartWidgetCreationFeature extends SwingWidgetCreationFeature
   @Override
   protected JComponent createSwingWidget()
   {
-    chart = new BarChart();
+    chart = new BarChart( Xlate.get( xidget.getConfig(), "orientation", "vertical").equals( "horizontal"));
     findGraphAxes( chart);
     return chart;
   }

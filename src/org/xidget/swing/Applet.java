@@ -9,6 +9,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import org.xidget.Creator;
 import org.xidget.IXidget;
+import org.xidget.caching.XipAssociation;
 import org.xidget.swing.applet.JAppletXidget;
 import org.xidget.swing.feature.SwingWidgetFeature;
 import org.xmodel.caching.URLCachingPolicy;
@@ -102,7 +103,10 @@ public class Applet extends JApplet
     {
       URL url = getClass().getResource( "/xapp.xip");
       URLCachingPolicy cachingPolicy = new URLCachingPolicy( new UnboundedCache());
-      cachingPolicy.addAssociation( new SwingXipAssociation());
+      
+      // HACK: Need to formalize caching policy structure for startup and put it into org.xidget.Startup.
+      Creator.setToolkitClass( Toolkit.class);
+      cachingPolicy.addAssociation( new XipAssociation());
       
       ExternalReference resources = new ExternalReference( "resources");
       resources.setAttribute( "url", url);

@@ -20,10 +20,9 @@
 package org.xidget.swing.feature;
 
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.Window;
-
 import javax.swing.JFrame;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetFeature;
@@ -54,9 +53,15 @@ public class ToplevelWidgetFeature extends SwingContainerWidgetFeature implement
     // inherits from BorderLayout, the content pane will be resized and the computed size
     // of the root form will be set (see AdapterLayoutManager.layoutContainer).
     //
+    int ix = Math.round( x);
+    int iy = Math.round( y);
+    int iw = Math.round( width);
+    int ih = Math.round( height);
+    
     Component frame = xidget.getFeature( Component.class);
-    frame.setLocation( (int)Math.round( x), (int)Math.round( y));
-    frame.setSize( (int)Math.round( width), (int)Math.round( height));
+    Rectangle bounds = frame.getBounds();
+    if ( bounds.x != ix || bounds.y != iy) frame.setLocation( ix, iy);
+    if ( bounds.width != iw || bounds.height != ih) frame.setSize( iw, ih);
   }
 
   /* (non-Javadoc)

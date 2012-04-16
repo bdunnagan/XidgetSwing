@@ -20,10 +20,8 @@
 package org.xidget.swing.table;
 
 import java.awt.Component;
-
 import javax.swing.JComponent;
 import javax.swing.JTable;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -33,7 +31,6 @@ import org.xidget.feature.tree.ColumnSetFeature;
 import org.xidget.feature.tree.RowSetFeature;
 import org.xidget.ifeature.IBindFeature;
 import org.xidget.ifeature.ITextWidgetFeature;
-import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.model.IPartialSelectionWidgetFeature;
@@ -60,7 +57,6 @@ public class JTableXidget extends Xidget
     bindFeature = new BindFeature( this, new String[] { "text", "combo", "button"});
     widgetFeature = new SwingWidgetFeature( this);
     textFeature = new SwingTextWidgetFeature( this);
-    containerFeature = new JTableContainerFeature( this);
     treeWidgetFeature = new JTableWidgetFeature( this);
     columnWidthFeature = new JTableColumnWidthFeature( this);
     creationFeature = new JTableWidgetCreationFeature( this);
@@ -80,7 +76,6 @@ public class JTableXidget extends Xidget
     if ( clss == IColumnSetFeature.class) return (T)columnSetFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
-    if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == ITreeWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IColumnWidthFeature.class) return (T)columnWidthFeature;
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
@@ -105,7 +100,6 @@ public class JTableXidget extends Xidget
   private IBindFeature bindFeature;
   private IWidgetFeature widgetFeature;
   private ITextWidgetFeature textFeature;
-  private IWidgetContainerFeature containerFeature;
   private ITreeWidgetFeature treeWidgetFeature;
   private IColumnWidthFeature columnWidthFeature;
   private JTableWidgetCreationFeature creationFeature;  
