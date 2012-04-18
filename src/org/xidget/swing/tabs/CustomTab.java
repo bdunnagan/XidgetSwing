@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 
 import org.xidget.Creator;
 import org.xidget.IXidget;
+import org.xidget.swing.util.IconCache;
 
 /**
  * A custom widget for use as a JTabbedPane tab. This widget supports an icon,
@@ -55,7 +56,7 @@ public class CustomTab extends JPanel
    */
   public void setImage( Image image)
   {
-    label.setIcon( new ImageIcon( image));
+    label.setIcon( IconCache.getInstance().getIcon( image));
   }
   
   /**

@@ -20,15 +20,16 @@
 package org.xidget.swing.tree;
 
 import java.awt.Component;
+import java.awt.Image;
 import java.util.List;
-import javax.swing.Icon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import org.xidget.swing.util.IconCache;
 import org.xidget.tree.Cell;
 import org.xidget.tree.Row;
 
 /**
- * An implementatino of TreeCellRenderer for rendering the cells of a tree.
+ * An implementation of TreeCellRenderer for rendering the cells of a tree.
  */
 @SuppressWarnings("serial")
 public class CustomTreeCellRenderer extends DefaultTreeCellRenderer
@@ -54,7 +55,7 @@ public class CustomTreeCellRenderer extends DefaultTreeCellRenderer
     }
     
     Cell firstCell = row.getCell( 0);
-    setIcon( (Icon)firstCell.image);
+    setIcon( IconCache.getInstance().getIcon( firstCell.image));
     
     sb.setLength( 0);
     List<Cell> cells = row.getCells();

@@ -20,12 +20,12 @@
 package org.xidget.swing.label;
 
 import java.awt.Image;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IImageFeature;
 import org.xidget.swing.feature.SwingWidgetCreationFeature;
+import org.xidget.swing.util.IconCache;
 
 /**
  * An implementation of IWidgetCreationFeature for the Swing JLabel widget.
@@ -42,7 +42,7 @@ public class JLabelWidgetCreationFeature extends SwingWidgetCreationFeature impl
    */
   public void setImage( Object image)
   {
-    jLabel.setIcon( new ImageIcon( (Image)image));
+    jLabel.setIcon( IconCache.getInstance().getIcon( (Image)image));
   }
 
   /* (non-Javadoc)
@@ -51,8 +51,7 @@ public class JLabelWidgetCreationFeature extends SwingWidgetCreationFeature impl
   @Override
   protected JComponent createSwingWidget()
   {
-    jLabel = new JLabel();
-    jLabel.setOpaque( false);
+    jLabel = new TransparentLabel();
     return jLabel;
   }
 

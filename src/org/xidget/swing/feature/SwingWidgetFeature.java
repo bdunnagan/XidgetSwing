@@ -291,7 +291,6 @@ public class SwingWidgetFeature implements IWidgetFeature
     Toolkit toolkit = (Toolkit)Creator.getToolkit();
     IColorFeature<Color, Graphics2D> colorFeature = toolkit.getFeature( IColorFeature.class);
     JComponent widget = getPrimaryWidget( xidget);
-    widget.setOpaque( true);
     widget.setBackground( colorFeature.getColor( color));
   }
 
