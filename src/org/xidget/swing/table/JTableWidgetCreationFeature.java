@@ -32,9 +32,12 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
@@ -101,6 +104,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     jtable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF);
     jtable.addComponentListener( componentListener);
     jscrollPane.addComponentListener( componentListener);
+    jscrollPane.addMouseWheelListener( mouseWheelListener);
     
     // add listener for column resize events
     jtable.getColumnModel().addColumnModelListener( columnResizeListener);
@@ -323,6 +327,21 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     }
     public void columnSelectionChanged( ListSelectionEvent e)
     {
+    }
+  };
+  
+  private MouseWheelListener mouseWheelListener = new MouseWheelListener() {
+    @Override
+    public void mouseWheelMoved( MouseWheelEvent event)
+    {
+      if ( event.isShiftDown())
+      {
+        JScrollBar scrollbar = jscrollPane.getHorizontalScrollBar();
+        int x = scrollbar.getValue();
+        x += event.getWheelRotation() * 5;
+        if ( x >= scrollbar.getMinimum() && x <= scrollbar.getMaximum())
+          scrollbar.setValue( x);
+      }
     }
   };
   
