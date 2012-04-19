@@ -8,18 +8,21 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import org.xidget.Creator;
 import org.xidget.IXidget;
@@ -36,6 +39,7 @@ public class CustomTab extends JPanel
   public CustomTab( IXidget xidget)
   {
     this.xidget = xidget;
+    this.placement = -1;
     
     setLayout( new FlowLayout( FlowLayout.LEFT, 5, 0));
     setOpaque( false);
@@ -75,6 +79,70 @@ public class CustomTab extends JPanel
   public void setTitle( String title)
   {
     label.setText( title);
+  }
+  
+  /* (non-Javadoc)
+   * @see javax.swing.JComponent#paintChildren(java.awt.Graphics)
+   */
+  @Override
+  protected void paintChildren( Graphics g)
+  {
+    Graphics2D g2d = (Graphics2D)g;
+    AffineTransform transform = g2d.getTransform(); 
+    
+    if ( getPlacement() == JTabbedPane.LEFT)
+    {
+      if ( rotate == null) rotate = AffineTransform.getRotateInstance( -Math.PI / 2);
+      AffineTransform t = new AffineTransform( transform);
+      t.translate( 0, getHeight());
+      t.concatenate( rotate);
+      g2d.setTransform( t);
+    }
+    else if ( getPlacement() == JTabbedPane.RIGHT)
+    {
+      if ( rotate == null) rotate = AffineTransform.getRotateInstance( Math.PI / 2);
+      AffineTransform t = new AffineTransform( transform);
+      t.translate( getWidth(), 0);
+      t.concatenate( rotate);
+      g2d.setTransform( t);
+    }
+    
+    super.paintChildren( g);
+    
+    g2d.setTransform( transform);
+  }
+
+  /* (non-Javadoc)
+   * @see javax.swing.JComponent#getPreferredSize()
+   */
+  @Override
+  public Dimension getPreferredSize()
+  {
+    Dimension size = super.getPreferredSize();
+    if ( !isHorizontal())
+    {
+      int width = size.width;
+      size.width = size.height;
+      size.height = width;
+    }
+    return size;
+  }
+  
+  /**
+   * @return Returns the Swing tab placement constant.
+   */
+  private int getPlacement()
+  {
+    if ( placement == -1) placement = JTabbedPaneWidgetCreationFeature.getTabPlacement( xidget.getParent());
+    return placement;
+  }
+  
+  /**
+   * @return Returns true if the tab placement is horizontal.
+   */
+  private boolean isHorizontal()
+  {
+    return placement == JTabbedPane.TOP || placement == JTabbedPane.BOTTOM;
   }
   
   /**
@@ -151,4 +219,6 @@ public class CustomTab extends JPanel
   private boolean hovering;
   private JLabel label;
   private CloseButton closeButton;
+  private AffineTransform rotate;
+  private int placement;
 }

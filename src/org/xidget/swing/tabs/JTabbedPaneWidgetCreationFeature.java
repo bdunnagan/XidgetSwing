@@ -62,7 +62,7 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
     jtabbedPane = new JTabbedPane();
     jtabbedPane.addChangeListener( selectionListener);
     jtabbedPane.addComponentListener( componentListener);
-    jtabbedPane.setTabPlacement( getTabPlacement());    
+    jtabbedPane.setTabPlacement( getTabPlacement( xidget));    
     
     // use nimbus small components
 //    jtabbedPane.putClientProperty("JComponent.sizeVariant", "small");
@@ -83,9 +83,11 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   }
   
   /**
+   * Returns the Swing tab placement constant.
+   * @param xidget The xidget.
    * @return Returns the Swing tab placement constant.
    */
-  private int getTabPlacement()
+  public static int getTabPlacement( IXidget xidget)
   {
     String placement = Xlate.get( xidget.getConfig(), "placement", "top");
     if ( placement.equals( "top")) return JTabbedPane.TOP;
