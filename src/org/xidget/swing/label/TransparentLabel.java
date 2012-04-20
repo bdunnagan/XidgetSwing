@@ -4,43 +4,17 @@
  */
 package org.xidget.swing.label;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JLabel;
 
 /**
- * Implementation of JLabel that supports both foreground and background transparency.
- * The isOpaque() method is overridden to always return false.  Normally, this causes
- * JLabel to not draw its background at all, which is incorrect, since isOpaque is
- * just a hint to the Swing painting algorithm.  Note that JLabel is not opaque by
- * default, and therefore does not draw its background.
+ * A JLabel that handles both foreground and background translucent colors.
  */
 public class TransparentLabel extends JLabel
 {
-  private static final long serialVersionUID = 6931269104922870224L;
-
   public TransparentLabel()
   {
-  }
-
-  /* (non-Javadoc)
-   * @see javax.swing.JComponent#isOpaque()
-   */
-  @Override
-  public boolean isOpaque()
-  {
-    return false;
-  }
-
-  /* (non-Javadoc)
-   * @see javax.swing.JComponent#setForeground(java.awt.Color)
-   */
-  @Override
-  public void setForeground( Color fg)
-  {
-    super.setForeground( fg);
-    repaint();
-    validate();
+    setOpaque( false);
   }
 
   /* (non-Javadoc)
@@ -53,4 +27,6 @@ public class TransparentLabel extends JLabel
     g.fillRect( 0, 0, getWidth(), getHeight());
     super.paintComponent( g);
   }
+  
+  private static final long serialVersionUID = 1L;
 }

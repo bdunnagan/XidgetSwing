@@ -86,10 +86,6 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
     //
     button.setHorizontalAlignment( SwingConstants.CENTER);
     
-    // set button label
-//    String label = Xlate.childGet( xidget.getConfig(), "label", (String)null);
-//    if ( label != null) button.setText( label);
-    
     // add button listener
     button.addActionListener( actionListener);
     button.addItemListener( itemListener);
