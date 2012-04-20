@@ -106,8 +106,10 @@ public class CustomTab extends JPanel
       t.concatenate( rotate);
       g2d.setTransform( t);
     }
-    
-    super.paintChildren( g);
+    else
+    {
+      super.paintChildren( g);
+    }
     
     g2d.setTransform( transform);
   }
@@ -142,7 +144,7 @@ public class CustomTab extends JPanel
    */
   private boolean isHorizontal()
   {
-    return placement == JTabbedPane.TOP || placement == JTabbedPane.BOTTOM;
+    return getPlacement() == JTabbedPane.TOP || getPlacement() == JTabbedPane.BOTTOM;
   }
   
   /**

@@ -283,9 +283,9 @@ public class PieChart extends JPanel implements IPlotFeature
     
     if ( slices.size() == 0)
     {
-      arc.setArcByCenter( cx, cy, r, 0, 360, Arc2D.OPEN);
-      g2d.setColor( Color.gray);
-      g2d.draw( arc);
+//      arc.setArcByCenter( cx, cy, r, 0, 360, Arc2D.OPEN);
+//      g2d.setColor( Color.gray);
+//      g2d.draw( arc);
     }
     else
     {
