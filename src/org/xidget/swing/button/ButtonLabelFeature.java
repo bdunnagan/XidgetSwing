@@ -23,6 +23,8 @@ import javax.swing.AbstractButton;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILabelFeature;
+import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.layout.Bounds;
 
 /**
  * An implementation of ILabelFeature for Swing AbstractButton widgets.
@@ -39,6 +41,13 @@ public class ButtonLabelFeature implements ILabelFeature
    */
   public int getLabelWidth()
   {
+//    String type = Xlate.get( xidget.getConfig(), "type", "push");
+//    if ( type.equals( "check") || type.equals( "radio"))
+//    {
+//      AbstractButton button = xidget.getFeature( AbstractButton.class);
+//      Dimension size = button.getPreferredSize();
+//      return size.width;
+//    }
     return 0;
   }
 
@@ -47,6 +56,13 @@ public class ButtonLabelFeature implements ILabelFeature
    */
   public void setLabelWidth( int width)
   {
+//    String type = Xlate.get( xidget.getConfig(), "type", "push");
+//    if ( type.equals( "check") || type.equals( "radio"))
+//    {
+//      AbstractButton button = xidget.getFeature( AbstractButton.class);
+//      Dimension size = button.getPreferredSize();
+//      button.setIconTextGap( width - size.width);
+//    }
   }
 
   /* (non-Javadoc)
@@ -55,7 +71,17 @@ public class ButtonLabelFeature implements ILabelFeature
   public void setLabelText( String text)
   {
     AbstractButton button = xidget.getFeature( AbstractButton.class);
-    if ( button != null) button.setText( text);
+    if ( button != null) 
+    {
+      //
+      // HACK: Original default bounds are overwritten by computed bounds!
+      //
+      IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+      Bounds bounds = widgetFeature.getDefaultBounds();
+      widgetFeature.setDefaultBounds( bounds.x, bounds.y, -1, -1, false);
+      
+      button.setText( text);
+    }
   }
   
   private IXidget xidget;
