@@ -51,5 +51,25 @@ public class AbstractButtonImageFeature implements IImageFeature
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IImageFeature#setImageHover(java.lang.Object)
+   */
+  @Override
+  public void setImageHover( Object image)
+  {
+    AbstractButton button = xidget.getFeature( AbstractButton.class);
+    if ( button != null) button.setRolloverIcon( new ImageIcon( (Image)image));
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IImageFeature#setImagePress(java.lang.Object)
+   */
+  @Override
+  public void setImagePress( Object image)
+  {
+    AbstractButton button = xidget.getFeature( AbstractButton.class);
+    if ( button != null) button.setPressedIcon( new ImageIcon( (Image)image));
+  }
+
   private IXidget xidget;
 }

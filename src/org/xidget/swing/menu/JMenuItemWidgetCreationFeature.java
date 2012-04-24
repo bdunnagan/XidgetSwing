@@ -103,6 +103,24 @@ public class JMenuItemWidgetCreationFeature extends SwingWidgetCreationFeature i
   }
 
   /* (non-Javadoc)
+   * @see org.xidget.ifeature.IImageFeature#setImageHover(java.lang.Object)
+   */
+  @Override
+  public void setImageHover( Object image)
+  {
+    throw new UnsupportedOperationException( "Xidget does not support hover images.");
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IImageFeature#setImagePress(java.lang.Object)
+   */
+  @Override
+  public void setImagePress( Object image)
+  {
+    throw new UnsupportedOperationException( "Xidget does not support hover images.");
+  }
+
+  /* (non-Javadoc)
    * @see org.xidget.ifeature.ILabelFeature#getLabelWidth()
    */
   public int getLabelWidth()
