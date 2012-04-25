@@ -19,7 +19,6 @@
  */
 package org.xidget.swing.menu;
 
-import java.awt.Component;
 import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
@@ -64,7 +63,6 @@ public class JMenuBarXidget extends Xidget
     if ( clss == IBindFeature.class) return (T)bindFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJMenuBar();
     if ( clss == Container.class) return (T)creationFeature.getJMenuBar();
     if ( clss == JComponent.class) return (T)creationFeature.getJMenuBar();
     if ( clss == JMenuBar.class) return (T)creationFeature.getJMenuBar();

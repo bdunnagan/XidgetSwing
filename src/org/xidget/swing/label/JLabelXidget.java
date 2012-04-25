@@ -19,11 +19,8 @@
  */
 package org.xidget.swing.label;
 
-import java.awt.Component;
-
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -77,7 +74,6 @@ public class JLabelXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJLabel();
     if ( clss == JComponent.class) return (T)creationFeature.getJLabel();
     if ( clss == JLabel.class) return (T)creationFeature.getJLabel();
     

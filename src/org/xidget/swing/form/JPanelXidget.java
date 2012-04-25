@@ -19,7 +19,6 @@
  */
 package org.xidget.swing.form;
 
-import java.awt.Component;
 import java.awt.Container;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -38,7 +37,6 @@ import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.canvas.ICanvasFeature;
 import org.xidget.swing.canvas.CanvasFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
-import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingContainerTextWidgetFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
 
@@ -56,7 +54,7 @@ public class JPanelXidget extends Xidget
     titleFeature = new SwingTitleFeature( this);
     iconFeature = new TabImageFeature( this);
     creationFeature = new JPanelWidgetCreationFeature( this);
-    containerFeature = new GenericContainerFeature( this);
+    containerFeature = new JPanelContainerFeature( this);
     canvasFeature = new CanvasFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
@@ -78,10 +76,9 @@ public class JPanelXidget extends Xidget
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == ICanvasFeature.class) return (T)canvasFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getContainer();
-    if ( clss == JComponent.class) return (T)creationFeature.getContainer();
-    if ( clss == JPanel.class) return (T)creationFeature.getJPanel();
-    if ( clss == Container.class) return (T)creationFeature.getContainer();
+    if ( clss == JComponent.class) return (T)creationFeature.getOuterWidget();
+    if ( clss == JPanel.class) return (T)creationFeature.getInnerWidget();
+    if ( clss == Container.class) return (T)creationFeature.getInnerWidget();
     
     T feature = basicFeatureSet.getFeature( clss);
     if ( feature != null) return feature;

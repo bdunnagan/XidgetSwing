@@ -19,13 +19,10 @@
  */
 package org.xidget.swing.menu;
 
-import java.awt.Component;
 import java.awt.Container;
-
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -88,7 +85,6 @@ public class JMenuItemXidget extends Xidget
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJMenuItem();
     if ( clss == JComponent.class) return (T)creationFeature.getJMenuItem();
     if ( clss == JMenuItem.class) return (T)creationFeature.getJMenuItem();
     if ( clss == Container.class) return (T)creationFeature.getJMenuItem();

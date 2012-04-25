@@ -6,9 +6,9 @@ package org.xidget.swing.form;
 
 import javax.swing.JPanel;
 import org.xidget.IXidget;
-import org.xidget.swing.feature.SwingContainerWidgetFeature;
+import org.xidget.swing.feature.SwingWidgetFeature;
 
-public class CanvasWidgetFeature extends SwingContainerWidgetFeature
+public class CanvasWidgetFeature extends SwingWidgetFeature
 {
   public CanvasWidgetFeature( IXidget xidget)
   {

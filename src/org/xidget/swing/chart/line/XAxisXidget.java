@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.chart.line;
 
-import java.awt.Component;
 import javax.swing.JComponent;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
@@ -52,7 +51,6 @@ public class XAxisXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getComponent();
     if ( clss == JComponent.class) return (T)creationFeature.getComponent();
     if ( clss == Axis.class) return (T)creationFeature.getAxis();
     

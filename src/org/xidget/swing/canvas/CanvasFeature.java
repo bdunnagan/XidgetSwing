@@ -32,6 +32,7 @@ import org.xmodel.util.MultiMap;
 /**
  * An implementation of ICanvasFeature that uses the Swing JPanel.
  */
+@SuppressWarnings("rawtypes")
 public class CanvasFeature implements ICanvasFeature, IPaintFeature
 {
   public CanvasFeature( IXidget xidget)
@@ -98,24 +99,6 @@ public class CanvasFeature implements ICanvasFeature, IPaintFeature
   }
 
   /* (non-Javadoc)
-   * @see org.xidget.ifeature.canvas.ICanvasFeature#getHeight()
-   */
-  public int getHeight()
-  {
-    Container container = xidget.getFeature( Container.class);
-    return container.getWidth();
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.canvas.ICanvasFeature#getWidth()
-   */
-  public int getWidth()
-  {
-    Container container = xidget.getFeature( Container.class);
-    return container.getHeight();
-  }
-
-  /* (non-Javadoc)
    * @see org.xidget.ifeature.canvas.ICanvasFeature#repaint()
    */
   public void repaint()
@@ -152,6 +135,7 @@ public class CanvasFeature implements ICanvasFeature, IPaintFeature
   /* (non-Javadoc)
    * @see org.xidget.ifeature.canvas.IPaintFeature#paint(java.lang.Object)
    */
+  @SuppressWarnings("unchecked")
   public void paint( Object graphics)
   {
     for( String layer: layers)

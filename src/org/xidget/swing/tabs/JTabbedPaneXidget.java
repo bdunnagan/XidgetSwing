@@ -19,12 +19,9 @@
  */
 package org.xidget.swing.tabs;
 
-import java.awt.Component;
 import java.awt.Container;
-
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.model.SelectionModelFeature;
@@ -79,7 +76,6 @@ public class JTabbedPaneXidget extends Xidget
     if ( clss == ISelectionUpdateFeature.class) return (T)selectionUpdateFeature;
     if ( clss == ISelectionWidgetFeature.class) return (T)selectionWidgetFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJTabbedPane();
     if ( clss == JComponent.class) return (T)creationFeature.getJTabbedPane();
     if ( clss == Container.class) return (T)creationFeature.getJTabbedPane();
     if ( clss == JTabbedPane.class) return (T)creationFeature.getJTabbedPane();

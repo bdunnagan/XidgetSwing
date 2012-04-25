@@ -19,13 +19,10 @@
  */
 package org.xidget.swing.dialog;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
-
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -68,7 +65,6 @@ public class JDialogXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJDialog();
     if ( clss == JComponent.class) return (T)creationFeature.getJDialog();
     if ( clss == Container.class) return (T)creationFeature.getJDialog();
     if ( clss == Window.class) return (T)creationFeature.getJDialog();

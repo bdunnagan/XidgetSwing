@@ -9,10 +9,10 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.LayoutManager2;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.layout.Bounds;
 
@@ -114,9 +114,11 @@ public class AdapterLayoutManager implements LayoutManager2
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
     if ( widgetFeature != null)
     {
-      Component widget = xidget.getFeature( Component.class);
-      if ( widget != null)
+      IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+      Object[] widgets = creationFeature.getLastWidgets();
+      if ( widgets.length > 0)
       {
+        Component widget = (Component)widgets[ 0];
         widgetFeature.setComputedBounds( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight());
       }
     }
@@ -134,7 +136,10 @@ public class AdapterLayoutManager implements LayoutManager2
     ILayoutFeature layoutFeature = xidget.getFeature( ILayoutFeature.class);
     if ( layoutFeature != null) 
     {
-      Component widget = xidget.getFeature( Component.class);
+      IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+      Object[] widgets = creationFeature.getLastWidgets();
+      
+      Component widget = (Component)widgets[ 0];
       IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
       layoutFeature.layout( contextFeature.getContext( widget));
       

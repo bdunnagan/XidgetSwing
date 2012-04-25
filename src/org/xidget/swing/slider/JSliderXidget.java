@@ -19,11 +19,8 @@
  */
 package org.xidget.swing.slider;
 
-import java.awt.Component;
-
 import javax.swing.JComponent;
 import javax.swing.JSlider;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -77,7 +74,6 @@ public class JSliderXidget extends Xidget
     if ( clss == ILabelFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getContainer();
     if ( clss == JComponent.class) return (T)creationFeature.getContainer();
     if ( clss == JSlider.class) return (T)creationFeature.getJSlider();
     

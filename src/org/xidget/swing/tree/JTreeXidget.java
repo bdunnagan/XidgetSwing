@@ -19,11 +19,8 @@
  */
 package org.xidget.swing.tree;
 
-import java.awt.Component;
-
 import javax.swing.JComponent;
 import javax.swing.JTree;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -82,7 +79,6 @@ public class JTreeXidget extends Xidget
     if ( clss == ISelectionWidgetFeature.class) return (T)selectionWidgetFeature;
     if ( clss == IPartialSelectionWidgetFeature.class) return (T)selectionWidgetFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JComponent.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JTree.class) return (T)creationFeature.getJTree();
     

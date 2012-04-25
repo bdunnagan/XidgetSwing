@@ -69,13 +69,6 @@ public class GenericContainerFeature implements IWidgetContainerFeature
         {
           if ( index == -1) container.add( (Component)widgets[ 0]);
           else container.add( (Component)widgets[ 0], index);
-          
-          // validate the container later to improve performance
-//          if ( container.isShowing())
-//          {
-//            IAsyncFeature asyncFeature = xidget.getFeature( IAsyncFeature.class);
-//            asyncFeature.schedule( this, validationDelay, false, validateRunnable);
-//          }
         }
       }
       
@@ -155,14 +148,6 @@ public class GenericContainerFeature implements IWidgetContainerFeature
     return xidget.toString();
   }
 
-//  private Runnable validateRunnable = new Runnable() {
-//    public void run()
-//    {
-//      Container container = xidget.getFeature( Container.class);
-//      container.validate();
-//    }
-//  };
-  
   protected IXidget xidget;
   private int spacing;
 }

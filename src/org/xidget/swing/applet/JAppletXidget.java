@@ -19,13 +19,10 @@
  */
 package org.xidget.swing.applet;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
-
 import javax.swing.JApplet;
 import javax.swing.JComponent;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -73,7 +70,6 @@ public class JAppletXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJApplet();
     if ( clss == JComponent.class) return (T)creationFeature.getJApplet();
     if ( clss == Container.class) return (T)creationFeature.getJApplet();
     if ( clss == Window.class) return (T)creationFeature.getJApplet();

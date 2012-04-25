@@ -5,10 +5,7 @@
 
 package org.xidget.swing.xmleditor;
 
-import java.awt.Component;
-
 import javax.swing.JComponent;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -56,7 +53,6 @@ public class XmlTextPaneXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JComponent.class) return (T)creationFeature.getJScrollPane();
     if ( clss == XmlTextPane.class) return (T)creationFeature.getXmlTextPane();
     

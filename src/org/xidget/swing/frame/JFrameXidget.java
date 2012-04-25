@@ -19,13 +19,10 @@
  */
 package org.xidget.swing.frame;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
-
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -64,7 +61,6 @@ public class JFrameXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IWidgetContainerFeature.class) return (T)containerFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getFrame();
     if ( clss == JComponent.class) return (T)creationFeature.getFrame();
     if ( clss == Container.class) return (T)creationFeature.getFrame();
     if ( clss == Window.class) return (T)creationFeature.getFrame();

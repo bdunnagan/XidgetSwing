@@ -19,7 +19,6 @@
  */
 package org.xidget.swing.table;
 
-import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import org.xidget.IFeatured;
@@ -85,7 +84,6 @@ public class JTableXidget extends Xidget
     if ( clss == IPartialSelectionWidgetFeature.class) return (T)treeWidgetFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JComponent.class) return (T)creationFeature.getJScrollPane();
     if ( clss == JTable.class) return (T)creationFeature.getJTable();
     

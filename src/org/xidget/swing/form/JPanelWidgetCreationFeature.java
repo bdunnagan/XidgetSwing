@@ -19,19 +19,18 @@
  */
 package org.xidget.swing.form;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.List;
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
-
 import org.xidget.IXidget;
 import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.ifeature.ILayoutFeature;
@@ -71,12 +70,12 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
         jPanel.setBorder( new TitledBorder( getTitle()));
     }
 
-    container = jPanel;
+    component = jPanel;
     
     // create scrollpane if requested
     if ( Xlate.get( xidget.getConfig(), "scroll", false))
     {
-      container = new JScrollPane( jPanel);
+      component = new JScrollPane( jPanel);
     }
     
     // add panel to parent container
@@ -133,7 +132,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
     
     jPanel = null;
-    container = null;
+    component = null;
   }
 
   /* (non-Javadoc)
@@ -141,15 +140,14 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public Object[] getLastWidgets()
   {
-    if ( container != jPanel) return new Object[] { container, jPanel};
+    if ( component != jPanel) return new Object[] { component, jPanel};
     return new Object[] { jPanel};
   }
 
   /**
-   * Returns the JPanel.
-   * @return Returns the JPanel.
+   * @return Returns the inner widget.
    */
-  public JPanel getJPanel()
+  public JPanel getInnerWidget()
   {
     return jPanel;
   }
@@ -157,9 +155,9 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   /**
    * @return Returns the outer widget.
    */
-  public Container getContainer()
+  public Component getOuterWidget()
   {
-    return container;
+    return component;
   }
   
   /**
@@ -273,7 +271,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
 
   private IXidget xidget;
   private JPanel jPanel;
-  private Container container;
+  private Component component;
   private AnchorNode grabbed;
   private Cursor cursor;
 }

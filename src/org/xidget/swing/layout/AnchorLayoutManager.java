@@ -26,6 +26,8 @@ import java.awt.LayoutManager2;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContextFeature;
+import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.layout.Bounds;
 import org.xmodel.xpath.expression.StatefulContext;
 
 /**
@@ -128,7 +130,10 @@ public class AnchorLayoutManager implements LayoutManager2
    */
   public Dimension preferredLayoutSize( Container parent)
   {
-    throw new UnsupportedOperationException();
+    //layoutContainer( parent);
+    IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+    Bounds bounds = widgetFeature.getDefaultBounds();
+    return new Dimension( (int)(bounds.width + 0.5f), (int)(bounds.height + 0.5f));
   }
   
   private IXidget xidget;

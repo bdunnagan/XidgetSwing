@@ -19,11 +19,8 @@
  */
 package org.xidget.swing.combo;
 
-import java.awt.Component;
-
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -95,7 +92,6 @@ public class JComboBoxXidget extends Xidget
     if ( clss == ISelectionUpdateFeature.class) return (T)selectionUpdateFeature;
     if ( clss == ISelectionWidgetFeature.class) return (T)selectionWidgetFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getContainer();
     if ( clss == JComponent.class) return (T)creationFeature.getContainer();
     if ( clss == JComboBox.class) return (T)creationFeature.getComboBox();
     

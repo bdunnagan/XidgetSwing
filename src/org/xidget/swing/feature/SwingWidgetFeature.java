@@ -78,7 +78,9 @@ public class SwingWidgetFeature implements IWidgetFeature
     // determine their preferred size via layout or according to the default bounds 
     // specified for the container.
     //
-    Component widget = xidget.getFeature( Component.class);
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    Component widget = (Component)widgets[ 0];
     Dimension size = widget.getPreferredSize();
     if ( defaultBounds.width < 0) defaultBounds.width = size.width;
     if ( defaultBounds.height < 0) defaultBounds.height = size.height;
@@ -107,7 +109,9 @@ public class SwingWidgetFeature implements IWidgetFeature
     if ( computedBounds.width < 1 || computedBounds.height < 1)
       SLog.debugf( this, "widget (%s) has zero dimension (%s)", xidget, computedBounds);
     
-    Component widget = xidget.getFeature( Component.class);
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    Component widget = (Component)widgets[ 0];
     widget.setBounds( 
       (int)Math.round( x), 
       (int)Math.round( y), 
@@ -137,8 +141,13 @@ public class SwingWidgetFeature implements IWidgetFeature
     //
     if ( node != null)
     {
-      Component component = xidget.getFeature( Component.class);
-      if ( component != null) component.addComponentListener( new WidgetBoundsListener( xidget));
+      IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+      Object[] widgets = creationFeature.getLastWidgets();
+      if ( widgets.length > 0)
+      {
+        Component component = (Component)widgets[ 0];
+        component.addComponentListener( new WidgetBoundsListener( xidget));
+      }
     }
   }
   
@@ -251,7 +260,9 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void setVisible( boolean visible)
   {
-    Component widget = xidget.getFeature( Component.class);
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    Component widget = (Component)widgets[ 0];
     widget.setVisible( visible);
   }
 
@@ -260,7 +271,9 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public boolean getVisible()
   {
-    Component widget = xidget.getFeature( Component.class);
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    Component widget = (Component)widgets[ 0];
     return widget.isVisible(); 
   }
 

@@ -19,10 +19,7 @@
  */
 package org.xidget.swing.chart.line;
 
-import java.awt.Component;
-
 import javax.swing.JComponent;
-
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.BindFeature;
@@ -58,7 +55,6 @@ public class LineChartXidget extends Xidget
     if ( clss == IWidgetCreationFeature.class) return (T)creationFeature;
     if ( clss == IBindFeature.class) return (T)bindFeature;
     
-    if ( clss == Component.class) return (T)creationFeature.getComponent();
     if ( clss == JComponent.class) return (T)creationFeature.getComponent();
     if ( clss == LineChart.class) return (T)creationFeature.getLineChart();
     

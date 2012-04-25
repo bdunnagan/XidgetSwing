@@ -25,6 +25,7 @@ import java.awt.Window;
 import javax.swing.JFrame;
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITitleFeature;
+import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
@@ -58,7 +59,9 @@ public class ToplevelWidgetFeature extends SwingContainerWidgetFeature implement
     int iw = Math.round( width);
     int ih = Math.round( height);
     
-    Component frame = xidget.getFeature( Component.class);
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    Component frame = (Component)widgets[ 0];
     Rectangle bounds = frame.getBounds();
     if ( bounds.x != ix || bounds.y != iy) frame.setLocation( ix, iy);
     if ( bounds.width != iw || bounds.height != ih) frame.setSize( iw, ih);
