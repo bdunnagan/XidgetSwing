@@ -19,9 +19,10 @@
  */
 package org.xidget.swing.canvas;
 
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JPanel;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.canvas.ICanvasFeature;
 import org.xidget.ifeature.canvas.IPaintFeature;
@@ -101,8 +102,8 @@ public class CanvasFeature implements ICanvasFeature, IPaintFeature
    */
   public int getHeight()
   {
-    JPanel jPanel = xidget.getFeature( JPanel.class);
-    return jPanel.getWidth();
+    Container container = xidget.getFeature( Container.class);
+    return container.getWidth();
   }
 
   /* (non-Javadoc)
@@ -110,8 +111,8 @@ public class CanvasFeature implements ICanvasFeature, IPaintFeature
    */
   public int getWidth()
   {
-    JPanel jPanel = xidget.getFeature( JPanel.class);
-    return jPanel.getHeight();
+    Container container = xidget.getFeature( Container.class);
+    return container.getHeight();
   }
 
   /* (non-Javadoc)
@@ -119,8 +120,8 @@ public class CanvasFeature implements ICanvasFeature, IPaintFeature
    */
   public void repaint()
   {
-    JPanel jPanel = xidget.getFeature( JPanel.class);
-    jPanel.repaint();
+    Container container = xidget.getFeature( Container.class);
+    container.repaint();
   }
 
   /* (non-Javadoc)
@@ -128,8 +129,8 @@ public class CanvasFeature implements ICanvasFeature, IPaintFeature
    */
   public void repaint( int x, int y, int width, int height)
   {
-    JPanel jPanel = xidget.getFeature( JPanel.class);
-    jPanel.repaint( x, y, width, height);
+    Container container = xidget.getFeature( Container.class);
+    container.repaint( x, y, width, height);
   }
   
   /* (non-Javadoc)

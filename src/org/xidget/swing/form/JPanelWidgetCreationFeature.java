@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
@@ -70,6 +71,14 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
         jPanel.setBorder( new TitledBorder( getTitle()));
     }
 
+    container = jPanel;
+    
+    // create scrollpane if requested
+    if ( Xlate.get( xidget.getConfig(), "scroll", false))
+    {
+      container = new JScrollPane( jPanel);
+    }
+    
     // add panel to parent container
     IXidget xidgetParent = xidget.getParent();
     if ( xidgetParent != null)
@@ -124,6 +133,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
     }
     
     jPanel = null;
+    container = null;
   }
 
   /* (non-Javadoc)
@@ -131,6 +141,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public Object[] getLastWidgets()
   {
+    if ( container != jPanel) return new Object[] { container, jPanel};
     return new Object[] { jPanel};
   }
 
@@ -141,6 +152,14 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   public JPanel getJPanel()
   {
     return jPanel;
+  }
+  
+  /**
+   * @return Returns the outer widget.
+   */
+  public Container getContainer()
+  {
+    return container;
   }
   
   /**
@@ -254,6 +273,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
 
   private IXidget xidget;
   private JPanel jPanel;
+  private Container container;
   private AnchorNode grabbed;
   private Cursor cursor;
 }

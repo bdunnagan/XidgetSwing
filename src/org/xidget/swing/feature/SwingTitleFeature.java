@@ -19,10 +19,11 @@
  */
 package org.xidget.swing.feature;
 
-import javax.swing.JPanel;
+import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.swing.tabs.CustomTab;
@@ -70,7 +71,7 @@ public class SwingTitleFeature implements ITitleFeature
     }
     else
     {
-      JPanel panel = xidget.getFeature( JPanel.class);
+      JComponent panel = xidget.getFeature( JComponent.class);
       Border border = panel.getBorder();
       if ( border instanceof TitledBorder)
       {

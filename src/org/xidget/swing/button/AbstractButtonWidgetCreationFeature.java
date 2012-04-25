@@ -26,6 +26,7 @@ import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -73,7 +74,10 @@ public class AbstractButtonWidgetCreationFeature extends SwingWidgetCreationFeat
     
     // remove border
     if ( type == Type.check || type == Type.radio || Xlate.get( xidget.getConfig(), "borderless", false))
+    {
       button.setContentAreaFilled( false);
+      button.setBorder( BorderFactory.createEmptyBorder());
+    }
 
     // put label on left
     button.setHorizontalTextPosition( SwingConstants.LEFT);

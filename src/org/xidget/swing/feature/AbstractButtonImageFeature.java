@@ -25,6 +25,8 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IImageFeature;
+import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.layout.Bounds;
 
 /**
  * An implementation of IImageFeature which updates the image of an AbstractButton. 
@@ -41,6 +43,13 @@ public class AbstractButtonImageFeature implements IImageFeature
    */
   public void setImage( Object image)
   {
+    //
+    // HACK: Original default bounds are overwritten by computed bounds!
+    //
+    IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+    Bounds bounds = widgetFeature.getDefaultBounds();
+    widgetFeature.setDefaultBounds( bounds.x, bounds.y, -1, -1, false);
+    
     AbstractButton button = xidget.getFeature( AbstractButton.class);
     if ( button != null) button.setIcon( new ImageIcon( (Image)image));
     
@@ -57,6 +66,13 @@ public class AbstractButtonImageFeature implements IImageFeature
   @Override
   public void setImageHover( Object image)
   {
+    //
+    // HACK: Original default bounds are overwritten by computed bounds!
+    //
+    IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+    Bounds bounds = widgetFeature.getDefaultBounds();
+    widgetFeature.setDefaultBounds( bounds.x, bounds.y, -1, -1, false);
+    
     AbstractButton button = xidget.getFeature( AbstractButton.class);
     if ( button != null) button.setRolloverIcon( new ImageIcon( (Image)image));
   }
@@ -67,6 +83,13 @@ public class AbstractButtonImageFeature implements IImageFeature
   @Override
   public void setImagePress( Object image)
   {
+    //
+    // HACK: Original default bounds are overwritten by computed bounds!
+    //
+    IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+    Bounds bounds = widgetFeature.getDefaultBounds();
+    widgetFeature.setDefaultBounds( bounds.x, bounds.y, -1, -1, false);
+    
     AbstractButton button = xidget.getFeature( AbstractButton.class);
     if ( button != null) button.setPressedIcon( new ImageIcon( (Image)image));
   }
