@@ -19,7 +19,6 @@
  */
 package org.xidget.swing.feature;
 
-import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -53,7 +52,7 @@ public abstract class SwingWidgetCreationFeature extends ComponentAdapter implem
     // create widget(s)
     createSwingWidget();
 
-    // attach to parent
+    // add to parent
     IWidgetContainerFeature containerFeature = xidget.getParent().getFeature( IWidgetContainerFeature.class);
     if ( containerFeature != null) containerFeature.addWidget( xidget);  
     
@@ -79,19 +78,11 @@ public abstract class SwingWidgetCreationFeature extends ComponentAdapter implem
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
    */
-  public void destroyWidgets()
+  public void destroyWidgets( IXidget parent)
   {
-    JComponent widget = xidget.getFeature( JComponent.class);
-    if ( widget != null)
-    {
-      Container container = widget.getParent();
-      if ( container != null) 
-      {
-        container.remove( widget);
-        container.validate();
-        container.repaint();
-      }
-    }
+    // remove from parent
+    IWidgetContainerFeature containerFeature = parent.getFeature( IWidgetContainerFeature.class);
+    if ( containerFeature != null) containerFeature.removeWidget( xidget);
   }
 
   /**

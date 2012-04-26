@@ -130,10 +130,7 @@ public class AnchorLayoutManager implements LayoutManager2
    */
   public Dimension preferredLayoutSize( Container parent)
   {
-    //layoutContainer( parent);
-    IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
-    Bounds bounds = widgetFeature.getDefaultBounds();
-    return new Dimension( (int)(bounds.width + 0.5f), (int)(bounds.height + 0.5f));
+    throw new UnsupportedOperationException();
   }
   
   private IXidget xidget;

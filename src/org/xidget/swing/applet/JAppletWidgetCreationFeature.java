@@ -43,7 +43,7 @@ public class JAppletWidgetCreationFeature implements IWidgetCreationFeature
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
    */
-  public void destroyWidgets()
+  public void destroyWidgets(IXidget parent)
   {
   }
   

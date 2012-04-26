@@ -70,7 +70,7 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
    */
-  public void destroyWidgets()
+  public void destroyWidgets( IXidget parent)
   {
     if ( jframe != null) jframe.dispose();
     jframe = null;

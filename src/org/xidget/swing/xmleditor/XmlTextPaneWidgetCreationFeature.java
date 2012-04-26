@@ -67,7 +67,7 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetCreationFeature#destroyWidgets()
    */
-  public void destroyWidgets()
+  public void destroyWidgets(IXidget parent)
   {
     executor.shutdownNow();
     

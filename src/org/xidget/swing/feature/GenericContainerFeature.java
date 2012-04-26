@@ -96,7 +96,12 @@ public class GenericContainerFeature implements IWidgetContainerFeature
       if ( creationFeature != null)
       {
         Object[] widgets = creationFeature.getLastWidgets();
-        if ( widgets.length > 0) container.remove( (Component)widgets[ 0]);
+        if ( widgets.length > 0)
+        {
+          container.remove( (Component)widgets[ 0]);
+          container.validate();
+          container.repaint();
+        }
       }
       
       // paintable xidgets

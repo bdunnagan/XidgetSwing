@@ -20,17 +20,17 @@
 package org.xidget.swing.form;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.JComponent;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
+
 import org.xidget.IXidget;
 import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.ifeature.ILayoutFeature;
@@ -117,20 +117,13 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
    */
-  public void destroyWidgets()
+  public void destroyWidgets(IXidget parent)
   {
-    JComponent widget = xidget.getFeature( JComponent.class);
-    if ( widget != null)
-    {
-      Container container = widget.getParent();
-      if ( container != null) 
-      {
-        container.remove( widget);
-        container.validate();
-        container.repaint();
-      }
-    }
-    
+    // remove from parent
+    IWidgetContainerFeature containerFeature = parent.getFeature( IWidgetContainerFeature.class);
+    if ( containerFeature != null) containerFeature.removeWidget( xidget);
+
+    // clear references
     jPanel = null;
     component = null;
   }

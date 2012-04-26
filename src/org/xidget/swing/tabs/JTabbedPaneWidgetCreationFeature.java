@@ -114,10 +114,13 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
   /* (non-Javadoc)
    * @see org.xidget.feature.IWidgetCreationFeature#destroyWidget()
    */
-  public void destroyWidgets()
+  public void destroyWidgets( IXidget parent)
   {
-    jtabbedPane.getParent().remove( jtabbedPane);
-    jtabbedPane.getParent().validate();
+    // remove from parent
+    IWidgetContainerFeature containerFeature = parent.getFeature( IWidgetContainerFeature.class);
+    if ( containerFeature != null) containerFeature.removeWidget( xidget);
+    
+    // clear references
     jtabbedPane = null;
   }
 

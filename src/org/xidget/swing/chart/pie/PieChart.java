@@ -172,6 +172,8 @@ public class PieChart extends JPanel implements IPlotFeature
    */
   private void computeSlices( Graphics2D g)
   {
+    longestLabel = 0;
+    
     Font font = getFont();
     FontRenderContext fontRenderContext = g.getFontRenderContext();
 
@@ -203,11 +205,17 @@ public class PieChart extends JPanel implements IPlotFeature
         if ( point.coords[ 0] <= 0 || Double.isNaN( point.coords[ 0]) || Double.isInfinite( point.coords[ 0])) continue;
         
         Slice slice = new Slice();
-        if ( point.label != null) slice.label = font.createGlyphVector( fontRenderContext, point.label);
+        if ( point.label != null) 
+        {
+          slice.label = font.createGlyphVector( fontRenderContext, point.label);
+          double width = slice.label.getVisualBounds().getWidth();
+          if ( width > longestLabel) longestLabel = width;
+        }
+        
         slice.startAngle = startAngle;
         slice.angleExtent = point.coords[ 0] / total;
         slice.fcolor = getForeground( point, total);
-        slice.bcolor = getBackground( point, total);
+        slice.bcolor = getBackground( point, total, startAngle);
         
         double w = (slice.startAngle + (slice.angleExtent / 2)) * PI2;
         slice.midUX = Math.cos( w);
@@ -242,7 +250,7 @@ public class PieChart extends JPanel implements IPlotFeature
   }
   
   @SuppressWarnings("unchecked")
-  private Color getBackground( Point point, double total)
+  private Color getBackground( Point point, double total, double startAngle)
   {
     if ( point.bcolor != null)
     {
@@ -251,7 +259,7 @@ public class PieChart extends JPanel implements IPlotFeature
       return feature.getColor( point.bcolor);
     }
     
-    return Color.getHSBColor( (float)(point.coords[ 0] / total), 0.7f, 0.95f);
+    return Color.getHSBColor( (float)startAngle, 0.7f, 0.95f);
   }
   
   /* (non-Javadoc)
@@ -271,12 +279,18 @@ public class PieChart extends JPanel implements IPlotFeature
     
     int width = getWidth();
     int height = getHeight();
+
+    double cx = width / 2d;
+    double cy = height / 2d;
+
+    // shift pie chart if one side doesn't have labels
+    int labelOffset = (int)(longestLabel + labelMargin + 0.5);
+    if ( q1.size() == 0 && q4.size() == 0) cx += (labelOffset / 2); else width -= labelOffset;
+    if ( q2.size() == 0 && q3.size() == 0) cx -= (labelOffset / 2); else width -= labelOffset;
+    
     int size = ((width < height)? width: height);
-
-    double cx = getWidth() / 2d;
-    double cy = getHeight() / 2d;
-    double r = size / 2d - 3;
-
+    double r = size / 2d;
+    
     // leave room for at least 1 label on top and bottom
     FontMetrics metrics = g2d.getFontMetrics();
     r -= metrics.getHeight();
@@ -482,4 +496,5 @@ public class PieChart extends JPanel implements IPlotFeature
   private List<Slice> q3;
   private List<Slice> q4;
   private List<Slice> slices;
+  private double longestLabel;
 }

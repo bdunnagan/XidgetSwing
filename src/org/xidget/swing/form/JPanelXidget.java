@@ -20,8 +20,10 @@
 package org.xidget.swing.form;
 
 import java.awt.Container;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
 import org.xidget.feature.AnchorLayoutFeature;
@@ -37,7 +39,9 @@ import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.ifeature.canvas.ICanvasFeature;
 import org.xidget.swing.canvas.CanvasFeature;
 import org.xidget.swing.feature.BasicFeatureSet;
+import org.xidget.swing.feature.GenericContainerFeature;
 import org.xidget.swing.feature.SwingContainerTextWidgetFeature;
+import org.xidget.swing.feature.SwingContainerWidgetFeature;
 import org.xidget.swing.feature.SwingTitleFeature;
 
 /**
@@ -49,12 +53,12 @@ public class JPanelXidget extends Xidget
   {
     bindFeature = new BindFeature( this);
     layoutFeature = new AnchorLayoutFeature( this);
-    widgetFeature = new CanvasWidgetFeature( this);
+    widgetFeature = new SwingContainerWidgetFeature( this);
     textFeature = new SwingContainerTextWidgetFeature( this);
     titleFeature = new SwingTitleFeature( this);
     iconFeature = new TabImageFeature( this);
     creationFeature = new JPanelWidgetCreationFeature( this);
-    containerFeature = new JPanelContainerFeature( this);
+    containerFeature = new GenericContainerFeature( this);
     canvasFeature = new CanvasFeature( this);
     basicFeatureSet = new BasicFeatureSet( this);
   }
