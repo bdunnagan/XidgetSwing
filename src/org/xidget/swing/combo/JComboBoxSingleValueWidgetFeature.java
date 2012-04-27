@@ -49,10 +49,7 @@ public class JComboBoxSingleValueWidgetFeature implements ISingleValueWidgetFeat
       if ( item != null)
       {
         Object content = item.getContent();
-        Object value = (content instanceof IModelObject)? ((IModelObject)content).getValue(): content;
-        
-        // HACK: SignelValueUpdateFeature ignores nulls
-        return (value != null)? value: "";
+        return (content instanceof IModelObject)? ((IModelObject)content).getValue(): content;
       }
     }
     return selected;
