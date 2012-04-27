@@ -21,7 +21,8 @@ public class JProgressBarValueWidgetFeature implements ISingleValueWidgetFeature
    */
   @Override
   public void setValue( Object value)
-  {    ISliderWidgetFeature feature = xidget.getFeature( ISliderWidgetFeature.class);
+  {    
+    ISliderWidgetFeature feature = xidget.getFeature( ISliderWidgetFeature.class);
     if ( value instanceof Number)
     {
       feature.setValue( ((Number)value).doubleValue());

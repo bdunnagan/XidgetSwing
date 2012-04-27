@@ -392,7 +392,7 @@ public class BarChart extends JPanel implements IPlotFeature
         }
         
         // draw text
-        g2d.setColor( Color.black);
+        colorFeature.applyColor( plot.getForeground(), g2d, width, height);
         float textWidth = metrics.stringWidth( point.label);
         g2d.drawString( point.label, (int)(x - (textWidth / 2)), height + 3 + metrics.getAscent());
         

@@ -312,7 +312,7 @@ public class PieChart extends JPanel implements IPlotFeature
         g2d.fill( arc);
       }
       
-      if ( slices.size() > 1)
+      if ( slices.size() > 0)
       {
         g2d.setStroke( stroke);
         for( int i=0; i<slices.size(); i++)
