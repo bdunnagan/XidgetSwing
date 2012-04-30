@@ -58,7 +58,7 @@ public final class Startup extends org.xidget.Startup
         }
       }
     } 
-    catch ( Exception e)
+    catch ( Throwable t)
     {
     }
     

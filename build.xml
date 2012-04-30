@@ -1,4 +1,4 @@
-<project name="XidgetSwing" default="shrink" basedir=".">
+<project name="XidgetSwing" default="jar" basedir=".">
   
   <property name="jdir" location="jars"/>
   <property name="jar" location="${jdir}/xidget-swing.jar"/>
@@ -14,40 +14,6 @@
       <fileset dir="../Xidget/bin"/>
       <fileset dir="bin"/>
     </jar> 
-  </target>
-	
-  <target name="shrink" depends="jar">
-    <taskdef name="yguard" classname="com.yworks.yguard.YGuardTask" classpath="lib/yguard.jar"/>    
-  	
-    <yguard>
-      <inoutpair in="jars/xidget-swing.jar" out="jars/xidget-swing-ob.jar"/>
-      <attribute name="Deprecated"/>
-    	
-      <shrink logfile="jars/shrink-log.xml" createStubs="true">
-        <keep>
-          <class classes="protected" methods="protected" fields="protected">
-            <patternset>
-              <include name="org.xidget.**.*"/>
-              <exclude name="org.xidget.xaction.**.*"/>
-              <exclude name="org.xidget.layout.xaction.**.*"/>
-              <exclude name="org.xidget.caching.**.*"/>
-            </patternset>
-          </class>
-        </keep>
-      </shrink>
-    	
-      <!--rename logfile="jars/rename-log.xml">
-        <keep>
-          <class classes="protected" methods="protected" fields="protected">
-            <patternset>
-              <include name="org.xidget.xaction.**.*"/>
-              <include name="org.xidget.layout.xaction.**.*"/>
-              <include name="org.xidget.caching.**.*"/>
-            </patternset>
-          </class>
-        </keep>
-      </rename-->
-    </yguard>  
   </target>
 	
   <target name="clean" description="clean up">
