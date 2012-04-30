@@ -26,7 +26,6 @@ import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
@@ -190,7 +189,8 @@ public class JTabbedPaneWidgetCreationFeature implements IWidgetCreationFeature
           try
           {
             ISelectionUpdateFeature selectionFeature = xidget.getFeature( ISelectionUpdateFeature.class);
-            selectionFeature.modelSelect( Collections.singletonList( childContext.getObject()));
+            selectionFeature.updateModel();
+            //selectionFeature.modelSelect( Collections.singletonList( childContext.getObject()));
           }
           finally
           {
