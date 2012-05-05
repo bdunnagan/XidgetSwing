@@ -7,16 +7,22 @@ package org.xidget.swing.feature;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.RepaintManager;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.IPrintFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
+import org.xidget.ifeature.IWidgetFeature;
+import org.xidget.layout.Bounds;
 import org.xmodel.log.Log;
 
 /**
@@ -24,6 +30,29 @@ import org.xmodel.log.Log;
  */
 public class SwingPrintFeature implements IPrintFeature, Printable
 {
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IPrintFeature#capture(org.xidget.IXidget, float)
+   */
+  @Override
+  public Object capture( IXidget xidget, float scale)
+  {
+    IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+    Object[] widgets = creationFeature.getLastWidgets();
+    Component component = (Component)widgets[ 0];
+    
+    IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+    Bounds bounds = widgetFeature.getDefaultBounds();
+    int width = (int)Math.ceil( bounds.width * scale);
+    int height = (int)Math.ceil( bounds.height * scale);
+    
+    BufferedImage image = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = image.createGraphics();
+    g.setTransform( AffineTransform.getScaleInstance( scale, scale));
+    component.paint( g);
+    
+    return image;
+  }
+
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IPrintFeature#print(java.util.List)
    */
