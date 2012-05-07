@@ -25,8 +25,10 @@ import javax.swing.JApplet;
 import javax.swing.JComponent;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
+import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.ITextWidgetFeature;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
@@ -50,6 +52,7 @@ public class JAppletXidget extends Xidget
   public void createFeatures()
   {
     bindFeature = new BindFeature( this);
+    layoutFeature = new AnchorLayoutFeature( this);
     widgetFeature = new JAppletWidgetFeature( this);
     textFeature = new SwingContainerTextWidgetFeature( this);
     containerFeature = new JAppletContainerFeature( this);
@@ -64,6 +67,7 @@ public class JAppletXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
+    if ( clss == ILayoutFeature.class) return (T)layoutFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITextWidgetFeature.class) return (T)textFeature;
     if ( clss == ITitleFeature.class) return (T)widgetFeature;
@@ -82,6 +86,7 @@ public class JAppletXidget extends Xidget
   }
   
   private IBindFeature bindFeature;
+  private ILayoutFeature layoutFeature;
   private IWidgetFeature widgetFeature;
   private ITextWidgetFeature textFeature;
   private JAppletWidgetCreationFeature creationFeature;

@@ -22,7 +22,6 @@ package org.xidget.swing.form;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import javax.swing.JPanel;
 import org.xidget.Creator;
@@ -37,9 +36,9 @@ import org.xidget.ifeature.canvas.IPaintFeature;
 @SuppressWarnings("serial")
 public class Canvas extends JPanel
 {
-  public Canvas( IXidget xidget, LayoutManager layout)
+  public Canvas( IXidget xidget)
   {
-    super( layout);
+    super( null);
     this.xidget = xidget;
   }
   
@@ -54,7 +53,7 @@ public class Canvas extends JPanel
     {
       Rectangle bounds = getBounds();
       IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
-      widgetFeature.setDefaultBounds( bounds.x, bounds.y, bounds.width, bounds.height, true);
+      widgetFeature.setComputedBounds( bounds.x, bounds.y, bounds.width, bounds.height);
     }
     
     super.doLayout();

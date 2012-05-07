@@ -21,11 +21,13 @@ package org.xidget.swing.applet;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
 
 import javax.swing.JApplet;
 
 import org.xidget.IXidget;
 import org.xidget.ifeature.ITitleFeature;
+import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
 import org.xidget.swing.feature.SwingContainerWidgetFeature;
 
@@ -39,22 +41,21 @@ public class JAppletWidgetFeature extends SwingContainerWidgetFeature implements
     super( xidget);
   }
   
-  /* (non-Javadoc)
-   * @see org.xidget.swing.feature.SwingWidgetFeature#setDefaultBounds(float, float, float, float, boolean)
-   */
   @Override
-  public void setDefaultBounds( float x, float y, float width, float height, boolean clamp)
+  public void setComputedBounds( float x, float y, float width, float height)
   {
-    super.setDefaultBounds( x, y, width, height, clamp);
+    super.setComputedBounds( x, y, width, height);
     
-    //
-    // Set the bounds of the frame.  Since the JApplet uses the AdapterLayoutManager which
-    // inherits from BorderLayout, the content pane will be resized and the computed size
-    // of the root form will be set (see AdapterLayoutManager.layoutContainer).
-    //
-    JApplet frame = xidget.getFeature( JApplet.class);
-    frame.setLocation( (int)Math.round( x), (int)Math.round( y));
-    frame.setSize( (int)Math.round( width), (int)Math.round( height));
+    JApplet applet = xidget.getFeature( JApplet.class);
+    Rectangle windowBounds = applet.getBounds();
+    
+    Bounds computedBounds = getComputedBounds();
+    if ( computedBounds.isXDefined() && computedBounds.x != windowBounds.x) windowBounds.x = (int)Math.floor( computedBounds.x);
+    if ( computedBounds.isYDefined() && computedBounds.y != windowBounds.y) windowBounds.y = (int)Math.floor( computedBounds.y);
+    if ( computedBounds.isWidthDefined() && computedBounds.width != windowBounds.width) windowBounds.width = (int)Math.ceil( computedBounds.width);
+    if ( computedBounds.isHeightDefined() && computedBounds.height != windowBounds.height) windowBounds.height = (int)Math.ceil( computedBounds.height);
+    
+    applet.setBounds( windowBounds);
   }
 
   /* (non-Javadoc)

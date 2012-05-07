@@ -20,13 +20,15 @@
 package org.xidget.swing.feature;
 
 import java.awt.Component;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Window;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import org.xidget.IXidget;
+import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.ifeature.IWidgetFeature;
 import org.xidget.layout.Bounds;
 import org.xidget.layout.Margins;
 
@@ -42,29 +44,25 @@ public class ToplevelWidgetFeature extends SwingContainerWidgetFeature implement
   }
   
   /* (non-Javadoc)
-   * @see org.xidget.swing.feature.SwingWidgetFeature#setDefaultBounds(float, float, float, float, boolean)
+   * @see org.xidget.swing.feature.SwingWidgetFeature#setComputedBounds(float, float, float, float)
    */
   @Override
-  public void setDefaultBounds( float x, float y, float width, float height, boolean clamp)
+  public void setComputedBounds( float x, float y, float width, float height)
   {
-    super.setDefaultBounds( x, y, width, height, clamp);
-    
-    //
-    // Set the bounds of the frame.  Since the JFrame uses the AdapterLayoutManager which
-    // inherits from BorderLayout, the content pane will be resized and the computed size
-    // of the root form will be set (see AdapterLayoutManager.layoutContainer).
-    //
-    int ix = Math.round( x);
-    int iy = Math.round( y);
-    int iw = Math.round( width);
-    int ih = Math.round( height);
+    super.setComputedBounds( x, y, width, height);
     
     IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
     Object[] widgets = creationFeature.getLastWidgets();
-    Component frame = (Component)widgets[ 0];
-    Rectangle bounds = frame.getBounds();
-    if ( bounds.x != ix || bounds.y != iy) frame.setLocation( ix, iy);
-    if ( bounds.width != iw || bounds.height != ih) frame.setSize( iw, ih);
+    Component window = (Component)widgets[ 0];
+    Rectangle windowBounds = window.getBounds();
+    
+    Bounds computedBounds = getComputedBounds();
+    if ( computedBounds.isXDefined() && computedBounds.x != windowBounds.x) windowBounds.x = (int)Math.floor( computedBounds.x);
+    if ( computedBounds.isYDefined() && computedBounds.y != windowBounds.y) windowBounds.y = (int)Math.floor( computedBounds.y);
+    if ( computedBounds.isWidthDefined() && computedBounds.width != windowBounds.width) windowBounds.width = (int)Math.ceil( computedBounds.width);
+    if ( computedBounds.isHeightDefined() && computedBounds.height != windowBounds.height) windowBounds.height = (int)Math.ceil( computedBounds.height);
+    
+    window.setBounds( windowBounds);
   }
 
   /* (non-Javadoc)
@@ -74,6 +72,24 @@ public class ToplevelWidgetFeature extends SwingContainerWidgetFeature implement
   {
     JFrame widget = xidget.getFeature( JFrame.class);
     if ( widget != null) widget.setTitle( title);
+  }
+  
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#setInsideMargins(org.xidget.layout.Margins)
+   */
+  @Override
+  public void setInsideMargins( Margins margins)
+  {
+  }
+
+  /* (non-Javadoc)
+   * @see org.xidget.ifeature.IWidgetFeature#getInsideMargins()
+   */
+  @Override
+  public Margins getInsideMargins()
+  {
+    if ( insideMargins == null) insideMargins = new Margins();
+    return insideMargins;
   }
 
   /* (non-Javadoc)
@@ -98,26 +114,14 @@ public class ToplevelWidgetFeature extends SwingContainerWidgetFeature implement
    */
   public void setVisible( boolean visible)
   {
+    if ( visible)
+    {
+      ILayoutFeature layoutFeature = xidget.getFeature( ILayoutFeature.class);
+      layoutFeature.layout();
+    }
+
     Window widget = xidget.getFeature( Window.class);
-    
-    //
-    // Pack frame to preferred size of root form if default bounds are not specified.
-    // This is the only case in which the Swing LayoutManager.preferredSize() method
-    // will be called (see AdapterLayoutManager.preferredSize).
-    //
-    Bounds bounds = getDefaultBounds();
-    if ( bounds.width < 0 && bounds.height < 0) widget.pack();
-   
-    // show
     widget.setVisible( visible);
-    
-    //
-    // Update computed bounds of top-level widget before the computed bounds
-    // are accessed by the WidgetBoundsListener due to ComponentListener
-    // callback.
-    //
-    IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
-    widgetFeature.setComputedBounds( widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight());
   }
   
   /* (non-Javadoc)

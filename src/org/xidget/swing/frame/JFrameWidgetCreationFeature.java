@@ -19,16 +19,18 @@
  */
 package org.xidget.swing.frame;
 
-import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 import org.xidget.Creator;
 import org.xidget.IXidget;
+import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
-import org.xidget.swing.form.JPanelXidget;
-import org.xidget.swing.layout.AdapterLayoutManager;
+import org.xidget.ifeature.IWidgetFeature;
 
 /**
  * An implementation of IWidgetCreationFeature which creates a Swing JFrame for the application.
@@ -49,15 +51,7 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
     jframe.setLocationByPlatform(true);    
     jframe.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE);
     jframe.addWindowListener( windowListener);
-
-    for( IXidget child: xidget.getChildren())
-    {
-      if ( child instanceof JPanelXidget)
-      {
-        AdapterLayoutManager layoutManager = new AdapterLayoutManager( child, new BorderLayout());
-        jframe.getContentPane().setLayout( layoutManager);
-      }
-    }
+    jframe.getContentPane().addComponentListener( componentListener);
     
     jframe.addWindowListener( new WindowAdapter() {
       public void windowClosed( WindowEvent e)
@@ -93,6 +87,18 @@ public class JFrameWidgetCreationFeature implements IWidgetCreationFeature
     return jframe;
   }
 
+  private ComponentListener componentListener = new ComponentAdapter() {
+    @Override
+    public void componentResized( ComponentEvent event)
+    {
+      IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
+      widgetFeature.setDefaultBounds( jframe.getX(), jframe.getY(), jframe.getWidth(), jframe.getHeight(), false);
+      
+      ILayoutFeature layoutFeature = xidget.getFeature( ILayoutFeature.class);
+      layoutFeature.layout();
+    }
+  };
+  
   private WindowListener windowListener = new WindowAdapter() {
     @Override
     public void windowClosing( WindowEvent event)

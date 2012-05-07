@@ -25,8 +25,10 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import org.xidget.IFeatured;
 import org.xidget.Xidget;
+import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.feature.BindFeature;
 import org.xidget.ifeature.IBindFeature;
+import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.ITitleFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
@@ -43,6 +45,7 @@ public class JDialogXidget extends Xidget
   public void createFeatures()
   {
     bindFeature = new BindFeature( this);
+    layoutFeature = new AnchorLayoutFeature( this);
     dialogFeature = new JDialogFeature( this);
     widgetFeature = new ToplevelWidgetFeature( this);
     titleFeature = new JDialogTitleFeature( this);
@@ -59,6 +62,7 @@ public class JDialogXidget extends Xidget
   public <T> T getFeature( Class<T> clss)
   {
     if ( clss == IBindFeature.class) return (T)bindFeature;
+    if ( clss == ILayoutFeature.class) return (T)layoutFeature;
     if ( clss == IDialogFeature.class) return (T)dialogFeature;
     if ( clss == IWidgetFeature.class) return (T)widgetFeature;
     if ( clss == ITitleFeature.class) return (T)titleFeature;
@@ -77,6 +81,7 @@ public class JDialogXidget extends Xidget
   }
   
   private IBindFeature bindFeature;
+  private ILayoutFeature layoutFeature;
   private IDialogFeature dialogFeature;
   private IWidgetFeature widgetFeature;
   private ITitleFeature titleFeature;

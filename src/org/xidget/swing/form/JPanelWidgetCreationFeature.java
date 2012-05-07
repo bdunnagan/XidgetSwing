@@ -24,13 +24,11 @@ import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.List;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
-
 import org.xidget.IXidget;
 import org.xidget.feature.AnchorLayoutFeature;
 import org.xidget.ifeature.ILayoutFeature;
@@ -38,7 +36,6 @@ import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.layout.AnchorNode;
 import org.xidget.layout.IComputeNode;
-import org.xidget.swing.layout.AnchorLayoutManager;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
 import org.xmodel.xpath.expression.IExpression;
@@ -58,7 +55,7 @@ public class JPanelWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void createWidgets()
   {
-    jPanel = new Canvas( xidget, new AnchorLayoutManager( xidget));
+    jPanel = new Canvas( xidget);
     jPanel.addMouseListener( mouseListener);
     jPanel.addMouseMotionListener( mouseListener);
 

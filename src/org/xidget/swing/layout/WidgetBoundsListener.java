@@ -33,25 +33,11 @@ public class WidgetBoundsListener extends ComponentAdapter
     IModelObject node = widgetFeature.getBoundsNode();
     if ( node != null)
     {
-      Object value = node.getValue();
-      if ( value == null) value = new Bounds();
-
-      Bounds bounds = null;
-      if ( value instanceof Bounds)
-      {
-        bounds = (Bounds)value;
-      }
-      else
-      {
-        bounds = new Bounds();
-        bounds.parse( value.toString());
-      }
-      
+      Bounds bounds = getBoundsFromNode( node);
       Component component = e.getComponent();
-      if ( component.getX() != bounds.x || component.getY() != bounds.y)
-      {
-        node.setValue( new Bounds( component.getX(), component.getY(), bounds.width, bounds.height));
-      }
+      if ( bounds.isXDefined() && bounds.x != component.getX()) bounds.x = component.getX();
+      if ( bounds.isYDefined() && bounds.y != component.getX()) bounds.y = component.getY();
+      if ( bounds.isXDefined() || bounds.isYDefined()) node.setValue( bounds);
     }
   }
 
@@ -65,26 +51,24 @@ public class WidgetBoundsListener extends ComponentAdapter
     IModelObject node = widgetFeature.getBoundsNode();
     if ( node != null)
     {
-      Object value = node.getValue();
-      if ( value == null) value = new Bounds();
-
-      Bounds bounds = null;
-      if ( value instanceof Bounds)
-      {
-        bounds = (Bounds)value;
-      }
-      else
-      {
-        bounds = new Bounds();
-        bounds.parse( value.toString());
-      }
-      
+      Bounds bounds = getBoundsFromNode( node);
       Component component = e.getComponent();
-      if ( component.getWidth() != bounds.width || component.getHeight() != bounds.height)
-      {
-        node.setValue( new Bounds( bounds.x, bounds.y, component.getWidth(), component.getHeight()));
-      }
+      if ( bounds.isWidthDefined() && bounds.width != component.getWidth()) bounds.width = component.getWidth();
+      if ( bounds.isHeightDefined() && bounds.height != component.getHeight()) bounds.height = component.getHeight();
+      if ( bounds.isWidthDefined() || bounds.isHeightDefined()) node.setValue( bounds);
     }
+  }
+  
+  private Bounds getBoundsFromNode( IModelObject node)
+  {
+    Object value = node.getValue();
+    if ( value == null) return new Bounds();
+
+    if ( value instanceof Bounds) return new Bounds( (Bounds)value);
+    
+    Bounds bounds = new Bounds();
+    bounds.parse( value.toString());
+    return bounds;
   }
   
   private IXidget xidget;

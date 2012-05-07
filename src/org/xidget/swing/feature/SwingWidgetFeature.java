@@ -39,7 +39,6 @@ import org.xidget.swing.Toolkit;
 import org.xidget.swing.layout.WidgetBoundsListener;
 import org.xmodel.IModelObject;
 import org.xmodel.log.Log;
-import org.xmodel.log.SLog;
 
 /**
  * An adapter for Swing/AWT widgets.
@@ -51,8 +50,8 @@ public class SwingWidgetFeature implements IWidgetFeature
   public SwingWidgetFeature( IXidget xidget)
   {
     this.xidget = xidget;
-    this.defaultBounds = new Bounds( 0, 0, -1, -1);
-    this.computedBounds = new Bounds( 0, 0, -1, -1);
+    this.defaultBounds = new Bounds();
+    this.computedBounds = new Bounds();
   }
   
   /* (non-Javadoc)
@@ -64,7 +63,6 @@ public class SwingWidgetFeature implements IWidgetFeature
     defaultBounds.y = y;
     defaultBounds.width = width;
     defaultBounds.height = height;
-    clampBounds = clamp;
   }
   
   /* (non-Javadoc)
@@ -81,9 +79,12 @@ public class SwingWidgetFeature implements IWidgetFeature
     IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
     Object[] widgets = creationFeature.getLastWidgets();
     Component widget = (Component)widgets[ 0];
+    
     Dimension size = widget.getPreferredSize();
-    if ( defaultBounds.width < 0) defaultBounds.width = size.width;
-    if ( defaultBounds.height < 0) defaultBounds.height = size.height;
+    if ( !defaultBounds.isXDefined()) defaultBounds.x = 0;
+    if ( !defaultBounds.isYDefined()) defaultBounds.y = 0;
+    if ( !defaultBounds.isWidthDefined()) defaultBounds.width = size.width;
+    if ( !defaultBounds.isHeightDefined()) defaultBounds.height = size.height;
     
     return defaultBounds;
   }
@@ -93,21 +94,16 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public void setComputedBounds( float x, float y, float width, float height)
   {
-    if ( x == computedBounds.x && y == computedBounds.y && width == computedBounds.width && height == computedBounds.height)
-      return;
+    Bounds bounds = getComputedBounds();
     
+    if ( x == bounds.x && y == bounds.y && width == bounds.width && height == bounds.height) return;
+   
     computedBounds.x = x;
     computedBounds.y = y;
     computedBounds.width = width;
     computedBounds.height = height;
     
-    if ( !clampBounds)
-    {
-      setDefaultBounds( x, y, width, height, false);
-    }
-    
-    if ( computedBounds.width < 1 || computedBounds.height < 1)
-      SLog.debugf( this, "widget (%s) has zero dimension (%s)", xidget, computedBounds);
+    //System.out.printf( "%s %s\n", xidget, computedBounds);
     
     IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
     Object[] widgets = creationFeature.getLastWidgets();
@@ -124,7 +120,17 @@ public class SwingWidgetFeature implements IWidgetFeature
    */
   public Bounds getComputedBounds()
   {
-    return computedBounds;
+    Bounds defaultBounds = getDefaultBounds();
+    Bounds bounds = new Bounds( computedBounds);
+    if ( !bounds.isXDefined()) bounds.x = defaultBounds.x;
+    if ( !bounds.isYDefined()) bounds.y = defaultBounds.y;
+    if ( !bounds.isWidthDefined()) bounds.width = defaultBounds.width;
+    if ( !bounds.isHeightDefined()) bounds.height = defaultBounds.height;
+    
+    if ( !bounds.isXDefined()) bounds.x = 0;
+    if ( !bounds.isYDefined()) bounds.y = 0;
+    
+    return bounds;
   }
 
   /* (non-Javadoc)
@@ -344,7 +350,6 @@ public class SwingWidgetFeature implements IWidgetFeature
   protected IModelObject boundsNode;
   protected Bounds defaultBounds = new Bounds();
   protected Bounds computedBounds = new Bounds();
-  protected boolean clampBounds;
   protected Margins insideMargins;
   protected Margins outsideMargins;
   protected Border insideBorder;

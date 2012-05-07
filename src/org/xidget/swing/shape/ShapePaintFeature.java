@@ -35,7 +35,6 @@ import org.xidget.swing.Toolkit;
 import org.xidget.swing.feature.SwingTextWidgetFeature;
 import org.xmodel.IModelObject;
 import org.xmodel.Xlate;
-import org.xmodel.log.SLog;
 import org.xmodel.xpath.expression.IContext;
 import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.IExpression.ResultType;
@@ -281,7 +280,6 @@ public class ShapePaintFeature implements IPaintFeature<Graphics2D>, IShapeFeatu
     defaultBounds.y = y;
     defaultBounds.width = width;
     defaultBounds.height = height;
-    clampBounds = clamp;
   }
   
   /* (non-Javadoc)
@@ -305,21 +303,12 @@ public class ShapePaintFeature implements IPaintFeature<Graphics2D>, IShapeFeatu
    */
   public void setComputedBounds( float x, float y, float width, float height)
   {
-    if ( x == computedBounds.x && y == computedBounds.y && width == computedBounds.width && height == computedBounds.height)
-      return;
+    if ( x == computedBounds.x && y == computedBounds.y && width == computedBounds.width && height == computedBounds.height) return;
     
     computedBounds.x = x;
     computedBounds.y = y;
     computedBounds.width = width;
     computedBounds.height = height;
-    
-    if ( !clampBounds)
-    {
-      setDefaultBounds( x, y, width, height, false);
-    }
-    
-    if ( computedBounds.width < 1 || computedBounds.height < 1)
-      SLog.debugf( this, "widget (%s) has zero dimension (%s)", xidget, computedBounds);
   }
 
   /* (non-Javadoc)
@@ -327,7 +316,17 @@ public class ShapePaintFeature implements IPaintFeature<Graphics2D>, IShapeFeatu
    */
   public Bounds getComputedBounds()
   {
-    return computedBounds;
+    Bounds defaultBounds = getDefaultBounds();
+    Bounds bounds = new Bounds( computedBounds);
+    if ( !bounds.isXDefined()) bounds.x = defaultBounds.x;
+    if ( !bounds.isYDefined()) bounds.y = defaultBounds.y;
+    if ( !bounds.isWidthDefined()) bounds.width = defaultBounds.width;
+    if ( !bounds.isHeightDefined()) bounds.height = defaultBounds.height;
+    
+    if ( !bounds.isXDefined()) bounds.x = 0;
+    if ( !bounds.isYDefined()) bounds.y = 0;
+    
+    return bounds;
   }
 
   /* (non-Javadoc)
@@ -522,7 +521,6 @@ public class ShapePaintFeature implements IPaintFeature<Graphics2D>, IShapeFeatu
 
   protected Bounds defaultBounds = new Bounds();
   protected Bounds computedBounds = new Bounds();
-  protected boolean clampBounds;
   protected Margins insideMargins;
   protected Margins outsideMargins;
   protected Border insideBorder;

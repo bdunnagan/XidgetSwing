@@ -20,12 +20,8 @@
 package org.xidget.swing.tabs;
 
 import java.awt.Component;
-import java.awt.Container;
-
 import javax.swing.JTabbedPane;
-
 import org.xidget.IXidget;
-import org.xidget.ifeature.ILayoutFeature;
 import org.xidget.ifeature.IWidgetContainerFeature;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xmodel.Xlate;
@@ -104,18 +100,6 @@ public class JTabbedPaneContainerFeature implements IWidgetContainerFeature
     }
   }
   
-  /* (non-Javadoc)
-   * @see org.xidget.ifeature.IWidgetContainerFeature#relayout()
-   */
-  public void relayout()
-  {
-    ILayoutFeature layoutFeature = xidget.getFeature( ILayoutFeature.class);
-    if ( layoutFeature != null) layoutFeature.invalidate();
-    
-    Container container = xidget.getFeature( Container.class);
-    if ( container != null && container.isShowing()) container.validate();
-  }
-
   /* (non-Javadoc)
    * @see org.xidget.ifeature.IWidgetContainerFeature#setSpacing(int)
    */

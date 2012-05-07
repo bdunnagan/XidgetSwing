@@ -4,16 +4,12 @@
  */
 package org.xidget.swing.applet;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-
 import javax.swing.JApplet;
 import javax.swing.JMenuBar;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.feature.GenericContainerFeature;
-import org.xidget.swing.layout.AdapterLayoutManager;
 
 /**
  * An implementation of IWidgetContainerFeature for the Swing JFrame widget.
@@ -40,9 +36,6 @@ public class JAppletContainerFeature extends GenericContainerFeature
     }
     else
     {
-      AdapterLayoutManager layoutManager = new AdapterLayoutManager( child, new BorderLayout());
-      applet.getContentPane().setLayout( layoutManager);
-      
       IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
       Object[] widgets = creationFeature.getLastWidgets();
       if ( widgets.length > 0) 

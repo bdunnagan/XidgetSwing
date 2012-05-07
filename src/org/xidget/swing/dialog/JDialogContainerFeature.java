@@ -4,16 +4,12 @@
  */
 package org.xidget.swing.dialog;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
-
 import javax.swing.JDialog;
 import javax.swing.JMenuBar;
-
 import org.xidget.IXidget;
 import org.xidget.ifeature.IWidgetCreationFeature;
 import org.xidget.swing.feature.GenericContainerFeature;
-import org.xidget.swing.layout.AdapterLayoutManager;
 
 /**
  * An implementation of IWidgetContainerFeature for the Swing JFrame widget.
@@ -40,10 +36,6 @@ public class JDialogContainerFeature extends GenericContainerFeature
     else
     {
       JDialog dialog = xidget.getFeature( JDialog.class);
-
-      AdapterLayoutManager layoutManager = new AdapterLayoutManager( child, new BorderLayout());
-      dialog.getContentPane().setLayout( layoutManager);
-      
       IWidgetCreationFeature creationFeature = child.getFeature( IWidgetCreationFeature.class);
       Object[] widgets = creationFeature.getLastWidgets();
       if ( widgets.length > 0) dialog.getContentPane().add( (Component)widgets[ 0], index);

@@ -38,6 +38,7 @@ public class JAppletWidgetCreationFeature implements IWidgetCreationFeature
    */
   public void createWidgets()
   {
+    applet.getContentPane().setLayout( null);
   }
 
   /* (non-Javadoc)

@@ -40,6 +40,7 @@ public class SwingContainerWidgetFeature extends SwingWidgetFeature
   @Override
   public Bounds getDefaultBounds()
   {
-    return defaultBounds;
+    return super.getDefaultBounds();
+//    return defaultBounds;
   }
 }

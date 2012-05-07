@@ -41,7 +41,7 @@ public class SwingPrintFeature implements IPrintFeature, Printable
     Component component = (Component)widgets[ 0];
     
     IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
-    Bounds bounds = widgetFeature.getDefaultBounds();
+    Bounds bounds = widgetFeature.getComputedBounds();
     int width = (int)Math.ceil( bounds.width * scale);
     int height = (int)Math.ceil( bounds.height * scale);
     

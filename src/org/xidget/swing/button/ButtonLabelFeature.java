@@ -71,17 +71,7 @@ public class ButtonLabelFeature implements ILabelFeature
   public void setLabelText( String text)
   {
     AbstractButton button = xidget.getFeature( AbstractButton.class);
-    if ( button != null) 
-    {
-      //
-      // HACK: Original default bounds are overwritten by computed bounds!
-      //
-      IWidgetFeature widgetFeature = xidget.getFeature( IWidgetFeature.class);
-      Bounds bounds = widgetFeature.getDefaultBounds();
-      widgetFeature.setDefaultBounds( bounds.x, bounds.y, -1, -1, false);
-      
-      button.setText( text);
-    }
+    if ( button != null) button.setText( text);
   }
   
   private IXidget xidget;
