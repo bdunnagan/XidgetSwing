@@ -362,6 +362,7 @@ public class Toolkit implements IToolkit
      */
     public boolean accept( File pathname)
     {
+      if ( pathname.isDirectory()) return true;
       parent.set( "value", pathname.getPath());
       boolean result = filter.evaluateBoolean( parent);
       return result;
