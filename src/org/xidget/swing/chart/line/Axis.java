@@ -4,7 +4,6 @@
  */
 package org.xidget.swing.chart.line;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
@@ -12,7 +11,9 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JPanel;
+
 import org.xidget.IXidget;
 import org.xidget.chart.IScale;
 import org.xidget.chart.Plot;
@@ -32,7 +33,6 @@ public abstract class Axis extends JPanel implements IPlotFeature
     
     setFont( Font.decode( "times-10"));
     
-    setBackground( Color.white);
     addComponentListener( resizeListener);
   }
   
