@@ -256,7 +256,7 @@ public class PieChart extends JPanel implements IPlotFeature
     {
       Toolkit toolkit = (Toolkit)Creator.getToolkit();
       IColorFeature<Color, Graphics2D> feature = toolkit.getFeature( IColorFeature.class);
-      return feature.getColor( point.bcolor);
+      if ( point.bcolor != null && point.bcolor.length() > 0) return feature.getColor( point.bcolor);
     }
     
     return Color.getHSBColor( (float)startAngle, 0.7f, 0.95f);
