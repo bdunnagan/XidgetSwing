@@ -21,6 +21,7 @@ package org.xidget.swing;
 
 import java.io.File;
 import javax.swing.SwingUtilities;
+import org.xidget.Creator;
 import org.xidget.caching.ZipCachingPolicy;
 import org.xidget.swing.image.ImageFileAssociation;
 import org.xmodel.caching.FileSystemCachingPolicy;
@@ -56,6 +57,11 @@ public class Main
   public static void start( String[] args)
   {    
     final String path = (args.length > 0)? args[ 0]: "xapp/main.xml";
+    
+    //
+    // Initialize Creator first so that scripts relying on xidget XPath functions can run headless.
+    //
+    Creator.getInstance();
     
     //
     // Create caching policy depending on whether we are running in a jar.
