@@ -32,7 +32,6 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JToggleButton;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import org.xidget.Creator;
 import org.xidget.IToolkit;
@@ -78,8 +77,8 @@ import org.xidget.swing.tabs.JTabbedPaneXidget;
 import org.xidget.swing.text.JTextXidget;
 import org.xidget.swing.tree.JTreeXidget;
 import org.xidget.swing.util.BuildLabelHtml;
+import org.xidget.swing.util.SwingDispatcher;
 import org.xidget.swing.xmleditor.XmlTextPaneXidget;
-import org.xmodel.IDispatcher;
 import org.xmodel.IModelObject;
 import org.xmodel.ModelRegistry;
 import org.xmodel.caching.IFileAssociation;
@@ -101,12 +100,7 @@ public class Toolkit implements IToolkit
     printFeature = new SwingPrintFeature();
     
     // define the dispatcher in the xmodel
-    ModelRegistry.getInstance().getModel().setDispatcher( new IDispatcher() {
-      public void execute( Runnable runnable)
-      {
-        SwingUtilities.invokeLater( runnable);
-      }
-    });
+    ModelRegistry.getInstance().getModel().setDispatcher( new SwingDispatcher());
   }
   
   /* (non-Javadoc)
