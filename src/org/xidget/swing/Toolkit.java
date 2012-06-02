@@ -106,6 +106,15 @@ public class Toolkit implements IToolkit
       {
         SwingUtilities.invokeLater( runnable);
       }
+
+      /* (non-Javadoc)
+       * @see org.xmodel.IDispatcher#shutdown(boolean)
+       */
+      @Override
+      public void shutdown( boolean immediate)
+      {
+      }
+      
     });
   }
   
