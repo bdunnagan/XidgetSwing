@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.lang.Thread.UncaughtExceptionHandler;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import org.xidget.IToolkit;
 import org.xmodel.log.SLog;
 import org.xmodel.xpath.expression.IExpression;
 import org.xmodel.xpath.expression.StatefulContext;
@@ -70,15 +69,6 @@ public final class Startup extends org.xidget.Startup
     // Start
     //
     super.start( path);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xidget.Startup#getToolkitClass()
-   */
-  @Override
-  protected Class<? extends IToolkit> getToolkitClass()
-  {
-    return Toolkit.class;
   }
 
   /* (non-Javadoc)

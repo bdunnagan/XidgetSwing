@@ -63,6 +63,9 @@ public class Main
     //
     Creator.getInstance();
     
+    // configure the xidget toolkit
+    Creator.setToolkitClass( Toolkit.class);
+    
     //
     // Create caching policy depending on whether we are running in a jar.
     //

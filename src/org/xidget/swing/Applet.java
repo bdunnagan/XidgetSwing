@@ -99,6 +99,9 @@ public class Applet extends JApplet
     //
     Creator.getInstance().register( this, appletXidget);
     
+    // configure the xidget toolkit
+    Creator.setToolkitClass( Toolkit.class);
+    
     try
     {
       URL url = getClass().getResource( "/xapp.xip");
