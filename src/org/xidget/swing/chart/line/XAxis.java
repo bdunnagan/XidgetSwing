@@ -9,6 +9,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.xidget.chart.IScale.Tick;
 import org.xidget.chart.NumericScale;
 import org.xidget.ifeature.IWidgetContextFeature;
 import org.xidget.ifeature.chart.IAxisFeature;
+import org.xidget.swing.chart.line.ParagraphLayout.Justify;
 import org.xmodel.xpath.expression.IContext;
 
 /**
@@ -82,11 +84,14 @@ public class XAxis extends Axis
     // get label fonts
     Font[] fonts = getLabelFonts( g2d);
     
+    // layout tick labels
+    ParagraphLayout[] layouts = layoutTicks( fonts, g2d.getFontRenderContext());
+    
     // find tick depth at which labels do not overlap
     AxisFeature axisFeature = (AxisFeature)xidget.getFeature( IAxisFeature.class);
     List<Tick> ticks = scale.getTicks();
     int labelDepth = axisFeature.labelDepth;
-    if ( labelDepth == -1) labelDepth = findTextDepth( g2d);
+    if ( labelDepth == -1) labelDepth = findTextDepth( layouts);
     if ( labelDepth == -1) labelDepth = 0;
     
     // draw ticks and labels
@@ -127,41 +132,51 @@ public class XAxis extends Axis
       }
     }
   }
+
+  /**
+   * Layout each tick paragraph.
+   * @param fonts The label fonts by depth.
+   * @param frc The FontRenderContext for layout.
+   * @return Returns the paragraph layouts.
+   */
+  private ParagraphLayout[] layoutTicks( Font[] fonts, FontRenderContext frc)
+  {
+    List<Tick> ticks = scale.getTicks();
+    ParagraphLayout[] layouts = new ParagraphLayout[ ticks.size()];
+    for( int i=0; i<ticks.size(); i++)
+    {
+      Tick tick = ticks.get( i);
+      int fontIndex = (tick.depth < fonts.length)? tick.depth: fonts.length-1;
+      layouts[ i] = new ParagraphLayout( tick.label, fonts[ fontIndex], Justify.center, frc);
+    }
+    return layouts;
+  }
   
   /**
-   * Find the tick depth at which ticks are spaced far enough apart for the specified width.
-   * @param metric The FontMetrics instance.
+   * Find the tick depth at which ticks are spaced far enough apart for the width of the component.
+   * @param Layouts for each tick.
    * @return Returns the maximum tick depth for labeling.
    */
-  private int findTextDepth( Graphics2D g)
+  private int findTextDepth( ParagraphLayout[] layouts)
   {
-    if ( scale == null) return 0;
-    
     int width = getWidth();
     List<Tick> ticks = scale.getTicks();
-    for( int i=0; i <= ticks.get( 1).depth && i < fonts.length; i++)
+    int maxDepth = ticks.get( 1).depth;
+    for( int i=0; i <= maxDepth && i < fonts.length; i++)
     {
-      int max = 0;
-      int count = 0;
-      String maxLabel = "";
-      for( Tick tick: ticks)
+      int widthAtDepth = 0;
+      for( int j=0; j<ticks.size(); j++)
       {
+        Tick tick = ticks.get( j);
         if ( tick.depth == i)
         {
-          if ( max < tick.label.length())
-          {
-            max = tick.label.length();
-            maxLabel = tick.label;
-          }
-          count++;
+          float tickWidth = layouts[ j].getWidth();
+          widthAtDepth += tickWidth;
+          if ( widthAtDepth > width) return i-1;
         }
       }
-      
-      FontMetrics metrics = g.getFontMetrics( fonts[ i]);
-      int textWidth = metrics.stringWidth( maxLabel) + 10; 
-      if ( textWidth > (width / count)) return i-1;
     }
-    return ticks.get( 1).depth - 1;
+    return maxDepth;
   }
   
   private boolean top;
