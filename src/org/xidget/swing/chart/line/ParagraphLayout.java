@@ -78,8 +78,8 @@ public class ParagraphLayout
         case right:  jx = width - layout.getAdvance(); break;
       }
       
-      layout.draw( g, jx, y + layout.getAdvance());
-      y += layout.getAdvance() + layout.getDescent() + layout.getLeading();
+      layout.draw( g, x + jx, y + layout.getAscent());
+      y += layout.getAscent() + layout.getDescent() + layout.getLeading();
     }
   }
 
@@ -91,14 +91,15 @@ public class ParagraphLayout
     layouts = new ArrayList<TextLayout>();
     
     int start = 0;
-    int index = indexOf( text, start, separators); 
+    int index = 0;
     while( index < text.length())
     {
+      index = indexOf( text, start, separators);
+      
       TextLayout layout = new TextLayout( text.substring( start, index), font, frc);
       layouts.add( layout);
       
       start = index + 1;
-      index = indexOf( text, start, separators);
     }
     
     // compute dimensions
@@ -112,7 +113,7 @@ public class ParagraphLayout
       if ( width < layout.getAdvance())
         width = layout.getAdvance();
       
-      height += layout.getAdvance() + layout.getDescent();
+      height += layout.getAscent() + layout.getDescent();
       leading = layout.getLeading();
     }
   }

@@ -436,8 +436,8 @@ public class LineChart extends JPanel implements IPlotFeature
     }
   };
 
-  final static int padWidth = 10;
-  final static int padHeight = 10;
+  final static int padWidth = 5;
+  final static int padHeight = 5;
   
   private final static double pointBoxTabWidth = 7;
   private final static double pointBoxTabHeight = 7;

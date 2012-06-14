@@ -26,6 +26,7 @@ import org.xidget.chart.Point;
 import org.xidget.ifeature.IColorFeature;
 import org.xidget.ifeature.chart.IPlotFeature;
 import org.xidget.swing.Toolkit;
+import org.xidget.swing.chart.line.ParagraphLayout.Justify;
 
 /**
  * A custom widget that plots points on a two dimensional graph.  
@@ -323,16 +324,24 @@ public class BarChart extends JPanel implements IPlotFeature
     Toolkit toolkit = (Toolkit)Creator.getToolkit();
     IColorFeature<Color, Graphics2D> colorFeature = toolkit.getFeature( IColorFeature.class);
     
-    // draw gradient background
-//    GradientPaint paint = new GradientPaint( 0, 0, Color.white, 0, height, Color.lightGray);
-//    g2d.setPaint( paint);
-//    g2d.fillRect( 0, 0, width, height);
-    
     // set grid color
     g2d.setColor( getForeground());
     
-    FontMetrics metrics = g2d.getFontMetrics();
-    height -= metrics.getHeight() + 3;
+    // get label paragraphs
+    float maxLabelHeight = 0;
+    List<ParagraphLayout> labelLayouts = new ArrayList<ParagraphLayout>();
+    for( Plot plot: plots)
+    {
+      for( Point point: plot.getPoints())
+      {
+        ParagraphLayout layout = new ParagraphLayout( point.label, getFont(), Justify.center, g2d.getFontRenderContext());
+        labelLayouts.add( layout);
+        if ( layout.getHeight() > maxLabelHeight) maxLabelHeight = layout.getHeight();
+      }
+    }
+    
+    // adjust height of graph to accomodate labels
+    height -= maxLabelHeight + 3;
     
     // draw vertical grid-lines
     IScale yscale = (yAxis != null)? yAxis.getScale(): null;
@@ -359,9 +368,9 @@ public class BarChart extends JPanel implements IPlotFeature
       n += plot.getPoints().size();
 
     // horizontal orientation
-    double wbt = width / (n + 1);
-    double wb = wbt * 0.75;
-    double x = wbt;
+    double wbt = width / n;
+    double wb = wbt * 0.5;
+    double x = wbt / 2;
     for( Plot plot: plots)
     {
       for( Point point: plot.getPoints())
@@ -393,8 +402,8 @@ public class BarChart extends JPanel implements IPlotFeature
         
         // draw text
         colorFeature.applyColor( plot.getForeground(), g2d, width, height);
-        float textWidth = metrics.stringWidth( point.label);
-        g2d.drawString( point.label, (int)(x - (textWidth / 2)), height + 3 + metrics.getAscent());
+        ParagraphLayout layout = new ParagraphLayout( point.label, getFont(), Justify.center, g2d.getFontRenderContext());
+        layout.draw( g2d, (int)(x - (layout.getWidth() / 2)), height + 3);
         
         x += wbt;
       }
