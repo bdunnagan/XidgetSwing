@@ -367,6 +367,8 @@ public class BarChart extends JPanel implements IPlotFeature
     for( Plot plot: plots)
       n += plot.getPoints().size();
 
+    if ( n == 0) return;
+    
     // horizontal orientation
     double wbt = width / n;
     double wb = wbt * 0.5;
