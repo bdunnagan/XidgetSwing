@@ -20,7 +20,6 @@
 package org.xidget.swing.table;
 
 import java.awt.Color;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.dnd.DnDConstants;
@@ -35,7 +34,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.List;
-
 import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -47,7 +45,6 @@ import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
 import org.xidget.IXidget;
 import org.xidget.feature.tree.ColumnWidthFeature;
 import org.xidget.ifeature.IDragAndDropFeature;
@@ -102,7 +99,6 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     ColumnWidthFeature widthFeature = (ColumnWidthFeature)xidget.getFeature( IColumnWidthFeature.class);
     widthFeature.configure( xidget);
     jtable.setAutoResizeMode( JTable.AUTO_RESIZE_OFF);
-    jtable.addComponentListener( componentListener);
     jscrollPane.addComponentListener( componentListener);
     jscrollPane.addMouseWheelListener( mouseWheelListener);
     
@@ -292,8 +288,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
     public void componentResized( ComponentEvent e)
     {
       IColumnWidthFeature feature = xidget.getFeature( IColumnWidthFeature.class);
-      Insets insets = jscrollPane.getInsets();
-      feature.setTotalWidth( jscrollPane.getWidth() - insets.left - insets.right);
+      feature.setTotalWidth( jscrollPane.getViewport().getWidth());
     }
   };
   
@@ -313,8 +308,7 @@ public class JTableWidgetCreationFeature extends SwingWidgetCreationFeature
         feature.setFreeWidth( index, width, width, 0);
       }
       
-      Insets insets = jscrollPane.getInsets();
-      feature.setTotalWidth( jscrollPane.getWidth() - insets.left - insets.right);
+      feature.setTotalWidth( jscrollPane.getViewport().getWidth());
     }
     public void columnAdded( TableColumnModelEvent e)
     {
