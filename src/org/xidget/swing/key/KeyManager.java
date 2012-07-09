@@ -11,8 +11,8 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
 import org.xidget.Creator;
 import org.xidget.IXidget;
 import org.xidget.ifeature.IKeyFeature;
@@ -53,7 +53,7 @@ public class KeyManager
    */
   public void unbind( IXidget xidget, String keys, IXAction script)
   {
-    tree.unbind( keys);
+    tree.unbind( keys, new KeyBinding( xidget, false, script));
   }
   
   /**
@@ -81,21 +81,26 @@ public class KeyManager
     String key = lookup.get( e.getKeyCode());
     if ( key != null)
     {
-      KeyBinding binding = tree.keyDown( key);
-      if ( binding != null)
+      List<KeyBinding> bindings = tree.keyDown( key);
+      if ( bindings != null && bindings.size() > 0)
       {
         IXidget xidget = findXidget( e.getComponent());
         if ( xidget != null)
         {
-          if ( binding.override) e.consume();
-          
-          IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
-          Object[] widgets = creationFeature.getLastWidgets();
-          
-          IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
-          StatefulContext context = contextFeature.getContext( widgets[ 0]);
-          context.set( "here", binding.xidget.getConfig());
-          binding.script.run( context);
+          for( KeyBinding binding: bindings)
+          {
+            if ( !binding.xidget.equals( xidget)) continue;
+            
+            if ( binding.override) e.consume();
+            
+            IWidgetCreationFeature creationFeature = xidget.getFeature( IWidgetCreationFeature.class);
+            Object[] widgets = creationFeature.getLastWidgets();
+            
+            IWidgetContextFeature contextFeature = xidget.getFeature( IWidgetContextFeature.class);
+            StatefulContext context = contextFeature.getContext( widgets[ 0]);
+            context.set( "here", binding.xidget.getConfig());
+            binding.script.run( context);
+          }
         }
       }
     }
@@ -152,6 +157,28 @@ public class KeyManager
       this.script = script;
     }
     
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals( Object object)
+    {
+      if ( !(object instanceof KeyBinding)) return false;
+      KeyBinding binding = (KeyBinding)object;
+      if ( !binding.xidget.equals( xidget)) return false;
+      if ( !binding.script.equals( script)) return false;
+      return true;
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode()
+    {
+      return xidget.hashCode() + script.hashCode();
+    }
+
     public IXidget xidget;
     public boolean override;
     public IXAction script;

@@ -10,7 +10,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.ThreadFactory;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -40,14 +39,7 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     xmlIO.setErrorHandler( errorHandler);
     errorHighlighter = new ErrorHighlightPainter();
 
-    executor = Executors.newCachedThreadPool( new ThreadFactory() {
-      public Thread newThread( Runnable runnable)
-      {
-        Thread thread = new Thread( runnable);
-        thread.setDaemon( true);
-        return thread;
-      }
-    });
+    executor = Executors.newFixedThreadPool( 1);
   }
 
   /* (non-Javadoc)
