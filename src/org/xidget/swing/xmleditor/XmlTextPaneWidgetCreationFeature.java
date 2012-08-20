@@ -6,10 +6,10 @@
 package org.xidget.swing.xmleditor;
 
 import java.awt.Container;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -38,8 +38,6 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     xmlIO = new XmlIO();
     xmlIO.setErrorHandler( errorHandler);
     errorHighlighter = new ErrorHighlightPainter();
-
-    executor = Executors.newFixedThreadPool( 1);
   }
 
   /* (non-Javadoc)
@@ -145,9 +143,10 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
   private void updateEditor()
   {
     xmlTextPane.getHighlighter().removeAllHighlights();
-    if ( future != null) future.cancel( false);
-    future = new FutureTask<IModelObject>( parseCallable);
-    executor.submit( future);
+    if ( future == null || future.cancel( false))
+    {
+      future = executor.schedule( parseRunnable, 250, TimeUnit.MILLISECONDS);
+    }
   }
 
   private DocumentListener documentListener = new DocumentListener() {
@@ -165,16 +164,21 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     }
   };
   
-  private Callable<IModelObject> parseCallable = new Callable<IModelObject>() {
-    public IModelObject call() throws Exception
+  private Runnable parseRunnable = new Runnable() {
+    public void run()
     {
-      String text = xmlTextPane.getText();
-      IModelObject element = xmlIO.read( text);
-      SwingUtilities.invokeLater( new Commiter( element));
-      return element;
+      try
+      {
+        String text = xmlTextPane.getText();
+        IModelObject element = xmlIO.read( text);
+        SwingUtilities.invokeLater( new Commiter( element));
+      }
+      catch( Exception e)
+      {
+      }
     }
   };
-  
+    
   private class Commiter implements Runnable
   {
     public Commiter( IModelObject element)
@@ -216,10 +220,11 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     }
   };
 
+  private ScheduledExecutorService executor = Executors.newScheduledThreadPool( 1);
+  
   private JScrollPane jScrollPane;
   private XmlTextPane xmlTextPane;
   private ErrorHighlightPainter errorHighlighter;
   private XmlIO xmlIO;
-  private FutureTask<IModelObject> future;
-  private ExecutorService executor;
+  private ScheduledFuture<?> future;
 }
