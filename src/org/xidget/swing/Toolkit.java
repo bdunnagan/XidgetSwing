@@ -80,7 +80,7 @@ import org.xidget.swing.util.BuildLabelHtml;
 import org.xidget.swing.util.SwingDispatcher;
 import org.xidget.swing.xmleditor.XmlTextPaneXidget;
 import org.xmodel.IModelObject;
-import org.xmodel.ModelRegistry;
+import org.xmodel.GlobalSettings;
 import org.xmodel.caching.IFileAssociation;
 import org.xmodel.compress.ISerializer;
 import org.xmodel.xpath.expression.IExpression;
@@ -100,7 +100,7 @@ public class Toolkit implements IToolkit
     printFeature = new SwingPrintFeature();
     
     // define the dispatcher in the xmodel
-    ModelRegistry.getInstance().getModel().setDispatcher( new SwingDispatcher());
+    GlobalSettings.getInstance().getModel().setDispatcher( new SwingDispatcher());
   }
   
   /* (non-Javadoc)
