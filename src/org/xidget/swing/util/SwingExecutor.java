@@ -4,13 +4,13 @@
  */
 package org.xidget.swing.util;
 
+import java.util.concurrent.Executor;
 import javax.swing.SwingUtilities;
-import org.xmodel.IDispatcher;
 
 /**
- * An implementation of IDispatcher that dispatches to the Swing event thread.
+ * An implementation of Executor that dispatches to the Swing event thread.
  */
-public class SwingDispatcher implements IDispatcher
+public class SwingExecutor implements Executor
 {
   /* (non-Javadoc)
    * @see org.xmodel.IDispatcher#execute(java.lang.Runnable)
@@ -19,15 +19,5 @@ public class SwingDispatcher implements IDispatcher
   public void execute( Runnable runnable)
   {
     SwingUtilities.invokeLater( runnable);
-  }
-
-  /* (non-Javadoc)
-   * @see org.xmodel.IDispatcher#shutdown(boolean)
-   */
-  @Override
-  public void shutdown( boolean immediate)
-  {
-    // see JSR 296
-    throw new UnsupportedOperationException();
   }
 }
