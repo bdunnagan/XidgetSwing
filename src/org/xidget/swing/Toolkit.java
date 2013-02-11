@@ -100,7 +100,7 @@ public class Toolkit implements IToolkit
     printFeature = new SwingPrintFeature();
     
     // define the dispatcher in the xmodel
-    GlobalSettings.getInstance().getModel().setExecutor( new SwingExecutor());
+    GlobalSettings.getInstance().setDefaultExecutor( new SwingExecutor());
   }
   
   /* (non-Javadoc)
