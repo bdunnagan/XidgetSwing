@@ -6,16 +6,16 @@
 package org.xidget.swing.xmleditor;
 
 import java.awt.Container;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import org.xidget.IXidget;
 import org.xidget.ifeature.model.ISingleValueUpdateFeature;
 import org.xidget.ifeature.model.ISingleValueWidgetFeature;
@@ -23,6 +23,7 @@ import org.xidget.swing.feature.SwingWidgetCreationFeature;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.xmodel.GlobalSettings;
 import org.xmodel.IModelObject;
 import org.xmodel.xml.XmlIO;
 
@@ -59,8 +60,6 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
    */
   public void destroyWidgets(IXidget parent)
   {
-    executor.shutdownNow();
-    
     jScrollPane.setEnabled( false);
     
     Container container = jScrollPane.getParent();
@@ -140,12 +139,12 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
   /**
    * Reparse the editor content and update markers.
    */
-  private void updateEditor()
+  private synchronized void updateEditor()
   {
     xmlTextPane.getHighlighter().removeAllHighlights();
-    if ( future == null || future.cancel( false))
+    if ( future == null || future.isDone() || future.cancel( false))
     {
-      future = executor.schedule( parseRunnable, 250, TimeUnit.MILLISECONDS);
+      future = GlobalSettings.getInstance().getScheduler().schedule( parseRunnable, 250, TimeUnit.MILLISECONDS);
     }
   }
 
@@ -220,8 +219,6 @@ public class XmlTextPaneWidgetCreationFeature extends SwingWidgetCreationFeature
     }
   };
 
-  private ScheduledExecutorService executor = Executors.newScheduledThreadPool( 1);
-  
   private JScrollPane jScrollPane;
   private XmlTextPane xmlTextPane;
   private ErrorHighlightPainter errorHighlighter;
